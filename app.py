@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 1. PASTE YOUR API KEY HERE
-genai.configure(api_key="AIzaSyC6BaPmPbT0pcw858o1k3fatGha5PJ3Liw")
+genai.configure(api_key="AIzaSyCoiWYtl2E5DATpunC2__5uwenTQ7ML0JE")
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
 @app.route('/mark', methods=['POST'])
