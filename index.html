@@ -144,6 +144,64 @@
     .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
     @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
 
+/* === DEFINITIONS SECTION STYLES === */
+    #view-definitions .def-section { margin-bottom: 50px; }
+    
+    #view-definitions .topic-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        margin-bottom: 25px;
+        border-bottom: 2px solid var(--lime-primary);
+        padding-bottom: 8px;
+        display: inline-block;
+    }
+    
+    #view-definitions .def-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+        gap: 20px; 
+    }
+    
+    #view-definitions .def-card { 
+        background: white; 
+        padding: 25px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #view-definitions .def-card:hover { 
+        transform: translateY(-3px); 
+        border-color: var(--lime-primary);
+        box-shadow: 0 10px 25px rgba(50, 205, 50, 0.15);
+    }
+    
+    /* Blue accent line for definitions to distinguish from formulae */
+    #view-definitions .def-card::before {
+        content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+        background: #3b82f6; /* Nice professional blue */
+    }
+
+    #view-definitions .d-term { 
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem; 
+        font-weight: 700; 
+        color: #1e293b; 
+        margin-bottom: 10px;
+    }
+    
+    #view-definitions .d-desc { 
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem; 
+        font-weight: 400; 
+        color: #475569; 
+        line-height: 1.6;
+    }
+
 </style>
 </head>
 <body>
@@ -168,12 +226,14 @@
                     <div id="welcome-msg" class="welcome-text"></div>
                 </div>
             </div>
-            <div class="nav">
-                <button class="nav-btn active" onclick="setView('papers')">Papers</button>
-                <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
-                <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-                <button class="nav-btn" onclick="doLogout()">Logout</button>
-            </div>
+           <div class="nav">
+    <button class="nav-btn active" onclick="setView('papers')">Papers</button>
+    <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
+    <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
+    
+    <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
+    <button class="nav-btn" onclick="doLogout()">Logout</button>
+</div>
         </div>
 
         <div id="view-papers">
@@ -274,6 +334,56 @@
                 </div>
             </div>
         </div>
+        <div id="view-definitions" class="hidden">
+    
+    <div class="def-section">
+        <h3 class="topic-title">Strategy & Economics</h3>
+        <div class="def-grid">
+            [cite_start]<div class="def-card"><div class="d-term">Privatization</div><div class="d-desc">The act of selling state-owned and controlled business organizations to investors in the private sector. [cite: 3]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Globalization</div><div class="d-desc">The increasing freedom of movement of goods, capital, and people around the world. [cite: 12]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">SWOT Analysis</div><div class="d-desc">Strategic analysis identifying internal strengths and weaknesses, and external opportunities and threats influencing business success. [cite: 63]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Porter's Five Forces</div><div class="d-desc">Technique for analysing competitive forces within an industry. [cite: 67]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Core Competence</div><div class="d-desc">An essential business capability that provides a competitive advantage. [cite: 68]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Ansoff Matrix</div><div class="d-desc">A model illustrating the degree of risk in growth strategies: market penetration, product development, market development, and diversification. [cite: 70]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Blue Ocean Strategy</div><div class="d-desc">Exploiting uncontested market space through product differentiation and low cost. [cite: 61]</div></div>
+        </div>
+    </div>
+
+    <div class="def-section">
+        <h3 class="topic-title">Finance</h3>
+        <div class="def-grid">
+            [cite_start]<div class="def-card"><div class="d-term">Working Capital</div><div class="d-desc">The capital required for day-to-day activities (Current Assets - Current Liabilities). [cite: 235]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Depreciation</div><div class="d-desc">The reduction in the estimated value of a non-current asset over time. [cite: 238]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Goodwill</div><div class="d-desc">The value arising when a business is bought for more than the balance sheet value of its assets. [cite: 233]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Capital Employed</div><div class="d-desc">The total value of long-term finance invested in a business. [cite: 248]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Investment Appraisal</div><div class="d-desc">Evaluating the profitability or feasibility of an investment project (e.g., NPV, ARR). [cite: 261]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Window Dressing</div><div class="d-desc">Techniques used by companies to manipulate financial statements to show more favorable results. [cite: 234]</div></div>
+        </div>
+    </div>
+
+    <div class="def-section">
+        <h3 class="topic-title">HR & Leadership</h3>
+        <div class="def-grid">
+            [cite_start]<div class="def-card"><div class="d-term">Hard HRM</div><div class="d-desc">An approach to managing employees focused on cutting costs. [cite: 132]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Soft HRM</div><div class="d-desc">An approach to managing employees focused on their development, self-fulfillment, and motivation. [cite: 133]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Emotional Intelligence</div><div class="d-desc">The ability to understand and manage one's own emotions and those of others to improve business performance. [cite: 128]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Corporate Culture</div><div class="d-desc">The values, attitudes, and beliefs of an organisation's people that influence interactions. [cite: 80]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Gig Economy</div><div class="d-desc">A labor market with temporary, flexible jobs, where workers are often independent contractors. [cite: 140]</div></div>
+        </div>
+    </div>
+
+    <div class="def-section">
+        <h3 class="topic-title">Operations</h3>
+        <div class="def-grid">
+            [cite_start]<div class="def-card"><div class="d-term">Kaizen</div><div class="d-desc">A Japanese term meaning continuous improvement. [cite: 203]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">TQM</div><div class="d-desc">Total Quality Management: A quality approach involving all employees in continuous improvement. [cite: 189]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Lean Production</div><div class="d-desc">Producing goods and services with minimal wasted resources while maintaining high quality. [cite: 194]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Critical Path Analysis</div><div class="d-desc">A planning technique that identifies tasks, sequences them, and identifies the critical path. [cite: 207]</div></div>
+            [cite_start]<div class="def-card"><div class="d-term">Reshoring</div><div class="d-desc">Moving a previously offshored business operation back to its original country. [cite: 176]</div></div>
+        </div>
+    </div>
+
+</div>
 
         <div id="view-scorecard" class="hidden">
             <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;">
@@ -349,11 +459,23 @@
 
     function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
-    function setView(viewName) {
-        ['papers', 'scorecard', 'workspace', 'formulae'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
-        document.getElementById(`view-${viewName}`).classList.remove('hidden');
-        if(viewName === 'scorecard') renderScorecard();
-    }
+   function setView(viewName) {
+    // Added 'definitions' to this list so it hides properly when switching tabs
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if(el) el.classList.add('hidden');
+    });
+    
+    document.getElementById(`view-${viewName}`).classList.remove('hidden');
+    
+    // Update active button state
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase() === viewName) btn.classList.add('active');
+    });
+
+    if(viewName === 'scorecard') renderScorecard();
+}
 
     function backToDash() { setView('papers'); }
     function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
