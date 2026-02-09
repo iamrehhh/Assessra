@@ -3,7 +3,7 @@ from flask_cors import CORS
 import google.generativeai as genai
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 1. PASTE YOUR API KEY HERE
 genai.configure(api_key="AIzaSyC6BaPmPbT0pcw858o1k3fatGha5PJ3Liw")
