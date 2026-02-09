@@ -149,12 +149,11 @@
 <body>
 
 <div id="login-layer" class="login-screen">
-    <div class="login-card">
-        <h1>EXAM PORTAL</h1>
-        <input type="text" id="u-in" class="login-input" placeholder="name.surname.dob">
-        <input type="password" id="p-in" class="login-input" placeholder="Passcode">
-        <button class="submit-btn" onclick="tryLogin()">Sign in</button>
-        <button class="sys-reset" onclick="resetAll()">Reset System Data</button>
+    <div class="login-card" style="text-align: left;"> <img src="logo.png" alt="Logo" style="height:50px; margin-bottom:20px; width:auto;" onerror="this.style.display='none'">
+    <h1 style="text-align: left;">EXAM PORTAL</h1>
+    <input type="text" id="u-in" class="login-input" placeholder="name.surname.dob">
+    <input type="password" id="p-in" class="login-input" placeholder="Passcode">
+    <button class="submit-btn" onclick="tryLogin()">Access System</button>
     </div>
 </div>
 
@@ -400,34 +399,92 @@
         setView('workspace');
     }
 
-    async function submitAnswer(pid, qn) {
-        const el = document.getElementById(`ans_${pid}_${qn}`);
-        const btn = event.target;
-        const ans = el.value.trim();
-        if(!ans) return alert("Please write an answer first.");
-        btn.innerText = "⏳ Marking..."; btn.disabled = true;
-        try {
-            const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    question: paperData[pid].questions.find(q=>q.n===qn).t, 
-                    case_study: "Refer to attached PDF", 
-                    answer: ans, 
-                    marks: paperData[pid].questions.find(q=>q.n===qn).m 
-                })
-            });
-            const json = await res.json();
-            saveAttempt(getUser(), pid, qn, { 
-                answer: ans, 
-                score: json.score, 
-                ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
-                strengths: json.strengths, 
-                weaknesses: json.weaknesses, 
-                modelAnswer: json.model_answer 
-            });
-            openPaper(pid);
-        } catch(e) { alert("Error: Is Terminal running?"); btn.innerText = "Retry"; btn.disabled = false; }
+  async function submitAnswer(pid, qn) {
+    const el = document.getElementById(`ans_${pid}_${qn}`);
+    const btn = event.target;
+    const ans = el.value.trim();
+    if(!ans) return alert("Please write an answer first.");
+    
+    btn.innerText = "⏳ Strict Marking..."; 
+    btn.disabled = true;
+
+    // 1. GET QUESTION DATA
+    const qData = paperData[pid].questions.find(q => q.n === qn);
+    
+    // 2. GENERATE STRICT RUBRIC BASED ON MARKS
+    let rubricInstructions = "";
+    
+    if (qData.m === 12) {
+        // 12 Mark Evaluation Question Split: 2, 2, 2, 6
+        rubricInstructions = `
+        [IMPORTANT EXAMINER INSTRUCTIONS]
+        ACT AS A STRICT CAMBRIDGE EXAMINER.
+        You MUST follow this exact marking grid for 12 marks:
+        - AO1 (Knowledge): Max 2 marks.
+        - AO2 (Application): Max 2 marks.
+        - AO3 (Analysis): Max 2 marks (DO NOT AWARD MORE THAN 2).
+        - AO4 (Evaluation): Max 6 marks.
+        
+        CRITICAL RULES:
+        1. If the Analysis (AO3) is strong, it is still CAPPED at 2 marks. Do not give 3 or 4 for Analysis.
+        2. To award high AO4, the student must show judgement, weighting of arguments, or short/long term perspective.
+        3. Be harsh. Do not be generous.
+        `;
+    } else if (qData.m === 8) {
+        // 8 Mark Analysis Question Split: 2, 2, 4, 0
+        rubricInstructions = `
+        [IMPORTANT EXAMINER INSTRUCTIONS]
+        ACT AS A STRICT CAMBRIDGE EXAMINER.
+        You MUST follow this exact marking grid for 8 marks:
+        - AO1 (Knowledge): Max 2 marks.
+        - AO2 (Application): Max 2 marks.
+        - AO3 (Analysis): Max 4 marks.
+        - AO4 (Evaluation): 0 marks (This is an Analysis question).
+        `;
+    } else if (qData.m === 20) {
+        // 20 Mark Essay (Just in case): 2, 3, 8, 7
+        rubricInstructions = `[INSTRUCTION: Mark strictly. AO1=2, AO2=3, AO3=8, AO4=7.]`;
     }
+
+    // 3. COMBINE QUESTION + INSTRUCTIONS
+    const finalPrompt = `${qData.t}\n\n${rubricInstructions}`;
+
+    try {
+        const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ 
+                question: finalPrompt,  // We send the instructions attached to the question
+                case_study: "Refer to attached PDF. Use the case context strictly for AO2.", 
+                answer: ans, 
+                marks: qData.m 
+            })
+        });
+        
+        const json = await res.json();
+        
+        saveAttempt(getUser(), pid, qn, { 
+            answer: ans, 
+            score: json.score, 
+            ao1: json.ao1, 
+            ao2: json.ao2, 
+            ao3: json.ao3, 
+            ao4: json.ao4, 
+            strengths: json.strengths, 
+            weaknesses: json.weaknesses, 
+            modelAnswer: json.model_answer 
+        });
+        
+        openPaper(pid); // Refresh view to show feedback
+        
+    } catch(e) { 
+        console.error(e);
+        alert("Error: Server not responding. Try again."); 
+        btn.innerText = "Retry"; 
+        btn.disabled = false; 
+    }
+}
+
 
     function renderScorecard() {
         const u = getUser();
