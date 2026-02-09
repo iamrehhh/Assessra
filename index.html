@@ -330,7 +330,7 @@
             if(!ans) return alert("Please write an answer first.");
             btn.innerText = "⏳ Marking..."; btn.disabled = true;
             try {
-                const res = await fetch('https://ultimate-exam-guide.onrender.com', {
+                const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ question: paperData[pid].questions.find(q=>q.n===qn).t, case_study: paperData[pid].insert, answer: ans, marks: paperData[pid].questions.find(q=>q.n===qn).m })
                 });
