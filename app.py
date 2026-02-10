@@ -9,43 +9,89 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 genai.configure(api_key="AIzaSyCoiWYtl2E5DATpunC2__5uwenTQ7ML0JE")
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
+import os
+import json
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+app = Flask(__name__)
+CORS(app)
+
+# 1. CONFIGURE GEMINI (Use the best FREE model: 2.0 Flash)
+# Make sure your API key is in a .env file or set directly here
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+model = genai.GenerativeModel('gemini-2.0-flash') 
+
 @app.route('/mark', methods=['POST'])
 def mark():
-    data = request.json
-    marks = data['marks']
-    
-    # Setting word limit constraints based on marks
-    word_limit = "150-225 words" if marks == 8 else "250-350 words"
-    
-    system_prompt = f"""
-    You are a Senior Cambridge A-Level Business (9609) Examiner. 
-    Be extremely strict. Grade the answer based on these Assessment Objectives:
-    - AO1 (Knowledge): Correct definitions.
-    - AO2 (Application): Direct reference to Iyipada (IPA) facts.
-    - AO3 (Analysis): Clear cause-and-effect chains.
-    - AO4 (Evaluation): Required for 12-mark questions. A justified conclusion is a must.
+    try:
+        data = request.json
+        marks = int(data.get('marks', 0))
+        question = data.get('question', 'Unknown Question')
+        case_study = data.get('case_study', 'No Case Study Provided')
+        student_answer = data.get('answer', '')
 
-    STRICT CONSTRAINTS:
-    - Target Word Count: {word_limit}. Penalize if significantly over or under.
-    - Reference the provided Case Study for application marks.
-    
-    Question: {data['question']}
-    Marks: {marks}
-    Case Study: {data['case_study']}
-    Student Answer: {data['answer']}
+        # 2. WORD LIMIT LOGIC (Kept from your original code)
+        word_limit = "150-225 words" if marks == 8 else "250-350 words"
 
-    Return ONLY a JSON object:
-    {{
-        "score": int,
-        "ao1": int, "ao2": int, "ao3": int, "ao4": int,
-        "strengths": "string",
-        "weaknesses": "string",
-        "model_answer": "Provide a high-scoring, concise A* model answer here."
-    }}
-    """
-    
-    response = model.generate_content(system_prompt)
-    return response.text.replace('```json', '').replace('```', '').strip()
+        # 3. UPGRADED "SENIOR EXAMINER" SYSTEM PROMPT
+        # This prompt forces deep analysis, strict marking, and proper paragraph breaks.
+        system_prompt = f"""
+        You are a SENIOR CAMBRIDGE A-LEVEL BUSINESS (9609) EXAMINER.
+        Your task is to mark the student's answer STRICTLY against the marking scheme.
+
+        ### QUESTION DETAILS:
+        - **Question:** {question}
+        - **Max Marks:** {marks}
+        - **Target Word Count:** {word_limit} (Penalize if significantly under/over).
+        - **Case Study Context:** {case_study}
+
+        ### ASSESSMENT OBJECTIVES (AOs):
+        - **AO1 (Knowledge):** Accurate definitions & theories.
+        - **AO2 (Application):** CRITICAL. The answer MUST explicitly reference the Case Study (names, data, scenario). If the answer is generic (could apply to any business), CAP AO2 MARKS AT 0.
+        - **AO3 (Analysis):** Chains of reasoning (Cause -> Effect -> Impact).
+        - **AO4 (Evaluation):** (Only for 12/20 marks) Final judgement, weighing pros/cons, short/long term perspective.
+
+        ### FEEDBACK RULES:
+        1. **Be Constructive:** Do not just say "good". Explain *why* marks were awarded or lost.
+        2. **Paragraph Breaks:** Use \\n\\n in your JSON strings to create paragraphs in the feedback.
+        3. **Model Answer:** Provide a perfect, A* grade answer that uses the Case Study context perfectly.
+
+        ### REQUIRED OUTPUT FORMAT (JSON ONLY):
+        {{
+            "score": (integer),
+            "ao1": (integer),
+            "ao2": (integer),
+            "ao3": (integer),
+            "ao4": (integer),
+            "strengths": "Detailed paragraph identifying what the student did well.",
+            "weaknesses": "Detailed paragraph explaining where marks were lost, referencing missing context or broken analysis chains.",
+            "model_answer": "A perfect model answer."
+        }}
+        """
+
+        # 4. GENERATE CONTENT WITH JSON ENFORCEMENT
+        # This ensures Gemini returns PURE JSON, no markdown formatting to clean up.
+        response = model.generate_content(
+            f"STUDENT ANSWER:\n{student_answer}\n\nSYSTEM INSTRUCTIONS:\n{system_prompt}",
+            generation_config=genai.types.GenerationConfig(
+                response_mime_type="application/json",
+                temperature=0.3  # Lower temperature = stricter, more consistent marking
+            )
+        )
+
+        # 5. SAFE RETURN
+        # Directly parse the JSON from Gemini
+        return jsonify(json.loads(response.text))
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Failed to mark answer", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
