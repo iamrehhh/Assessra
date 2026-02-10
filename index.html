@@ -213,15 +213,6 @@ textarea.expanded {
 .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
 @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
 
-/* TUTOR BTN STYLES */
-.tutor-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-.tutor-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
 
 </style>
 </head>
@@ -253,7 +244,6 @@ textarea.expanded {
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
         <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
-        <button class="nav-btn tutor-btn" onclick="window.location.href='tutor.html'">📚 Tutor</button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
