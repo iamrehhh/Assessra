@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .tutor-container {
+            width: 100%;
+            max-width: 900px;
+            height: 85vh;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tutor-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 32px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tutor-header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tutor-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tutor-avatar {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message-content h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+
+        .user-message .message-content h3 {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .message-content ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .message-content li {
+            margin-bottom: 6px;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chip:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .input-area {
+            padding: 24px 32px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 24px;
+            padding: 8px 8px 8px 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .input-container:focus-within {
+            border-color: #667eea;
+            background: white;
+        }
+
+        #user-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            padding: 8px;
+            outline: none;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        #send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        #send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        #send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .welcome-message h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-message p {
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="tutor-container">
+        <div class="tutor-header">
+            <h1>
+                <div class="tutor-icon">📚</div>
+                Business Tutor
+            </h1>
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+        </div>
+
+        <div class="chat-area" id="chat-area">
+            <div class="welcome-message">
+                <h2>Welcome to your Business Tutor! 👋</h2>
+                <p>Ask me anything about A-Level Business concepts</p>
+                <div class="suggestion-chips">
+                    <div class="chip" onclick="askQuestion('What is marketing?')">What is marketing?</div>
+                    <div class="chip" onclick="askQuestion('Explain break-even analysis')">Explain break-even analysis</div>
+                    <div class="chip" onclick="askQuestion('What is motivation?')">What is motivation?</div>
+                    <div class="chip" onclick="askQuestion('Define cash flow')">Define cash flow</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Ask a business question..." />
+                <button id="send-btn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutor-knowledge.js"></script>
+    <script src="tutor.js"></script>
+</body>
+</html>
