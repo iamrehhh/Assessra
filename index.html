@@ -5,81 +5,167 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A-Level Business | The One</title>
 <link rel="icon" type="image/png" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-    /* GLOBAL FONT */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+/* GLOBAL FONT */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+/* NEW FONTS (For Formula Sheet) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
 
-    :root {
-        --lime-primary: #32CD32;
-        --lime-dark: #228B22;
-        --lime-light: #F0FFF0;
-        --glass-bg: rgba(255, 255, 255, 0.95);
-        --text-dark: #1a1a1a;
-        --danger: #dc2626;
-        --warning: #f59e0b;
-    }
+:root {
+--lime-primary: #32CD32;
+--lime-dark: #228B22;
+--lime-light: #F0FFF0;
+--glass-bg: rgba(255, 255, 255, 0.95);
+--text-dark: #1a1a1a;
+--shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+--danger: #dc2626; 
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f6fff6 0%, #e8f5e9 100%); color: var(--text-dark); min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* CARD GRID STYLES */
-    .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #1a1a1a; margin: 40px 0 20px 0; border-bottom: 3px solid var(--lime-primary); display: inline-block; }
-    .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    
-    .info-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s; }
-    .info-card:hover { transform: translateY(-3px); border-color: var(--lime-primary); }
-    
-    .formula-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--lime-primary); }
-    .def-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #3b82f6; } /* Blue for definitions */
+body {
+font-family: 'Plus Jakarta Sans', sans-serif;
+background: linear-gradient(135deg, #f6fff6 0%, #e8f5e9 100%);
+color: var(--text-dark);
+min-height: 100vh;
+}
 
-    .card-title { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .card-body { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 500; color: #2c3e50; line-height: 1.4; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-    /* APP UI */
-    .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.9); z-index: 1000; }
-    .login-card { background: white; padding: 40px; width: 350px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; }
-    .login-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; }
-    
-    .app-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-    .nav-btn { background: transparent; border: none; font-weight: 700; color: #666; padding: 10px 20px; cursor: pointer; font-size: 1rem; border-radius: 8px; }
-    .nav-btn.active { background: var(--lime-light); color: var(--lime-dark); }
+/* === FORMULA SHEET SPECIFIC STYLES === */
+#view-formulae .formula-section, #view-definitions .def-section { margin-bottom: 40px; }
 
-    .paper-card { background: white; padding: 25px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 15px; }
-    .paper-card:hover { border-color: var(--lime-primary); transform: scale(1.01); }
-    .paper-tag { padding: 4px 10px; background: #eee; border-radius: 6px; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; display: inline-block; }
+#view-formulae .chapter-title, #view-definitions .topic-title {
+font-family: 'Playfair Display', serif;
+font-size: 1.6rem;
+color: #1a1a1a;
+margin-bottom: 20px;
+border-bottom: 2px solid var(--lime-primary);
+padding-bottom: 5px;
+display: inline-block;
+}
 
-    /* WORKSPACE */
-    .workspace { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; height: 80vh; }
-    .insert-panel { background: #333; border-radius: 15px; overflow: hidden; height: 100%; }
-    .questions-panel { overflow-y: auto; padding-right: 10px; height: 100%; }
-    .question-card { background: white; padding: 30px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-    
-    textarea { width: 100%; min-height: 200px; padding: 15px; border: 2px solid #eee; border-radius: 10px; margin: 15px 0 5px 0; font-family: inherit; font-size: 1rem; resize: vertical; }
-    textarea:focus { border-color: var(--lime-primary); outline: none; }
-    
-    .word-count { text-align: right; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
-    .word-count.good { color: var(--lime-dark); }
-    .word-count.bad { color: var(--danger); }
+#view-formulae .formula-grid, #view-definitions .def-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 20px;
+}
 
-    .submit-btn { background: var(--lime-dark); color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; width: 100%; font-size: 1rem; }
-    .submit-btn:disabled { background: #ccc; }
+.formula-card, .def-card {
+background: white;
+padding: 25px;
+border-radius: 12px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+border: 1px solid rgba(0,0,0,0.05);
+transition: transform 0.2s ease;
+position: relative;
+overflow: hidden;
+}
 
-    .feedback-box { margin-top: 20px; background: var(--lime-light); padding: 20px; border-radius: 12px; border: 1px solid var(--lime-primary); }
-    .score-badge { display: inline-block; background: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; margin-right: 5px; font-size: 0.9rem; border: 1px solid #ddd; }
-    .model-ans { background: #222; color: #ddd; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; }
+.formula-card:hover, .def-card:hover {
+transform: translateY(-3px);
+border-color: var(--lime-primary);
+}
 
-    .hidden { display: none !important; }
-    .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
-    @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
+.formula-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--lime-primary); }
+/* Blue accent for definitions */
+.def-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #3b82f6; }
+
+.f-title, .d-term {
+font-family: 'Inter', sans-serif;
+font-size: 0.85rem;
+font-weight: 600;
+color: #888;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-bottom: 8px;
+}
+.d-term { font-size: 1.1rem; color: #1e293b; font-family: 'Playfair Display', serif; font-weight: 700; }
+
+.f-body, .d-desc {
+font-family: 'Inter', sans-serif;
+font-size: 1.15rem;
+font-weight: 500;
+color: #2c3e50;
+line-height: 1.4;
+}
+.d-desc { font-size: 0.95rem; font-weight: 400; color: #475569; line-height: 1.6; }
+
+/* === APP STYLES === */
+.login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); z-index: 1000; }
+.login-card { background: white; padding: 50px; width: 400px; border-radius: 24px; box-shadow: var(--shadow); text-align: center; border: 1px solid var(--lime-light); }
+.login-input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 2px solid #eee; font-size: 1rem; transition: 0.3s; }
+.login-input:focus { border-color: var(--lime-primary); outline: none; }
+
+.app-header { display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); padding: 20px 30px; border-radius: 20px; margin-bottom: 30px; border: 1px solid white; box-shadow: var(--shadow); }
+.header-left { display: flex; align-items: center; }
+.app-logo { height: 45px; width: auto; margin-right: 15px; }
+
+.nav-btn { background: transparent; border: none; font-weight: 700; color: #666; padding: 10px 20px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+.nav-btn.active { color: var(--lime-dark); background: var(--lime-light); border-radius: 10px; }
+
+.series-header { margin: 40px 0 20px 0; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: baseline; gap: 15px; }
+.year-big { font-size: 2rem; font-weight: 800; color: #ccc; }
+.series-name { font-size: 1.4rem; font-weight: 700; color: var(--lime-dark); }
+.papers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.paper-card { background: white; padding: 25px; border-radius: 18px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.paper-card:hover { border-color: var(--lime-primary); transform: translateY(-5px); }
+.paper-tag { display: inline-block; padding: 5px 10px; background: var(--lime-light); color: var(--lime-dark); border-radius: 8px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+
+/* STATS & SCORECARD - RESTORED ORIGINAL */
+.stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat-card { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); border: 1px solid var(--lime-light); text-align: center; transition: transform 0.3s ease; }
+.stat-card:hover { transform: translateY(-5px); border-color: var(--lime-primary); }
+.stat-value { font-size: 2.5rem; font-weight: 800; color: var(--lime-dark); display: block; margin-bottom: 5px; }
+.stat-label { font-size: 0.9rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+.modern-table { width: 100%; border-collapse: separate; border-spacing: 0 15px; margin-top: 10px; }
+.modern-table thead th { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0 20px 10px 20px; border: none; background: transparent; text-align: left; }
+.modern-table tbody tr { background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+.modern-table td { padding: 20px; border: none; }
+.modern-table td:first-child { border-top-left-radius: 15px; border-bottom-left-radius: 15px; }
+.modern-table td:last-child { border-top-right-radius: 15px; border-bottom-right-radius: 15px; text-align: right; }
+.score-badge { background: var(--lime-light); color: var(--lime-dark); padding: 8px 16px; border-radius: 30px; font-weight: 800; font-size: 1rem; border: 1px solid var(--lime-primary); }
+.progress-track { background: #f0f0f0; height: 8px; width: 100px; border-radius: 10px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 10px; }
+.progress-fill { background: var(--lime-primary); height: 100%; border-radius: 10px; }
+.reset-icon-btn { background: #fff0f0; color: #ff4757; border: 1px solid #ff4757; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.8rem; transition: 0.3s; }
+.reset-icon-btn:hover { background: #ff4757; color: white; }
+
+/* WORKSPACE */
+.workspace { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; height: 85vh; }
+.insert-panel { background: #333; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); height: 100%; position: relative; }
+.insert-pdf-frame { width: 100%; height: 100%; border: none; }
+.questions-panel { overflow-y: auto; padding-right: 10px; height: 100%; }
+.question-card { background: white; padding: 30px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #f0f0f0; }
+.q-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+.q-badge { background: var(--lime-dark); color: white; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
+
+textarea { width: 100%; min-height: 200px; padding: 15px; border: 2px solid #eee; border-radius: 12px; margin: 15px 0 5px 0; font-family: inherit; font-size: 1rem; resize: vertical; transition: 0.3s; }
+textarea:focus { border-color: var(--lime-primary); outline: none; }
+
+/* WORD COUNT STYLE */
+.word-count { font-size: 0.85rem; color: #888; text-align: right; margin-bottom: 15px; font-weight: 600; }
+.word-count.bad { color: var(--danger); }
+.word-count.good { color: var(--lime-dark); }
+
+.submit-btn { background: linear-gradient(135deg, var(--lime-primary) 0%, var(--lime-dark) 100%); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%; box-shadow: 0 4px 15px rgba(50, 205, 50, 0.3); font-size: 1rem; }
+.submit-btn:disabled { background: #ccc; transform: none; box-shadow: none; }
+
+.feedback-box { margin-top: 20px; background: var(--lime-light); padding: 20px; border-radius: 16px; border: 1px solid var(--lime-primary); }
+.model-ans-box { background: #1a1a1a; color: #f0f0f0; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; }
+
+.hidden { display: none !important; }
+.toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
+@media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
+
 </style>
 </head>
 <body>
 
 <div id="login-layer" class="login-screen">
-    <div class="login-card">
-        <h2>A-Level Business</h2>
+    <div class="login-card" style="text-align: left;">
+        <img src="logo.png" alt="Logo" style="width: 100%; height: auto; display: block; margin-bottom: 20px;">
         <input type="text" id="u-in" class="login-input" placeholder="username">
         <input type="password" id="p-in" class="login-input" placeholder="******">
         <button class="submit-btn" onclick="tryLogin()">Sign in</button>
@@ -87,203 +173,223 @@
 </div>
 
 <div id="app-layer" class="hidden">
-    <div class="container">
-        <div class="app-header">
+<div class="container">
+
+<div class="app-header">
+    <div class="header-left">
+        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
+        <div>
             <h2 style="color:var(--lime-dark); margin:0;">Business Practice</h2>
-            <div class="nav">
-                <button class="nav-btn active" onclick="setView('papers')">Papers</button>
-                <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
-                <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
-                <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-                <button class="nav-btn" onclick="doLogout()">Logout</button>
-            </div>
+            <div id="welcome-msg" class="welcome-text"></div>
         </div>
+    </div>
+    <div class="nav">
+        <button class="nav-btn active" onclick="setView('papers')">Papers</button>
+        <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
+        <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
+        <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
+        <button class="nav-btn" onclick="doLogout()">Logout</button>
+    </div>
+</div>
 
-        <div id="view-papers">
-            <h3 style="margin-bottom:15px; color:#888;">2024 Series</h3>
-            <div class="grid-layout">
-                <div class="paper-card" onclick="openPaper('2024_fm_32')">
-                    <span class="paper-tag">Feb/March 2024</span>
-                    <h3>Clean Delivery (CD)</h3>
-                    <p style="color:#666; font-size:0.9rem;">Paper 32 • Strategy & Finance</p>
-                </div>
-                <div class="paper-card" onclick="openPaper('2024_mj_32')">
-                    <span class="paper-tag">May/June 2024</span>
-                    <h3>Soymai Farms (SF)</h3>
-                    <p style="color:#666; font-size:0.9rem;">Paper 32 • Operations & Marketing</p>
-                </div>
-            </div>
-            
-            <h3 style="margin:30px 0 15px 0; color:#888;">2025 Series</h3>
-            <div class="grid-layout">
-                <div class="paper-card" onclick="openPaper('2025_fm_32')">
-                    <span class="paper-tag">Feb/March 2025</span>
-                    <h3>Iyipada (IPA)</h3>
-                    <p style="color:#666; font-size:0.9rem;">Paper 32 • Change Management</p>
-                </div>
-            </div>
+<div id="view-papers">
+
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2024_fm_32')"><span class="paper-tag">9609/32</span><h3>Clean Delivery (CD)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">May / June Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2024_mj_31')"><span class="paper-tag">9609/31</span><h3>Gordy Building Supplies (GBS)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2024_mj_32')"><span class="paper-tag">9609/32</span><h3>Soymai Farms (SF)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2024_mj_33')"><span class="paper-tag">9609/33</span><h3>Sunil's Clothing Company (SCC)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2024_on_31')"><span class="paper-tag">9609/31</span><h3>TopoChoc Enterprises (TC)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2024_on_32')"><span class="paper-tag">9609/32</span><h3>Habesha Clean Cooking (HCC)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2024_on_33')"><span class="paper-tag">9609/33</span><h3>Australasia Fitness Factory (AFF)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2025_fm_32')"><span class="paper-tag">9609/32</span><h3>Iyipada (IPA)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">May / June Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2025_mj_31')"><span class="paper-tag">9609/31</span><h3>Wisdom Shoes (WS)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2025_mj_32')"><span class="paper-tag">9609/32</span><h3>Pura AI Robots (PAIR)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2025_mj_33')"><span class="paper-tag">9609/33</span><h3>We Care Products (WCP)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2025_on_31')"><span class="paper-tag">9609/31</span><h3>Pedro's Perfect Pies (PPP)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2025_on_32')"><span class="paper-tag">9609/32</span><h3>Komate Tropical Juice (KTJ)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+        <div class="paper-card" onclick="openPaper('2025_on_33')"><span class="paper-tag">9609/33</span><h3>Lithium Battery Metals (LBM)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+    </div>
+</div>
+
+<div id="view-formulae" class="hidden">
+    <div class="formula-section">
+        <h3 class="chapter-title">Finance: Ratio Analysis</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Current Ratio</div><div class="f-body">Current Assets / Current Liabilities</div></div>
+            <div class="formula-card"><div class="f-title">Acid Test Ratio</div><div class="f-body">Liquid Assets / Current Liabilities</div></div>
+            <div class="formula-card"><div class="f-title">ROCE</div><div class="f-body">(Operating Profit / Capital Employed) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Gearing Ratio</div><div class="f-body">(Non-Current Liabilities / Capital Employed) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Gross Profit Margin</div><div class="f-body">(Gross Profit / Revenue) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Operating Profit Margin</div><div class="f-body">(Operating Profit / Revenue) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Inventory Turnover</div><div class="f-body">Cost of Sales / Average Inventory</div></div>
+            <div class="formula-card"><div class="f-title">Trade Payables Turnover</div><div class="f-body">(Trade Payables / Credit Purchases) × 365</div></div>
         </div>
-
-        <div id="view-formulae" class="hidden">
-            <div class="section-title">Finance: Ratios</div>
-            <div class="grid-layout">
-                <div class="info-card formula-card"><div class="card-title">Current Ratio</div><div class="card-body">Current Assets / Current Liabilities</div></div>
-                <div class="info-card formula-card"><div class="card-title">ROCE</div><div class="card-body">(Operating Profit / Capital Employed) × 100</div></div>
-                <div class="info-card formula-card"><div class="card-title">Gearing</div><div class="card-body">(Non-Current Liab / Capital Employed) × 100</div></div>
-                <div class="info-card formula-card"><div class="card-title">Inventory Turnover</div><div class="card-body">Cost of Sales / Average Inventory</div></div>
-            </div>
-            <div class="section-title">Investment Appraisal</div>
-            <div class="grid-layout">
-                <div class="info-card formula-card"><div class="card-title">ARR</div><div class="card-body">(Avg Annual Profit / Avg Investment) × 100</div></div>
-                <div class="info-card formula-card"><div class="card-title">Payback Period</div><div class="card-body">Initial Inv / Annual Net Cash Flow</div></div>
-            </div>
+    </div>
+    <div class="formula-section">
+        <h3 class="chapter-title">Finance: Shareholder Ratios</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Earnings Per Share (EPS)</div><div class="f-body">Profit for Year / Number of Issued Shares</div></div>
+            <div class="formula-card"><div class="f-title">Price / Earnings (P/E) Ratio</div><div class="f-body">Market Price / Earnings Per Share</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Per Share</div><div class="f-body">Total Annual Dividends / Total Issued Shares</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Yield</div><div class="f-body">(Dividend Per Share / Market Price) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Cover</div><div class="f-body">Profit for Year / Annual Dividends</div></div>
         </div>
-
-        <div id="view-definitions" class="hidden">
-            
-            <div class="section-title">Economics & Global Environment</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Privatization</div><div class="card-body">Selling state-owned organizations to investors in the private sector.</div></div>
-                <div class="info-card def-card"><div class="card-title">Nationalization</div><div class="card-body">Transfer of privately owned businesses to state ownership.</div></div>
-                <div class="info-card def-card"><div class="card-title">Monopoly</div><div class="card-body">A market with only one supplier and no close competitors.</div></div>
-                <div class="info-card def-card"><div class="card-title">Globalization</div><div class="card-body">Increasing freedom of movement of goods, capital, and people around the world.</div></div>
-                <div class="info-card def-card"><div class="card-title">Protectionism</div><div class="card-body">Using barriers (tariffs, quotas) to free trade to protect domestic industries.</div></div>
-                <div class="info-card def-card"><div class="card-title">Tariff</div><div class="card-body">A tax imposed on an imported product.</div></div>
-                <div class="info-card def-card"><div class="card-title">Quota</div><div class="card-body">A physical limit placed on the quantity of imports.</div></div>
-                <div class="info-card def-card"><div class="card-title">GDP</div><div class="card-body">Total value of goods and services produced in a country in one year.</div></div>
-                <div class="info-card def-card"><div class="card-title">Inflation</div><div class="card-body">Increase in average price level, resulting in a fall in the value of money.</div></div>
-                <div class="info-card def-card"><div class="card-title">Recession</div><div class="card-body">Decline in real GDP over two or more consecutive quarters.</div></div>
-                <div class="info-card def-card"><div class="card-title">Monetary Policy</div><div class="card-body">Decisions about interest rates and money supply.</div></div>
-                <div class="info-card def-card"><div class="card-title">Fiscal Policy</div><div class="card-body">Decisions about government expenditure, tax rates, and borrowing.</div></div>
-                <div class="info-card def-card"><div class="card-title">Exchange Rate Appreciation</div><div class="card-body">A rise in a currency's external value compared to other currencies.</div></div>
-            </div>
-
-            <div class="section-title">Strategic Management</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Strategic Management</div><div class="card-body">Setting long-term objectives and implementing strategies to achieve them.</div></div>
-                <div class="info-card def-card"><div class="card-title">Blue Ocean Strategy</div><div class="card-body">Exploiting uncontested market space through differentiation and low cost.</div></div>
-                <div class="info-card def-card"><div class="card-title">SWOT Analysis</div><div class="card-body">Analysis of internal Strengths/Weaknesses and external Opportunities/Threats.</div></div>
-                <div class="info-card def-card"><div class="card-title">PEST Analysis</div><div class="card-body">Analysis of Political, Economic, Social, and Technological factors.</div></div>
-                <div class="info-card def-card"><div class="card-title">Porter's Five Forces</div><div class="card-body">Technique for analysing competitive forces within an industry.</div></div>
-                <div class="info-card def-card"><div class="card-title">Core Competence</div><div class="card-body">An essential capability providing competitive advantage.</div></div>
-                <div class="info-card def-card"><div class="card-title">Ansoff Matrix</div><div class="card-body">Model showing risk in strategies: Penetration, Product/Market Dev, Diversification.</div></div>
-                <div class="info-card def-card"><div class="card-title">Corporate Culture</div><div class="card-body">Values, attitudes, and beliefs influencing interaction within an organization.</div></div>
-                <div class="info-card def-card"><div class="card-title">Transformational Leadership</div><div class="card-body">Leader works with teams to identify change and create a vision.</div></div>
-                <div class="info-card def-card"><div class="card-title">Change Management</div><div class="card-body">Planning and controlling the transition of an organization to a new state.</div></div>
-                <div class="info-card def-card"><div class="card-title">Project Champion</div><div class="card-body">Individual supporting a project and driving it forward.</div></div>
-                <div class="info-card def-card"><div class="card-title">Contingency Planning</div><div class="card-body">Preparing resources to ensure business continuity after a crisis.</div></div>
-            </div>
-
-            <div class="section-title">HR & Organization</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Functional Structure</div><div class="card-body">Departments organised by specialist areas (e.g., marketing, finance).</div></div>
-                <div class="info-card def-card"><div class="card-title">Matrix Structure</div><div class="card-body">Structure creating project teams cutting across functional departments.</div></div>
-                <div class="info-card def-card"><div class="card-title">Delayering</div><div class="card-body">Removing one or more levels of hierarchy.</div></div>
-                <div class="info-card def-card"><div class="card-title">Delegation</div><div class="card-body">Passing authority down the hierarchy.</div></div>
-                <div class="info-card def-card"><div class="card-title">Centralisation</div><div class="card-body">Concentrating decision-making powers at the head office.</div></div>
-                <div class="info-card def-card"><div class="card-title">Emotional Intelligence</div><div class="card-body">Ability to understand and manage emotions of self and others.</div></div>
-                <div class="info-card def-card"><div class="card-title">Hard HRM</div><div class="card-body">Managing employees focused on cutting costs.</div></div>
-                <div class="info-card def-card"><div class="card-title">Soft HRM</div><div class="card-body">Managing employees focused on development and motivation.</div></div>
-                <div class="info-card def-card"><div class="card-title">Gig Economy</div><div class="card-body">Labor market with temporary, flexible jobs (independent contractors).</div></div>
-                <div class="info-card def-card"><div class="card-title">Absenteeism</div><div class="card-body">Rate of workforce absence as a proportion of total employees.</div></div>
-            </div>
-
-            <div class="section-title">Marketing</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Price Elasticity (PED)</div><div class="card-body">Measure of how demand changes in response to price changes.</div></div>
-                <div class="info-card def-card"><div class="card-title">Product Development</div><div class="card-body">Creating and marketing new goods/services.</div></div>
-                <div class="info-card def-card"><div class="card-title">Sales Forecasting</div><div class="card-body">Predicting future sales levels and trends.</div></div>
-                <div class="info-card def-card"><div class="card-title">Delphi Method</div><div class="card-body">Qualitative forecasting gathering forecasts from a panel of experts.</div></div>
-                <div class="info-card def-card"><div class="card-title">Global Localisation</div><div class="card-body">Adjusting marketing mix to suit local tastes while maintaining global strategy.</div></div>
-                <div class="info-card def-card"><div class="card-title">Pan-Global Marketing</div><div class="card-body">Marketing a standardised product worldwide as if it were a single market.</div></div>
-            </div>
-
-            <div class="section-title">Operations</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Reshoring</div><div class="card-body">Moving a previously offshored operation back to the original country.</div></div>
-                <div class="info-card def-card"><div class="card-title">Economies of Scale</div><div class="card-body">Cost reductions per unit achieved as a business expands.</div></div>
-                <div class="info-card def-card"><div class="card-title">Total Quality Management</div><div class="card-body">Quality approach involving all employees in continuous improvement.</div></div>
-                <div class="info-card def-card"><div class="card-title">Lean Production</div><div class="card-body">Producing goods with minimal waste while maintaining quality.</div></div>
-                <div class="info-card def-card"><div class="card-title">Kaizen</div><div class="card-body">Japanese term meaning continuous improvement.</div></div>
-                <div class="info-card def-card"><div class="card-title">Critical Path Analysis</div><div class="card-body">Technique identifying task sequences and the critical path.</div></div>
-                <div class="info-card def-card"><div class="card-title">Total Float</div><div class="card-body">Time an activity can be delayed without delaying the project.</div></div>
-            </div>
-
-            <div class="section-title">Finance</div>
-            <div class="grid-layout">
-                <div class="info-card def-card"><div class="card-title">Working Capital</div><div class="card-body">Capital for day-to-day activities (Current Assets - Current Liabilities).</div></div>
-                <div class="info-card def-card"><div class="card-title">Depreciation</div><div class="card-body">Reduction in estimated value of a non-current asset over time.</div></div>
-                <div class="info-card def-card"><div class="card-title">Goodwill</div><div class="card-body">Value arising when a business is bought for more than asset value.</div></div>
-                <div class="info-card def-card"><div class="card-title">Window Dressing</div><div class="card-body">Manipulating financial statements to show more favorable results.</div></div>
-                <div class="info-card def-card"><div class="card-title">Capital Employed</div><div class="card-body">Total value of long-term finance invested in a business.</div></div>
-                <div class="info-card def-card"><div class="card-title">Investment Appraisal</div><div class="card-body">Evaluating profitability/feasibility of an investment (NPV, ARR).</div></div>
-            </div>
-
+    </div>
+    <div class="formula-section">
+        <h3 class="chapter-title">Investment Appraisal</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">ARR (Accounting Rate of Return)</div><div class="f-body">(Average Annual Profit / Average Investment) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Payback Period</div><div class="f-body">Amount Invested / Annual Net Cash Flow</div></div>
+            <div class="formula-card"><div class="f-title">Payback (Monthly Adj.)</div><div class="f-body">(Additional Cash Needed / Annual Cash Flow) × 12</div></div>
+            <div class="formula-card"><div class="f-title">Average Investment</div><div class="f-body">(Initial Cost + Residual Value) / 2</div></div>
         </div>
-
-        <div id="view-scorecard" class="hidden">
-            <h2 class="section-title">Performance</h2>
-            <div id="stats-overview" style="display:flex; gap:20px; margin-bottom:30px;"></div>
-            <div id="score-table-container"></div>
-            <button onclick="if(confirm('Reset all?')) { localStorage.clear(); location.reload(); }" style="margin-top:20px; color:red; background:none; border:1px solid red; padding:10px; border-radius:5px; cursor:pointer;">Reset Data</button>
+    </div>
+    <div class="formula-section">
+        <h3 class="chapter-title">Marketing</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Market Share</div><div class="f-body">(Sales of Business / Total Market Sales) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Price Elasticity (PED)</div><div class="f-body">% Change in Demand / % Change in Price</div></div>
+            <div class="formula-card"><div class="f-title">Income Elasticity (YED)</div><div class="f-body">% Change in Demand / % Change in Income</div></div>
+            <div class="formula-card"><div class="f-title">Promotional Elasticity</div><div class="f-body">% Change in Demand / % Change in Spending</div></div>
         </div>
-
-        <div id="view-workspace" class="hidden">
-            <button class="nav-btn" onclick="setView('papers')">← Back</button>
-            <div class="toggle-insert" onclick="toggleInsert()">📖 Toggle Case Study</div>
-            <div class="workspace">
-                <div class="insert-panel" id="insert-panel">
-                    <iframe id="insert-pdf" style="width:100%; height:100%; border:none;" src=""></iframe>
-                </div>
-                <div class="questions-panel" id="questions-container"></div>
-            </div>
+    </div>
+    <div class="formula-section">
+        <h3 class="chapter-title">Operations & Project Management</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Capacity Utilisation</div><div class="f-body">(Current Output / Maximum Output) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Total Float</div><div class="f-body">LFT - Duration - EST</div></div>
+            <div class="formula-card"><div class="f-title">Free Float</div><div class="f-body">EST (Next Activity) - Duration - EST (This Activity)</div></div>
+        </div>
+    </div>
+    <div class="formula-section">
+        <h3 class="chapter-title">Human Resources</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Absenteeism Rate</div><div class="f-body">(Total Days Absent / Total Work Days) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Labour Turnover</div><div class="f-body">(Number of Staff Leaving / Average Staff) × 100</div></div>
         </div>
     </div>
 </div>
 
+<div id="view-definitions" class="hidden">
+    <div class="def-section">
+        <h3 class="topic-title">Strategy & Economics</h3>
+        <div class="def-grid">
+            <div class="def-card"><div class="d-term">Privatization</div><div class="d-desc">The act of selling state-owned and controlled business organizations to investors in the private sector.</div></div>
+            <div class="def-card"><div class="d-term">Globalization</div><div class="d-desc">The increasing freedom of movement of goods, capital, and people around the world.</div></div>
+            <div class="def-card"><div class="d-term">SWOT Analysis</div><div class="d-desc">Strategic analysis identifying internal strengths and weaknesses, and external opportunities and threats.</div></div>
+            <div class="def-card"><div class="d-term">Porter's Five Forces</div><div class="d-desc">Technique for analysing competitive forces within an industry.</div></div>
+            <div class="def-card"><div class="d-term">Core Competence</div><div class="d-desc">An essential business capability that provides a competitive advantage.</div></div>
+            <div class="def-card"><div class="d-term">Ansoff Matrix</div><div class="d-desc">A model illustrating risk in growth strategies: market penetration, product dev, market dev, and diversification.</div></div>
+            <div class="def-card"><div class="d-term">Blue Ocean Strategy</div><div class="d-desc">Exploiting uncontested market space through product differentiation and low cost.</div></div>
+        </div>
+    </div>
+    <div class="def-section">
+        <h3 class="topic-title">Finance</h3>
+        <div class="def-grid">
+            <div class="def-card"><div class="d-term">Working Capital</div><div class="d-desc">The capital required for day-to-day activities (Current Assets - Current Liabilities).</div></div>
+            <div class="def-card"><div class="d-term">Depreciation</div><div class="d-desc">The reduction in the estimated value of a non-current asset over time.</div></div>
+            <div class="def-card"><div class="d-term">Goodwill</div><div class="d-desc">The value arising when a business is bought for more than the balance sheet value of its assets.</div></div>
+            <div class="def-card"><div class="d-term">Capital Employed</div><div class="d-desc">The total value of long-term finance invested in a business.</div></div>
+            <div class="def-card"><div class="d-term">Investment Appraisal</div><div class="d-desc">Evaluating the profitability or feasibility of an investment project (e.g., NPV, ARR).</div></div>
+            <div class="def-card"><div class="d-term">Window Dressing</div><div class="d-desc">Techniques used by companies to manipulate financial statements to show more favorable results.</div></div>
+        </div>
+    </div>
+    <div class="def-section">
+        <h3 class="topic-title">HR & Leadership</h3>
+        <div class="def-grid">
+            <div class="def-card"><div class="d-term">Hard HRM</div><div class="d-desc">An approach to managing employees focused on cutting costs.</div></div>
+            <div class="def-card"><div class="d-term">Soft HRM</div><div class="d-desc">An approach to managing employees focused on their development, self-fulfillment, and motivation.</div></div>
+            <div class="def-card"><div class="d-term">Emotional Intelligence</div><div class="d-desc">The ability to understand and manage one's own emotions and those of others to improve performance.</div></div>
+            <div class="def-card"><div class="d-term">Corporate Culture</div><div class="d-desc">The values, attitudes, and beliefs of an organisation's people that influence interactions.</div></div>
+            <div class="def-card"><div class="d-term">Gig Economy</div><div class="d-desc">A labor market with temporary, flexible jobs, where workers are often independent contractors.</div></div>
+        </div>
+    </div>
+    <div class="def-section">
+        <h3 class="topic-title">Operations</h3>
+        <div class="def-grid">
+            <div class="def-card"><div class="d-term">Kaizen</div><div class="d-desc">A Japanese term meaning continuous improvement.</div></div>
+            <div class="def-card"><div class="d-term">TQM</div><div class="d-desc">Total Quality Management: A quality approach involving all employees in continuous improvement.</div></div>
+            <div class="def-card"><div class="d-term">Lean Production</div><div class="d-desc">Producing goods and services with minimal wasted resources while maintaining high quality.</div></div>
+            <div class="def-card"><div class="d-term">Critical Path Analysis</div><div class="d-desc">A planning technique that identifies tasks, sequences them, and identifies the critical path.</div></div>
+            <div class="def-card"><div class="d-term">Reshoring</div><div class="d-desc">Moving a previously offshored business operation back to its original country.</div></div>
+        </div>
+    </div>
+</div>
+
+<div id="view-scorecard" class="hidden">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;">
+        <div>
+            <h2 style="font-size:2rem; color:var(--text-dark);">Performance Analytics</h2>
+            <p style="color:#888;">Track your progress across all exam series</p>
+        </div>
+        <button class="reset-icon-btn" onclick="resetAll()">⚠ WIPE DATA</button>
+    </div>
+    <div id="stats-overview" class="stats-container"></div>
+    <div id="score-table-container"></div>
+</div>
+
+<div id="view-workspace" class="hidden">
+    <button class="nav-btn" onclick="backToDash()" style="margin-bottom:10px;">← Back to Papers</button>
+    <div class="toggle-insert" onclick="toggleInsert()">📖 Toggle PDF Case Study</div>
+    <div class="workspace">
+        <div class="insert-panel" id="insert-panel">
+            <iframe id="insert-pdf" class="insert-pdf-frame" src=""></iframe>
+        </div>
+        <div class="questions-panel" id="questions-container"></div>
+    </div>
+</div>
+
+</div>
+</div>
+
 <script>
-// === CORRECTED DATA BASED ON YOUR INSERTS ===
+// === ORIGINAL PAPER DATA + CORRECTED 2024 QUESTIONS ===
 const paperData = {
-    '2024_fm_32': { 
-        title: "Clean Delivery (CD)", 
-        pdf: "9609_m24_in_32.pdf", 
-        questions: [ 
-            { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, 
-            { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, 
-            { n:'3(a)', m:2, t:'Calculate the Price Earnings (P/E) ratio for 2024.'}, 
-            { n:'3(b)', m:2, t:'Calculate the Return on Capital Employed (ROCE) for 2024.'}, 
-            { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to CD’s directors.', l:'250-350'}, 
-            { n:'4(a)', m:4, t:'Calculate the difference in capacity utilisation between 2022 and 2023.'}, 
-            { n:'4(b)', m:12, t:'Evaluate the importance of research and development (R&D) to CD’s future success.', l:'250-350'}, 
-            { n:'5', m:12, t:'Evaluate the impact on CD of the appreciation of country K’s exchange rate.', l:'250-350'} 
-        ] 
-    },
-    '2024_mj_32': { 
-        title: "Soymai Farms (SF)", 
-        pdf: "9609_s24_in_32.pdf", 
-        questions: [ 
-            { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, 
-            { n:'2', m:8, t:'Analyse two problems SF may experience when implementing TQM.', l:'150-225'}, 
-            { n:'3(a)', m:2, t:'Calculate the sales volume variation for Quarter 1 2023.'}, 
-            { n:'3(b)', m:2, t:'Calculate the centred quarterly moving average for Quarter 2 2023.'}, 
-            { n:'3(c)', m:12, t:'Evaluate the usefulness of sales forecasting to SF.', l:'250-350'}, 
-            { n:'4(a)', m:4, t:'Calculate the current capacity utilisation of the factory.'}, 
-            { n:'4(b)', m:12, t:'Evaluate the decision to outsource production of Sosoy Ice Cream.', l:'250-350'}, 
-            { n:'5', m:12, t:'Evaluate the impact on SF of joining the NFTA trading agreement.', l:'250-350'} 
-        ] 
-    },
-    '2025_fm_32': { 
-        title: "Iyipada (IPA)", 
-        pdf: "9609_m25_in_32.pdf", 
-        questions: [ 
-            { n:'1', m:8, t:'Analyse one advantage and one disadvantage to IPA of changing employment contracts.', l:'150-225'}, 
-            { n:'5', m:12, t:'Evaluate the most likely impact on IPA of the fiscal and monetary policy changes.', l:'250-350'} 
-        ] 
-    }
+/* 2025 SERIES */
+'2025_on_31': { title: "Pedro's Perfect Pies (PPP)", pdf: "9609_w25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two likely impacts on PPP of the changing external influences.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to PPP of using quality assurance.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.3, calculate the payback period for PPP\'s new machine.'}, { n:'3(b)', m:2, t:'Using Table 1.3, calculate the ARR for PPP\'s new machine.'}, { n:'3(c)', m:12, t:'Evaluate whether PPP should invest in the new machine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the monthly revenue from the sales of the classic pie after the price increase.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness to PPP of elasticity measures.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of emotional intelligence to Pedro\'s leadership.', l:'250-350'} ] },
+'2025_on_32': { title: "Komate Tropical Juice (KTJ)", pdf: "9609_w25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to KTJ of delegation.', l:'150-225'}, { n:'2', m:8, t:'Analyse two impacts on KTJ of its commitment to CSR.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the payback period of the country C location.'}, { n:'3(b)', m:2, t:'Calculate the ARR of the country D location.'}, { n:'3(c)', m:12, t:'Evaluate which location KTJ should choose for its new factory.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the four period centred moving average for Quarter 1 2025.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of time series analysis to KTJ.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on KTJ of fluctuations in the exchange rate.', l:'250-350'} ] },
+'2025_on_33': { title: "Lithium Battery Metals (LBM)", pdf: "9609_w25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to the government of country G from nationalisation.', l:'150-225'}, { n:'2', m:8, t:'Analyse one benefit and one limitation of sales forecasting to LBM.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.1, calculate the payback period.'}, { n:'3(b)', m:2, t:'Using Table 1.1, calculate the NPV over six years discounted at 8%.'}, { n:'3(c)', m:12, t:'Evaluate LBM\'s decision to go ahead with the hot water mine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate total float for activity C and minimum project duration.'}, { n:'4(b)', m:12, t:'Evaluate the importance of CPA to the success of the hard rock mine.', l:'250-350'}, { n:'5', m:12, t:'Evaluate LBM\'s decision to use two different approaches to HRM.', l:'250-350'} ] },
+'2025_mj_31': { title: "Wisdom Shoes (WS)", pdf: "9609_s25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to WS of using an environmental audit.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WS of Enterprise Resource Planning (ERP).', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.4. Calculate the change in dividend yield.'}, { n:'3(b)', m:2, t:'Refer to Table 1.4. Calculate the change in P/E ratio.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on WS shareholders of the proposed changes.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the inventory turnover ratio.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to WS directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of environmental targets to WS success.', l:'250-350'} ] },
+'2025_mj_32': { title: "Pura AI Robots (PAIR)", pdf: "9609_s25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to PAIR of contingency planning.', l:'150-225'}, { n:'2', m:8, t:'Analyse two likely causes of the failure of the battery supplier.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the capacity utilisation for 2025.'}, { n:'3(b)', m:2, t:'Calculate the increase in profit margin.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on PAIR of the decision to increase investment in R&D.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for the critical path.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to PAIR.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which PAIRs future success depends on external influences.', l:'250-350'} ] },
+'2025_mj_33': { title: "We Care Products (WCP)", pdf: "9609_s25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two ways the external influences referred to in lines 8-12 may impact on WCP.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WCP of its social objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the labour turnover rate at GC.'}, { n:'3(b)', m:2, t:'Calculate the cost per unit.'}, { n:'3(c)', m:12, t:'Evaluate whether Aldin should change the HRM approach at GC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the marketing budget variance.'}, { n:'4(b)', m:12, t:'Evaluate the effectiveness of WCP’s marketing strategy.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on WCP of the takeover of GC.', l:'250-350'} ] },
+'2025_fm_32': { title: "Iyipada (IPA)", pdf: "9609_m25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to IPA of changing employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two methods to improve IPA\'s liquidity.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate, for 2024, IPA\'s market share.'}, { n:'3(b)', m:2, t:'Calculate, for 2025, the expected percentage market growth.'}, { n:'3(c)', m:12, t:'Evaluate the Marketing Director\'s proposed changes to IPA\'s marketing mix.', l:'250-350'}, { n:'4(a)', m:2, t:'Complete nodes 5 and 6 on the network diagram.'}, { n:'4(b)', m:2, t:'Calculate the total float for Activity F.'}, { n:'4(c)', m:12, t:'Evaluate the benefit to IPA of Critical Path Analysis (CPA).', l:'250-350'}, { n:'5', m:12, t:'Evaluate the most likely impact on IPA of the fiscal and monetary policy changes.', l:'250-350'} ] },
+
+/* 2024 SERIES (WITH CORRECTED QUESTIONS) */
+'2024_on_31': { title: "TopoChoc Enterprises (TC)", pdf: "9609_w24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to TC of marketing planning for the new range of chocolate bars.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to TC of setting SMART business objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the current ratio for 2023.'}, { n:'3(b)', m:2, t:'Calculate the acid test ratio for 2023.'}, { n:'3(c)', m:12, t:'Evaluate whether the directors should worry about TCs liquidity.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the contribution of one chocolate bar.'}, { n:'4(b)', m:12, t:'Evaluate the proposal to produce chocolate bars.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of Total Quality Management (TQM) to TC.', l:'250-350'} ] },
+'2024_on_32': { title: "Habesha Clean Cooking (HCC)", pdf: "9609_w24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two impacts on HCC of the increase in competition in country E.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to HCC of being a social enterprise.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the capacity utilisation for the Wonder Stove in 2023.'}, { n:'3(b)', m:2, t:'Calculate the increase in profit if production is outsourced.'}, { n:'3(c)', m:12, t:'Evaluate the decision to outsource production of the Wonder Stove.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the EST and LFT for activity F.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to HCC.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of business planning to the success of HCCs expansion into country K.', l:'250-350'} ] },
+'2024_on_33': { title: "Australasia Fitness Factory (AFF)", pdf: "9609_w24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two threats to AFF from changes in its external environment.', l:'150-225'}, { n:'2', m:8, t:'Analyse one advantage and one disadvantage to AFF of being a public limited company.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the return on capital employed (ROCE) for 2023.'}, { n:'3(b)', m:2, t:'Calculate the gearing ratio for 2023.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on AFF shareholders of the new share issue.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the dividend yield for 2022.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to AFFs directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether TQM is the best way to solve customer complaint problems.', l:'250-350'} ] },
+'2024_mj_31': { title: "Gordy Building Supplies (GBS)", pdf: "9609_s24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to GBS of using flexible part-time employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to GBS of its proposed communication process innovation.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the gearing ratio.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to GBS’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity C.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to GBS.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which corporate social responsibility (CSR) should influence GBS’s decision to expand into new land.', l:'250-350'} ] },
+'2024_mj_32': { title: "Soymai Farms (SF)", pdf: "9609_s24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two problems SF may experience when implementing total quality management (TQM).', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.1. Calculate the sales volume variation for Quarter 1 2023.'}, { n:'3(b)', m:2, t:'Refer to Table 1.1. Calculate the centred quarterly moving average for Quarter 2 2023.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of sales forecasting to SF.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the current capacity utilisation of the factory.'}, { n:'4(b)', m:12, t:'Evaluate the decision to outsource production of Sosoy Ice Cream.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on SF of country B becoming a member of the NFTA international trading agreement.', l:'250-350'} ] },
+'2024_mj_33': { title: "Sunil's Clothing Company (SCC)", pdf: "9609_s24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two impacts on SCC of the changing external influences in country Z.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to SCC of the proposed new factory.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the promotional elasticity of demand.'}, { n:'3(b)', m:2, t:'Calculate the price elasticity of demand.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of elasticity data to SCC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity B.'}, { n:'4(b)', m:12, t:'Evaluate the importance of Critical Path Analysis (CPA) to the success of the new factory.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether Sunil should use a soft or hard approach to human resource management.', l:'250-350'} ] },
+'2024_fm_32': { title: "Clean Delivery (CD)", pdf: "9609_m24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.1. Calculate the Price Earnings (P/E) ratio for 2024.'}, { n:'3(b)', m:2, t:'Refer to Table 1.1. Calculate the Return on Capital Employed (ROCE) for 2024.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to CD’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the difference in capacity utilisation between 2022 and 2023.'}, { n:'4(b)', m:12, t:'Evaluate the importance of research and development (R&D) to CD’s future success.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on CD of the appreciation of country K’s exchange rate.', l:'250-350'} ] }
 };
 
 function getUser() { return localStorage.getItem('user'); }
+function setUser(u) { localStorage.setItem('user', u); }
 function getAttempts(u) { return JSON.parse(localStorage.getItem(`attempts_${u}`) || '{}'); }
+
 function saveAttempt(u, pid, qn, data) {
     const atts = getAttempts(u);
     if(!atts[pid]) atts[pid] = {};
@@ -295,7 +401,9 @@ function tryLogin() {
     const u = document.getElementById('u-in').value.trim();
     const p = document.getElementById('p-in').value.trim();
     if(p === '011406' && u.includes('.') && u.split('.').length >= 2) {
-        localStorage.setItem('user', u);
+        setUser(u);
+        const name = u.split('.')[0];
+        document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
         document.getElementById('login-layer').classList.add('hidden');
         document.getElementById('app-layer').classList.remove('hidden');
         setView('papers');
@@ -305,107 +413,194 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if(el) el.classList.add('hidden');
+    });
     document.getElementById(`view-${viewName}`).classList.remove('hidden');
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase().includes(viewName)) btn.classList.add('active');
+    });
     if(viewName === 'scorecard') renderScorecard();
 }
+
+function backToDash() { setView('papers'); }
+function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
 
 function openPaper(pid) {
     const data = paperData[pid];
     const u = getUser();
     const attempts = getAttempts(u)[pid] || {};
+
     document.getElementById('insert-pdf').src = data.pdf;
     
-    let html = `<h2>${data.title}</h2>`;
+    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
     data.questions.forEach(q => {
         const att = attempts[q.n] || {};
         const done = att.score !== undefined;
-        html += `
-        <div class="question-card">
-            <div style="display:flex; justify-content:space-between;"><strong>Q${q.n}</strong><span>${q.m} Marks</span></div>
-            <p style="margin:10px 0; font-weight:500;">${q.t}</p>
-            ${q.l ? `<p style="font-size:0.8rem; color:#666;">Limit: ${q.l} words</p>` : ''}
+        
+        let aoHtml = '';
+        if(done) {
+            aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${att.ao3 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${att.ao4 || '-'}</span>
+            </div>`;
+        }
+
+        qHtml += `<div class="question-card">
+            <div class="q-header"><strong>Q${q.n}</strong><span class="q-badge">${q.m} Marks</span></div>
+            <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
+            ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
             
-            <textarea id="ans_${pid}_${q.n}" oninput="checkWords(this, '${q.l}')">${att.answer || ''}</textarea>
+            <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
 
-            <button class="submit-btn" onclick="submitAns('${pid}', '${q.n}')" ${done ? '' : ''}>${done ? 'Re-Evaluate' : 'Strict Mark'}</button>
+            <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
             
             ${done ? `<div class="feedback-box">
                 <h3>Score: ${att.score}/${q.m}</h3>
-                <div style="margin:10px 0;">
-                    <span class="score-badge">AO1: ${att.ao1}</span>
-                    <span class="score-badge">AO2: ${att.ao2}</span>
-                    <span class="score-badge">AO3: ${att.ao3}</span>
-                    <span class="score-badge">AO4: ${att.ao4}</span>
-                </div>
+                ${aoHtml}
                 <p><strong>Strengths:</strong> ${att.strengths}</p>
                 <p><strong>Improvements:</strong> <span style="color:#d63031">${att.weaknesses}</span></p>
-                <div class="model-ans"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
+                <div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
             </div>` : ''}
         </div>`;
     });
-    document.getElementById('questions-container').innerHTML = html;
+    document.getElementById('questions-container').innerHTML = qHtml;
     setView('workspace');
-    data.questions.forEach(q => checkWords(document.getElementById(`ans_${pid}_${q.n}`), q.l));
+    
+    // Init word counts
+    data.questions.forEach(q => {
+        const el = document.getElementById(`ans_${pid}_${q.n}`);
+        if(el) updateWordCount(el, q.l);
+    });
 }
 
-function checkWords(el, limit) {
-    if(!limit) return;
+function updateWordCount(el, limitStr) {
+    if(!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-    const [min, max] = limit.split('-').map(Number);
-    const wcDiv = document.getElementById(el.id.replace('ans', 'wc'));
-    wcDiv.innerText = `${count} words`;
-    wcDiv.className = (count >= min && count <= max) ? 'word-count good' : 'word-count bad';
+    const idParts = el.id.split('_');
+    const wcEl = document.getElementById(`wc_${idParts[1]}_${idParts[2]}`);
+    
+    const [min, max] = limitStr.split('-').map(Number);
+    wcEl.innerText = `${count} words (${limitStr})`;
+    
+    if(count < min || count > max) {
+        wcEl.classList.add('bad'); wcEl.classList.remove('good');
+    } else {
+        wcEl.classList.add('good'); wcEl.classList.remove('bad');
+    }
 }
 
-function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
-
-async function submitAns(pid, qn) {
+async function submitAnswer(pid, qn) {
     const el = document.getElementById(`ans_${pid}_${qn}`);
     const btn = event.target;
-    btn.disabled = true; btn.innerText = "Marking...";
-    
+    const ans = el.value.trim();
+    if(!ans) return alert("Please write an answer first.");
+
+    btn.innerText = "⏳ Strict Marking...";
+    btn.disabled = true;
+
+    const qData = paperData[pid].questions.find(q => q.n === qn);
+
     try {
-        // === CRITICAL: POINTING TO YOUR HOSTED SERVER ===
         const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                question: paperData[pid].questions.find(q => q.n === qn).t,
-                marks: paperData[pid].questions.find(q => q.n === qn).m,
-                case_study: `Refer to PDF ${paperData[pid].title}`,
-                answer: el.value
+                question: qData.t,
+                case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
+                answer: ans,
+                marks: qData.m
             })
         });
-        const data = await res.json();
-        saveAttempt(getUser(), pid, qn, data);
+
+        const json = await res.json();
+        saveAttempt(getUser(), pid, qn, {
+            answer: ans,
+            score: json.score,
+            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
+            strengths: json.strengths,
+            weaknesses: json.weaknesses,
+            modelAnswer: json.model_answer
+        });
         openPaper(pid);
+
     } catch(e) {
-        alert("Server Error. Check console.");
-        btn.disabled = false; btn.innerText = "Retry";
+        console.error(e);
+        alert("Error: Server not responding.");
+        btn.innerText = "Retry";
+        btn.disabled = false;
     }
 }
 
+// RESTORED ORIGINAL SCORECARD RENDERER
 function renderScorecard() {
     const u = getUser();
-    const atts = getAttempts(u);
-    let html = '';
-    let total = 0, max = 0;
-    
+    const allAtts = getAttempts(u);
+    let totalQ = 0, totalAns = 0, totalScore = 0, possibleScore = 0, papersStarted = 0;
+    let rows = '';
+
     Object.keys(paperData).forEach(pid => {
-        const pAtts = atts[pid] || {};
-        let pScore = 0;
-        Object.values(pAtts).forEach(a => pScore += (a.score || 0));
-        html += `<div style="background:white; padding:15px; margin-bottom:10px; border-radius:10px; border:1px solid #eee; display:flex; justify-content:space-between;">
-            <span>${paperData[pid].title}</span>
-            <strong style="color:var(--lime-dark);">${pScore} Marks</strong>
-        </div>`;
+        const pAtts = allAtts[pid] || {};
+        const qs = paperData[pid].questions;
+        const answeredCount = Object.keys(pAtts).length;
+        if(answeredCount > 0) papersStarted++;
+
+        let pScore = 0, pMax = 0;
+        qs.forEach(q => {
+            pMax += q.m;
+            if(pAtts[q.n]) {
+                pScore += (pAtts[q.n].score || 0);
+                totalScore += (pAtts[q.n].score || 0);
+                possibleScore += q.m;
+            }
+        });
+        totalQ += qs.length;
+        totalAns += answeredCount;
+
+        const percent = (answeredCount / qs.length) * 100;
+
+        rows += `<tr>
+        <td><div style="font-weight:700;">${paperData[pid].title}</div><div style="font-size:0.8rem; color:#888;">${pid}</div></td>
+        <td><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div> <span style="font-size:0.9rem; font-weight:600;">${answeredCount}/${qs.length}</span></td>
+        <td><span class="score-badge">${pScore}/${pMax}</span></td>
+        <td>${answeredCount > 0 ? `<button class="reset-icon-btn" onclick="resetPaper('${pid}')">Reset</button>` : '-'}</td>
+        </tr>`;
     });
-    document.getElementById('score-table-container').innerHTML = html;
+
+    const accuracy = possibleScore > 0 ? Math.round((totalScore/possibleScore)*100) : 0;
+
+    document.getElementById('stats-overview').innerHTML = `
+        <div class="stat-card"><span class="stat-value">${papersStarted}</span><span class="stat-label">Papers Started</span></div>
+        <div class="stat-card"><span class="stat-value">${totalAns}</span><span class="stat-label">Questions Solved</span></div>
+        <div class="stat-card"><span class="stat-value">${accuracy}%</span><span class="stat-label">Global Accuracy</span></div>
+    `;
+
+    document.getElementById('score-table-container').innerHTML = `<table class="modern-table"><thead><tr><th>Paper</th><th>Progress</th><th>Score</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function resetPaper(pid) {
+    if(confirm("Delete all answers for this paper?")) {
+        const u = getUser();
+        const atts = getAttempts(u);
+        delete atts[pid];
+        localStorage.setItem(`attempts_${u}`, JSON.stringify(atts));
+        renderScorecard();
+    }
+}
+
+function resetAll() {
+    if(confirm("WIPE ALL DATA?")) { localStorage.clear(); location.reload(); }
 }
 
 if(getUser()) {
+    const u = getUser();
+    const name = u.split('.')[0];
+    document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
     document.getElementById('login-layer').classList.add('hidden');
     document.getElementById('app-layer').classList.remove('hidden');
     setView('papers');
