@@ -7,7 +7,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 1. PASTE YOUR API KEY HERE
 genai.configure(api_key="AIzaSyCoiWYtl2E5DATpunC2__5uwenTQ7ML0JE")
-model = genai.GenerativeModel('models/gemini-2.5-flash')
+model = genai.GenerativeModel('models/gemini-3-pro-preview')
 
 @app.route('/mark', methods=['POST'])
 def mark():
