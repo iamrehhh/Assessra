@@ -227,7 +227,9 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
 <button class="nav-btn tutor-btn" onclick="window.location.href='tutor.html'">
     📚 Tutor
 </button>
-        
+<button class="action-btn tutor-btn" onclick="window.location.href='tutor.html'">
+    📚 Tutor
+</button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
@@ -440,7 +442,7 @@ function saveAttempt(u, pid, qn, data) {
 function tryLogin() {
     const u = document.getElementById('u-in').value.trim();
     const p = document.getElementById('p-in').value.trim();
-    if(p === '011406' && u.includes('.') && u.split('.').length >= 2) {
+    if(p === '2026' && u.includes('.') && u.split('.').length >= 2) {
         setUser(u);
         const name = u.split('.')[0];
         document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
