@@ -92,6 +92,34 @@ def mark():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Failed to mark answer", "details": str(e)}), 500
+        # --- ADD THIS NEW ROUTE FOR THE CHATBOT ---
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    try:
+        data = request.json
+        user_message = data.get('message')
+
+        # TUTOR PERSONALITY
+        tutor_prompt = f"""
+        You are an Expert A-Level Business & Economics Tutor for Cambridge (9609/9708).
+        
+        YOUR RULES:
+        1. Answer ONLY questions related to Business Studies, Economics, Finance, or Management.
+        2. If a user asks about anything else (e.g., movies, coding, weather), politely refuse: "I can only help with Business and Economics studies."
+        3. Keep answers concise, structured (bullet points), and easy to revise from.
+        4. Use bolding (**text**) for key terms.
+        
+        Student Question: {user_message}
+        """
+
+        response = model.generate_content(tutor_prompt)
+        
+        # Return plain text (Markdown is fine, we will render it)
+        return jsonify({"reply": response.text})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
