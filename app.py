@@ -14,7 +14,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 1. CONFIGURE API KEY
 # (Render will provide this via Environment Variables, or you can paste it for local test)
-api_key = os.getenv("GOOGLE_API_KEY") 
+api_key = os.getenv("AIzaSyCoiWYtl2E5DATpunC2__5uwenTQ7ML0JE") 
 if api_key:
     genai.configure(api_key=api_key)
 
