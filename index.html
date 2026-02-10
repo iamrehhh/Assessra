@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> A-Level Business | The One</title>
 <link rel="icon" type="image/png" href="logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap)" rel="stylesheet">
 <style>
     /* GLOBAL FONT */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+    @import url('[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap)');
     /* NEW FONTS */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+    @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap)');
 
     :root {
         --lime-primary: #32CD32;
@@ -242,7 +242,8 @@
     <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
     <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
     <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-    <button class="nav-btn" onclick="setView('chat')">AI Tutor</button> <button class="nav-btn" onclick="doLogout()">Logout</button>
+    <button class="nav-btn" onclick="setView('chat')">AI Tutor</button>
+    <button class="nav-btn" onclick="doLogout()">Logout</button>
 </div>
         </div>
 
@@ -362,6 +363,7 @@
         </div>
         
 <div id="view-definitions" class="hidden">
+    
     <div class="def-section">
         <h3 class="topic-title">Strategy & Economics</h3>
         <div class="def-grid">
@@ -637,7 +639,7 @@
     // ... (Your strict marking logic is handled in Python now, so we just send marks)
 
     try {
-        const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
+        const res = await fetch('[https://ultimate-exam-guide.onrender.com/mark](https://ultimate-exam-guide.onrender.com/mark)', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
@@ -751,7 +753,7 @@
         chatWin.scrollTop = chatWin.scrollHeight;
 
         try {
-            const res = await fetch('https://ultimate-exam-guide.onrender.com/chat', {
+            const res = await fetch('[https://ultimate-exam-guide.onrender.com/chat](https://ultimate-exam-guide.onrender.com/chat)', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: msg })

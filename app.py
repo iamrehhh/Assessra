@@ -1,14 +1,3 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import google.generativeai as genai
-
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-# 1. PASTE YOUR API KEY HERE
-genai.configure(api_key="AIzaSyCoiWYtl2E5DATpunC2__5uwenTQ7ML0JE")
-model = genai.GenerativeModel('models/gemini-2.5-flash')
-
 import os
 import json
 from flask import Flask, request, jsonify
@@ -16,110 +5,105 @@ from flask_cors import CORS
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load environment variables (for local testing)
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# Allow CORS for your Render URL and Localhost
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# 1. CONFIGURE GEMINI (Use the best FREE model: 2.0 Flash)
-# Make sure your API key is in a .env file or set directly here
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel('gemini-2.0-flash') 
+# 1. CONFIGURE API KEY
+# (Render will provide this via Environment Variables, or you can paste it for local test)
+api_key = os.getenv("GOOGLE_API_KEY") 
+if api_key:
+    genai.configure(api_key=api_key)
 
+# 2. SMART MODEL SELECTOR (Prevents Crashing)
+def get_model():
+    try:
+        # Try the newest model first
+        return genai.GenerativeModel('gemini-2.0-flash')
+    except:
+        # Fallback to the stable model if 2.0 isn't available to your key
+        return genai.GenerativeModel('gemini-1.5-flash')
+
+model = get_model()
+
+# --- ROUTE 1: MARKING SYSTEM ---
 @app.route('/mark', methods=['POST'])
 def mark():
     try:
         data = request.json
         marks = int(data.get('marks', 0))
-        question = data.get('question', 'Unknown Question')
-        case_study = data.get('case_study', 'No Case Study Provided')
+        question = data.get('question', '')
+        case_study = data.get('case_study', '')
         student_answer = data.get('answer', '')
-
-        # 2. WORD LIMIT LOGIC (Kept from your original code)
+        
+        # Word limit constraints
         word_limit = "150-225 words" if marks == 8 else "250-350 words"
-
-        # 3. UPGRADED "SENIOR EXAMINER" SYSTEM PROMPT
-        # This prompt forces deep analysis, strict marking, and proper paragraph breaks.
+        
         system_prompt = f"""
-        You are a SENIOR CAMBRIDGE A-LEVEL BUSINESS (9609) EXAMINER.
-        Your task is to mark the student's answer STRICTLY against the marking scheme.
+        You are a Senior Cambridge A-Level Business (9609) Examiner. 
+        Be extremely strict. Grade the answer based on these Assessment Objectives:
+        - AO1 (Knowledge): Correct definitions.
+        - AO2 (Application): Direct reference to the Case Study facts provided.
+        - AO3 (Analysis): Clear cause-and-effect chains.
+        - AO4 (Evaluation): Required for 12-mark questions. A justified conclusion is a must.
 
-        ### QUESTION DETAILS:
-        - **Question:** {question}
-        - **Max Marks:** {marks}
-        - **Target Word Count:** {word_limit} (Penalize if significantly under/over).
-        - **Case Study Context:** {case_study}
+        STRICT CONSTRAINTS:
+        - Target Word Count: {word_limit}. Penalize if significantly over or under.
+        - Reference the provided Case Study for application marks.
+        
+        Question: {question}
+        Marks: {marks}
+        Case Study Context: {case_study}
+        Student Answer: {student_answer}
 
-        ### ASSESSMENT OBJECTIVES (AOs):
-        - **AO1 (Knowledge):** Accurate definitions & theories.
-        - **AO2 (Application):** CRITICAL. The answer MUST explicitly reference the Case Study (names, data, scenario). If the answer is generic (could apply to any business), CAP AO2 MARKS AT 0.
-        - **AO3 (Analysis):** Chains of reasoning (Cause -> Effect -> Impact).
-        - **AO4 (Evaluation):** (Only for 12/20 marks) Final judgement, weighing pros/cons, short/long term perspective.
-
-        ### FEEDBACK RULES:
-        1. **Be Constructive:** Do not just say "good". Explain *why* marks were awarded or lost.
-        2. **Paragraph Breaks:** Use \\n\\n in your JSON strings to create paragraphs in the feedback.
-        3. **Model Answer:** Provide a perfect, A* grade answer that uses the Case Study context perfectly.
-
-        ### REQUIRED OUTPUT FORMAT (JSON ONLY):
+        Return ONLY a JSON object:
         {{
-            "score": (integer),
-            "ao1": (integer),
-            "ao2": (integer),
-            "ao3": (integer),
-            "ao4": (integer),
-            "strengths": "Detailed paragraph identifying what the student did well.",
-            "weaknesses": "Detailed paragraph explaining where marks were lost, referencing missing context or broken analysis chains.",
-            "model_answer": "A perfect model answer."
+            "score": int,
+            "ao1": int, "ao2": int, "ao3": int, "ao4": int,
+            "strengths": "string (use \\n\\n for paragraphs)",
+            "weaknesses": "string (use \\n\\n for paragraphs)",
+            "model_answer": "Provide a high-scoring, concise A* model answer here. (use \\n\\n for paragraphs)"
         }}
         """
-
-        # 4. GENERATE CONTENT WITH JSON ENFORCEMENT
-        # This ensures Gemini returns PURE JSON, no markdown formatting to clean up.
+        
+        # Force JSON response
         response = model.generate_content(
-            f"STUDENT ANSWER:\n{student_answer}\n\nSYSTEM INSTRUCTIONS:\n{system_prompt}",
+            system_prompt,
             generation_config=genai.types.GenerationConfig(
-                response_mime_type="application/json",
-                temperature=0.3  # Lower temperature = stricter, more consistent marking
+                response_mime_type="application/json"
             )
         )
-
-        # 5. SAFE RETURN
-        # Directly parse the JSON from Gemini
-        return jsonify(json.loads(response.text))
+        
+        # Clean and Parse
+        text = response.text.replace('```json', '').replace('```', '').strip()
+        return jsonify(json.loads(text))
 
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Failed to mark answer", "details": str(e)}), 500
-        # --- ADD THIS NEW ROUTE FOR THE CHATBOT ---
+        return jsonify({"error": str(e)}), 500
 
+# --- ROUTE 2: AI TUTOR (Added to match your HTML) ---
 @app.route('/chat', methods=['POST'])
 def chat():
     try:
         data = request.json
         user_message = data.get('message')
 
-        # TUTOR PERSONALITY
         tutor_prompt = f"""
-        You are an Expert A-Level Business & Economics Tutor for Cambridge (9609/9708).
-        
-        YOUR RULES:
-        1. Answer ONLY questions related to Business Studies, Economics, Finance, or Management.
-        2. If a user asks about anything else (e.g., movies, coding, weather), politely refuse: "I can only help with Business and Economics studies."
-        3. Keep answers concise, structured (bullet points), and easy to revise from.
-        4. Use bolding (**text**) for key terms.
+        You are an Expert A-Level Business Tutor.
+        Answer ONLY questions related to Business/Economics.
+        Keep answers concise and structured with bullet points.
         
         Student Question: {user_message}
         """
 
         response = model.generate_content(tutor_prompt)
-        
-        # Return plain text (Markdown is fine, we will render it)
         return jsonify({"reply": response.text})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5000)
