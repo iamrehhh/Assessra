@@ -149,29 +149,8 @@ line-height: 1.4;
 .header-left { display: flex; align-items: center; }
 .app-logo { height: 45px; width: auto; margin-right: 15px; }
 
-.nav-btn {
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: white;
-    color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.nav-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.nav-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
+.nav-btn { background: transparent; border: none; font-weight: 700; color: #666; padding: 10px 20px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+.nav-btn.active { color: var(--lime-dark); background: var(--lime-light); border-radius: 10px; }
 
 .series-header { margin: 40px 0 20px 0; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: baseline; gap: 15px; }
 .year-big { font-size: 2rem; font-weight: 800; color: #ccc; }
@@ -312,7 +291,8 @@ textarea.expanded {
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
         <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
-        <button class="nav-btn tip-nav-btn" onclick="setView('tips')" title="Exam Tips" style="font-size: 1.3rem;">💡</button>
+                <button class="nav-btn tip-nav-btn" onclick="setView('tips')" title="Exam Tips" style="font-size: 1.3rem;">💡</button>
+
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
@@ -422,41 +402,14 @@ textarea.expanded {
         <h3 class="topic-title">Strategy & Economics</h3>
         <div class="def-grid">
             <div class="def-card"><div class="d-term">Privatization</div><div class="d-desc">The act of selling state-owned and controlled business organizations to investors in the private sector.</div></div>
-            <div class="def-card"><div class="d-term">Nationalization</div><div class="d-desc">The transfer of privately owned businesses to state (government) ownership and control.</div></div>
-            <div class="def-card"><div class="d-term">Minimum Wage</div><div class="d-desc">Employers are not allowed to pay less than the set minimum wage per hour.</div></div>
-            <div class="def-card"><div class="d-term">Monopoly</div><div class="d-desc">A market in which there is only one supplier with no close competitors.</div></div>
-            <div class="def-card"><div class="d-term">Collusion</div><div class="d-desc">Businesses agree to work together and restrict competition by fixing prices and sharing contracts.</div></div>
-            <div class="def-card"><div class="d-term">Social Audit</div><div class="d-desc">A report on the impact a business has on society.</div></div>
             <div class="def-card"><div class="d-term">Globalization</div><div class="d-desc">The increasing freedom of movement of goods, capital, and people around the world.</div></div>
-            <div class="def-card"><div class="d-term">Protectionism</div><div class="d-desc">The use of barriers to free trade to protect a country's domestic industries.</div></div>
-            <div class="def-card"><div class="d-term">Tariff</div><div class="d-desc">A tax imposed on an imported product.</div></div>
-            <div class="def-card"><div class="d-term">Quota</div><div class="d-desc">A physical limit placed on the quantity of imports of certain products.</div></div>
-            <div class="def-card"><div class="d-term">Voluntary Export Limits</div><div class="d-desc">Agreed limits to the quantity of certain goods sold by one country to another.</div></div>
-            <div class="def-card"><div class="d-term">Free Trade</div><div class="d-desc">Trade with no restrictions or barriers that might prevent or limit trade between countries.</div></div>
-            <div class="def-card"><div class="d-term">Environmental Audit</div><div class="d-desc">Assesses the impact of the activities and decisions of a business on the environment.</div></div>
-            <div class="def-card"><div class="d-term">Sustainability</div><div class="d-desc">Meeting the needs of the present without compromising the ability of future generations to meet theirs.</div></div>
-            <div class="def-card"><div class="d-term">Green Consumerism</div><div class="d-desc">The trend for consumers to only buy products that are produced sustainably.</div></div>
-            <div class="def-card"><div class="d-term">External Costs</div><div class="d-desc">Costs of an economic activity not paid for by the producer or consumer, but by the rest of society.</div></div>
-            <div class="def-card"><div class="d-term">Economic Growth</div><div class="d-desc">An increase in a country's productive potential, measured by an increase in its real GDP.</div></div>
-            <div class="def-card"><div class="d-term">GDP</div><div class="d-desc">The total value of goods and services produced in a country in one year.</div></div>
-            <div class="def-card"><div class="d-term">Real GDP</div><div class="d-desc">GDP data adjusted for the effects of inflation.</div></div>
-            <div class="def-card"><div class="d-term">Inflation</div><div class="d-desc">An increase in the average price level of goods and services, resulting in a fall in the value of money.</div></div>
-            <div class="def-card"><div class="d-term">Recession</div><div class="d-desc">A decline in real GDP over two or more consecutive quarters.</div></div>
-            <div class="def-card"><div class="d-term">Business Cycle</div><div class="d-desc">Regular swings in output, measured by real GDP, from boom conditions to recession.</div></div>
-            <div class="def-card"><div class="d-term">Exchange Rate</div><div class="d-desc">The price of one currency in terms of another.</div></div>
-            <div class="def-card"><div class="d-term">Strategic Management</div><div class="d-desc">Analysis, setting objectives, deciding on strategies, and implementing them.</div></div>
-            <div class="def-card"><div class="d-term">SWOT Analysis</div><div class="d-desc">Identifying internal strengths/weaknesses and external opportunities/threats.</div></div>
-            <div class="def-card"><div class="d-term">PEST Analysis</div><div class="d-desc">Strategic analysis of the macro environment: Political, Economic, Social, Technological.</div></div>
+            <div class="def-card"><div class="d-term">SWOT Analysis</div><div class="d-desc">Strategic analysis identifying internal strengths and weaknesses, and external opportunities and threats.</div></div>
             <div class="def-card"><div class="d-term">Porter's Five Forces</div><div class="d-desc">Technique for analysing competitive forces within an industry.</div></div>
             <div class="def-card"><div class="d-term">Core Competence</div><div class="d-desc">An essential business capability that provides a competitive advantage.</div></div>
             <div class="def-card"><div class="d-term">Ansoff Matrix</div><div class="d-desc">A model illustrating risk in growth strategies: market penetration, product dev, market dev, and diversification.</div></div>
-            <div class="def-card"><div class="d-term">Force-field Analysis</div><div class="d-desc">Identifying driving and restraining forces affecting a decision.</div></div>
-            <div class="def-card"><div class="d-term">Decision Tree</div><div class="d-desc">A diagram outlining decision options, outcomes, and potential economic returns.</div></div>
-            <div class="def-card"><div class="d-term">Change Management</div><div class="d-desc">Planning and controlling the transition of an organisation from its current state to a new one.</div></div>
-            <div class="def-card"><div class="d-term">Contingency Planning</div><div class="d-desc">Preparing resources to ensure the business can continue operations after a major crisis.</div></div>
+            <div class="def-card"><div class="d-term">Blue Ocean Strategy</div><div class="d-desc">Exploiting uncontested market space through product differentiation and low cost.</div></div>
         </div>
     </div>
-    
     <div class="def-section">
         <h3 class="topic-title">Finance</h3>
         <div class="def-grid">
@@ -466,80 +419,26 @@ textarea.expanded {
             <div class="def-card"><div class="d-term">Capital Employed</div><div class="d-desc">The total value of long-term finance invested in a business.</div></div>
             <div class="def-card"><div class="d-term">Investment Appraisal</div><div class="d-desc">Evaluating the profitability or feasibility of an investment project (e.g., NPV, ARR).</div></div>
             <div class="def-card"><div class="d-term">Window Dressing</div><div class="d-desc">Techniques used by companies to manipulate financial statements to show more favorable results.</div></div>
-            <div class="def-card"><div class="d-term">Statement of Profit/Loss</div><div class="d-desc">Records revenue, costs, and profit (or loss) over a specific period.</div></div>
-            <div class="def-card"><div class="d-term">Statement of Financial Position</div><div class="d-desc">Records assets, liabilities, and equity at a point in time (Balance Sheet).</div></div>
-            <div class="def-card"><div class="d-term">Asset</div><div class="d-desc">An item of monetary value owned by a business.</div></div>
-            <div class="def-card"><div class="d-term">Liability</div><div class="d-desc">A financial obligation that a business must pay in the future.</div></div>
-            <div class="def-card"><div class="d-term">Gross Profit</div><div class="d-desc">Revenue minus the cost of sales.</div></div>
-            <div class="def-card"><div class="d-term">Cost of Sales</div><div class="d-desc">The direct cost of the goods sold during a financial period.</div></div>
-            <div class="def-card"><div class="d-term">Profit for the Year</div><div class="d-desc">Profit after tax; profit before tax minus corporation tax.</div></div>
-            <div class="def-card"><div class="d-term">Dividends</div><div class="d-desc">A portion of profits paid to shareholders as a return on investment.</div></div>
-            <div class="def-card"><div class="d-term">Shareholders' Equity</div><div class="d-desc">Total value of assets minus total value of liabilities.</div></div>
-            <div class="def-card"><div class="d-term">Net Book Value</div><div class="d-desc">Original cost of a non-current asset minus accumulated depreciation.</div></div>
-            <div class="def-card"><div class="d-term">Liquidity Ratios</div><div class="d-desc">Current Ratio and Acid Test Ratio; measure ability to pay short-term debts.</div></div>
-            <div class="def-card"><div class="d-term">Profitability Ratios</div><div class="d-desc">Gross Margin, Operating Margin, ROCE; measure ability to make profit.</div></div>
-            <div class="def-card"><div class="d-term">Gearing Ratio</div><div class="d-desc">Proportion of capital employed financed by long-term borrowing.</div></div>
-            <div class="def-card"><div class="d-term">NPV (Net Present Value)</div><div class="d-desc">Current value of estimated future cash flows from an investment (discounted).</div></div>
-            <div class="def-card"><div class="d-term">Payback Period</div><div class="d-desc">Time taken for net cash inflows to recover the original investment cost.</div></div>
-            <div class="def-card"><div class="d-term">ARR</div><div class="d-desc">Accounting Rate of Return; average annual profit as a percentage of average investment.</div></div>
         </div>
     </div>
-
     <div class="def-section">
         <h3 class="topic-title">HR & Leadership</h3>
         <div class="def-grid">
             <div class="def-card"><div class="d-term">Hard HRM</div><div class="d-desc">An approach to managing employees focused on cutting costs.</div></div>
             <div class="def-card"><div class="d-term">Soft HRM</div><div class="d-desc">An approach to managing employees focused on their development, self-fulfillment, and motivation.</div></div>
-            <div class="def-card"><div class="d-term">Emotional Intelligence</div><div class="d-desc">The ability to understand and manage one's own emotions and those of others.</div></div>
+            <div class="def-card"><div class="d-term">Emotional Intelligence</div><div class="d-desc">The ability to understand and manage one's own emotions and those of others to improve performance.</div></div>
             <div class="def-card"><div class="d-term">Corporate Culture</div><div class="d-desc">The values, attitudes, and beliefs of an organisation's people that influence interactions.</div></div>
             <div class="def-card"><div class="d-term">Gig Economy</div><div class="d-desc">A labor market with temporary, flexible jobs, where workers are often independent contractors.</div></div>
-            <div class="def-card"><div class="d-term">Functional Structure</div><div class="d-desc">Departments organised by specialist areas (marketing, finance, etc.).</div></div>
-            <div class="def-card"><div class="d-term">Matrix Structure</div><div class="d-desc">Project teams that cut across traditional functional departments.</div></div>
-            <div class="def-card"><div class="d-term">Span of Control</div><div class="d-desc">The number of subordinates directly accountable to a manager.</div></div>
-            <div class="def-card"><div class="d-term">Delayering</div><div class="d-desc">Removing one or more levels of hierarchy from the structure.</div></div>
-            <div class="def-card"><div class="d-term">Delegation</div><div class="d-desc">Passing authority down the organisational hierarchy.</div></div>
-            <div class="def-card"><div class="d-term">Centralisation</div><div class="d-desc">Concentrating decision-making powers at the head office.</div></div>
-            <div class="def-card"><div class="d-term">Decentralisation</div><div class="d-desc">Distributing decision-making powers down the hierarchy.</div></div>
-            <div class="def-card"><div class="d-term">Leadership</div><div class="d-desc">The art of motivating a group of people to achieve a common objective.</div></div>
-            <div class="def-card"><div class="d-term">Transformational Leadership</div><div class="d-desc">Leaders work with teams to identify change, create a vision, and implement it.</div></div>
-            <div class="def-card"><div class="d-term">Employment Contracts</div><div class="d-desc">Full-time, Part-time, Temporary, Permanent, Zero-hours.</div></div>
-            <div class="def-card"><div class="d-term">Absenteeism</div><div class="d-desc">Rate of workforce absence as a proportion of total employees.</div></div>
-            <div class="def-card"><div class="d-term">MBO</div><div class="d-desc">Management by Objectives; comparing performance against pre-set objectives.</div></div>
         </div>
     </div>
-
-    <div class="def-section">
-        <h3 class="topic-title">Marketing</h3>
-        <div class="def-grid">
-            <div class="def-card"><div class="d-term">Price Elasticity (PED)</div><div class="d-desc">Measure of how demand changes in response to a change in price.</div></div>
-            <div class="def-card"><div class="d-term">Income Elasticity (YED)</div><div class="d-desc">Measure of how demand changes in response to changes in consumer income.</div></div>
-            <div class="def-card"><div class="d-term">Sales Forecasting</div><div class="d-desc">Predicting future sales levels and trends.</div></div>
-            <div class="def-card"><div class="d-term">New Product Development</div><div class="d-desc">The design, creation, and marketing of new goods and services.</div></div>
-            <div class="def-card"><div class="d-term">Test Marketing</div><div class="d-desc">Launching a product on a small-scale market to test reactions.</div></div>
-            <div class="def-card"><div class="d-term">Delphi Method</div><div class="d-desc">Qualitative forecasting gathering forecasts from a panel of experts.</div></div>
-            <div class="def-card"><div class="d-term">International Marketing</div><div class="d-desc">Selling products in markets outside the domestic market.</div></div>
-            <div class="def-card"><div class="d-term">Pan-global Marketing</div><div class="d-desc">Marketing a standardised product worldwide using the same strategy.</div></div>
-            <div class="def-card"><div class="d-term">Global Localisation</div><div class="d-desc">Adjusting the marketing mix to suit local tastes while maintaining global differences.</div></div>
-        </div>
-    </div>
-
     <div class="def-section">
         <h3 class="topic-title">Operations</h3>
         <div class="def-grid">
             <div class="def-card"><div class="d-term">Kaizen</div><div class="d-desc">A Japanese term meaning continuous improvement.</div></div>
-            <div class="def-card"><div class="d-term">TQM</div><div class="d-desc">Total Quality Management: A quality approach involving all employees.</div></div>
-            <div class="def-card"><div class="d-term">Lean Production</div><div class="d-desc">Producing goods with minimal wasted resources while maintaining quality.</div></div>
-            <div class="def-card"><div class="d-term">Critical Path Analysis</div><div class="d-desc">Planning technique that identifies tasks, sequences, and the critical path.</div></div>
+            <div class="def-card"><div class="d-term">TQM</div><div class="d-desc">Total Quality Management: A quality approach involving all employees in continuous improvement.</div></div>
+            <div class="def-card"><div class="d-term">Lean Production</div><div class="d-desc">Producing goods and services with minimal wasted resources while maintaining high quality.</div></div>
+            <div class="def-card"><div class="d-term">Critical Path Analysis</div><div class="d-desc">A planning technique that identifies tasks, sequences them, and identifies the critical path.</div></div>
             <div class="def-card"><div class="d-term">Reshoring</div><div class="d-desc">Moving a previously offshored business operation back to its original country.</div></div>
-            <div class="def-card"><div class="d-term">Offshoring</div><div class="d-desc">Relocating a business process from one country to another.</div></div>
-            <div class="def-card"><div class="d-term">Scale of Operations</div><div class="d-desc">The maximum output achievable with available resources.</div></div>
-            <div class="def-card"><div class="d-term">Economies of Scale</div><div class="d-desc">Cost reductions per unit achieved as a business expands (Internal/External).</div></div>
-            <div class="def-card"><div class="d-term">Diseconomies of Scale</div><div class="d-desc">Increases in unit production costs when a business grows too large.</div></div>
-            <div class="def-card"><div class="d-term">Quality Assurance</div><div class="d-desc">Ensuring quality standards are met at each production stage.</div></div>
-            <div class="def-card"><div class="d-term">Benchmarking</div><div class="d-desc">Comparing performance against the best companies in the industry.</div></div>
-            <div class="def-card"><div class="d-term">CAD / CAM</div><div class="d-desc">Computer-Aided Design and Computer-Aided Manufacturing.</div></div>
-            <div class="def-card"><div class="d-term">ERP</div><div class="d-desc">Enterprise Resource Planning; software to manage resources efficiently.</div></div>
-            <div class="def-card"><div class="d-term">Total Float</div><div class="d-desc">Time an activity can be delayed without delaying the overall project.</div></div>
         </div>
     </div>
 </div>
