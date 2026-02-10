@@ -72,6 +72,53 @@ border-color: var(--lime-primary);
 /* Blue accent for definitions */
 .def-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #3b82f6; }
 
+/* === NEW TIPS STYLES === */
+.tip-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.tip-card:hover {
+    transform: translateY(-3px);
+    border-color: #FFD700; /* Gold/Yellow Color */
+}
+.tip-card::before { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 4px; 
+    height: 100%; 
+    background: #FFD700; /* Gold/Yellow Strip */
+}
+
+.t-topic {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #d4ac0d; /* Darker Gold Text */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.t-content {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+}
+/* Yellow glow for the active lightbulb button */
+.nav-btn.active.tip-nav-btn {
+    background: #fff9c4; /* Light yellow bg */
+    color: #b7950b;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
 .f-title, .d-term {
 font-family: 'Inter', sans-serif;
 font-size: 0.85rem;
@@ -242,6 +289,7 @@ textarea.expanded {
         <button class="nav-btn active" onclick="setView('papers')">Papers</button>
         <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
+        <button class="nav-btn tip-nav-btn" onclick="setView('tips')" title="Exam Tips" style="font-size: 1.3rem;">💡</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
         <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
@@ -394,6 +442,53 @@ textarea.expanded {
     </div>
 </div>
 
+<div id="view-tips" class="hidden">
+    <div style="text-align:center; margin-bottom:40px;">
+        <h2 style="font-size:2rem; color:#b7950b; font-family:'Playfair Display', serif;">💡 Examiner's Tips</h2>
+        <p style="color:#888;">Key advice for A Level Business (Chapters 6-36)</p>
+    </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title" style="border-color:#FFD700;">External Influences & Economy</h3>
+        <div class="formula-grid">
+            <div class="tip-card"><div class="t-topic">Employment Laws</div><div class="t-content">You don't need specific law names, but know the <strong>main laws</strong> in your country and what they expect employers to do.</div></div>
+            <div class="tip-card"><div class="t-topic">Social Change</div><div class="t-content">Changing social conditions create opportunities (e.g., new markets) just as much as threats. Use this to <strong>evaluate</strong> impact.</div></div>
+            <div class="tip-card"><div class="t-topic">New Technology</div><div class="t-content">Don't assume new tech is always best. It has high costs. Evaluate how it was introduced—bad implementation causes more problems than it solves.</div></div>
+            <div class="tip-card"><div class="t-topic">Inflation</div><div class="t-content">The impact depends heavily on the <strong>rate</strong> of inflation and future forecasts. Don't treat all inflation the same.</div></div>
+            <div class="tip-card"><div class="t-topic">Interest Rates</div><div class="t-content">Even small changes can be significant for businesses with <strong>high debt</strong> or those selling expensive goods on credit.</div></div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title" style="border-color:#FFD700;">Strategy & Planning</h3>
+        <div class="formula-grid">
+            <div class="tip-card"><div class="t-topic">Mergers & Takeovers</div><div class="t-content">Always identify the <strong>type</strong> of integration first. Remember: mergers often cause as many personnel/culture problems as they solve.</div></div>
+            <div class="tip-card"><div class="t-topic">Contingency Planning</div><div class="t-content">Great evaluation point: Planning does <strong>not guarantee</strong> disasters won't happen, but it reduces the damage when they do.</div></div>
+            <div class="tip-card"><div class="t-topic">Resistance to Change</div><div class="t-content">When discussing resistance, analyse the <strong>leadership style</strong> used to implement the change. Was it forced (autocratic) or discussed (democratic)?</div></div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title" style="border-color:#FFD700;">Marketing</h3>
+        <div class="formula-grid">
+            <div class="tip-card"><div class="t-topic">Elasticity Calculations</div><div class="t-content">Never assume a PED/YED result will be accurate forever. Markets change. <strong>Do not base major decisions</strong> on elasticity data alone.</div></div>
+            <div class="tip-card"><div class="t-topic">R&D Spending</div><div class="t-content">Spending more on R&D does not guarantee success. Many inventions are technical successes but <strong>commercial failures</strong>.</div></div>
+            <div class="tip-card"><div class="t-topic">Quality</div><div class="t-content">Quality is relative, not absolute. It must be explained with reference to the <strong>expectations</strong> of the target market (e.g., cheap vs luxury).</div></div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title" style="border-color:#FFD700;">Operations & Finance</h3>
+        <div class="formula-grid">
+            <div class="tip-card"><div class="t-topic">Scale of Operations</div><div class="t-content">Don't confuse "producing more" (capacity utilisation) with increasing <strong>scale</strong>. Changing scale means using more of ALL resources (capital + labour).</div></div>
+            <div class="tip-card"><div class="t-topic">CPA Evaluation</div><div class="t-content">Evaluate Critical Path Analysis by noting that no planning technique can <strong>ensure</strong> a project reaches a successful conclusion.</div></div>
+            <div class="tip-card"><div class="t-topic">Investment Appraisal</div><div class="t-content">Unless a question asks ONLY for numerical factors, your answer <strong>must</strong> include an assessment of qualitative factors (e.g., brand image, morale).</div></div>
+            <div class="tip-card"><div class="t-topic">Ratio Analysis</div><div class="t-content">Question the <strong>accuracy</strong> of the data. Using only one year of results is a major limitation for evaluation.</div></div>
+            <div class="tip-card"><div class="t-topic">Strategy Evaluation</div><div class="t-content">Distinguish between <strong>Short Term</strong> (costs, disruption) vs <strong>Long Term</strong> (efficiency, profit) impacts on ratios.</div></div>
+        </div>
+    </div>
+</div>
+
 <div id="view-scorecard" class="hidden">
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;">
         <div>
@@ -501,7 +596,7 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard'].forEach(v => {
+   ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
     });
