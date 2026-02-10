@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
 import os
+import json
 
 app = Flask(__name__)
 # Allow CORS for your specific domain to be safe, or * for testing
@@ -12,6 +13,48 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ==========================================
 genai.configure(api_key="AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg") 
 model = genai.GenerativeModel('models/gemini-2.5-flash')
+
+# File to store leaderboard data
+SCORES_FILE = 'scores.json'
+
+@app.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    try:
+        if os.path.exists(SCORES_FILE):
+            with open(SCORES_FILE, 'r') as f:
+                scores = json.load(f)
+        else:
+            scores = {}
+        
+        # Sort users by score (highest first)
+        sorted_scores = sorted(scores.items(), key=lambda x: x[1]['score'], reverse=True)
+        return jsonify(sorted_scores), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/update_score', methods=['POST'])
+def update_score():
+    data = request.json
+    user = data.get('username')
+    score = data.get('total_score')
+    papers = data.get('papers_completed')
+    
+    if not user: return jsonify({"error": "No user"}), 400
+    
+    current_scores = {}
+    if os.path.exists(SCORES_FILE):
+        try:
+            with open(SCORES_FILE, 'r') as f:
+                current_scores = json.load(f)
+        except: pass
+        
+    # Update or add user stats
+    current_scores[user] = {"score": score, "papers": papers}
+    
+    with open(SCORES_FILE, 'w') as f:
+        json.dump(current_scores, f)
+        
+    return jsonify({"status": "success"}), 200
 
 @app.route('/mark', methods=['POST'])
 def mark():
