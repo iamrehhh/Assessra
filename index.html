@@ -144,6 +144,29 @@ line-height: 1.4;
 textarea { width: 100%; min-height: 200px; padding: 15px; border: 2px solid #eee; border-radius: 12px; margin: 15px 0 5px 0; font-family: inherit; font-size: 1rem; resize: vertical; transition: 0.3s; }
 textarea:focus { border-color: var(--lime-primary); outline: none; }
 
+/* EXPAND FEATURE - NEW STYLE */
+textarea.expanded {
+    min-height: 500px;
+    border-color: var(--lime-dark);
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.1);
+}
+.expand-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: 0.2s;
+    float: right; 
+}
+.expand-btn:hover {
+    background: #e0e0e0;
+}
+
 /* WORD COUNT STYLE */
 .word-count { font-size: 0.85rem; color: #888; text-align: right; margin-bottom: 15px; font-weight: 600; }
 .word-count.bad { color: var(--danger); }
@@ -158,41 +181,15 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
 .hidden { display: none !important; }
 .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
 @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
-.tutor-btn {/* Remove the old tutor-btn styles and add these instead */
 
-.nav-btn {
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: white;
-    color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.nav-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.nav-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-/* If Tutor needs to stand out slightly, use this */
+/* TUTOR BTN STYLES */
 .tutor-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
-
 .tutor-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-};
 }
 
 </style>
@@ -224,12 +221,7 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
         <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-<button class="nav-btn tutor-btn" onclick="window.location.href='tutor.html'">
-    📚 Tutor
-</button>
-<button class="action-btn tutor-btn" onclick="window.location.href='tutor.html'">
-    📚 Tutor
-</button>
+        <button class="nav-btn tutor-btn" onclick="window.location.href='tutor.html'">📚 Tutor</button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
@@ -497,6 +489,7 @@ function openPaper(pid) {
             <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
             ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
             
+            <button class="expand-btn" onclick="toggleExpand('ans_${pid}_${q.n}')">⤢ Expand</button>
             <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
 
@@ -524,17 +517,25 @@ function openPaper(pid) {
 function updateWordCount(el, limitStr) {
     if(!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-    const idParts = el.id.split('_');
-    const wcEl = document.getElementById(`wc_${idParts[1]}_${idParts[2]}`);
+    // FIX: Using replace is safer than splitting by underscore since paper IDs contain underscores
+    const wcId = el.id.replace('ans_', 'wc_');
+    const wcEl = document.getElementById(wcId);
     
-    const [min, max] = limitStr.split('-').map(Number);
-    wcEl.innerText = `${count} words (${limitStr})`;
-    
-    if(count < min || count > max) {
-        wcEl.classList.add('bad'); wcEl.classList.remove('good');
-    } else {
-        wcEl.classList.add('good'); wcEl.classList.remove('bad');
+    if(wcEl) {
+        const [min, max] = limitStr.split('-').map(Number);
+        wcEl.innerText = `${count} words (${limitStr})`;
+        
+        if(count < min || count > max) {
+            wcEl.classList.add('bad'); wcEl.classList.remove('good');
+        } else {
+            wcEl.classList.add('good'); wcEl.classList.remove('bad');
+        }
     }
+}
+
+function toggleExpand(id) {
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle('expanded');
 }
 
 async function submitAnswer(pid, qn) {
