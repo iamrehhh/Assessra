@@ -262,39 +262,7 @@ line-height: 1.4;
 
 .q-badge { background: var(--lime-dark); color: white; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
 
-/* NEW: Word counter and expand button styles */
-.answer-controls { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
-
-.word-counter { 
-    font-size: 0.9rem; 
-    color: #666; 
-    font-weight: 600;
-    padding: 8px 15px;
-    background: #f8f8f8;
-    border-radius: 8px;
-}
-
-.word-counter.warning { color: #ff9800; background: #fff3e0; }
-.word-counter.error { color: #f44336; background: #ffebee; }
-.word-counter.good { color: var(--lime-dark); background: var(--lime-light); }
-
-.expand-btn {
-    background: var(--lime-light);
-    color: var(--lime-dark);
-    border: 1px solid var(--lime-primary);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: 0.3s;
-}
-
-.expand-btn:hover { background: var(--lime-primary); color: white; }
-
 textarea { width: 100%; min-height: 200px; padding: 15px; border: 2px solid #eee; border-radius: 12px; margin: 15px 0; font-family: inherit; font-size: 1rem; resize: vertical; transition: 0.3s; }
-
-textarea.expanded { min-height: 500px; }
 
 textarea:focus { border-color: var(--lime-primary); outline: none; }
 
@@ -302,113 +270,7 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
 
 .submit-btn:disabled { background: #ccc; transform: none; box-shadow: none; }
 
-.feedback-box { margin-top: 20px; background: var(--lime-light); padding: 25px; border-radius: 16px; border: 2px solid var(--lime-primary); }
-
-/* NEW: Enhanced feedback styles */
-.ao-breakdown {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    margin: 15px 0;
-    padding: 15px;
-    background: white;
-    border-radius: 10px;
-}
-
-.ao-item {
-    text-align: center;
-    padding: 10px;
-    background: #f8f8f8;
-    border-radius: 8px;
-    border: 2px solid #eee;
-}
-
-.ao-item.full-marks { border-color: var(--lime-primary); background: var(--lime-light); }
-
-.ao-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.ao-score {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--lime-dark);
-}
-
-.feedback-section {
-    margin: 20px 0;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    border-left: 4px solid var(--lime-primary);
-}
-
-.feedback-section h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--lime-dark);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.feedback-section p {
-    line-height: 1.8;
-    color: #333;
-    font-size: 0.95rem;
-}
-
-.model-answer-box {
-    background: #2c3e50;
-    color: #ecf0f1;
-    padding: 25px;
-    border-radius: 12px;
-    margin-top: 20px;
-    line-height: 1.8;
-    font-size: 0.95rem;
-}
-
-.model-answer-box h4 {
-    color: var(--lime-primary);
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.score-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid var(--lime-primary);
-}
-
-.total-score {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--lime-dark);
-}
-
-.word-count-info {
-    text-align: right;
-    font-size: 0.9rem;
-}
-
-.word-count-info .count {
-    font-weight: 700;
-    color: #333;
-}
-
-.word-count-info .penalty {
-    color: #f44336;
-    font-weight: 700;
-    margin-top: 5px;
-}
+.feedback-box { margin-top: 20px; background: var(--lime-light); padding: 20px; border-radius: 16px; }
 
 .hidden { display: none !important; }
 
@@ -489,56 +351,43 @@ box-shadow: 0 10px 25px rgba(50, 205, 50, 0.15);
 
 #view-definitions .def-card::before {
 
-content: '';
+content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
 
-position: absolute;
-
-top: 0;
-
-left: 0;
-
-width: 4px;
-
-height: 100%;
-
-background: linear-gradient(180deg, #2196F3 0%, #1976D2 100%);
+background: #3b82f6; /* Nice professional blue */
 
 }
 
 
 
-#view-definitions .def-term {
+#view-definitions .d-term {
 
-font-family: 'Inter', sans-serif;
+font-family: 'Playfair Display', serif;
 
-font-size: 0.85rem;
+font-size: 1.1rem;
 
-font-weight: 600;
+font-weight: 700;
 
-color: #888;
-
-text-transform: uppercase;
-
-letter-spacing: 0.5px;
+color: #1e293b;
 
 margin-bottom: 10px;
 
 }
 
 
-#view-definitions .def-meaning {
+#view-definitions .d-desc {
 
 font-family: 'Inter', sans-serif;
 
-font-size: 1.05rem;
+font-size: 0.95rem;
 
 font-weight: 400;
 
-color: #2c3e50;
+color: #475569;
 
 line-height: 1.6;
 
 }
+
 
 
 </style>
@@ -549,9 +398,7 @@ line-height: 1.6;
 
 
 
-<!-- Login Layer -->
-
-<div class="login-screen" id="login-layer">
+<div id="login-layer" class="login-screen">
 
 <div class="login-card" style="text-align: left;">
 
@@ -569,15 +416,10 @@ line-height: 1.6;
 
 
 
-<!-- App Layer -->
-
 <div id="app-layer" class="hidden">
-
-
 
 <div class="container">
 
-<!-- Header -->
 
 <div class="app-header">
 
@@ -613,10 +455,6 @@ line-height: 1.6;
 </div>
 
 
-
-
-
-<!-- View: Papers List -->
 
 <div id="view-papers">
 
@@ -666,173 +504,173 @@ line-height: 1.6;
 
 </div>
 
-</div>
 
 
+<div class="series-header"><div class="year-big">2025</div><div class="series-name">May / June Series</div></div>
 
-<!-- View: Scorecard -->
+<div class="papers-grid">
 
-<div id="view-scorecard" class="hidden">
+<div class="paper-card" onclick="openPaper('2025_mj_31')"><span class="paper-tag">9609/31</span><h3>Wisdom Shoes (WS)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
 
-<h1 style="font-weight:800; color: var(--lime-dark); margin-bottom:20px;">Your Progress</h1>
+<div class="paper-card" onclick="openPaper('2025_mj_32')"><span class="paper-tag">9609/32</span><h3>Pura AI Robots (PAIR)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
 
-<div class="stats-container" id="stats-overview"></div>
-
-<div id="score-table-container"></div>
-
-<button class="reset-icon-btn" onclick="resetAll()" style="margin-top:20px; padding:12px 25px;">Reset All Data</button>
+<div class="paper-card" onclick="openPaper('2025_mj_33')"><span class="paper-tag">9609/33</span><h3>We Care Products (WCP)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
 
 </div>
 
 
 
-<!-- View: Formulae Sheet -->
+<div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
 
-<div id="view-formulae" class="hidden">
+<div class="papers-grid">
 
-<h1 style="font-weight:800; color: var(--lime-dark); margin-bottom:30px;">📐 Formula Sheet</h1>
+<div class="paper-card" onclick="openPaper('2025_on_31')"><span class="paper-tag">9609/31</span><h3>Pedro's Perfect Pies (PPP)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+
+<div class="paper-card" onclick="openPaper('2025_on_32')"><span class="paper-tag">9609/32</span><h3>Komate Tropical Juice (KTJ)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+
+<div class="paper-card" onclick="openPaper('2025_on_33')"><span class="paper-tag">9609/33</span><h3>Lithium Battery Metals (LBM)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
+
+</div>
 
 
+</div> <div id="view-formulae" class="hidden">
 
 <div class="formula-section">
 
-<h2 class="chapter-title">Chapter 1: Finance & Accounting</h2>
+<h3 class="chapter-title">Finance: Ratio Analysis</h3>
 
 <div class="formula-grid">
-
-<div class="formula-card"><div class="f-title">Net Profit Margin</div><div class="f-body">(Net Profit / Revenue) × 100</div></div>
-
-<div class="formula-card"><div class="f-title">Gross Profit Margin</div><div class="f-body">(Gross Profit / Revenue) × 100</div></div>
-
-<div class="formula-card"><div class="f-title">Return on Capital Employed (ROCE)</div><div class="f-body">(Operating Profit / Capital Employed) × 100</div></div>
 
 <div class="formula-card"><div class="f-title">Current Ratio</div><div class="f-body">Current Assets / Current Liabilities</div></div>
 
-<div class="formula-card"><div class="f-title">Acid Test Ratio</div><div class="f-body">(Current Assets - Inventory) / Current Liabilities</div></div>
+<div class="formula-card"><div class="f-title">Acid Test Ratio</div><div class="f-body">Liquid Assets / Current Liabilities</div></div>
 
-<div class="formula-card"><div class="f-title">Gearing Ratio</div><div class="f-body">(Non-current Liabilities / Capital Employed) × 100</div></div>
+<div class="formula-card"><div class="f-title">ROCE</div><div class="f-body">(Operating Profit / Capital Employed) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Gearing Ratio</div><div class="f-body">(Non-Current Liabilities / Capital Employed) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Gross Profit Margin</div><div class="f-body">(Gross Profit / Revenue) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Operating Profit Margin</div><div class="f-body">(Operating Profit / Revenue) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Inventory Turnover</div><div class="f-body">Cost of Sales / Average Inventory</div></div>
+
+<div class="formula-card"><div class="f-title">Trade Payables Turnover</div><div class="f-body">(Trade Payables / Credit Purchases) × 365</div></div>
 
 </div>
 
 </div>
-
-
 
 <div class="formula-section">
 
-<h2 class="chapter-title">Chapter 2: Marketing</h2>
+<h3 class="chapter-title">Finance: Shareholder Ratios</h3>
 
 <div class="formula-grid">
 
-<div class="formula-card"><div class="f-title">Market Share</div><div class="f-body">(Company Sales / Total Market Sales) × 100</div></div>
+<div class="formula-card"><div class="f-title">Earnings Per Share (EPS)</div><div class="f-body">Profit for Year / Number of Issued Shares</div></div>
 
-<div class="formula-card"><div class="f-title">Price Elasticity of Demand (PED)</div><div class="f-body">% Change in Quantity Demanded / % Change in Price</div></div>
+<div class="formula-card"><div class="f-title">Price / Earnings (P/E) Ratio</div><div class="f-body">Market Price / Earnings Per Share</div></div>
 
-<div class="formula-card"><div class="f-title">Income Elasticity of Demand (YED)</div><div class="f-body">% Change in Quantity Demanded / % Change in Income</div></div>
+<div class="formula-card"><div class="f-title">Dividend Per Share</div><div class="f-body">Total Annual Dividends / Total Issued Shares</div></div>
 
-<div class="formula-card"><div class="f-title">Marketing Budget as % of Sales</div><div class="f-body">(Marketing Budget / Sales Revenue) × 100</div></div>
+<div class="formula-card"><div class="f-title">Dividend Yield</div><div class="f-body">(Dividend Per Share / Market Price) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Dividend Cover</div><div class="f-body">Profit for Year / Annual Dividends</div></div>
 
 </div>
 
 </div>
-
-
 
 <div class="formula-section">
 
-<h2 class="chapter-title">Chapter 3: Operations</h2>
+<h3 class="chapter-title">Investment Appraisal</h3>
 
 <div class="formula-grid">
 
-<div class="formula-card"><div class="f-title">Capacity Utilization</div><div class="f-body">(Actual Output / Maximum Possible Output) × 100</div></div>
+<div class="formula-card"><div class="f-title">ARR (Accounting Rate of Return)</div><div class="f-body">(Average Annual Profit / Average Investment) × 100</div></div>
 
-<div class="formula-card"><div class="f-title">Labour Productivity</div><div class="f-body">Total Output / Number of Employees</div></div>
+<div class="formula-card"><div class="f-title">Payback Period</div><div class="f-body">Amount Invested / Annual Net Cash Flow</div></div>
 
-<div class="formula-card"><div class="f-title">Unit Cost</div><div class="f-body">Total Costs / Units Produced</div></div>
+<div class="formula-card"><div class="f-title">Payback (Monthly Adj.)</div><div class="f-body">(Additional Cash Needed / Annual Cash Flow) × 12</div></div>
+
+<div class="formula-card"><div class="f-title">Average Investment</div><div class="f-body">(Initial Cost + Residual Value) / 2</div></div>
 
 </div>
 
 </div>
-
-
 
 <div class="formula-section">
 
-<h2 class="chapter-title">Chapter 4: Human Resources</h2>
+<h3 class="chapter-title">Marketing</h3>
 
 <div class="formula-grid">
 
-<div class="formula-card"><div class="f-title">Labour Turnover</div><div class="f-body">(Number Leaving / Average Employed) × 100</div></div>
+<div class="formula-card"><div class="f-title">Market Share</div><div class="f-body">(Sales of Business / Total Market Sales) × 100</div></div>
 
-<div class="formula-card"><div class="f-title">Absenteeism Rate</div><div class="f-body">(Days Absent / Total Possible Days) × 100</div></div>
+<div class="formula-card"><div class="f-title">Price Elasticity (PED)</div><div class="f-body">% Change in Demand / % Change in Price</div></div>
+
+<div class="formula-card"><div class="f-title">Income Elasticity (YED)</div><div class="f-body">% Change in Demand / % Change in Income</div></div>
+
+<div class="formula-card"><div class="f-title">Promotional Elasticity</div><div class="f-body">% Change in Demand / % Change in Spending</div></div>
 
 </div>
 
 </div>
-
-
 
 <div class="formula-section">
 
-<h2 class="chapter-title">Chapter 5: Investment Appraisal</h2>
+<h3 class="chapter-title">Operations & Project Management</h3>
 
 <div class="formula-grid">
 
-<div class="formula-card"><div class="f-title">Payback Period</div><div class="f-body">Initial Investment / Annual Cash Inflow</div></div>
+<div class="formula-card"><div class="f-title">Capacity Utilisation</div><div class="f-body">(Current Output / Maximum Output) × 100</div></div>
 
-<div class="formula-card"><div class="f-title">Average Rate of Return (ARR)</div><div class="f-body">(Average Annual Profit / Initial Investment) × 100</div></div>
+<div class="formula-card"><div class="f-title">Total Float</div><div class="f-body">LFT - Duration - EST</div></div>
 
-<div class="formula-card"><div class="f-title">Net Present Value (NPV)</div><div class="f-body">Sum of (Cash Flow × Discount Factor) - Initial Investment</div></div>
+<div class="formula-card"><div class="f-title">Free Float</div><div class="f-body">EST (Next Activity) - Duration - EST (This Activity)</div></div>
+
+</div>
+
+</div>
+
+<div class="formula-section">
+
+<h3 class="chapter-title">Human Resources</h3>
+
+<div class="formula-grid">
+
+<div class="formula-card"><div class="f-title">Absenteeism Rate</div><div class="f-body">(Total Days Absent / Total Work Days) × 100</div></div>
+
+<div class="formula-card"><div class="f-title">Labour Turnover</div><div class="f-body">(Number of Staff Leaving / Average Staff) × 100</div></div>
 
 </div>
 
 </div>
 
 </div>
-
-
-
-<!-- View: Definitions -->
 
 <div id="view-definitions" class="hidden">
 
-<h1 style="font-weight:800; color: var(--lime-dark); margin-bottom:30px;">📚 Key Definitions</h1>
-
-
 
 <div class="def-section">
 
-<h2 class="topic-title">Chapter 1: Business & Environment</h2>
+<h3 class="topic-title">Strategy & Economics</h3>
 
 <div class="def-grid">
 
-<div class="def-card"><div class="def-term">Stakeholder</div><div class="def-meaning">An individual or group with a direct interest in the activities and performance of a business.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Privatization</div><div class="d-desc">The act of selling state-owned and controlled business organizations to investors in the private sector. [cite: 3]</div></div>
 
-<div class="def-card"><div class="def-term">Mission Statement</div><div class="def-meaning">A declaration of the organization's overall purpose.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Globalization</div><div class="d-desc">The increasing freedom of movement of goods, capital, and people around the world. [cite: 12]</div></div>
 
-<div class="def-card"><div class="def-term">Corporate Objectives</div><div class="def-meaning">Goals of the whole organization set by senior management.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">SWOT Analysis</div><div class="d-desc">Strategic analysis identifying internal strengths and weaknesses, and external opportunities and threats influencing business success. [cite: 63]</div></div>
 
-<div class="def-card"><div class="def-term">SWOT Analysis</div><div class="def-meaning">Analysis of internal Strengths and Weaknesses, and external Opportunities and Threats.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Porter's Five Forces</div><div class="d-desc">Technique for analysing competitive forces within an industry. [cite: 67]</div></div>
 
-</div>
+[cite_start]<div class="def-card"><div class="d-term">Core Competence</div><div class="d-desc">An essential business capability that provides a competitive advantage. [cite: 68]</div></div>
 
-</div>
+[cite_start]<div class="def-card"><div class="d-term">Ansoff Matrix</div><div class="d-desc">A model illustrating the degree of risk in growth strategies: market penetration, product development, market development, and diversification. [cite: 70]</div></div>
 
-
-
-<div class="def-section">
-
-<h2 class="topic-title">Chapter 2: Marketing</h2>
-
-<div class="def-grid">
-
-<div class="def-card"><div class="def-term">Market Segmentation</div><div class="def-meaning">Dividing a market into distinct groups of consumers with similar needs.</div></div>
-
-<div class="def-card"><div class="def-term">Niche Marketing</div><div class="def-meaning">Targeting a small, specialized segment of a larger market.</div></div>
-
-<div class="def-card"><div class="def-term">Marketing Mix</div><div class="def-meaning">The combination of Product, Price, Place, and Promotion used to market a product.</div></div>
-
-<div class="def-card"><div class="def-term">Brand Loyalty</div><div class="def-meaning">The tendency of consumers to continue buying the same brand.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Blue Ocean Strategy</div><div class="d-desc">Exploiting uncontested market space through product differentiation and low cost. [cite: 61]</div></div>
 
 </div>
 
@@ -842,17 +680,21 @@ line-height: 1.6;
 
 <div class="def-section">
 
-<h2 class="topic-title">Chapter 3: Finance</h2>
+<h3 class="topic-title">Finance</h3>
 
 <div class="def-grid">
 
-<div class="def-card"><div class="def-term">Working Capital</div><div class="def-meaning">Current Assets minus Current Liabilities.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Working Capital</div><div class="d-desc">The capital required for day-to-day activities (Current Assets - Current Liabilities). [cite: 235]</div></div>
 
-<div class="def-card"><div class="def-term">Cash Flow</div><div class="def-meaning">The movement of money into and out of a business.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Depreciation</div><div class="d-desc">The reduction in the estimated value of a non-current asset over time. [cite: 238]</div></div>
 
-<div class="def-card"><div class="def-term">Break-even Point</div><div class="def-meaning">The level of output where total revenue equals total costs.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Goodwill</div><div class="d-desc">The value arising when a business is bought for more than the balance sheet value of its assets. [cite: 233]</div></div>
 
-<div class="def-card"><div class="def-term">Liquidity</div><div class="def-meaning">The ability of a business to pay its short-term debts.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Capital Employed</div><div class="d-desc">The total value of long-term finance invested in a business. [cite: 248]</div></div>
+
+[cite_start]<div class="def-card"><div class="d-term">Investment Appraisal</div><div class="d-desc">Evaluating the profitability or feasibility of an investment project (e.g., NPV, ARR). [cite: 261]</div></div>
+
+[cite_start]<div class="def-card"><div class="d-term">Window Dressing</div><div class="d-desc">Techniques used by companies to manipulate financial statements to show more favorable results. [cite: 234]</div></div>
 
 </div>
 
@@ -862,17 +704,19 @@ line-height: 1.6;
 
 <div class="def-section">
 
-<h2 class="topic-title">Chapter 4: Operations</h2>
+<h3 class="topic-title">HR & Leadership</h3>
 
 <div class="def-grid">
 
-<div class="def-card"><div class="def-term">Lean Production</div><div class="def-meaning">An approach focused on minimizing waste while maintaining quality.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Hard HRM</div><div class="d-desc">An approach to managing employees focused on cutting costs. [cite: 132]</div></div>
 
-<div class="def-card"><div class="def-term">Quality Assurance</div><div class="def-meaning">A system to maintain a desired level of quality throughout production.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Soft HRM</div><div class="d-desc">An approach to managing employees focused on their development, self-fulfillment, and motivation. [cite: 133]</div></div>
 
-<div class="def-card"><div class="def-term">Just-in-Time (JIT)</div><div class="def-meaning">Inventory management where materials arrive exactly when needed.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Emotional Intelligence</div><div class="d-desc">The ability to understand and manage one's own emotions and those of others to improve business performance. [cite: 128]</div></div>
 
-<div class="def-card"><div class="def-term">Kaizen</div><div class="def-meaning">A Japanese philosophy of continuous improvement.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Corporate Culture</div><div class="d-desc">The values, attitudes, and beliefs of an organisation's people that influence interactions. [cite: 80]</div></div>
+
+[cite_start]<div class="def-card"><div class="d-term">Gig Economy</div><div class="d-desc">A labor market with temporary, flexible jobs, where workers are often independent contractors. [cite: 140]</div></div>
 
 </div>
 
@@ -882,35 +726,67 @@ line-height: 1.6;
 
 <div class="def-section">
 
-<h2 class="topic-title">Chapter 5: Human Resources</h2>
+<h3 class="topic-title">Operations</h3>
 
 <div class="def-grid">
 
-<div class="def-card"><div class="def-term">Motivation</div><div class="def-meaning">The internal and external factors that stimulate people to take actions.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Kaizen</div><div class="d-desc">A Japanese term meaning continuous improvement. [cite: 203]</div></div>
 
-<div class="def-card"><div class="def-term">Delegation</div><div class="def-meaning">Assigning authority to subordinates to complete tasks.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">TQM</div><div class="d-desc">Total Quality Management: A quality approach involving all employees in continuous improvement. [cite: 189]</div></div>
 
-<div class="def-card"><div class="def-term">Autocratic Leadership</div><div class="def-meaning">A leadership style where the manager makes all decisions.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Lean Production</div><div class="d-desc">Producing goods and services with minimal wasted resources while maintaining high quality. [cite: 194]</div></div>
 
-<div class="def-card"><div class="def-term">Democratic Leadership</div><div class="def-meaning">A leadership style where employees participate in decision-making.</div></div>
+[cite_start]<div class="def-card"><div class="d-term">Critical Path Analysis</div><div class="d-desc">A planning technique that identifies tasks, sequences them, and identifies the critical path. [cite: 207]</div></div>
 
-</div>
-
-</div>
+[cite_start]<div class="def-card"><div class="d-term">Reshoring</div><div class="d-desc">Moving a previously offshored business operation back to its original country. [cite: 176]</div></div>
 
 </div>
 
+</div>
 
 
-<!-- View: Workspace -->
+
+</div>
+
+
+
+<div id="view-scorecard" class="hidden">
+
+<div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;">
+
+<div>
+
+<h2 style="font-size:2rem; color:var(--text-dark);">Performance Analytics</h2>
+
+<p style="color:#888;">Track your progress across all exam series</p>
+
+</div>
+
+<button class="reset-icon-btn" onclick="resetAll()">⚠ WIPE DATA</button>
+
+</div>
+
+<div id="stats-overview" class="stats-container"></div>
+
+<div id="score-table-container"></div>
+
+</div>
+
+
 
 <div id="view-workspace" class="hidden">
 
-<div class="toggle-insert" onclick="toggleInsert()">📄 Toggle Insert</div>
+<button class="nav-btn" onclick="backToDash()" style="margin-bottom:10px;">← Back to Papers</button>
+
+<div class="toggle-insert" onclick="toggleInsert()">📖 Toggle PDF Case Study</div>
 
 <div class="workspace">
 
-<div class="insert-panel" id="insert-panel"><iframe class="insert-pdf-frame" id="insert-pdf"></iframe></div>
+<div class="insert-panel" id="insert-panel">
+
+<iframe id="insert-pdf" class="insert-pdf-frame" src=""></iframe>
+
+</div>
 
 <div class="questions-panel" id="questions-container"></div>
 
@@ -932,11 +808,17 @@ const paperData = {
 
 /* 2025 SERIES */
 
+'2025_on_31': { title: "Pedro's Perfect Pies (PPP)", pdf: "9609_w25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two likely impacts on PPP of the changing external influences.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to PPP of using quality assurance.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.3, calculate the payback period for PPP\'s new machine.'}, { n:'3(b)', m:2, t:'Using Table 1.3, calculate the ARR for PPP\'s new machine.'}, { n:'3(c)', m:12, t:'Evaluate whether PPP should invest in the new machine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the monthly revenue from the sales of the classic pie after the price increase.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness to PPP of elasticity measures.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of emotional intelligence to Pedro\'s leadership.', l:'250-350'} ] },
+
+'2025_on_32': { title: "Komate Tropical Juice (KTJ)", pdf: "9609_w25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to KTJ of delegation.', l:'150-225'}, { n:'2', m:8, t:'Analyse two impacts on KTJ of its commitment to CSR.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the payback period of the country C location.'}, { n:'3(b)', m:2, t:'Calculate the ARR of the country D location.'}, { n:'3(c)', m:12, t:'Evaluate which location KTJ should choose for its new factory.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the four period centred moving average for Quarter 1 2025.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of time series analysis to KTJ.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on KTJ of fluctuations in the exchange rate.', l:'250-350'} ] },
+
+'2025_on_33': { title: "Lithium Battery Metals (LBM)", pdf: "9609_w25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to the government of country G from nationalisation.', l:'150-225'}, { n:'2', m:8, t:'Analyse one benefit and one limitation of sales forecasting to LBM.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.1, calculate the payback period.'}, { n:'3(b)', m:2, t:'Using Table 1.1, calculate the NPV over six years discounted at 8%.'}, { n:'3(c)', m:12, t:'Evaluate LBM\'s decision to go ahead with the hot water mine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate total float for activity C and minimum project duration.'}, { n:'4(b)', m:12, t:'Evaluate the importance of CPA to the success of the hard rock mine.', l:'250-350'}, { n:'5', m:12, t:'Evaluate LBM\'s decision to use two different approaches to HRM.', l:'250-350'} ] },
+
 '2025_mj_31': { title: "Wisdom Shoes (WS)", pdf: "9609_s25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to WS of using an environmental audit.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WS of Enterprise Resource Planning (ERP).', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.4. Calculate the change in dividend yield.'}, { n:'3(b)', m:2, t:'Refer to Table 1.4. Calculate the change in P/E ratio.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on WS shareholders of the proposed changes.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the inventory turnover ratio.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to WS directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of environmental targets to WS success.', l:'250-350'} ] },
 
 '2025_mj_32': { title: "Pura AI Robots (PAIR)", pdf: "9609_s25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to PAIR of contingency planning.', l:'150-225'}, { n:'2', m:8, t:'Analyse two likely causes of the failure of the battery supplier.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the capacity utilisation for 2025.'}, { n:'3(b)', m:2, t:'Calculate the increase in profit margin.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on PAIR of the decision to increase investment in R&D.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for the critical path.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to PAIR.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which PAIRs future success depends on external influences.', l:'250-350'} ] },
 
-'2025_mj_33': { title: "We Care Products (WCP)", pdf: "9609_s25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two ways the external influences referred to in lines 8-12 may impact on WCP.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WCP of its social objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the labour turnover rate at GC.'}, { n:'3(b)', m:2, t:'Calculate the cost per unit.'}, { n:'3(c)', m:12, t:'Evaluate whether Aldin should change the HRM approach at GC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the marketing budget variance.'}, { n:'4(b)', m:12, t:'Evaluate the effectiveness of WCP's marketing strategy.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on WCP of the takeover of GC.', l:'250-350'} ] },
+'2025_mj_33': { title: "We Care Products (WCP)", pdf: "9609_s25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two ways the external influences referred to in lines 8-12 may impact on WCP.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WCP of its social objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the labour turnover rate at GC.'}, { n:'3(b)', m:2, t:'Calculate the cost per unit.'}, { n:'3(c)', m:12, t:'Evaluate whether Aldin should change the HRM approach at GC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the marketing budget variance.'}, { n:'4(b)', m:12, t:'Evaluate the effectiveness of WCP’s marketing strategy.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on WCP of the takeover of GC.', l:'250-350'} ] },
 
 '2025_fm_32': { title: "Iyipada (IPA)", pdf: "9609_m25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to IPA of changing employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two methods to improve IPA\'s liquidity.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate, for 2024, IPA\'s market share.'}, { n:'3(b)', m:2, t:'Calculate, for 2025, the expected percentage market growth.'}, { n:'3(c)', m:12, t:'Evaluate the Marketing Director\'s proposed changes to IPA\'s marketing mix.', l:'250-350'}, { n:'4(a)', m:2, t:'Complete nodes 5 and 6 on the network diagram.'}, { n:'4(b)', m:2, t:'Calculate the total float for Activity F.'}, { n:'4(c)', m:12, t:'Evaluate the benefit to IPA of Critical Path Analysis (CPA).', l:'250-350'}, { n:'5', m:12, t:'Evaluate the most likely impact on IPA of the fiscal and monetary policy changes.', l:'250-350'} ] },
 
@@ -950,13 +832,13 @@ const paperData = {
 
 '2024_on_33': { title: "Australasia Fitness Factory (AFF)", pdf: "9609_w24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two threats to AFF from changes in its external environment.', l:'150-225'}, { n:'2', m:8, t:'Analyse one advantage and one disadvantage to AFF of being a public limited company.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the return on capital employed (ROCE) for 2023.'}, { n:'3(b)', m:2, t:'Calculate the gearing ratio for 2023.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on AFF shareholders of the new share issue.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the dividend yield for 2022.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to AFFs directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether TQM is the best way to solve customer complaint problems.', l:'250-350'} ] },
 
-'2024_mj_31': { title: "Gordy Building Supplies (GBS)", pdf: "9609_s24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to GBS of using flexible part-time employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to GBS of its proposed communication process innovation.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the gearing ratio.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to GBS's directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity C.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to GBS.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which corporate social responsibility (CSR) should influence GBS's decision to expand into new land.', l:'250-350'} ] },
+'2024_mj_31': { title: "Gordy Building Supplies (GBS)", pdf: "9609_s24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to GBS of using flexible part-time employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to GBS of its proposed communication process innovation.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the gearing ratio.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to GBS’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity C.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to GBS.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which corporate social responsibility (CSR) should influence GBS’s decision to expand into new land.', l:'250-350'} ] },
 
-'2024_mj_32': { title: "Soymai Farms (SF)", pdf: "9609_s24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two problems SF may experience when implementing total quality management (TQM).', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the inventory turnover.'}, { n:'3(b)', m:2, t:'Calculate the acid test ratio.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on SF's shareholders of the proposed changes to the dividend policy.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the capacity utilisation.'}, { n:'4(b)', m:12, t:'Evaluate the decision to outsource production.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on SF of country B becoming a member of the NFTA international trading agreement.', l:'250-350'} ] },
+'2024_mj_32': { title: "Soymai Farms (SF)", pdf: "9609_s24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two problems SF may experience when implementing total quality management (TQM).', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the inventory turnover.'}, { n:'3(b)', m:2, t:'Calculate the acid test ratio.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on SF’s shareholders of the proposed changes to the dividend policy.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the capacity utilisation.'}, { n:'4(b)', m:12, t:'Evaluate the decision to outsource production.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on SF of country B becoming a member of the NFTA international trading agreement.', l:'250-350'} ] },
 
 '2024_mj_33': { title: "Sunil's Clothing Company (SCC)", pdf: "9609_s24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two impacts on SCC of the changing external influences in country Z.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to SCC of the proposed new factory.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the promotional elasticity of demand.'}, { n:'3(b)', m:2, t:'Calculate the price elasticity of demand.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of elasticity data to SCC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity B.'}, { n:'4(b)', m:12, t:'Evaluate the importance of Critical Path Analysis (CPA) to the success of the new factory.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether Sunil should use a soft or hard approach to human resource management.', l:'250-350'} ] },
 
-'2024_fm_32': { title: "Clean Delivery (CD)", pdf: "9609_m24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the inventory turnover.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to CD's directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the difference in capacity utilisation between 2022 and 2023.'}, { n:'4(b)', m:12, t:'Evaluate the importance of research and development to CD's future success.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on CD of the appreciation of country K's exchange rate.', l:'250-350'} ] }
+'2024_fm_32': { title: "Clean Delivery (CD)", pdf: "9609_m24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the inventory turnover.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to CD’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the difference in capacity utilisation between 2022 and 2023.'}, { n:'4(b)', m:12, t:'Evaluate the importance of research and development to CD’s future success.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on CD of the appreciation of country K’s exchange rate.', l:'250-350'} ] }
 
 };
 
@@ -1081,39 +963,15 @@ let aoHtml = '';
 
 if(done) {
 
-aoHtml = `<div class="ao-breakdown">
+aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
 
-<div class="ao-item ${att.ao1 === 2 ? 'full-marks' : ''}">
+<span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
 
-<div class="ao-label">AO1 (Knowledge)</div>
+<span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
 
-<div class="ao-score">${att.ao1 || 0}/${q.m === 8 ? 2 : 2}</div>
+<span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${att.ao3 || '-'}</span>
 
-</div>
-
-<div class="ao-item ${att.ao2 === 2 ? 'full-marks' : ''}">
-
-<div class="ao-label">AO2 (Application)</div>
-
-<div class="ao-score">${att.ao2 || 0}/${q.m === 8 ? 2 : 2}</div>
-
-</div>
-
-<div class="ao-item ${(q.m === 8 && att.ao3 === 4) || (q.m === 12 && att.ao3 === 2) ? 'full-marks' : ''}">
-
-<div class="ao-label">AO3 (Analysis)</div>
-
-<div class="ao-score">${att.ao3 || 0}/${q.m === 8 ? 4 : 2}</div>
-
-</div>
-
-${q.m === 12 ? `<div class="ao-item ${att.ao4 === 6 ? 'full-marks' : ''}">
-
-<div class="ao-label">AO4 (Evaluation)</div>
-
-<div class="ao-score">${att.ao4 || 0}/6</div>
-
-</div>` : ''}
+<span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${att.ao4 || '-'}</span>
 
 </div>`;
 
@@ -1127,67 +985,23 @@ qHtml += `<div class="question-card">
 
 <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
 
-${q.l ? `<p class="word-limit">Target: ${q.l} words</p>` : ''}
+${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
 
-<div class="answer-controls">
-
-<div class="word-counter" id="counter_${pid}_${q.n}">Words: 0</div>
-
-<button class="expand-btn" onclick="toggleExpand('${pid}', '${q.n}')">Expand Writing Space</button>
-
-</div>
-
-<textarea id="ans_${pid}_${q.n}" oninput="updateWordCount('${pid}', '${q.n}', ${q.m})">${att.answer || ''}</textarea>
+<textarea id="ans_${pid}_${q.n}">${att.answer || ''}</textarea>
 
 <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit'}</button>
 
 ${done ? `<div class="feedback-box">
 
-<div class="score-header">
-
-<div>
-
-<div class="total-score">${att.score}/${q.m}</div>
-
-<div style="font-size:0.9rem; color:#666; margin-top:5px;">Overall Score</div>
-
-</div>
-
-<div class="word-count-info">
-
-<div class="count">Word Count: ${att.word_count || 'N/A'}</div>
-
-${att.word_count_penalty > 0 ? `<div class="penalty">Penalty: -${att.word_count_penalty} marks</div>` : ''}
-
-</div>
-
-</div>
+<h3>Score: ${att.score}/${q.m}</h3>
 
 ${aoHtml}
 
-<div class="feedback-section">
+<p><strong>Strengths:</strong> ${att.strengths}</p>
 
-<h4>✅ Strengths</h4>
+<p><strong>Improvements:</strong> ${att.weaknesses}</p>
 
-<p>${att.strengths}</p>
-
-</div>
-
-<div class="feedback-section" style="border-left-color: #f44336;">
-
-<h4>⚠️ Areas for Improvement</h4>
-
-<p>${att.weaknesses}</p>
-
-</div>
-
-<div class="model-answer-box">
-
-<h4>📝 Model Answer (A* Standard)</h4>
-
-<p style="white-space: pre-line;">${att.modelAnswer}</p>
-
-</div>
+<div style="background:#222; color:#eee; padding:15px; border-radius:10px; margin-top:10px;"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
 
 </div>` : ''}
 
@@ -1197,97 +1011,7 @@ ${aoHtml}
 
 document.getElementById('questions-container').innerHTML = qHtml;
 
-// Update all word counts on page load
-
-data.questions.forEach(q => {
-
-updateWordCount(pid, q.n, q.m);
-
-});
-
 setView('workspace');
-
-}
-
-
-
-function toggleExpand(pid, qn) {
-
-const textarea = document.getElementById(`ans_${pid}_${qn}`);
-
-const btn = event.target;
-
-if (textarea.classList.contains('expanded')) {
-
-textarea.classList.remove('expanded');
-
-btn.innerText = 'Expand Writing Space';
-
-} else {
-
-textarea.classList.add('expanded');
-
-btn.innerText = 'Collapse Writing Space';
-
-}
-
-}
-
-
-
-function updateWordCount(pid, qn, marks) {
-
-const textarea = document.getElementById(`ans_${pid}_${qn}`);
-
-const counter = document.getElementById(`counter_${pid}_${qn}`);
-
-const text = textarea.value.trim();
-
-const wordCount = text ? text.split(/\s+/).length : 0;
-
-const minWords = marks === 8 ? 150 : 250;
-
-const maxWords = marks === 8 ? 225 : 350;
-
-counter.innerText = `Words: ${wordCount}`;
-
-counter.classList.remove('warning', 'error', 'good');
-
-if (wordCount === 0) {
-
-// No styling
-
-} else if (wordCount < minWords) {
-
-counter.classList.add('error');
-
-counter.innerText = `Words: ${wordCount} (min: ${minWords})`;
-
-} else if (wordCount > maxWords) {
-
-counter.classList.add('error');
-
-counter.innerText = `Words: ${wordCount} (max: ${maxWords})`;
-
-} else if (wordCount >= minWords - 20 && wordCount <= minWords) {
-
-counter.classList.add('warning');
-
-counter.innerText = `Words: ${wordCount} (approaching min)`;
-
-} else if (wordCount >= maxWords - 20 && wordCount < maxWords) {
-
-counter.classList.add('warning');
-
-counter.innerText = `Words: ${wordCount} (approaching max)`;
-
-} else {
-
-counter.classList.add('good');
-
-counter.innerText = `Words: ${wordCount} ✓`;
-
-}
 
 }
 
@@ -1304,7 +1028,6 @@ const ans = el.value.trim();
 if(!ans) return alert("Please write an answer first.");
 
 
-
 btn.innerText = "⏳ Strict Marking...";
 
 btn.disabled = true;
@@ -1316,11 +1039,9 @@ btn.disabled = true;
 const qData = paperData[pid].questions.find(q => q.n === qn);
 
 
-
 // 2. GENERATE STRICT RUBRIC BASED ON MARKS
 
 let rubricInstructions = "";
-
 
 
 if (qData.m === 12) {
@@ -1342,7 +1063,6 @@ You MUST follow this exact marking grid for 12 marks:
 - AO3 (Analysis): Max 2 marks (DO NOT AWARD MORE THAN 2).
 
 - AO4 (Evaluation): Max 6 marks.
-
 
 
 CRITICAL RULES:
@@ -1416,9 +1136,7 @@ marks: qData.m
 });
 
 
-
 const json = await res.json();
-
 
 
 saveAttempt(getUser(), pid, qn, {
@@ -1435,10 +1153,6 @@ ao3: json.ao3,
 
 ao4: json.ao4,
 
-word_count: json.word_count,
-
-word_count_penalty: json.word_count_penalty,
-
 strengths: json.strengths,
 
 weaknesses: json.weaknesses,
@@ -1448,9 +1162,7 @@ modelAnswer: json.model_answer
 });
 
 
-
 openPaper(pid); // Refresh view to show feedback
-
 
 
 } catch(e) {
@@ -1494,7 +1206,6 @@ const answeredCount = Object.keys(pAtts).length;
 if(answeredCount > 0) papersStarted++;
 
 
-
 let pScore = 0, pMax = 0;
 
 qs.forEach(q => {
@@ -1518,9 +1229,7 @@ totalQ += qs.length;
 totalAns += answeredCount;
 
 
-
 const percent = (answeredCount / qs.length) * 100;
-
 
 
 rows += `<tr>
@@ -1542,7 +1251,6 @@ rows += `<tr>
 const accuracy = possibleScore > 0 ? Math.round((totalScore/possibleScore)*100) : 0;
 
 
-
 document.getElementById('stats-overview').innerHTML = `
 
 <div class="stat-card"><span class="stat-value">${papersStarted}</span><span class="stat-label">Papers Started</span></div>
@@ -1552,7 +1260,6 @@ document.getElementById('stats-overview').innerHTML = `
 <div class="stat-card"><span class="stat-value">${accuracy}%</span><span class="stat-label">Global Accuracy</span></div>
 
 `;
-
 
 
 document.getElementById('score-table-container').innerHTML = `<table class="modern-table"><thead><tr><th>Paper</th><th>Progress</th><th>Score</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
