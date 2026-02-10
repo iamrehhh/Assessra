@@ -158,6 +158,14 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
 .hidden { display: none !important; }
 .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
 @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
+.tutor-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.tutor-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(245, 87, 108, 0.3);
+}
 
 </style>
 </head>
@@ -188,6 +196,12 @@ textarea:focus { border-color: var(--lime-primary); outline: none; }
         <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
+<button class="action-btn" onclick="window.location.href='scorecard.html'">
+    📊 Scorecard
+</button>
+<button class="action-btn tutor-btn" onclick="window.location.href='tutor.html'">
+    📚 Tutor
+</button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
@@ -427,21 +441,6 @@ function setView(viewName) {
 
 function backToDash() { setView('papers'); }
 function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
-    
-    function checkWords(el, limit) {
-    if(!limit) return;
-    // Count words by splitting on whitespace
-    const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-    const [min, max] = limit.split('-').map(Number);
-    
-    // Find the word count display div
-    const wcDiv = document.getElementById(el.id.replace('ans', 'wc'));
-    if (wcDiv) {
-        wcDiv.innerText = `${count} words`;
-        // Apply CSS classes based on limits
-        wcDiv.className = (count >= min && count <= max) ? 'word-count good' : 'word-count bad';
-    }
-}
 
 function openPaper(pid) {
     const data = paperData[pid];
@@ -470,8 +469,8 @@ function openPaper(pid) {
             <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
             ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
             
-            <textarea id="ans_${pid}_${q.n}" oninput="checkWords(this, '${q.l}')">${att.answer || ''}</textarea>
-<div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
+            <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
+            <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
 
             <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
             
@@ -486,11 +485,6 @@ function openPaper(pid) {
     });
     document.getElementById('questions-container').innerHTML = qHtml;
     setView('workspace');
-    
-    data.questions.forEach(q => {
-    const el = document.getElementById(`ans_${pid}_${q.n}`);
-    if(el) checkWords(el, q.l);
-});
     
     // Init word counts
     data.questions.forEach(q => {
