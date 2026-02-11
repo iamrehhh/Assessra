@@ -15,6 +15,58 @@ Object.assign(paperData, {
         ] 
     },
 
+    // --- 2024 MAY / JUNE SERIES ---
+    '2024_mj_41': { 
+        title: "Luxury Cars (LC)", 
+        pdf: "9609_s24_qp_41.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate LC's business performance between 2014 and 2023.", l:'400-600'},
+            { n:'2', m:20, t:"Advise LC on a new HR strategy to improve employee performance.", l:'400-600'}
+        ] 
+    },
+    '2024_mj_42': { 
+        title: "Clean Arena (CA)", 
+        pdf: "9609_s24_qp_42.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate the extent to which CA's operations strategy between 2019 and 2024 led to the failure of the city Z branch.", l:'400-600'},
+            { n:'2', m:20, t:"Advise Nala on the most important elements to be included in a corporate plan for the future of the city Z branch.", l:'400-600'}
+        ] 
+    },
+    '2024_mj_43': { 
+        title: "Kitchen Favourites (KF)", 
+        pdf: "9609_s24_qp_43.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate KF's approach to human resource management (HRM) between 2018-2023.", l:'400-600'},
+            { n:'2', m:20, t:"Advise KF whether using Ansoff's matrix is sufficient to develop a successful growth strategy.", l:'400-600'}
+        ] 
+    },
+
+    // --- 2024 OCT / NOV SERIES ---
+    '2024_on_41': { 
+        title: "Designer Floor Cleaners (DF)", 
+        pdf: "9609_w24_qp_41.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate the extent to which corporate planning could have prevented the 'Fly-away' promotion crisis.", l:'400-600'},
+            { n:'2', m:20, t:"Advise DF on the likely impact of ratio results on its choice of future growth strategy.", l:'400-600'}
+        ] 
+    },
+    '2024_on_42': { 
+        title: "Puli Insurance (PI)", 
+        pdf: "9609_w24_qp_42.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate the success of Idir's strategy for improving employee performance between 2020 and 2024.", l:'400-600'},
+            { n:'2', m:20, t:"Advise Idir on what accounting data he should use to help him develop a new business strategy for PI to sell pet insurance.", l:'400-600'}
+        ] 
+    },
+    '2024_on_43': { 
+        title: "Fletcher Brenton (FB)", 
+        pdf: "9609_w24_qp_43.pdf",
+        questions: [
+            { n:'1', m:20, t:"Evaluate the impact of FB's finance and accounting strategy on its performance between 2016 and 2022.", l:'400-600'},
+            { n:'2', m:20, t:"Advise the Board of Directors on whether scenario planning is the most useful approach to develop a new business strategy for FB.", l:'400-600'}
+        ] 
+    },
+
     // --- 2025 FEB / MARCH SERIES ---
     '2025_fm_42': { 
         title: "Daniel & Carl for Education (DCE)", 
@@ -94,6 +146,44 @@ const busP4Cards = `
         </div>
     </div>
     
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">May / June Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2024_mj_41')">
+            <span class="paper-tag">9609/41</span>
+            <h3>Luxury Cars (LC)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('2024_mj_42')">
+            <span class="paper-tag">9609/42</span>
+            <h3>Clean Arena (CA)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('2024_mj_43')">
+            <span class="paper-tag">9609/43</span>
+            <h3>Kitchen Favourites (KF)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('2024_on_41')">
+            <span class="paper-tag">9609/41</span>
+            <h3>Designer Floor Cleaners (DF)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('2024_on_42')">
+            <span class="paper-tag">9609/42</span>
+            <h3>Puli Insurance (PI)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('2024_on_43')">
+            <span class="paper-tag">9609/43</span>
+            <h3>Fletcher Brenton (FB)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+    </div>
+
     <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
     <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('2025_fm_42')">
@@ -142,10 +232,8 @@ const busP4Cards = `
     </div>
 `;
 
-// === 3. INJECT INTO INDEX.HTML AUTOMATICALLY ===
-document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById('container-bus-p4');
-    if (container) {
-        container.innerHTML = busP4Cards;
-    }
-});
+// === 3. INJECT INTO INDEX.HTML IMMEDIATELY ===
+const p4Container = document.getElementById('container-bus-p4');
+if (p4Container) {
+    p4Container.innerHTML = busP4Cards;
+}
