@@ -8,6 +8,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 
+/* === BUSINESS SECTION & TOGGLE SWITCH === */
+.business-dashboard {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.business-title {
+    font-size: 2.5rem;
+    color: var(--lime-dark);
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 20px;
+}
+.paper-toggle-box {
+    display: inline-flex;
+    background: white;
+    padding: 6px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--lime-light);
+}
+.p-toggle-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 40px;
+    font-weight: 800;
+    color: #888;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+.p-toggle-btn:hover { color: var(--lime-dark); }
+.p-toggle-btn.active {
+    background: var(--lime-light);
+    color: var(--lime-dark);
+    box-shadow: 0 4px 10px rgba(50, 205, 50, 0.1);
+}
+
+
     /* === CHAT MESSAGE BUBBLE STYLES === */
 
 /* === ADVANCED CHAT FEATURES STYLES === */
@@ -387,7 +425,18 @@ textarea.expanded {
     </div>
 </div>
 
-<div id="view-papers">
+<div id="view-papers" class="container">
+    
+    <div class="business-dashboard">
+        <h2 class="business-title">💼 Business Studies</h2>
+        <div class="paper-toggle-box">
+            <button id="tab-p3" class="p-toggle-btn active" onclick="switchPaperTab('p3')">Paper 3</button>
+            <button id="tab-p4" class="p-toggle-btn" onclick="switchPaperTab('p4')">Paper 4</button>
+        </div>
+    </div>
+
+    <div id="paper3-container">
+
 
     <div class="series-header"><div class="year-big">2024</div><div class="series-name">Feb / March Series</div></div>
     <div class="papers-grid">
@@ -426,6 +475,13 @@ textarea.expanded {
         <div class="paper-card" onclick="openPaper('2025_on_32')"><span class="paper-tag">9609/32</span><h3>Komate Tropical Juice (KTJ)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
         <div class="paper-card" onclick="openPaper('2025_on_33')"><span class="paper-tag">9609/33</span><h3>Lithium Battery Metals (LBM)</h3><p style="color:#888; margin-top:5px;">Paper 3 • PDF Available</p></div>
     </div>
+</div>
+        
+        </div>
+
+    <div id="paper4-container" class="hidden">
+        </div>
+
 </div>
 
 <div id="view-formulae" class="hidden">
@@ -1008,6 +1064,27 @@ function tryLogin() {
 
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
+// === SWITCH BETWEEN PAPER 3 AND PAPER 4 ===
+function switchPaperTab(tab) {
+    const p3Container = document.getElementById('paper3-container');
+    const p4Container = document.getElementById('paper4-container');
+    const tabP3 = document.getElementById('tab-p3');
+    const tabP4 = document.getElementById('tab-p4');
+
+    if (tab === 'p3') {
+        p3Container.classList.remove('hidden');
+        p4Container.classList.add('hidden');
+        tabP3.classList.add('active');
+        tabP4.classList.remove('active');
+    } else if (tab === 'p4') {
+        p3Container.classList.add('hidden');
+        p4Container.classList.remove('hidden');
+        tabP3.classList.remove('active');
+        tabP4.classList.add('active');
+    }
+}
+
+
 function setView(viewName) {
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
@@ -1326,6 +1403,8 @@ if(getUser()) {
     setTimeout(syncScore, 1000);
 }
 </script>
+
+<script src="paper4.js"></script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
