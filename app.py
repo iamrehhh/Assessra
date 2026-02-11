@@ -20,7 +20,13 @@ model = genai.GenerativeModel('models/gemini-2.5-flash')
 BIN_ID = '698c12cdae596e708f21a63d'
 MASTER_KEY = '$2a$10$atDVmJayGd5Wx2u3bcT67.gjsOMo8KJQWtFl5Yp5hSVbPvtdtj/EW'
 
-BIN_URL = f'https://api.jsonbin.io/v3/b/{BIN_ID}'@app.route('/leaderboard', methods=['GET'])
+BIN_URL = f'https://api.jsonbin.io/v3/b/{BIN_ID}'
+HEADERS = {
+    'X-Master-Key': MASTER_KEY,
+    'Content-Type': 'application/json'
+}
+
+@app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     try:
         # Fetch scores from the cloud
