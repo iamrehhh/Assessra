@@ -7,6 +7,34 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
+
+/* === CHAT PANEL STYLES === */
+.chat-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2999; transition: opacity 0.3s ease; }
+.chat-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden off-screen by default */
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+    z-index: 3000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+.chat-panel.open { right: 0; /* Slides in */ }
+
+@media (max-width: 768px) { .chat-panel { width: 85vw; } } /* Wider on mobile */
+
+.chat-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+.chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; background: #f8fafc; }
+.chat-input-area { padding: 20px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
+.chat-input-area input { flex-grow: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+.chat-input-area input:focus { outline: none; border-color: var(--lime-primary); }
+
 /* GLOBAL FONT */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
 /* NEW FONTS (For Formula Sheet) */
@@ -292,6 +320,7 @@ textarea.expanded {
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
         <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
                 <button class="nav-btn tip-nav-btn" onclick="setView('tips')" title="Exam Tips" style="font-size: 1.3rem;">💡</button>
+                <button class="nav-btn" onclick="toggleChat()" style="color: #3b82f6; font-weight: 800;">💬 Group Chat</button>
 
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
@@ -801,10 +830,39 @@ textarea.expanded {
         </div>
 </div>
 
+<div id="chat-overlay" class="chat-overlay hidden" onclick="toggleChat()"></div>
+<div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+        <h3 style="margin: 0; color: white;">💬 Class Study Group</h3>
+        <button onclick="toggleChat()" style="background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer;">×</button>
+    </div>
+    <div id="chat-messages" class="chat-messages">
+        <div style="text-align: center; color: #888; margin-top: 20px;">Welcome to the study chat!</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+        <button onclick="sendChatMessage()" style="background: var(--lime-dark); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">Send</button>
+    </div>
+</div>
+
 </div>
 </div>
 
 <script>
+
+// === CHAT UI LOGIC ===
+function toggleChat() {
+    const panel = document.getElementById('chat-panel');
+    const overlay = document.getElementById('chat-overlay');
+    
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open')) {
+        overlay.classList.remove('hidden');
+    } else {
+        overlay.classList.add('hidden');
+    }
+}
+
 // === AUTHORIZED USERS LIST ===
 const ALLOWED_USERS = {
     "Jesan.Equebal": "virgin",
