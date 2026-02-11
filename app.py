@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
 import os
-import json
+import requests # <--- ADDED FOR JSONBIN
 
 app = Flask(__name__)
 # Allow CORS for your specific domain to be safe, or * for testing
@@ -14,17 +14,24 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 genai.configure(api_key="AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg") 
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
-# File to store leaderboard data
-SCORES_FILE = 'scores.json'
+# ==========================================
+# ☁️ CLOUD DATABASE SETTINGS (JSONBIN.IO)
+# ==========================================
+BIN_ID = '698c12cdae596e708f21a63d'
+MASTER_KEY = '$2a$10$atDVmJayGd5Wx2u3bcT67.gjsOMo8KJQWtFl5Yp5hSVbPvtdtj/EW'
+
+BIN_URL = f'https://api.jsonbin.io/v3/b/{BIN_ID}'
+HEADERS = {
+    'X-Master-Key': MASTER_KEY,
+    'Content-Type': 'application/json'
+}
 
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     try:
-        if os.path.exists(SCORES_FILE):
-            with open(SCORES_FILE, 'r') as f:
-                scores = json.load(f)
-        else:
-            scores = {}
+        # Fetch scores from the cloud
+        req = requests.get(BIN_URL, headers=HEADERS)
+        scores = req.json().get('record', {})
         
         # Sort users by score (highest first)
         sorted_scores = sorted(scores.items(), key=lambda x: x[1]['score'], reverse=True)
@@ -41,20 +48,39 @@ def update_score():
     
     if not user: return jsonify({"error": "No user"}), 400
     
-    current_scores = {}
-    if os.path.exists(SCORES_FILE):
-        try:
-            with open(SCORES_FILE, 'r') as f:
-                current_scores = json.load(f)
-        except: pass
+    try:
+        # 1. Get current scores from the cloud
+        req = requests.get(BIN_URL, headers=HEADERS)
+        current_scores = req.json().get('record', {})
         
-    # Update or add user stats
-    current_scores[user] = {"score": score, "papers": papers}
-    
-    with open(SCORES_FILE, 'w') as f:
-        json.dump(current_scores, f)
+        # 2. Update or add the specific user's stats
+        current_scores[user] = {"score": score, "papers": papers}
         
-    return jsonify({"status": "success"}), 200
+        # 3. Save it back to the cloud permanently
+        requests.put(BIN_URL, json=current_scores, headers=HEADERS)
+        
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/delete_user', methods=['GET'])
+def delete_user():
+    username = request.args.get('name')
+    if not username:
+        return "Please provide a name. Example: /delete_user?name=Username", 400
+
+    try:
+        req = requests.get(BIN_URL, headers=HEADERS)
+        scores = req.json().get('record', {})
+        
+        if username in scores:
+            del scores[username]
+            requests.put(BIN_URL, json=scores, headers=HEADERS)
+            return f"Deleted user: {username}", 200
+        else:
+            return f"User {username} not found.", 404
+    except Exception as e:
+        return f"Error: {str(e)}", 500
 
 @app.route('/mark', methods=['POST'])
 def mark():
