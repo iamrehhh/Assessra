@@ -334,6 +334,20 @@ textarea.expanded {
 .toggle-insert { display: none; margin-bottom: 15px; background: #eee; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; }
 @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } .insert-panel { display: none; height: 400px; } .insert-panel.show { display: block; } .toggle-insert { display: block; } }
 
+/* === UNREAD BADGE STYLE === */
+.unread-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: #ef4444; /* Bright Red */
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.unread-badge.hidden {
+    display: none;
+}
 
 </style>
 </head>
@@ -365,7 +379,10 @@ textarea.expanded {
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
         <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
         <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
-<button class="nav-btn" onclick="toggleChat()" style="color: #3b82f6; font-weight: 800;"><span style="font-size: 1.5rem; vertical-align: middle; margin-right: 5px;">💬</span></button>
+        <button class="nav-btn" onclick="toggleChat()" style="position: relative; color: #3b82f6; font-weight: 800;">
+            <span style="font-size: 1.5rem; vertical-align: middle; margin-right: 5px;">💬</span> Group Chat
+            <span id="unread-badge" class="unread-badge hidden"></span>
+        </button>
         <button class="nav-btn" onclick="doLogout()">Logout</button>
     </div>
 </div>
@@ -907,10 +924,12 @@ textarea.expanded {
 function toggleChat() {
     const panel = document.getElementById('chat-panel');
     const overlay = document.getElementById('chat-overlay');
+    const badge = document.getElementById('unread-badge'); // Grabs the red dot
     
     panel.classList.toggle('open');
     if (panel.classList.contains('open')) {
         overlay.classList.remove('hidden');
+        if (badge) badge.classList.add('hidden'); // Hides the red dot when chat opens!
     } else {
         overlay.classList.add('hidden');
     }
@@ -1434,6 +1453,14 @@ if(getUser()) {
       if (isNew) {
           chatMessages.appendChild(msgDiv);
           chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to bottom
+          
+          // NEW UNREAD DOT LOGIC:
+          const panel = document.getElementById('chat-panel');
+          const badge = document.getElementById('unread-badge');
+          // If the chat is closed AND I didn't send the message, show the red dot!
+          if (panel && badge && !panel.classList.contains('open') && !isMe) {
+              badge.classList.remove('hidden');
+          }
       }
   }
 
