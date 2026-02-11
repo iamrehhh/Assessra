@@ -34,9 +34,9 @@ min-height: 100vh;
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
 /* === FORMULA SHEET SPECIFIC STYLES === */
-#view-formulae .formula-section, #view-definitions .def-section { margin-bottom: 40px; }
+#view-formulae .formula-section, #view-definitions .def-section, #view-tips .formula-section { margin-bottom: 40px; }
 
-#view-formulae .chapter-title, #view-definitions .topic-title {
+#view-formulae .chapter-title, #view-definitions .topic-title, #view-tips .chapter-title {
 font-family: 'Playfair Display', serif;
 font-size: 1.6rem;
 color: #1a1a1a;
@@ -46,7 +46,7 @@ padding-bottom: 5px;
 display: inline-block;
 }
 
-#view-formulae .formula-grid, #view-definitions .def-grid {
+#view-formulae .formula-grid, #view-definitions .def-grid, #view-tips .formula-grid {
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 gap: 20px;
@@ -340,62 +340,90 @@ textarea.expanded {
 
 <div id="view-formulae" class="hidden">
     <div class="formula-section">
-        <h3 class="chapter-title">Finance: Ratio Analysis</h3>
+        <h3 class="chapter-title">Finance: Profitability & Liquidity Ratios</h3>
         <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Gross Profit</div><div class="f-body">Revenue - Cost of Sales</div></div>
+            <div class="formula-card"><div class="f-title">Gross Profit Margin (%)</div><div class="f-body">(Gross Profit / Revenue) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Operating Profit Margin (%)</div><div class="f-body">(Operating Profit / Revenue) × 100</div></div>
+            <div class="formula-card"><div class="f-title">ROCE (%)</div><div class="f-body">(Operating Profit / Capital Employed) × 100</div></div>
             <div class="formula-card"><div class="f-title">Current Ratio</div><div class="f-body">Current Assets / Current Liabilities</div></div>
+            <div class="formula-card"><div class="f-title">Liquid Assets</div><div class="f-body">Current Assets - Inventories</div></div>
             <div class="formula-card"><div class="f-title">Acid Test Ratio</div><div class="f-body">Liquid Assets / Current Liabilities</div></div>
-            <div class="formula-card"><div class="f-title">ROCE</div><div class="f-body">(Operating Profit / Capital Employed) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Gearing Ratio</div><div class="f-body">(Non-Current Liabilities / Capital Employed) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Gross Profit Margin</div><div class="f-body">(Gross Profit / Revenue) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Operating Profit Margin</div><div class="f-body">(Operating Profit / Revenue) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Inventory Turnover</div><div class="f-body">Cost of Sales / Average Inventory</div></div>
-            <div class="formula-card"><div class="f-title">Trade Payables Turnover</div><div class="f-body">(Trade Payables / Credit Purchases) × 365</div></div>
+            <div class="formula-card"><div class="f-title">Working Capital</div><div class="f-body">Current Assets - Current Liabilities</div></div>
         </div>
     </div>
+
     <div class="formula-section">
-        <h3 class="chapter-title">Finance: Shareholder Ratios</h3>
+        <h3 class="chapter-title">Finance: Efficiency Ratios</h3>
         <div class="formula-grid">
-            <div class="formula-card"><div class="f-title">Earnings Per Share (EPS)</div><div class="f-body">Profit for Year / Number of Issued Shares</div></div>
-            <div class="formula-card"><div class="f-title">Price / Earnings (P/E) Ratio</div><div class="f-body">Market Price / Earnings Per Share</div></div>
-            <div class="formula-card"><div class="f-title">Dividend Per Share</div><div class="f-body">Total Annual Dividends / Total Issued Shares</div></div>
-            <div class="formula-card"><div class="f-title">Dividend Yield</div><div class="f-body">(Dividend Per Share / Market Price) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Dividend Cover</div><div class="f-body">Profit for Year / Annual Dividends</div></div>
+            <div class="formula-card"><div class="f-title">Cost of Sales</div><div class="f-body">(Opening Inventories + Purchases) - Closing Inventories</div></div>
+            <div class="formula-card"><div class="f-title">Average Inventory</div><div class="f-body">(Inventory Start + Inventory End) / 2</div></div>
+            <div class="formula-card"><div class="f-title">Rate of Inventory Turnover</div><div class="f-body">Cost of Sales / Average Inventory</div></div>
+            <div class="formula-card"><div class="f-title">Trade Payable Turnover (Days)</div><div class="f-body">(Trade Payables / Credit Purchases) × 365</div></div>
         </div>
     </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title">Finance: Shareholder & Gearing Ratios</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Earnings Per Share (EPS)</div><div class="f-body">Profit for Year / Number of Shares Issued</div></div>
+            <div class="formula-card"><div class="f-title">Price / Earnings (P/E) Ratio</div><div class="f-body">Market Share Price / Earnings Per Share</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Per Share</div><div class="f-body">Total Annual Dividends / Total Issued Shares</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Yield Ratio (%)</div><div class="f-body">(Dividend Per Share / Market Share Price) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Dividend Cover Ratio</div><div class="f-body">Profit for Year / Annual Dividends</div></div>
+            <div class="formula-card"><div class="f-title">Gearing Ratio (%)</div><div class="f-body">(Non-Current Liabilities / Capital Employed) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Reserve</div><div class="f-body">Shareholders' Equity - Equity Capital</div></div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h3 class="chapter-title">Finance: Accounting & Asset Valuation</h3>
+        <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Annual Depreciation</div><div class="f-body">(Original Cost - Residual Value) / Useful Life</div></div>
+            <div class="formula-card"><div class="f-title">Net Book Value</div><div class="f-body">Original Cost - Accumulated Depreciation</div></div>
+            <div class="formula-card"><div class="f-title">Net Realisable Value</div><div class="f-body">Existing Inventory Value - Cost of Selling</div></div>
+        </div>
+    </div>
+
     <div class="formula-section">
         <h3 class="chapter-title">Investment Appraisal</h3>
         <div class="formula-grid">
+            <div class="formula-card"><div class="f-title">Average Investment</div><div class="f-body">(Initial Capital Cost + Residual Capital Value) / 2</div></div>
             <div class="formula-card"><div class="f-title">ARR (Accounting Rate of Return)</div><div class="f-body">(Average Annual Profit / Average Investment) × 100</div></div>
             <div class="formula-card"><div class="f-title">Payback Period</div><div class="f-body">Amount Invested / Annual Net Cash Flow</div></div>
-            <div class="formula-card"><div class="f-title">Payback (Monthly Adj.)</div><div class="f-body">(Additional Cash Needed / Annual Cash Flow) × 12</div></div>
-            <div class="formula-card"><div class="f-title">Average Investment</div><div class="f-body">(Initial Cost + Residual Value) / 2</div></div>
+            <div class="formula-card"><div class="f-title">Payback - Additional Months</div><div class="f-body">(Additional Net Cash Flow Needed / Annual Cash Flow) × 12</div></div>
         </div>
     </div>
+
     <div class="formula-section">
         <h3 class="chapter-title">Marketing</h3>
         <div class="formula-grid">
-            <div class="formula-card"><div class="f-title">Market Share</div><div class="f-body">(Sales of Business / Total Market Sales) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Price Elasticity (PED)</div><div class="f-body">% Change in Demand / % Change in Price</div></div>
+            <div class="formula-card"><div class="f-title">Total Revenue</div><div class="f-body">Selling Price × Quantity Sold</div></div>
+            <div class="formula-card"><div class="f-title">Market Share (%)</div><div class="f-body">(Sales of Business / Total Market Sales) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Price Elasticity (PED)</div><div class="f-body">% Change in Quantity Demanded / % Change in Price</div></div>
             <div class="formula-card"><div class="f-title">Income Elasticity (YED)</div><div class="f-body">% Change in Demand / % Change in Income</div></div>
-            <div class="formula-card"><div class="f-title">Promotional Elasticity</div><div class="f-body">% Change in Demand / % Change in Spending</div></div>
+            <div class="formula-card"><div class="f-title">Promotional Elasticity</div><div class="f-body">% Change in Demand / % Change in Promotional Spending</div></div>
         </div>
     </div>
+
     <div class="formula-section">
         <h3 class="chapter-title">Operations & Project Management</h3>
         <div class="formula-grid">
             <div class="formula-card"><div class="f-title">Capacity Utilisation</div><div class="f-body">(Current Output / Maximum Output) × 100</div></div>
-            <div class="formula-card"><div class="f-title">Total Float</div><div class="f-body">LFT - Duration - EST</div></div>
+            <div class="formula-card"><div class="f-title">Total Float</div><div class="f-body">Latest Finishing Time (LFT) - Duration - Earliest Starting Time (EST)</div></div>
             <div class="formula-card"><div class="f-title">Free Float</div><div class="f-body">EST (Next Activity) - Duration - EST (This Activity)</div></div>
         </div>
     </div>
+
     <div class="formula-section">
         <h3 class="chapter-title">Human Resources</h3>
         <div class="formula-grid">
-            <div class="formula-card"><div class="f-title">Absenteeism Rate</div><div class="f-body">(Total Days Absent / Total Work Days) × 100</div></div>
+            <div class="formula-card"><div class="f-title">Absenteeism Rate (%)</div><div class="f-body">(Number of Days Absent / Total Workdays) × 100</div></div>
             <div class="formula-card"><div class="f-title">Labour Turnover</div><div class="f-body">(Number of Staff Leaving / Average Staff) × 100</div></div>
         </div>
     </div>
 </div>
+
 
 <div id="view-definitions" class="hidden">
     <div class="def-section">
