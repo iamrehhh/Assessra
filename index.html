@@ -480,7 +480,12 @@ textarea.expanded {
         </div>
 
     <div id="container-econ-p3" class="subject-container hidden">
+    <div id="mcq-test-area">
         </div>
+    <div id="mcq-results" class="hidden">
+        </div>
+    <button id="submit-mcq" class="submit-btn hidden" onclick="gradeMCQ()">Submit Test</button>
+</div>
 
     <div id="container-econ-p4" class="subject-container hidden">
         </div>
@@ -968,7 +973,7 @@ textarea.expanded {
     <div class="subject-group">
         <button class="subject-btn" onclick="toggleSubject('sub-econ')">Economics <span>▼</span></button>
         <div id="sub-econ" class="subject-content">
-            <div id="link-econ-p3" class="paper-link" onclick="switchPaperView('econ-p3')">Paper 3</div>
+           <div id="link-econ-p3" class="paper-link" onclick="switchPaperView('econ-p3')">Paper 3 (MCQ)</div>
             <div id="link-econ-p4" class="paper-link" onclick="switchPaperView('econ-p4')">Paper 4</div>
         </div>
     </div>
@@ -1598,6 +1603,7 @@ if(getUser()) {
 
 <script src="business_p4.js"></script>
 <script src="economics_p4.js"></script>
+<script src="economics_p3.js"></script>
 
 </body>
 </html>
