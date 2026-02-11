@@ -41,6 +41,16 @@ Object.assign(paperData, {
         ] 
     },
 
+    // --- 2024 OCT / NOV SERIES ---
+    'econ_2024_on_42': { 
+        title: "Reduced Migration to the United States (US)", 
+        pdf: "9708_w24_qp_42.pdf",
+        questions: [
+            { n:'4', m:20, t:"The table below contains some key economic data for Mexico in 2020. Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.", l:'400-600'},
+            { n:'5', m:20, t:"Between 2010 and 2020, very low interest rates encouraged low-income countries to borrow money from foreign investors and governments to finance long-term economic growth. Evaluate this approach to promoting long-term economic growth.", l:'400-600'}
+        ] 
+    },
+
     // --- 2025 FEB / MARCH SERIES ---
     'econ_2025_fm_42': { 
         title: "China's population trend", 
@@ -151,6 +161,15 @@ const econP4Cards = `
         <div class="paper-card" onclick="openPaper('econ_2024_mj_43')">
             <span class="paper-tag">9708/43</span>
             <h3>Income inequality</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+    </div>
+
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('econ_2024_on_42')">
+            <span class="paper-tag">9708/42</span>
+            <h3>Reduced Migration to the United States (US)</h3>
             <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
         </div>
     </div>
