@@ -30,6 +30,9 @@ function loadMCQPapers() {
     const container = document.getElementById('container-econ-p3');
     if (!container) return;
 
+    // Release the body scroll just in case we are exiting a test
+    document.body.style.overflow = 'auto';
+
     container.innerHTML = `
         <div style="text-align:center; margin-bottom:30px;">
             <h2 style="font-size:2rem; color:var(--lime-dark); font-family:'Playfair Display', serif;">📈 Economics: Paper 3 (MCQ)</h2>
@@ -72,29 +75,32 @@ function startMCQTest(paperID) {
         return; 
     }
 
-    // Hide the main site scrolling, lock the view to the test interface
+    // Lock the background website from scrolling
     document.body.style.overflow = 'hidden';
 
+    // This completely takes over the screen as a fixed app view
     let html = `
-        <div id="mcq-header" style="background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <div style="display:flex; align-items:center; gap:20px;">
-                <button onclick="exitMCQTest()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">Exit</button>
-                <h3 style="margin:0; color:var(--lime-dark);">9708 Economics / ${paperID.replace('_', ' ')}</h3>
-            </div>
-            <div id="timer-display" style="font-size: 1.5rem; font-weight: bold; color: #dc2626; font-family: monospace;">01:15:00</div>
-        </div>
-
-        <div style="display: flex; height: calc(100vh - 80px); background: #f5f5f5;">
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
             
-            <div style="flex: 6; border-right: 2px solid #ddd; height: 100%;">
-                <iframe src="${paperInfo.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
+            <div id="mcq-header" style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <button onclick="exitMCQTest()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">Exit</button>
+                    <h3 style="margin:0; color:var(--lime-dark);">9708 Economics / ${paperID.replace('_', ' ')}</h3>
+                </div>
+                <div id="timer-display" style="font-size: 1.5rem; font-weight: bold; color: #dc2626; font-family: monospace;">01:15:00</div>
             </div>
 
-            <div id="answer-sheet-container" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white;">
-                <div id="mcq-result-box" style="display:none; text-align:center; padding:20px; margin-bottom: 30px; background: #f0fdf4; border: 2px solid var(--lime-primary); border-radius: 12px;"></div>
+            <div style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
                 
-                <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Answer Sheet</h3>
-                <div id="bubble-grid" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                <div style="flex: 6; height: 100%; border-right: 2px solid #ddd;">
+                    <iframe src="${paperInfo.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
+                </div>
+
+                <div id="answer-sheet-container" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;">
+                    <div id="mcq-result-box" style="display:none; text-align:center; padding:20px; margin-bottom: 30px; background: #f0fdf4; border: 2px solid var(--lime-primary); border-radius: 12px;"></div>
+                    
+                    <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Answer Sheet</h3>
+                    <div id="bubble-grid" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
     `;
     
     // Generate the 30 Bubbles
@@ -118,9 +124,12 @@ function startMCQTest(paperID) {
     });
 
     html += `
+                    </div>
+                    
+                    <button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; margin-bottom:20px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Submit & Grade Test</button>
+                    
+                    <div style="height: 150px; width: 100%;"></div> 
                 </div>
-                <button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Submit & Grade Test</button>
-                <div style="height: 50px;"></div>
             </div>
         </div>
     `;
@@ -192,22 +201,20 @@ function gradeMCQ() {
         const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
         const userChoice = selectedInput ? selectedInput.value : null;
 
-        // Reset text colors so they contrast with the new backgrounds
+        // Reset text colors
         ['A', 'B', 'C', 'D'].forEach(l => {
             document.getElementById(`label-q${index}-${l}`).style.color = '#555';
         });
 
         // Highlight Logic
         if (userChoice === correctLetter) {
-            // Correct Answer!
             score++;
             let correctLabel = document.getElementById(`label-q${index}-${correctLetter}`);
-            correctLabel.style.backgroundColor = "#22c55e"; // Solid Green
+            correctLabel.style.backgroundColor = "#22c55e"; // Green
             correctLabel.style.borderColor = "#22c55e";
             correctLabel.style.color = "white";
             document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #22c55e";
         } else {
-            // Wrong Answer! Show correct as Green, user guess as Red
             let correctLabel = document.getElementById(`label-q${index}-${correctLetter}`);
             correctLabel.style.backgroundColor = "#22c55e";
             correctLabel.style.borderColor = "#22c55e";
@@ -215,7 +222,7 @@ function gradeMCQ() {
             
             if (userChoice) {
                 let userLabel = document.getElementById(`label-q${index}-${userChoice}`);
-                userLabel.style.backgroundColor = "#ef4444"; // Solid Red
+                userLabel.style.backgroundColor = "#ef4444"; // Red
                 userLabel.style.borderColor = "#ef4444";
                 userLabel.style.color = "white";
             }
@@ -237,13 +244,13 @@ function gradeMCQ() {
     document.getElementById('submit-btn').style.display = "none";
     document.getElementById('timer-display').innerText = "TEST COMPLETE";
     
-    // Scroll the answer sheet back to the top
-    document.getElementById('answer-sheet-container').scrollTo(0,0);
+    // Smoothly scroll the answer sheet back to the top to see the score
+    document.getElementById('answer-sheet-container').scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function exitMCQTest() {
     document.body.style.overflow = 'auto'; // Restore normal scrolling
-    loadMCQPapers();
+    loadMCQPapers(); // Reload the cards
 }
 
 // Initial Load
