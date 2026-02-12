@@ -1,21 +1,19 @@
 // ==========================================
-// BUSINESS PAPER 3 DATA (FINAL VERIFIED)
+// BUSINESS PAPER 3 DATA (FIXED PDF LINKS)
 // ==========================================
 
-// 1. Ensure the container exists (Safe Check)
 if (typeof paperData === 'undefined') {
     var paperData = {};
 }
 
-// 2. Add the data safely using Object.assign
 Object.assign(paperData, {
 
     // ==========================================
-    // 2025 SERIES (OCT / NOV) - NEWLY ADDED
+    // 2025 SERIES (OCT / NOV)
     // ==========================================
     '2025_on_31': { 
         title: "Pedro's Perfect Pies (PPP)", 
-        pdf: "9609_w25_qp_31.pdf", 
+        pdf: "9609_w25_in_31.pdf", // Changed to _in_ (Insert)
         questions: [ 
             { n:'1', m:8, t:'Analyse two likely impacts on PPP of the changing external influences.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two benefits to PPP of using quality assurance.', l:'150-225'}, 
@@ -29,7 +27,7 @@ Object.assign(paperData, {
     },
     '2025_on_32': { 
         title: "Komate Tropical Juice (KTJ)", 
-        pdf: "9609_w25_qp_32.pdf", 
+        pdf: "9609_w25_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse one advantage and one disadvantage to KTJ of delegation.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two impacts on KTJ of its commitment to corporate social responsibility (CSR).', l:'150-225'}, 
@@ -43,7 +41,7 @@ Object.assign(paperData, {
     },
     '2025_on_33': { 
         title: "Lithium Battery Metals (LBM)", 
-        pdf: "9609_w25_qp_33.pdf", 
+        pdf: "9609_w25_in_33.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two advantages to the government of country G that could result from the nationalisation of LBM.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse one benefit and one limitation of sales forecasting to LBM as it begins its mining operations.', l:'150-225'}, 
@@ -61,7 +59,7 @@ Object.assign(paperData, {
     // ==========================================
     '2025_mj_31': { 
         title: "Wisdom Shoes (WS)", 
-        pdf: "9609_s25_qp_31.pdf", 
+        pdf: "9609_s25_in_31.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two advantages to WS of using an environmental audit.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two ways that enterprise resource planning (ERP) could improve the efficiency of WS.', l:'150-225'}, 
@@ -75,7 +73,7 @@ Object.assign(paperData, {
     },
     '2025_mj_32': { 
         title: "Pura AI Robots (PAIR)", 
-        pdf: "9609_s25_qp_32.pdf", 
+        pdf: "9609_s25_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two benefits to PAIR of contingency planning.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two benefits to PAIR of its organisational structure.', l:'150-225'}, 
@@ -89,7 +87,7 @@ Object.assign(paperData, {
     },
     '2025_mj_33': { 
         title: "We Care Products (WCP)", 
-        pdf: "9609_s25_qp_33.pdf", 
+        pdf: "9609_s25_in_33.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two ways the external influences referred to in lines 8-12 may impact on WCP.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two possible effects on WCPs efficiency of an increase in its scale of operations.', l:'150-225'}, 
@@ -103,11 +101,11 @@ Object.assign(paperData, {
     },
 
     // ==========================================
-    // 2025 SERIES (FEB / MARCH) - NEWLY ADDED
+    // 2025 SERIES (FEB / MARCH)
     // ==========================================
     '2025_fm_32': { 
         title: "Iyipada (IPA)", 
-        pdf: "9609_m25_qp_32.pdf", 
+        pdf: "9609_m25_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse one advantage and one disadvantage to IPA of changing employment contracts from full-time to zero hours for most production employees.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two methods to improve IPA\'s liquidity.', l:'150-225'}, 
@@ -126,7 +124,7 @@ Object.assign(paperData, {
     // ==========================================
     '2024_on_31': { 
         title: "TopoChoc Enterprises (TC)", 
-        pdf: "9609_w24_qp_31.pdf", 
+        pdf: "9609_w24_in_31.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two benefits to TC of marketing planning for the new range of chocolate bars.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two benefits to TC of investing in artificial intelligence (AI) for human resource management (HRM).', l:'150-225'}, 
@@ -140,7 +138,7 @@ Object.assign(paperData, {
     },
     '2024_on_32': { 
         title: "Habesha Clean Cooking (HCC)", 
-        pdf: "9609_w24_qp_32.pdf", 
+        pdf: "9609_w24_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two impacts on HCC of the increase in competition in country E.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two factors influencing HCCs method of entry into international markets.', l:'150-225'}, 
@@ -154,7 +152,7 @@ Object.assign(paperData, {
     },
     '2024_on_33': { 
         title: "Australasia Fitness Factory (AFF)", 
-        pdf: "9609_w24_qp_33.pdf", 
+        pdf: "9609_w24_in_33.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two threats to AFF from changes in its external environment.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two benefits to AFF of recruiting a new CEO who has a high level of emotional intelligence.', l:'150-225'}, 
@@ -172,7 +170,7 @@ Object.assign(paperData, {
     // ==========================================
     '2024_mj_31': { 
         title: "Gordy Building Supplies (GBS)", 
-        pdf: "9609_s24_qp_31.pdf", 
+        pdf: "9609_s24_in_31.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two advantages to GBS of using flexible part-time employment contracts.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two disadvantages to GBS of its proposed communication process innovation.', l:'150-225'}, 
@@ -186,7 +184,7 @@ Object.assign(paperData, {
     },
     '2024_mj_32': { 
         title: "Soymai Farms (SF)", 
-        pdf: "9609_s24_qp_32.pdf", 
+        pdf: "9609_s24_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two problems SF may experience when implementing total quality management (TQM).', l:'150-225'}, 
@@ -200,7 +198,7 @@ Object.assign(paperData, {
     },
     '2024_mj_33': { 
         title: "Sunil's Clothing Company (SCC)", 
-        pdf: "9609_s24_qp_33.pdf", 
+        pdf: "9609_s24_in_33.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two impacts on SCC of the changing external influences in country Z.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two benefits to SCC of developing new clothing products made from recycled materials.', l:'150-225'}, 
@@ -218,7 +216,7 @@ Object.assign(paperData, {
     // ==========================================
     '2024_fm_32': { 
         title: "Clean Delivery (CD)", 
-        pdf: "9609_m24_qp_32.pdf", 
+        pdf: "9609_m24_in_32.pdf", 
         questions: [ 
             { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, 
             { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, 
