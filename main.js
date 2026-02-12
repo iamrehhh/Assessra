@@ -35,21 +35,62 @@ function doLogout() {
     location.reload(); 
 }
 
+// === 🟢 NEW: SIDEBAR & NAVIGATION LOGIC ===
+function toggleSideMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('side-menu-overlay');
+    if(menu && overlay) {
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+}
+
+function toggleSubject(subId) {
+    const content = document.getElementById(subId);
+    if(content) {
+        content.classList.toggle('expanded');
+        // Rotate arrow if exists
+        const btn = content.previousElementSibling;
+        const arrow = btn.querySelector('span');
+        if(arrow) arrow.innerText = content.classList.contains('expanded') ? '▲' : '▼';
+    }
+}
+
+function switchPaperView(targetViewId) {
+    // 1. Hide ALL paper containers
+    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
+    
+    // 2. Show the specific one clicked (e.g., 'container-bus-p3')
+    const target = document.getElementById(`container-${targetViewId}`);
+    if(target) target.classList.remove('hidden');
+    else console.error(`Container not found: container-${targetViewId}`);
+    
+    // 3. Highlight the active link in the menu
+    document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
+    const link = document.getElementById(`link-${targetViewId}`);
+    if(link) link.classList.add('active');
+    
+    // 4. Close the side menu and ensure we are on the Papers view
+    toggleSideMenu();
+    if(typeof setView === 'function') {
+        setView('papers');
+    }
+}
+
 // === PAPER VIEWER LOGIC ===
 function openPaper(pid) {
     // 1. Check if it is an Essay Paper (Business P3/P4, Econ P4, GP)
-    // We check if the ID exists in our 'paperData' object
-    if(paperData && paperData[pid]) {
+    if(typeof paperData !== 'undefined' && paperData[pid]) {
         renderEssayPaper(pid);
         return;
     }
 
     // 2. If not in paperData, assume it's an MCQ Paper (Econ P3)
-    // We try to call the MCQ engine
     if(typeof startMCQTest === 'function') {
         startMCQTest(pid);
     } else {
-        alert("Paper Data Not Found! (If this is MCQ, ensure economics_p3.js is loaded)");
+        console.error("Paper Data missing for:", pid);
+        alert("Paper Data Not Found! Check if the subject script is loaded.");
     }
 }
 
@@ -61,7 +102,8 @@ function renderEssayPaper(pid) {
     // Load saved answers from StorageManager
     const savedEssays = StorageManager.getData(u).essays?.[pid] || {};
 
-    document.getElementById('insert-pdf').src = data.pdf;
+    const pdfFrame = document.getElementById('insert-pdf');
+    if(pdfFrame) pdfFrame.src = data.pdf;
     
     let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
     
@@ -104,13 +146,8 @@ function renderEssayPaper(pid) {
     
     // Switch to Workspace View
     document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-    // Ensure workspace view is visible (handling ID variations)
     const ws = document.getElementById('view-workspace');
     if(ws) ws.classList.remove('hidden');
-    else {
-        // Fallback if ID is different in HTML
-        document.getElementById('app-layer').querySelector('.workspace').parentNode.classList.remove('hidden');
-    }
     
     // Init word counts
     data.questions.forEach(q => {
@@ -170,7 +207,6 @@ async function submitAnswer(pid, qn) {
 function updateWordCount(el, limitStr) {
     if(!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-    // Fix ID replacement
     const wcId = el.id.replace('ans_', 'wc_');
     const wcEl = document.getElementById(wcId);
     
@@ -217,11 +253,8 @@ function renderScorecard(subjectFilter = null) {
     const essays = data.essays || {};
     
     let rows = '';
-    
-    // Combine all Essay Papers
     const allPaperIDs = Object.keys(paperData || {});
     
-    // Helper to check filter
     const checkFilter = (pid) => {
         let isBusiness = pid.includes('9609') || pid.includes('bus');
         let isEcon = pid.includes('9708') || pid.includes('econ');
@@ -262,10 +295,9 @@ function renderScorecard(subjectFilter = null) {
         }
     });
 
-    // ADD MCQ PAPERS (From StorageManager)
     const mcqData = data.mcq || {};
     Object.keys(mcqData).forEach(pid => {
-        if(!checkFilter(pid)) return; // Assuming ID contains 'econ'
+        if(!checkFilter(pid)) return; 
         
         const session = mcqData[pid];
         if(session.submitted) {
@@ -279,8 +311,10 @@ function renderScorecard(subjectFilter = null) {
         }
     });
 
-    document.getElementById('score-table-container').innerHTML = 
-        `<table class="modern-table"><thead><tr><th>Paper</th><th>Progress</th><th>Score</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
+    const tableContainer = document.getElementById('score-table-container');
+    if(tableContainer) {
+        tableContainer.innerHTML = `<table class="modern-table"><thead><tr><th>Paper</th><th>Progress</th><th>Score</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
 }
 
 function resetPaper(pid, isMCQ = false) {
@@ -295,13 +329,18 @@ function resetPaper(pid, isMCQ = false) {
         }
         
         StorageManager.saveData(u, data);
-        renderScorecard(UIManager.currentContext === 'scorecard' ? 'business' : null); // Refresh
+        renderScorecard(UIManager.currentContext === 'scorecard' ? 'business' : null); 
     }
+}
+
+function resetAll() {
+    if(confirm("WIPE ALL DATA?")) { localStorage.clear(); location.reload(); }
 }
 
 // === LEADERBOARD FETCHER ===
 async function loadLeaderboard(subjectFilter = null) {
     const container = document.getElementById('leaderboard-container');
+    if(!container) return;
     container.innerHTML = "⏳ Fetching rankings...";
     
     try {
@@ -328,46 +367,4 @@ async function loadLeaderboard(subjectFilter = null) {
     } catch(e) {
         container.innerHTML = `<p style="color:red;">Leaderboard offline.</p>`;
     }
-}
-// ==========================================
-// 🟢 RESTORED SIDEBAR LOGIC
-// ==========================================
-
-function toggleSideMenu() {
-    const menu = document.getElementById('side-menu');
-    const overlay = document.getElementById('side-menu-overlay');
-    if(menu && overlay) {
-        menu.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
-}
-
-function toggleSubject(subId) {
-    const content = document.getElementById(subId);
-    if(content) {
-        content.classList.toggle('expanded');
-        // Rotate arrow if exists
-        const btn = content.previousElementSibling;
-        const arrow = btn.querySelector('span');
-        if(arrow) arrow.innerText = content.classList.contains('expanded') ? '▲' : '▼';
-    }
-}
-
-function switchPaperView(targetViewId) {
-    // 1. Hide ALL paper containers
-    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
-    
-    // 2. Show the specific one clicked (e.g., 'container-bus-p3')
-    const target = document.getElementById(`container-${targetViewId}`);
-    if(target) target.classList.remove('hidden');
-    else console.error(`Container not found: container-${targetViewId}`);
-    
-    // 3. Highlight the active link in the menu
-    document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
-    const link = document.getElementById(`link-${targetViewId}`);
-    if(link) link.classList.add('active');
-    
-    // 4. Close the side menu and ensure we are on the Papers view
-    toggleSideMenu();
-    setView('papers');
 }
