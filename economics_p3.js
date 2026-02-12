@@ -65,77 +65,54 @@ function loadMCQPapers() {
     `;
 }
 
+// Inside economics_p3.js
+
 function startMCQTest(paperID) {
     currentPaperID = paperID;
     testSubmitted = false;
     const paperInfo = paperDatabase[paperID];
     
-    if(!paperInfo) { 
-        alert("Paper data not found!"); 
-        return; 
-    }
+    // 1. LOAD PREVIOUS STATE
+    const savedState = StorageManager.getMCQState(paperID);
+    const savedAnswers = savedState ? savedState.answers : new Array(30).fill(null);
+    testSubmitted = savedState ? savedState.submitted : false;
 
-    // Lock the background website from scrolling
-    document.body.style.overflow = 'hidden';
+    // ... [Keep your existing HTML generation code] ...
 
-    // This completely takes over the screen as a fixed app view
-    let html = `
-        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
-            
-            <div id="mcq-header" style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <div style="display:flex; align-items:center; gap:20px;">
-                    <button onclick="exitMCQTest()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">Exit</button>
-                    <h3 style="margin:0; color:var(--lime-dark);">9708 Economics / ${paperID.replace('_', ' ')}</h3>
-                </div>
-                <div id="timer-display" style="font-size: 1.5rem; font-weight: bold; color: #dc2626; font-family: monospace;">01:15:00</div>
-            </div>
-
-            <div style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
-                
-                <div style="flex: 6; height: 100%; border-right: 2px solid #ddd;">
-                    <iframe src="${paperInfo.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
-                </div>
-
-                <div id="answer-sheet-container" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;">
-                    <div id="mcq-result-box" style="display:none; text-align:center; padding:20px; margin-bottom: 30px; background: #f0fdf4; border: 2px solid var(--lime-primary); border-radius: 12px;"></div>
-                    
-                    <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Answer Sheet</h3>
-                    <div id="bubble-grid" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
-    `;
-    
-    // Generate the 30 Bubbles
+    // 2. INJECT SAVED ANSWERS INTO HTML
+    // Inside your loop where you generate bubbles:
     paperInfo.answers.forEach((correctLetter, index) => {
-        let qNum = index + 1;
-        html += `
-            <div id="block-q${index}" style="display:flex; align-items:center; padding: 10px; border-radius: 8px; border: 1px solid #eee; background: #fafafa;">
-                <div style="width: 40px; font-weight: bold; font-size: 1.1rem; color: #555;">Q${qNum}</div>
-                <div style="display:flex; gap: 10px; flex-grow: 1; justify-content: space-around;">
-        `;
-        
+        // ... html generation ...
         ['A', 'B', 'C', 'D'].forEach(letter => {
+            const isChecked = savedAnswers[index] === letter ? 'checked' : '';
+            const bgStyle = savedAnswers[index] === letter ? 'background:var(--lime-primary); border-color:var(--lime-primary); color:white;' : '';
+            
             html += `
-                <label id="label-q${index}-${letter}" style="display:flex; justify-content:center; align-items:center; width: 40px; height: 40px; background: white; border: 2px solid #ccc; border-radius: 50%; cursor:pointer; transition: 0.2s;">
-                    <input type="radio" name="q${index}" value="${letter}" style="display:none;" onchange="updateBubble(this, ${index}, '${letter}')">
-                    <span style="font-weight:bold; color:#555;">${letter}</span>
+                <label id="label-q${index}-${letter}" style="${bgStyle} ...other styles...">
+                    <input type="radio" name="q${index}" value="${letter}" ${isChecked} onchange="handleMCQSelection(${index}, '${letter}')">
+                    <span>${letter}</span>
                 </label>
             `;
         });
-        html += `</div></div>`;
     });
 
-    html += `
-                    </div>
-                    
-                    <button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; margin-bottom:20px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Submit & Grade Test</button>
-                    
-                    <div style="height: 150px; width: 100%;"></div> 
-                </div>
-            </div>
-        </div>
-    `;
+    // 3. IF SUBMITTED, SHOW GRADES IMMEDIATELY
+    if (testSubmitted) {
+        setTimeout(gradeMCQ, 500); // Trigger grading logic to show red/green
+    }
+}
+
+// NEW HANDLER TO SAVE ON EVERY CLICK
+function handleMCQSelection(index, letter) {
+    if(testSubmitted) return;
     
-    document.getElementById('container-econ-p3').innerHTML = html;
-    startTimer();
+    // UI Update (Your existing updateBubble logic)
+    updateBubble(null, index, letter); 
+
+    // Save to Storage
+    let currentAnswers = StorageManager.getMCQState(currentPaperID)?.answers || new Array(30).fill(null);
+    currentAnswers[index] = letter;
+    StorageManager.saveMCQState(currentPaperID, currentAnswers, false, 0);
 }
 
 // Visual effect for clicking a bubble

@@ -394,6 +394,14 @@ textarea.expanded {
     background: #f0f0f0; color: var(--lime-dark); border-left-color: var(--lime-primary); 
 }
 
+/* === NEW FILTERING STYLES (STEP 3) === */
+/* These classes allow the UI Manager to hide/show specific subjects */
+.formulae-section.hidden, 
+.definitions-section.hidden, 
+.tips-section.hidden { 
+    display: none !important; 
+}
+
 </style>
 </head>
 <body>
@@ -420,10 +428,11 @@ textarea.expanded {
     </div>
     <div class="nav">
         <button class="nav-btn active" onclick="setView('papers')">Papers</button>
-        <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
-        <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
-        <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-        <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
+<button class="nav-btn" onclick="UIManager.openSubjectSelection('formulae')">Formulae</button>
+        <button class="nav-btn" onclick="UIManager.openSubjectSelection('definitions')">Definitions</button>
+        <button class="nav-btn" onclick="UIManager.openSubjectSelection('tips')">Tips</button>
+        <button class="nav-btn" onclick="UIManager.openSubjectSelection('scorecard')">Scorecard</button>
+        <button class="nav-btn" onclick="UIManager.openSubjectSelection('leaderboard')">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="toggleChat()" style="position: relative; color: #3b82f6; font-weight: 800;">
             <span style="font-size: 1.5rem; vertical-align: middle; margin-right: 5px;">💬</span>
             <span id="unread-badge" class="unread-badge hidden"></span>
@@ -493,6 +502,8 @@ textarea.expanded {
 </div>
     
 <div id="view-formulae" class="hidden">
+    
+    <div class="formulae-section business">
     <div class="formula-section">
         <h3 class="chapter-title">Finance: Profitability & Liquidity Ratios</h3>
         <div class="formula-grid">
@@ -580,6 +591,8 @@ textarea.expanded {
 
 
 <div id="view-definitions" class="hidden">
+
+    <div class="definitions-section business">
     <div class="def-section">
         <h3 class="topic-title">Strategy & Economics</h3>
         <div class="def-grid">
@@ -849,6 +862,8 @@ textarea.expanded {
 </div>
 
 <div id="view-tips" class="hidden">
+
+    <div class="tips-section business">
     <div style="text-align:center; margin-bottom:40px;">
         <h2 style="font-size:2rem; color:#b7950b; font-family:'Playfair Display', serif;">💡 Examiner's Tips</h2>
         <p style="color:#888;">Key advice for A Level Business (Chapters 6-36)</p>
@@ -980,6 +995,18 @@ textarea.expanded {
     
     </div>
 
+    <div id="selector-overlay" class="side-menu-overlay" onclick="UIManager.toggleSelector(false)"></div>
+<div id="subject-selector-panel" class="side-menu" style="right: -350px;"> <div class="menu-header">
+        <h3 id="selector-title" style="margin:0; font-family:'Playfair Display',serif;">Select Subject</h3>
+        <button class="menu-close" onclick="UIManager.toggleSelector(false)">✖</button>
+    </div>
+    <div class="subject-group">
+        <button class="subject-btn" onclick="UIManager.selectSubject('business')">Business (9609)</button>
+        <button class="subject-btn" onclick="UIManager.selectSubject('economics')">Economics (9708)</button>
+        <button class="subject-btn" onclick="UIManager.selectSubject('general')">General Paper (8021)</button>
+    </div>
+</div>
+
 <div id="chat-overlay" class="chat-overlay hidden" onclick="toggleChat()"></div>
 <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
@@ -1007,442 +1034,59 @@ textarea.expanded {
 </div>
 </div>
 
+<script src="storage_manager.js"></script>
+<script src="ui_manager.js"></script>
+
+<script src="economics_p3.js"></script>
+<script src="economics_p4.js"></script>
+<script src="business_p4.js"></script>
+<script src="general_paper.js"></script>
+
+<script src="main.js"></script>
+
 <script>
+    // Runs automatically when the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("Habibi Studies Loaded 🚀");
 
-    // === SIDE MENU & MULTI-SUBJECT LOGIC ===
-function toggleSideMenu() {
-    document.getElementById('side-menu').classList.toggle('active');
-    document.getElementById('side-menu-overlay').classList.toggle('active');
-}
-
-function toggleSubject(subId) {
-    const content = document.getElementById(subId);
-    // Expand or collapse the clicked subject
-    content.classList.toggle('expanded');
-}
-
-function switchPaperView(targetViewId) {
-    // 1. Hide ALL paper containers
-    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
-    
-    // 2. Show the specific one clicked
-    const target = document.getElementById(`container-${targetViewId}`);
-    if(target) target.classList.remove('hidden');
-    
-    // 3. Highlight the active link in the menu
-    document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
-    document.getElementById(`link-${targetViewId}`).classList.add('active');
-    
-    // 4. Close the side menu and ensure we are on the Papers view
-    toggleSideMenu();
-    setView('papers');
-}
-
-// === CHAT UI LOGIC ===
-function toggleChat() {
-    const panel = document.getElementById('chat-panel');
-    const overlay = document.getElementById('chat-overlay');
-    const badge = document.getElementById('unread-badge'); 
-    
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) {
-        overlay.classList.remove('hidden');
-        if (badge) badge.classList.add('hidden'); 
-        
-        // 🧠 NEW: Remember the exact millisecond you opened the chat!
-        localStorage.setItem('habibi_chat_last_read', Date.now());
-    } else {
-        overlay.classList.add('hidden');
-    }
-}
-
-// === AUTHORIZED USERS LIST ===
-const ALLOWED_USERS = {
-    "Jesan.Equebal": "virgin",
-    "Newton.Mondal": "anime",
-    "Sarwar.Alam": "suspension",
-    "Aadrita.Mukhopadhyay": "ipmat",
-    "Shinjan.Garain": "xxx",
-    "Debraj.Mondal": "indore",
-    "Abdul.Subhan": "biology",
-    "Biswajit.Saha": "general",
-    "Surjayu.Sanyal": "rizz",
-    "Shreyas.Bhattacharya": "A....",
-    "Ayush.Paul": "ayush",
-    "Abdul.Rehan": "jipmat"
-};
-
-// === ORIGINAL PAPER DATA + CORRECTED 2024 QUESTIONS ===
-const paperData = {
-/* 2025 SERIES */
-'2025_on_31': { title: "Pedro's Perfect Pies (PPP)", pdf: "9609_w25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two likely impacts on PPP of the changing external influences.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to PPP of using quality assurance.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.3, calculate the payback period for PPP\'s new machine.'}, { n:'3(b)', m:2, t:'Using Table 1.3, calculate the ARR for PPP\'s new machine.'}, { n:'3(c)', m:12, t:'Evaluate whether PPP should invest in the new machine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the monthly revenue from the sales of the classic pie after the price increase.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness to PPP of elasticity measures.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of emotional intelligence to Pedro\'s leadership.', l:'250-350'} ] },
-'2025_on_32': { title: "Komate Tropical Juice (KTJ)", pdf: "9609_w25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to KTJ of delegation.', l:'150-225'}, { n:'2', m:8, t:'Analyse two impacts on KTJ of its commitment to CSR.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the payback period of the country C location.'}, { n:'3(b)', m:2, t:'Calculate the ARR of the country D location.'}, { n:'3(c)', m:12, t:'Evaluate which location KTJ should choose for its new factory.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the four period centred moving average for Quarter 1 2025.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of time series analysis to KTJ.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on KTJ of fluctuations in the exchange rate.', l:'250-350'} ] },
-'2025_on_33': { title: "Lithium Battery Metals (LBM)", pdf: "9609_w25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to the government of country G from nationalisation.', l:'150-225'}, { n:'2', m:8, t:'Analyse one benefit and one limitation of sales forecasting to LBM.', l:'150-225'}, { n:'3(a)', m:2, t:'Using Table 1.1, calculate the payback period.'}, { n:'3(b)', m:2, t:'Using Table 1.1, calculate the NPV over six years discounted at 8%.'}, { n:'3(c)', m:12, t:'Evaluate LBM\'s decision to go ahead with the hot water mine.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate total float for activity C and minimum project duration.'}, { n:'4(b)', m:12, t:'Evaluate the importance of CPA to the success of the hard rock mine.', l:'250-350'}, { n:'5', m:12, t:'Evaluate LBM\'s decision to use two different approaches to HRM.', l:'250-350'} ] },
-'2025_mj_31': { title: "Wisdom Shoes (WS)", pdf: "9609_s25_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to WS of using an environmental audit.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WS of Enterprise Resource Planning (ERP).', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.4. Calculate the change in dividend yield.'}, { n:'3(b)', m:2, t:'Refer to Table 1.4. Calculate the change in P/E ratio.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on WS shareholders of the proposed changes.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the inventory turnover ratio.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to WS directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of environmental targets to WS success.', l:'250-350'} ] },
-'2025_mj_32': { title: "Pura AI Robots (PAIR)", pdf: "9609_s25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to PAIR of contingency planning.', l:'150-225'}, { n:'2', m:8, t:'Analyse two likely causes of the failure of the battery supplier.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the capacity utilisation for 2025.'}, { n:'3(b)', m:2, t:'Calculate the increase in profit margin.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on PAIR of the decision to increase investment in R&D.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for the critical path.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to PAIR.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which PAIRs future success depends on external influences.', l:'250-350'} ] },
-'2025_mj_33': { title: "We Care Products (WCP)", pdf: "9609_s25_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two ways the external influences referred to in lines 8-12 may impact on WCP.', l:'150-225'}, { n:'2', m:8, t:'Analyse two benefits to WCP of its social objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the labour turnover rate at GC.'}, { n:'3(b)', m:2, t:'Calculate the cost per unit.'}, { n:'3(c)', m:12, t:'Evaluate whether Aldin should change the HRM approach at GC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the marketing budget variance.'}, { n:'4(b)', m:12, t:'Evaluate the effectiveness of WCP’s marketing strategy.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the likely impact on WCP of the takeover of GC.', l:'250-350'} ] },
-'2025_fm_32': { title: "Iyipada (IPA)", pdf: "9609_m25_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse one advantage and one disadvantage to IPA of changing employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two methods to improve IPA\'s liquidity.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate, for 2024, IPA\'s market share.'}, { n:'3(b)', m:2, t:'Calculate, for 2025, the expected percentage market growth.'}, { n:'3(c)', m:12, t:'Evaluate the Marketing Director\'s proposed changes to IPA\'s marketing mix.', l:'250-350'}, { n:'4(a)', m:2, t:'Complete nodes 5 and 6 on the network diagram.'}, { n:'4(b)', m:2, t:'Calculate the total float for Activity F.'}, { n:'4(c)', m:12, t:'Evaluate the benefit to IPA of Critical Path Analysis (CPA).', l:'250-350'}, { n:'5', m:12, t:'Evaluate the most likely impact on IPA of the fiscal and monetary policy changes.', l:'250-350'} ] },
-
-/* 2024 SERIES (WITH CORRECTED QUESTIONS) */
-'2024_on_31': { title: "TopoChoc Enterprises (TC)", pdf: "9609_w24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to TC of marketing planning for the new range of chocolate bars.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to TC of setting SMART business objectives.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the current ratio for 2023.'}, { n:'3(b)', m:2, t:'Calculate the acid test ratio for 2023.'}, { n:'3(c)', m:12, t:'Evaluate whether the directors should worry about TCs liquidity.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the contribution of one chocolate bar.'}, { n:'4(b)', m:12, t:'Evaluate the proposal to produce chocolate bars.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of Total Quality Management (TQM) to TC.', l:'250-350'} ] },
-'2024_on_32': { title: "Habesha Clean Cooking (HCC)", pdf: "9609_w24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two impacts on HCC of the increase in competition in country E.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to HCC of being a social enterprise.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the capacity utilisation for the Wonder Stove in 2023.'}, { n:'3(b)', m:2, t:'Calculate the increase in profit if production is outsourced.'}, { n:'3(c)', m:12, t:'Evaluate the decision to outsource production of the Wonder Stove.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the EST and LFT for activity F.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to HCC.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the importance of business planning to the success of HCCs expansion into country K.', l:'250-350'} ] },
-'2024_on_33': { title: "Australasia Fitness Factory (AFF)", pdf: "9609_w24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two threats to AFF from changes in its external environment.', l:'150-225'}, { n:'2', m:8, t:'Analyse one advantage and one disadvantage to AFF of being a public limited company.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the return on capital employed (ROCE) for 2023.'}, { n:'3(b)', m:2, t:'Calculate the gearing ratio for 2023.'}, { n:'3(c)', m:12, t:'Evaluate the likely impact on AFF shareholders of the new share issue.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the dividend yield for 2022.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of ratio analysis to AFFs directors.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether TQM is the best way to solve customer complaint problems.', l:'250-350'} ] },
-'2024_mj_31': { title: "Gordy Building Supplies (GBS)", pdf: "9609_s24_in_31.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to GBS of using flexible part-time employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to GBS of its proposed communication process innovation.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the gearing ratio.'}, { n:'3(b)', m:2, t:'Calculate the return on capital employed (ROCE).'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to GBS’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity C.'}, { n:'4(b)', m:12, t:'Evaluate the usefulness of Critical Path Analysis (CPA) to GBS.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the extent to which corporate social responsibility (CSR) should influence GBS’s decision to expand into new land.', l:'250-350'} ] },
-'2024_mj_32': { title: "Soymai Farms (SF)", pdf: "9609_s24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two advantages to SF of using flexible employment contracts.', l:'150-225'}, { n:'2', m:8, t:'Analyse two problems SF may experience when implementing total quality management (TQM).', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.1. Calculate the sales volume variation for Quarter 1 2023.'}, { n:'3(b)', m:2, t:'Refer to Table 1.1. Calculate the centred quarterly moving average for Quarter 2 2023.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of sales forecasting to SF.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the current capacity utilisation of the factory.'}, { n:'4(b)', m:12, t:'Evaluate the decision to outsource production of Sosoy Ice Cream.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on SF of country B becoming a member of the NFTA international trading agreement.', l:'250-350'} ] },
-'2024_mj_33': { title: "Sunil's Clothing Company (SCC)", pdf: "9609_s24_in_33.pdf", questions: [ { n:'1', m:8, t:'Analyse two impacts on SCC of the changing external influences in country Z.', l:'150-225'}, { n:'2', m:8, t:'Analyse two disadvantages to SCC of the proposed new factory.', l:'150-225'}, { n:'3(a)', m:2, t:'Calculate the promotional elasticity of demand.'}, { n:'3(b)', m:2, t:'Calculate the price elasticity of demand.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of elasticity data to SCC.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the total float for activity B.'}, { n:'4(b)', m:12, t:'Evaluate the importance of Critical Path Analysis (CPA) to the success of the new factory.', l:'250-350'}, { n:'5', m:12, t:'Evaluate whether Sunil should use a soft or hard approach to human resource management.', l:'250-350'} ] },
-'2024_fm_32': { title: "Clean Delivery (CD)", pdf: "9609_m24_in_32.pdf", questions: [ { n:'1', m:8, t:'Analyse two benefits to CD resulting from internal economies of scale.', l:'150-225'}, { n:'2', m:8, t:'Analyse two advantages to CD of changing to a geographical organisational structure.', l:'150-225'}, { n:'3(a)', m:2, t:'Refer to Table 1.1. Calculate the Price Earnings (P/E) ratio for 2024.'}, { n:'3(b)', m:2, t:'Refer to Table 1.1. Calculate the Return on Capital Employed (ROCE) for 2024.'}, { n:'3(c)', m:12, t:'Evaluate the usefulness of ratio analysis to CD’s directors.', l:'250-350'}, { n:'4(a)', m:4, t:'Calculate the difference in capacity utilisation between 2022 and 2023.'}, { n:'4(b)', m:12, t:'Evaluate the importance of research and development (R&D) to CD’s future success.', l:'250-350'}, { n:'5', m:12, t:'Evaluate the impact on CD of the appreciation of country K’s exchange rate.', l:'250-350'} ] }
-};
-
-function getUser() { return localStorage.getItem('user'); }
-function setUser(u) { localStorage.setItem('user', u); }
-function getAttempts(u) { return JSON.parse(localStorage.getItem(`attempts_${u}`) || '{}'); }
-
-function saveAttempt(u, pid, qn, data) {
-    const atts = getAttempts(u);
-    if(!atts[pid]) atts[pid] = {};
-    atts[pid][qn] = data;
-    localStorage.setItem(`attempts_${u}`, JSON.stringify(atts));
-    // SYNC ON SAVE
-    setTimeout(syncScore, 500);
-}
-
-function tryLogin() {
-    const u = document.getElementById('u-in').value.trim();
-    const p = document.getElementById('p-in').value.trim();
-    
-    // NEW RESTRICTED LOGIN CHECK
-    if(ALLOWED_USERS[u] && ALLOWED_USERS[u] === p) {
-        setUser(u);
-        const name = u.split('.')[0] || u;
-        document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
-        document.getElementById('login-layer').classList.add('hidden');
-        document.getElementById('app-layer').classList.remove('hidden');
-        setView('papers');
-        syncScore(); // Sync on login
-    } else { 
-        alert("Invalid Username or Password."); 
-    }
-}
-
-function doLogout() { localStorage.removeItem('user'); location.reload(); }
-
-function setView(viewName) {
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
-        const el = document.getElementById(`view-${v}`);
-        if(el) el.classList.add('hidden');
-    });
-    document.getElementById(`view-${viewName}`).classList.remove('hidden');
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase().includes(viewName.replace('leaderboard','🏆').replace('scorecard','scorecard'))) btn.classList.add('active');
-    });
-    if(viewName === 'scorecard') renderScorecard();
-    if(viewName === 'leaderboard') loadLeaderboard();
-}
-
-function backToDash() { setView('papers'); }
-function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
-
-function openPaper(pid) {
-    const data = paperData[pid];
-    const u = getUser();
-    const attempts = getAttempts(u)[pid] || {};
-
-    document.getElementById('insert-pdf').src = data.pdf;
-    
-    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
-    data.questions.forEach(q => {
-        const att = attempts[q.n] || {};
-        const done = att.score !== undefined;
-        
-        let aoHtml = '';
-        if(done) {
-            aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${att.ao3 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${att.ao4 || '-'}</span>
-            </div>`;
-        }
-
-        qHtml += `<div class="question-card">
-            <div class="q-header"><strong>Q${q.n}</strong><span class="q-badge">${q.m} Marks</span></div>
-            <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
-            ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
+        // Check if user is already logged in
+        const user = StorageManager.getUser();
+        if(user) {
+            const name = user.split('.')[0] || user;
+            document.getElementById('welcome-msg').innerText = `Welcome back, ${name}`;
+            document.getElementById('login-layer').classList.add('hidden');
+            document.getElementById('app-layer').classList.remove('hidden');
             
-            <button class="expand-btn" id="btn_exp_${pid}_${q.n}" onclick="toggleExpand('ans_${pid}_${q.n}', 'btn_exp_${pid}_${q.n}')">⤢ Expand</button>
-            <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
-            <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
-
-            <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
-            
-            ${done ? `<div class="feedback-box">
-                <h3>Score: ${att.score}/${q.m}</h3>
-                ${aoHtml}
-                <p><strong>Strengths:</strong> ${att.strengths}</p>
-                <p><strong>Improvements:</strong> <span style="color:#d63031">${att.weaknesses}</span></p>
-                <div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
-            </div>` : ''}
-        </div>`;
+            // Load the default view (Papers)
+            setView('papers'); 
+        }
     });
-    document.getElementById('questions-container').innerHTML = qHtml;
-    setView('workspace');
-    
-    // Init word counts
-    data.questions.forEach(q => {
-        const el = document.getElementById(`ans_${pid}_${q.n}`);
-        if(el) updateWordCount(el, q.l);
-    });
-}
 
-function updateWordCount(el, limitStr) {
-    if(!limitStr) return;
-    const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-    // FIX: Using replace is safer than splitting by underscore since paper IDs contain underscores
-    const wcId = el.id.replace('ans_', 'wc_');
-    const wcEl = document.getElementById(wcId);
-    
-    if(wcEl) {
-        const [min, max] = limitStr.split('-').map(Number);
-        wcEl.innerText = `${count} words (${limitStr})`;
+    // Main Navigation Handler
+    function setView(viewName) {
+        // Hide all views first
+        ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
+            const el = document.getElementById(`view-${v}`);
+            if(el) el.classList.add('hidden');
+        });
         
-        if(count < min || count > max) {
-            wcEl.classList.add('bad'); wcEl.classList.remove('good');
-        } else {
-            wcEl.classList.add('good'); wcEl.classList.remove('bad');
-        }
-    }
-}
-
-function toggleExpand(textAreaId, btnId) {
-    const el = document.getElementById(textAreaId);
-    const btn = document.getElementById(btnId);
-    if(el) {
-        el.classList.toggle('expanded');
-        if(el.classList.contains('expanded')) {
-            btn.innerText = "⤡ Shrink";
-        } else {
-            btn.innerText = "⤢ Expand";
-        }
-    }
-}
-
-function toggleInsertMaximize() {
-    const el = document.getElementById('insert-panel');
-    const btn = document.querySelector('.maximize-insert-btn');
-    el.classList.toggle('fullscreen');
-    
-    if(el.classList.contains('fullscreen')) {
-        btn.innerText = "⤡ Minimize";
-    } else {
-        btn.innerText = "⤢ Maximize";
-    }
-}
-
-async function submitAnswer(pid, qn) {
-    const el = document.getElementById(`ans_${pid}_${qn}`);
-    const btn = event.target;
-    const ans = el.value.trim();
-    if(!ans) return alert("Please write an answer first.");
-
-    btn.innerText = "⏳ Strict Marking...";
-    btn.disabled = true;
-
-    const qData = paperData[pid].questions.find(q => q.n === qn);
-
-    try {
-        const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                question: qData.t,
-                case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
-                answer: ans,
-                marks: qData.m
-            })
-        });
-
-        const json = await res.json();
-        saveAttempt(getUser(), pid, qn, {
-            answer: ans,
-            score: json.score,
-            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
-            strengths: json.strengths,
-            weaknesses: json.weaknesses,
-            modelAnswer: json.model_answer
-        });
-        openPaper(pid);
-
-    } catch(e) {
-        console.error(e);
-        alert("Error: Server not responding.");
-        btn.innerText = "Retry";
-        btn.disabled = false;
-    }
-}
-
-// === ADMIN DELETE FUNCTION ===
-async function deleteUser(name) {
-    if(!confirm(`Are you sure you want to delete ${name} from the leaderboard?`)) return;
-    try {
-        const res = await fetch(`https://ultimate-exam-guide.onrender.com/delete_user?name=${name}`);
-        if(res.ok) {
-            alert(`Deleted ${name}`);
-            loadLeaderboard(); 
-        } else {
-            alert("Failed to delete. Make sure app.py is updated.");
-        }
-    } catch(e) { console.error(e); alert("Connection error."); }
-}
-
-// === LEADERBOARD LOGIC ===
-async function syncScore() {
-    const u = getUser();
-    if(!u) return;
-    
-    const atts = getAttempts(u);
-    let totalScore = 0;
-    let papersDone = 0;
-    
-    // Calculate total score locally
-    Object.keys(atts).forEach(pid => {
-        let hasScore = false;
-        Object.values(atts[pid]).forEach(q => {
-            if(q.score) {
-                totalScore += q.score;
-                hasScore = true;
+        // Show the requested view
+        const target = document.getElementById(`view-${viewName}`);
+        if(target) target.classList.remove('hidden');
+        
+        // Update the active button in the top nav
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            // Check if button text matches view (handling special cases like Leaderboard icon)
+            if(btn.innerText.toLowerCase().includes(viewName.replace('leaderboard','').replace('scorecard',''))) {
+                btn.classList.add('active');
             }
         });
-        if(hasScore) papersDone++;
-    });
-
-    // Send to backend
-    try {
-        await fetch('https://ultimate-exam-guide.onrender.com/update_score', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                username: u,
-                total_score: totalScore,
-                papers_completed: papersDone
-            })
-        });
-    } catch(e) { console.error("Sync failed", e); }
-}
-
-async function loadLeaderboard() {
-    const container = document.getElementById('leaderboard-container');
-    container.innerHTML = "⏳ Fetching rankings...";
-    
-    try {
-        const res = await fetch('https://ultimate-exam-guide.onrender.com/leaderboard');
-        const data = await res.json();
-        const isAdmin = (getUser() === 'admin');
         
-        let html = `<table class="modern-table"><thead><tr><th>Rank</th><th>Student</th><th>Papers</th><th>Total Score</th>${isAdmin ? '<th>Action</th>' : ''}</tr></thead><tbody>`;
-        
-        data.forEach((entry, index) => {
-            const name = entry[0];
-            const stats = entry[1];
-            let badge = '';
-            if(index === 0) badge = '🥇';
-            else if(index === 1) badge = '🥈';
-            else if(index === 2) badge = '🥉';
-            else badge = `#${index+1}`;
-            
-            let actionBtn = '';
-            if(isAdmin) {
-                actionBtn = `<button class="reset-icon-btn" style="padding:2px 8px; font-size:12px;" onclick="deleteUser('${name}')">❌</button>`;
-            }
-            
-            html += `<tr>
-                <td><span style="font-size:1.2rem; font-weight:700;">${badge}</span></td>
-                <td style="font-weight:700; color:var(--text-dark);">${name}</td>
-                <td>${stats.papers}</td>
-                <td><span class="score-badge">${stats.score}</span></td>
-                ${isAdmin ? `<td>${actionBtn}</td>` : ''}
-            </tr>`;
-        });
-        
-        html += `</tbody></table>`;
-        container.innerHTML = html;
-    } catch(e) {
-        container.innerHTML = `<p style="color:red; font-weight:600;">Failed to load leaderboard. Server might be sleeping.</p>`;
+        // Special render calls
+        if(viewName === 'scorecard' && typeof renderScorecard === 'function') renderScorecard();
+        if(viewName === 'leaderboard' && typeof loadLeaderboard === 'function') loadLeaderboard();
     }
-}
-
-function renderScorecard() {
-    const u = getUser();
-    const allAtts = getAttempts(u);
-    let totalQ = 0, totalAns = 0, totalScore = 0, possibleScore = 0, papersStarted = 0;
-    let rows = '';
-
-    Object.keys(paperData).forEach(pid => {
-        const pAtts = allAtts[pid] || {};
-        const qs = paperData[pid].questions;
-        const answeredCount = Object.keys(pAtts).length;
-        if(answeredCount > 0) papersStarted++;
-
-        let pScore = 0, pMax = 0;
-        qs.forEach(q => {
-            pMax += q.m;
-            if(pAtts[q.n]) {
-                pScore += (pAtts[q.n].score || 0);
-                totalScore += (pAtts[q.n].score || 0);
-                possibleScore += q.m;
-            }
-        });
-        totalQ += qs.length;
-        totalAns += answeredCount;
-
-        const percent = (answeredCount / qs.length) * 100;
-
-        rows += `<tr>
-        <td><div style="font-weight:700;">${paperData[pid].title}</div><div style="font-size:0.8rem; color:#888;">${pid}</div></td>
-        <td><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div> <span style="font-size:0.9rem; font-weight:600;">${answeredCount}/${qs.length}</span></td>
-        <td><span class="score-badge">${pScore}/${pMax}</span></td>
-        <td>${answeredCount > 0 ? `<button class="reset-icon-btn" onclick="resetPaper('${pid}')">Reset</button>` : '-'}</td>
-        </tr>`;
-    });
-
-    const accuracy = possibleScore > 0 ? Math.round((totalScore/possibleScore)*100) : 0;
-
-    document.getElementById('stats-overview').innerHTML = `
-        <div class="stat-card"><span class="stat-value">${papersStarted}</span><span class="stat-label">Papers Started</span></div>
-        <div class="stat-card"><span class="stat-value">${totalAns}</span><span class="stat-label">Questions Solved</span></div>
-        <div class="stat-card"><span class="stat-value">${accuracy}%</span><span class="stat-label">Global Accuracy</span></div>
-    `;
-
-    document.getElementById('score-table-container').innerHTML = `<table class="modern-table"><thead><tr><th>Paper</th><th>Progress</th><th>Score</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
-    
-    // Auto-Sync score when viewing scorecard
-    syncScore();
-}
-
-function resetPaper(pid) {
-    if(confirm("Delete all answers for this paper?")) {
-        const u = getUser();
-        const atts = getAttempts(u);
-        delete atts[pid];
-        localStorage.setItem(`attempts_${u}`, JSON.stringify(atts));
-        renderScorecard();
-    }
-}
-
-function resetAll() {
-    if(confirm("WIPE ALL DATA?")) { localStorage.clear(); location.reload(); }
-}
-
-if(getUser()) {
-    const u = getUser();
-    const name = u.split('.')[0] || u;
-    document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
-    document.getElementById('login-layer').classList.add('hidden');
-    document.getElementById('app-layer').classList.remove('hidden');
-    setView('papers');
-    // Sync on auto-login
-    setTimeout(syncScore, 1000);
-}
 </script>
 
 <script type="module">
@@ -1463,27 +1107,24 @@ if(getUser()) {
   const db = getDatabase(app);
   const chatRef = ref(db, 'class_chat');
 
-  let replyingToData = null; // Remembers who you are replying to
+  let replyingToData = null; 
 
-  function getChatUser() {
-      return localStorage.getItem('username') || localStorage.getItem('user') || localStorage.getItem('currentUser') || "Student";
+  // Make these functions global so HTML buttons can use them
+  window.getChatUser = function() {
+      return localStorage.getItem('user') || "Student";
   }
 
-  // --- SEND MESSAGES ---
   window.sendChatMessage = function() {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
-      const user = getChatUser(); 
+      const user = window.getChatUser(); 
 
       if (text !== '') {
           const messageData = { name: user, text: text, timestamp: serverTimestamp() };
-          
-          if (replyingToData) messageData.replyTo = replyingToData; // Attach quote if replying
-
+          if (replyingToData) messageData.replyTo = replyingToData; 
           push(chatRef, messageData).catch(error => alert("Firebase Error: " + error.message));
-          
           input.value = ''; 
-          window.cancelReply(); // Clear the reply box
+          window.cancelReply(); 
       }
   };
 
@@ -1491,16 +1132,13 @@ if(getUser()) {
       if (event.key === 'Enter') window.sendChatMessage();
   };
 
-  // --- EDIT, DELETE & REPLY LOGIC ---
   window.deleteMessage = function(msgId) {
-      if(confirm("Delete this message for everyone?")) {
-          remove(ref(db, `class_chat/${msgId}`));
-      }
+      if(confirm("Delete this message for everyone?")) remove(ref(db, `class_chat/${msgId}`));
   };
 
   window.editMessage = function(msgId, oldText) {
       const newText = prompt("Edit your message:", oldText);
-      if(newText !== null && newText.trim() !== "" && newText !== oldText) {
+      if(newText && newText.trim() !== "" && newText !== oldText) {
           update(ref(db, `class_chat/${msgId}`), { text: newText.trim(), edited: true });
       }
   };
@@ -1518,41 +1156,29 @@ if(getUser()) {
       document.getElementById('reply-preview-bar').classList.remove('active');
   };
 
-  // --- REAL-TIME RENDERER ---
-  const chatMessages = document.getElementById('chat-messages');
-
   function renderMessage(snapshot) {
       const data = snapshot.val();
-      const msgId = snapshot.key; // Unique Firebase ID for each message
+      const msgId = snapshot.key;
+      const chatMessages = document.getElementById('chat-messages');
       
       const welcome = chatMessages.querySelector('div[style*="text-align: center"]');
       if (welcome) welcome.remove();
 
-      const isMe = data.name === getChatUser();
+      const isMe = data.name === window.getChatUser();
       const cleanName = data.name ? data.name.replace('.', ' ') : 'Unknown';
       
-      // 1. Build Quote Box if it's a reply
       let quoteHtml = '';
       if (data.replyTo) {
-          quoteHtml = `
-              <div class="quote-box">
-                  <strong style="color: var(--lime-dark); font-size: 0.75rem;">${data.replyTo.name.replace('.', ' ')}</strong><br>
-                  ${data.replyTo.text}
-              </div>`;
+          quoteHtml = `<div class="quote-box"><strong style="color:var(--lime-dark);font-size:0.75rem;">${data.replyTo.name.replace('.', ' ')}</strong><br>${data.replyTo.text}</div>`;
       }
 
-      // 2. Build Action Buttons (Hidden until you hover over the message)
       const safeText = data.text.replace(/"/g, '&quot;').replace(/'/g, "\\'");
-      let actionsHtml = `
-          <div class="msg-actions">
+      let actionsHtml = `<div class="msg-actions">
               <button class="msg-action-btn" onclick="replyToMessage('${data.name}', '${safeText}')">↩️ Reply</button>
-              ${isMe ? `
-                  <button class="msg-action-btn" onclick="editMessage('${msgId}', '${safeText}')">✏️ Edit</button>
-                  <button class="msg-action-btn" onclick="deleteMessage('${msgId}')">🗑️ Delete</button>
-              ` : ''}
+              ${isMe ? `<button class="msg-action-btn" onclick="editMessage('${msgId}', '${safeText}')">✏️ Edit</button>
+              <button class="msg-action-btn" onclick="deleteMessage('${msgId}')">🗑️ Delete</button>` : ''}
           </div>`;
 
-      // 3. Inject into the DOM
       let msgDiv = document.getElementById(`msg-${msgId}`);
       let isNew = false;
       if (!msgDiv) {
@@ -1562,15 +1188,8 @@ if(getUser()) {
       }
 
       msgDiv.className = `msg-box ${isMe ? 'me' : 'other'}`;
-      msgDiv.innerHTML = `
-          <div class="msg-name">${isMe ? 'You' : cleanName}</div>
-          <div class="msg-bubble">
-              ${quoteHtml}
-              <span class="msg-text-content">${data.text}</span>
-              ${data.edited ? '<span class="edited-tag">(edited)</span>' : ''}
-          </div>
-          ${actionsHtml}
-      `;
+      msgDiv.innerHTML = `<div class="msg-name">${isMe ? 'You' : cleanName}</div>
+          <div class="msg-bubble">${quoteHtml}<span class="msg-text-content">${data.text}</span>${data.edited ? '<span class="edited-tag">(edited)</span>' : ''}</div>${actionsHtml}`;
       
       if (isNew) {
           chatMessages.appendChild(msgDiv);
@@ -1578,32 +1197,21 @@ if(getUser()) {
           
           const panel = document.getElementById('chat-panel');
           const badge = document.getElementById('unread-badge');
-          
-          // Grab the time you last read the chat (default to 0 if never opened)
           const lastRead = localStorage.getItem('habibi_chat_last_read') || 0;
           
-          // Only show red dot if: 
-          // 1. Chat is closed, 2. Someone else sent it, AND 3. It was sent AFTER you last checked the chat!
           if (panel && badge && !panel.classList.contains('open') && !isMe) {
-              if (data.timestamp && data.timestamp > lastRead) {
-                  badge.classList.remove('hidden');
-              }
+              if (data.timestamp && data.timestamp > lastRead) badge.classList.remove('hidden');
           }
       }
   }
 
-  // FIREBASE REAL-TIME LISTENERS
-  onChildAdded(chatRef, renderMessage);   // When a new message arrives
-  onChildChanged(chatRef, renderMessage); // When someone edits a message
-  onChildRemoved(chatRef, (snapshot) => { // When someone deletes a message
+  onChildAdded(chatRef, renderMessage);
+  onChildChanged(chatRef, renderMessage);
+  onChildRemoved(chatRef, (snapshot) => {
       const el = document.getElementById(`msg-${snapshot.key}`);
       if(el) el.remove();
   });
 </script>
-
-<script src="business_p4.js"></script>
-<script src="economics_p4.js"></script>
-<script src="economics_p3.js"></script>
 
 </body>
 </html>
