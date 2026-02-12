@@ -329,3 +329,45 @@ async function loadLeaderboard(subjectFilter = null) {
         container.innerHTML = `<p style="color:red;">Leaderboard offline.</p>`;
     }
 }
+// ==========================================
+// 🟢 RESTORED SIDEBAR LOGIC
+// ==========================================
+
+function toggleSideMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('side-menu-overlay');
+    if(menu && overlay) {
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+}
+
+function toggleSubject(subId) {
+    const content = document.getElementById(subId);
+    if(content) {
+        content.classList.toggle('expanded');
+        // Rotate arrow if exists
+        const btn = content.previousElementSibling;
+        const arrow = btn.querySelector('span');
+        if(arrow) arrow.innerText = content.classList.contains('expanded') ? '▲' : '▼';
+    }
+}
+
+function switchPaperView(targetViewId) {
+    // 1. Hide ALL paper containers
+    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
+    
+    // 2. Show the specific one clicked (e.g., 'container-bus-p3')
+    const target = document.getElementById(`container-${targetViewId}`);
+    if(target) target.classList.remove('hidden');
+    else console.error(`Container not found: container-${targetViewId}`);
+    
+    // 3. Highlight the active link in the menu
+    document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
+    const link = document.getElementById(`link-${targetViewId}`);
+    if(link) link.classList.add('active');
+    
+    // 4. Close the side menu and ensure we are on the Papers view
+    toggleSideMenu();
+    setView('papers');
+}
