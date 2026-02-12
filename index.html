@@ -1037,7 +1037,7 @@ textarea.expanded {
 <script src="storage_manager.js"></script>
 <script src="ui_manager.js"></script>
 
-<script src="economics_p3.js"></script>
+<script src="papers_data.js"></script> <script src="economics_p3.js"></script>
 <script src="economics_p4.js"></script>
 <script src="business_p4.js"></script>
 <script src="general_paper.js"></script>
@@ -1077,7 +1077,6 @@ textarea.expanded {
         // Update the active button in the top nav
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
-            // Check if button text matches view (handling special cases like Leaderboard icon)
             if(btn.innerText.toLowerCase().includes(viewName.replace('leaderboard','').replace('scorecard',''))) {
                 btn.classList.add('active');
             }
@@ -1212,6 +1211,3 @@ textarea.expanded {
       if(el) el.remove();
   });
 </script>
-
-</body>
-</html>
