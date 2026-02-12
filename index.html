@@ -492,6 +492,9 @@ textarea.expanded {
 
 </div>
     
+    <div id="container-gp" class="subject-container hidden">
+        </div>
+    
 <div id="view-formulae" class="hidden">
     <div class="formula-section">
         <h3 class="chapter-title">Finance: Profitability & Liquidity Ratios</h3>
@@ -977,7 +980,11 @@ textarea.expanded {
             <div id="link-econ-p4" class="paper-link" onclick="switchPaperView('econ-p4')">Paper 4</div>
         </div>
     </div>
-    
+
+    <div class="subject-group">
+        <button class="subject-btn" onclick="toggleSubject('sub-econ')">General Paper <span>▼</span></button>
+        <div id="sub-econ" class="subject-content"></div>
+        <div id="link-gp" class="paper-link" onclick="switchPaperView('gp')">General Paper</div>
     </div>
 
 <div id="chat-overlay" class="chat-overlay hidden" onclick="toggleChat()"></div>
@@ -1021,21 +1028,40 @@ function toggleSubject(subId) {
     content.classList.toggle('expanded');
 }
 
-function switchPaperView(targetViewId) {
-    // 1. Hide ALL paper containers
-    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
+function switchPaperView(viewId) {
+    // 1. Define all possible IDs
+    const containers = [
+        'container-bus-p3', 
+        'container-bus-p4', 
+        'container-econ-p3', 
+        'container-econ-p4',
+        'container-gp' // Ensure this is here!
+    ];
     
-    // 2. Show the specific one clicked
-    const target = document.getElementById(`container-${targetViewId}`);
-    if(target) target.classList.remove('hidden');
+    // 2. Hide everything
+    containers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.add('hidden');
+        }
+    });
+
+    // 3. Show the requested one
+    const targetId = 'container-' + viewId;
+    const activeEl = document.getElementById(targetId);
     
-    // 3. Highlight the active link in the menu
-    document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
-    document.getElementById(`link-${targetViewId}`).classList.add('active');
+    if (activeEl) {
+        activeEl.classList.remove('hidden');
+    } else {
+        console.error("Could not find container with ID:", targetId);
+        alert("Error: The container '" + targetId + "' is missing from index.html");
+    }
     
-    // 4. Close the side menu and ensure we are on the Papers view
-    toggleSideMenu();
-    setView('papers');
+    // 4. Close mobile menu if open
+    const sideMenu = document.getElementById('side-menu');
+    if (sideMenu) {
+        sideMenu.classList.remove('open');
+    }
 }
 
 // === CHAT UI LOGIC ===
@@ -1604,6 +1630,7 @@ if(getUser()) {
 <script src="business_p4.js"></script>
 <script src="economics_p4.js"></script>
 <script src="economics_p3.js"></script>
+<script src="general_paper.js"></script>
 
 </body>
 </html>
