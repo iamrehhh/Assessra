@@ -411,3 +411,148 @@ if(getUser()) {
     // Sync on auto-login
     setTimeout(syncScore, 1000);
 }
+
+// ==========================================
+// 1. RIGHT SIDE MENU LOGIC
+// ==========================================
+
+let currentFilterContext = ''; // 'leaderboard' or 'scorecard'
+
+function toggleFilterMenu(context) {
+    const menu = document.getElementById('filter-menu');
+    const overlay = document.getElementById('filter-menu-overlay');
+    
+    if (context) {
+        currentFilterContext = context;
+        buildFilterOptions(context);
+        menu.classList.add('active');
+        overlay.classList.add('active');
+    } else {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+}
+
+function buildFilterOptions(context) {
+    const container = document.getElementById('filter-options');
+    const title = document.getElementById('filter-title');
+    container.innerHTML = ''; // Clear previous options
+
+    // === OPTION A: LEADERBOARD FILTERS ===
+    if (context === 'leaderboard') {
+        title.innerText = "Select Subject";
+        const subjects = ['Business', 'Economics', 'General Paper'];
+        
+        subjects.forEach(sub => {
+            container.innerHTML += `
+                <button class="filter-group-btn" onclick="filterLeaderboard('${sub}')">
+                    ${sub} <span>→</span>
+                </button>
+            `;
+        });
+    } 
+    
+    // === OPTION B: SCORECARD FILTERS ===
+    else if (context === 'scorecard') {
+        title.innerText = "Filter Scorecard";
+        
+        // Define Structure
+        const hierarchy = {
+            'Business': ['Paper 3', 'Paper 4'],
+            'Economics': ['Paper 3 (MCQ)', 'Paper 4'],
+            'General Paper': ['Paper 1', 'Paper 2']
+        };
+
+        // Build Accordion
+        for (const [subject, papers] of Object.entries(hierarchy)) {
+            let paperHtml = papers.map(p => 
+                `<span class="filter-pill" onclick="filterScorecard('${subject}', '${p}')">${p}</span>`
+            ).join('');
+
+            container.innerHTML += `
+                <div>
+                    <button class="filter-group-btn" onclick="toggleSubOptions(this)">
+                        ${subject} <span>▼</span>
+                    </button>
+                    <div class="filter-sub-options">
+                        <span class="filter-pill" onclick="filterScorecard('${subject}', 'All')">All Papers</span>
+                        ${paperHtml}
+                    </div>
+                </div>
+            `;
+        }
+    }
+}
+
+function toggleSubOptions(btn) {
+    const nextEl = btn.nextElementSibling;
+    nextEl.classList.toggle('show');
+    btn.classList.toggle('active');
+}
+
+// ==========================================
+// 2. FILTERING ACTIONS
+// ==========================================
+
+function filterLeaderboard(subject) {
+    // 1. Close Menu
+    toggleFilterMenu(); 
+    
+    // 2. Update UI Title
+    const container = document.getElementById('leaderboard-container');
+    container.innerHTML = `<h3 style="text-align:center; color:#888;">Loading ${subject} Leaderboard...</h3>`;
+
+    // 3. Simulate Fetching Data (Replace with your real Firebase fetch)
+    setTimeout(() => {
+        // Mock Data for Demo - Replace this with your actual DB call
+        // Example: loadLeaderboardData(subject);
+        renderMockLeaderboard(subject); 
+    }, 500);
+}
+
+function renderMockLeaderboard(subject) {
+    const container = document.getElementById('leaderboard-container');
+    container.innerHTML = `
+        <div class="lb-header" style="background:#f0fdf4; padding:15px; border-radius:8px; margin-bottom:20px; text-align:center;">
+            <h3 style="margin:0; color:var(--lime-dark);">🏆 ${subject} Top Performers</h3>
+        </div>
+        <div class="lb-item"><span>1. 🥇 Abdul Rehan</span><span>92%</span></div>
+        <div class="lb-item"><span>2. 🥈 Student B</span><span>88%</span></div>
+        <div class="lb-item"><span>3. 🥉 Student C</span><span>85%</span></div>
+    `;
+}
+
+function filterScorecard(subject, paper) {
+    toggleFilterMenu();
+    
+    // 1. Get All Scores (assuming StorageManager exists)
+    const allScores = StorageManager.getHistory(); // You need to ensure this returns an array
+    const container = document.getElementById('score-table-container');
+    
+    // 2. Filter Logic
+    const filtered = allScores.filter(item => {
+        const matchSub = item.subject === subject; // Ensure your saved data has 'subject' property
+        const matchPaper = paper === 'All' ? true : item.paper === paper;
+        return matchSub && matchPaper;
+    });
+
+    // 3. Render
+    if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:#888;">No records found for ${subject} - ${paper}</div>`;
+        return;
+    }
+
+    let html = `<h3 style="margin-bottom:20px;">Results: ${subject} (${paper})</h3>`;
+    filtered.forEach(s => {
+        html += `
+            <div class="score-card-item" style="border-left: 4px solid var(--lime-primary); padding:15px; margin-bottom:10px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                <div style="display:flex; justify-content:space-between;">
+                    <strong>${s.paperID || 'Unknown Paper'}</strong>
+                    <span style="color:var(--lime-dark); font-weight:bold;">${s.score}%</span>
+                </div>
+                <div style="font-size:0.8rem; color:#666; margin-top:5px;">${new Date(s.timestamp).toLocaleDateString()}</div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
