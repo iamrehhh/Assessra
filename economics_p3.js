@@ -232,12 +232,12 @@ function gradeMCQ() {
 
     const percent = Math.round((score / answers.length) * 100);
     
-    // Show Results
+    // Show Results - NOW WITH WORKING NUMBERS
     const resultBox = document.getElementById('mcq-result-box');
     resultBox.style.display = "block";
     resultBox.innerHTML = `
-        <h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">\${percent}%</h1>
-        <h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: \${score} / \${answers.length}</h2>
+        <h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1>
+        <h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>
         <p style="font-size:1rem; color:#666; margin-top: 10px;">Your errors are highlighted in <span style="color:#ef4444; font-weight:bold;">Red</span>. The correct answers are <span style="color:#22c55e; font-weight:bold;">Green</span>.</p>
     `;
 
