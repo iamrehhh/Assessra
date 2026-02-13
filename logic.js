@@ -51,18 +51,19 @@ function toggleScorecardPanel() {
 
 // === LEADERBOARD LOGIC ===
 
-// 1. Toggle the Side Panel
+// 1. Toggle the Side Panel (FIXED)
 function toggleLeaderboardPanel() {
     const panel = document.getElementById('leaderboard-panel');
     const overlay = document.getElementById('leaderboard-overlay');
     
-    // Close others first
-    closeAllPanels();
-
+    // Check if it is currently open
     if (panel.classList.contains('active')) {
+        // IF OPEN: Close it
         panel.classList.remove('active');
         overlay.classList.remove('active');
     } else {
+        // IF CLOSED: Close others first, then open this one
+        closeAllPanels(); 
         panel.classList.add('active');
         overlay.classList.add('active');
     }
