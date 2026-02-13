@@ -280,13 +280,9 @@ function gradeMCQ(isRestoring = false) {
     const sheet = document.getElementById('answer-sheet-container');
     if(sheet) sheet.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Inside gradeMCQ function...
-
-// === SAVE TO STORAGE ===
-if (!isRestoring && typeof StorageManager !== 'undefined') {
-    // Note: We don't need to pass 'Economics' manually anymore because 
-    // StorageManager.saveMCQState now hardcodes it as 'Economics' internally.
-    StorageManager.saveMCQState(currentPaperID, userAnswers, true, percent);
+    // === SAVE TO STORAGE ===
+    if (!isRestoring && typeof StorageManager !== 'undefined') {
+        StorageManager.saveMCQState(currentPaperID, userAnswers, true, score);
     }
 }
 

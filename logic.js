@@ -95,112 +95,72 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    // 1. Hide all views
-    // (Added 'tips' and 'workspace' to ensure everything closes properly)
-    const allViews = ['papers', 'formulae', 'definitions', 'scorecard', 'leaderboard', 'tips', 'workspace']; 
-    
-    allViews.forEach(v => {
-        const el = document.getElementById('view-' + v);
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
-        
-        // Update button states
-        const btn = document.querySelector(`button[onclick="setView('${v}')"]`);
-        if(btn) btn.classList.remove('active');
     });
-
-    // 2. Show the target view
-    const target = document.getElementById('view-' + viewName);
-    if(target) target.classList.remove('hidden');
-    
-    // 3. Highlight the button (if it exists)
-    const activeBtn = document.querySelector(`button[onclick="setView('${viewName}')"]`);
-    if(activeBtn) activeBtn.classList.add('active');
-
-    // 4. Close side menu if open
-    if(typeof toggleSideMenu === 'function') {
-        document.getElementById('side-menu').classList.remove('active');
-        document.getElementById('side-menu-overlay').classList.remove('active');
-    }
-
-    // 5. CRITICAL FIX: Update Stats when opening scorecard
-    if (viewName === 'scorecard' && typeof updateStats === 'function') {
-        updateStats();
-    }
+    document.getElementById(`view-${viewName}`).classList.remove('hidden');
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase().includes(viewName.replace('leaderboard','🏆').replace('scorecard','scorecard'))) btn.classList.add('active');
+    });
+    if(viewName === 'scorecard') renderScorecard();
+    if(viewName === 'leaderboard') loadLeaderboard();
 }
 
 function backToDash() { setView('papers'); }
 function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
 
-function openPaper(paperID) {
-    // 1. Determine Subject & Paper Type automatically
-    let subject = 'Business'; // Default
-    let paperType = 'Paper 3'; 
+function openPaper(pid) {
+    const data = paperData[pid];
+    const u = getUser();
+    const attempts = getAttempts(u)[pid] || {};
 
-    // Detect Economics
-    if (paperID.includes('econ') || (typeof econPaperData !== 'undefined' && econPaperData[paperID])) {
-        subject = 'Economics';
-    }
-
-    // Detect Paper 4
-    if (paperID.includes('p4') || paperID.includes('_4')) {
-        paperType = 'Paper 4';
-    }
-
-    // 2. CRITICAL FIX: Save to History immediately
-    // This makes it show up as "Viewed" in the scorecard even without a score
-    if (typeof StorageManager !== 'undefined') {
-        StorageManager.savePaperState(paperID, subject, paperType);
-    }
-
-    // 3. Setup Workspace UI
-    const workspace = document.getElementById('view-workspace');
-    const container = document.getElementById('questions-container');
-    const pdfFrame = document.getElementById('insert-pdf');
+    document.getElementById('insert-pdf').src = data.pdf;
     
-    // Switch View
+    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
+    data.questions.forEach(q => {
+        const att = attempts[q.n] || {};
+        const done = att.score !== undefined;
+        
+        let aoHtml = '';
+        if(done) {
+            aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${att.ao3 || '-'}</span>
+            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${att.ao4 || '-'}</span>
+            </div>`;
+        }
+
+        qHtml += `<div class="question-card">
+            <div class="q-header"><strong>Q${q.n}</strong><span class="q-badge">${q.m} Marks</span></div>
+            <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
+            ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
+            
+            <button class="expand-btn" id="btn_exp_${pid}_${q.n}" onclick="toggleExpand('ans_${pid}_${q.n}', 'btn_exp_${pid}_${q.n}')">⤢ Expand</button>
+            <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
+            <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
+
+            <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
+            
+            ${done ? `<div class="feedback-box">
+                <h3>Score: ${att.score}/${q.m}</h3>
+                ${aoHtml}
+                <p><strong>Strengths:</strong> ${att.strengths}</p>
+                <p><strong>Improvements:</strong> <span style="color:#d63031">${att.weaknesses}</span></p>
+                <div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
+            </div>` : ''}
+        </div>`;
+    });
+    document.getElementById('questions-container').innerHTML = qHtml;
     setView('workspace');
     
-    // 4. Load Content
-    let data = null;
-    if (typeof paperData !== 'undefined' && paperData[paperID]) {
-        data = paperData[paperID];
-    } else if (typeof econPaperData !== 'undefined' && econPaperData[paperID]) {
-        data = econPaperData[paperID];
-    }
-
-    if(data) {
-        // Set PDF
-        if (pdfFrame) pdfFrame.src = data.pdf;
-        
-        // Render Title
-        let html = `
-            <div style="padding:20px; border-bottom:1px solid #eee;">
-                <h2 style="margin:0; color:var(--lime-dark);">${data.title || paperID}</h2>
-                <span style="color:#666; font-size:0.9rem;">${subject} • ${paperType}</span>
-            </div>
-            <div style="padding:20px;">
-        `;
-        
-        // Render Questions
-        if (data.questions && Array.isArray(data.questions)) {
-            data.questions.forEach(q => {
-                html += `
-                    <div class="question-card" style="margin-bottom:20px; background:#f9fafb; padding:15px; border-radius:8px; border-left:4px solid #ddd;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                            <strong style="color:#374151;">Q${q.n}</strong>
-                            <span style="background:#e5e7eb; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:bold; color:#555;">[${q.m} Marks]</span>
-                        </div>
-                        <p style="margin:0; color:#4b5563; line-height:1.6;">${q.t}</p>
-                    </div>
-                `;
-            });
-        } else {
-            html += `<p style="color:#666;">No questions extracted for this paper yet.</p>`;
-        }
-        
-        html += `</div>`;
-        if (container) container.innerHTML = html;
-    }
+    // Init word counts
+    data.questions.forEach(q => {
+        const el = document.getElementById(`ans_${pid}_${q.n}`);
+        if(el) updateWordCount(el, q.l);
+    });
 }
 
 function updateWordCount(el, limitStr) {
@@ -450,234 +410,4 @@ if(getUser()) {
     setView('papers');
     // Sync on auto-login
     setTimeout(syncScore, 1000);
-}
-
-// ==========================================
-// 1. RIGHT SIDE MENU LOGIC
-// ==========================================
-
-let currentFilterContext = ''; // 'leaderboard' or 'scorecard'
-
-function toggleFilterMenu(context) {
-    const menu = document.getElementById('filter-menu');
-    const overlay = document.getElementById('filter-menu-overlay');
-    
-    if (context) {
-        currentFilterContext = context;
-        buildFilterOptions(context);
-        menu.classList.add('active');
-        overlay.classList.add('active');
-    } else {
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-    }
-}
-
-function buildFilterOptions(context) {
-    const container = document.getElementById('filter-options');
-    const title = document.getElementById('filter-title');
-    container.innerHTML = ''; // Clear previous options
-
-    // === OPTION A: LEADERBOARD FILTERS ===
-    if (context === 'leaderboard') {
-        title.innerText = "Select Subject";
-        const subjects = ['Business', 'Economics', 'General Paper'];
-        
-        subjects.forEach(sub => {
-            container.innerHTML += `
-                <button class="filter-group-btn" onclick="filterLeaderboard('${sub}')">
-                    ${sub} <span>→</span>
-                </button>
-            `;
-        });
-    } 
-    
-    // === OPTION B: SCORECARD FILTERS ===
-    else if (context === 'scorecard') {
-        title.innerText = "Filter Scorecard";
-        
-        // Define Structure
-        const hierarchy = {
-            'Business': ['Paper 3', 'Paper 4'],
-            'Economics': ['Paper 3 (MCQ)', 'Paper 4'],
-            'General Paper': ['Paper 1', 'Paper 2']
-        };
-
-        // Build Accordion
-        for (const [subject, papers] of Object.entries(hierarchy)) {
-            let paperHtml = papers.map(p => 
-                `<span class="filter-pill" onclick="filterScorecard('${subject}', '${p}')">${p}</span>`
-            ).join('');
-
-            container.innerHTML += `
-                <div>
-                    <button class="filter-group-btn" onclick="toggleSubOptions(this)">
-                        ${subject} <span>▼</span>
-                    </button>
-                    <div class="filter-sub-options">
-                        <span class="filter-pill" onclick="filterScorecard('${subject}', 'All')">All Papers</span>
-                        ${paperHtml}
-                    </div>
-                </div>
-            `;
-        }
-    }
-}
-
-function toggleSubOptions(btn) {
-    const nextEl = btn.nextElementSibling;
-    nextEl.classList.toggle('show');
-    btn.classList.toggle('active');
-}
-
-// ==========================================
-// 2. FILTERING ACTIONS (UPDATED FLOW)
-// ==========================================
-
-function filterLeaderboard(subject) {
-    // 1. Close the Slide-in Menu
-    toggleFilterMenu(); 
-    
-    // 2. NOW we switch the view (This is the key change)
-    setView('leaderboard');
-
-    // 3. Render the specific data
-    const container = document.getElementById('leaderboard-container');
-    container.innerHTML = `<h3 style="text-align:center; color:#888;">Loading ${subject} Leaderboard...</h3>`;
-
-    setTimeout(() => {
-        renderMockLeaderboard(subject); 
-    }, 300);
-}
-
-function filterScorecard(subject, paper) {
-    toggleFilterMenu();
-    setView('scorecard');
-
-    const allScores = typeof StorageManager !== 'undefined' ? StorageManager.getHistory() : [];
-    const container = document.getElementById('score-table-container');
-    
-    // === FILTERING ===
-    const filtered = allScores.filter(item => {
-        const matchSub = item.subject === subject;
-        let matchPaper = false;
-        if (paper === 'All') matchPaper = true;
-        else matchPaper = item.paper.includes(paper);
-        return matchSub && matchPaper;
-    });
-
-    if (filtered.length === 0) {
-        container.innerHTML = `
-            <div style="text-align:center; padding:50px; color:#888;">
-                <h3 style="margin:0;">${subject}</h3>
-                <p>No records found for ${paper}.</p>
-            </div>`;
-        return;
-    }
-
-    let html = `
-        <div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="margin:0; color:var(--lime-dark);">${subject}</h2>
-            <span style="background:#f3f4f6; padding:4px 12px; border-radius:20px; font-size:0.85rem; color:#555;">${paper}</span>
-        </div>`;
-        
-    filtered.forEach(s => {
-        // === DISPLAY LOGIC ===
-        let scoreDisplay = "";
-        let borderCol = "#cbd5e1"; // Default Grey
-
-        if (s.type === 'MCQ' || (s.score !== null && s.score !== 0)) {
-            // It has a real score (MCQ or manually graded)
-            scoreDisplay = `${s.score}%`;
-            if (s.score >= 80) borderCol = '#22c55e'; // Green
-            else if (s.score >= 50) borderCol = '#f59e0b'; // Orange
-            else borderCol = '#ef4444'; // Red
-        } else {
-            // It is an Essay paper with no manual score
-            scoreDisplay = "Viewed"; 
-            borderCol = "#3b82f6"; // Blue for Practice
-        }
-
-        html += `
-            <div class="score-card-item" style="border-left: 5px solid ${borderCol}; padding:15px; margin-bottom:12px; background:white; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius: 6px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <strong style="font-size:1.1rem; display:block; color:#1f2937;">${s.paperID.replace(/_/g, ' ').toUpperCase()}</strong>
-                        <div style="font-size:0.8rem; color:#666; margin-top:4px;">
-                            ${new Date(s.timestamp).toLocaleDateString()} • ${s.paper}
-                        </div>
-                    </div>
-                    <div style="text-align:right;">
-                        <span style="display:block; font-size:1.4rem; font-weight:800; color:${borderCol};">${scoreDisplay}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-}
-
-// ==========================================
-// 3. STATS CALCULATOR (The Colored Boxes)
-// ==========================================
-function updateStats() {
-    // Safety check: If StorageManager isn't loaded, stop.
-    if (typeof StorageManager === 'undefined') return;
-
-    const history = StorageManager.getHistory();
-    const statsContainer = document.getElementById('stats-overview');
-    
-    if (!statsContainer) return;
-
-    // 1. Aggregate Data
-    let subjects = {}; 
-
-    history.forEach(item => {
-        // Create subject entry if it doesn't exist
-        if (!subjects[item.subject]) {
-            subjects[item.subject] = { totalScore: 0, count: 0, gradedCount: 0 };
-        }
-        
-        // Always count the attempt (for "Papers Attempted")
-        subjects[item.subject].count++; 
-        
-        // Only calculate average if it is a graded paper (like MCQ)
-        if (item.score !== null) {
-             subjects[item.subject].totalScore += item.score;
-             subjects[item.subject].gradedCount++;
-        }
-    });
-
-    // 2. Build HTML for the boxes
-    let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">`;
-
-    if (Object.keys(subjects).length === 0) {
-        html += `<div style="grid-column: 1/-1; text-align:center; color:#888;">No data yet. Open a paper to start!</div>`;
-    } else {
-        for (const [subName, data] of Object.entries(subjects)) {
-            // Calculate Average (only for graded papers)
-            let avgDisplay = "N/A";
-            let color = "#3b82f6"; // Blue default (for Viewed only)
-
-            if (data.gradedCount > 0) {
-                const avg = Math.round(data.totalScore / data.gradedCount);
-                avgDisplay = `${avg}%`;
-                
-                // Set Color based on Score
-                if (avg < 50) color = '#ef4444';      // Red
-                else if (avg < 80) color = '#f59e0b'; // Orange
-                else color = '#22c55e';               // Green
-            }
-
-            html += `
-                <div style="background:white; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05); text-align:center; border-top: 4px solid ${color};">
-                    <div style="font-size:0.9rem; color:#666; font-weight:bold; text-transform:uppercase;">${subName}</div>
-                    <div style="font-size:2.5rem; font-weight:800; color:${color}; margin:5px 0;">${avgDisplay}</div>
-                    <div style="font-size:0.8rem; color:#9ca3af;">${data.count} Papers Attempted</div>
-                </div>
-            `;
-        }
-    }
-    html += `</div>`;
-    statsContainer.innerHTML = html;
 }

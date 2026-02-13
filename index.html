@@ -35,8 +35,8 @@
         <button class="nav-btn active" onclick="setView('papers')">Papers</button>
         <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
-<button class="nav-btn" onclick="toggleFilterMenu('scorecard')">Scorecard</button>
- <button class="nav-btn" onclick="toggleFilterMenu('leaderboard')">🏆 Leaderboard</button>
+        <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
+        <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="toggleChat()" style="position: relative; color: #3b82f6; font-weight: 800;">
             <span style="font-size: 1.5rem; vertical-align: middle; margin-right: 5px;">💬</span>
             <span id="unread-badge" class="unread-badge hidden"></span>
@@ -565,16 +565,6 @@
         <p style="color:#666;">Top performers in Business Practice</p>
     </div>
     <div id="leaderboard-container">
-        </div>
-</div>
-
-<div id="filter-menu-overlay" class="side-menu-overlay" onclick="toggleFilterMenu()"></div>
-<div id="filter-menu" class="side-menu right-side">
-    <div class="menu-header">
-        <h3 id="filter-title" style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Filter</h3>
-        <button class="menu-close" onclick="toggleFilterMenu()">✖</button>
-    </div>
-    <div id="filter-options" class="filter-container">
         </div>
 </div>
 
