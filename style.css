@@ -346,43 +346,49 @@ textarea.expanded {
 }
 .hamburger-btn:hover { color: var(--lime-dark); }
 
+/* === SIDE MENUS (RESTORED & FIXED) === */
 .side-menu-overlay { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.4); z-index: 4000; opacity: 0; 
-    pointer-events: none; transition: 0.3s ease; 
+    background: rgba(0,0,0,0.5); z-index: 4000; opacity: 0; 
+    pointer-events: none; transition: opacity 0.3s ease; 
 }
 .side-menu-overlay.active { opacity: 1; pointer-events: auto; }
 
-/* === WIDER SLIDING PANELS === */
+/* SHARED MENU STYLES */
 .side-menu { 
     position: fixed; 
     top: 0; 
-    width: 50vw; /* Takes up 50% of the screen width */
-    min-width: 350px; /* But never gets smaller than phone size */
+    width: 350px; /* REVERTED: Back to standard width */
     height: 100vh; 
     background: white; 
     z-index: 4001; 
-    box-shadow: -5px 0 25px rgba(0,0,0,0.1); 
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    box-shadow: 0 0 30px rgba(0,0,0,0.2); 
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     overflow-y: auto; 
     display: flex; 
     flex-direction: column; 
 
-    /* Default (Right Side) hidden state */
-    right: -55vw; 
+    /* DEFAULT POSITION: RIGHT SIDE (For Main Menu) */
+    right: 0;
+    left: auto;
+    transform: translateX(100%); /* Hidden off-screen to the right */
 }
 
-.side-menu.active { right: 0; }
+.side-menu.active {
+    transform: translateX(0); /* Slides in */
+}
 
-/* Left Side Menu (Scorecard/Leaderboard) hidden state */
+/* OVERRIDE FOR LEFT SIDE (Scorecard & Leaderboard) */
 .side-menu.left-side {
+    left: 0;
     right: auto;
-    left: -55vw; 
+    transform: translateX(-100%); /* Hidden off-screen to the left */
     border-right: 1px solid #ddd;
+    box-shadow: 5px 0 30px rgba(0,0,0,0.1); /* Shadow on the right side */
 }
 
 .side-menu.left-side.active {
-    left: 0;
+    transform: translateX(0); /* Slides in */
 }
 
 .menu-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
