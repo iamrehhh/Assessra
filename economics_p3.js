@@ -64,7 +64,7 @@ function loadMCQPapers() {
     `;
 }
 
-function startMCQTest(paperID) {
+async function startMCQTest(paperID) {
     currentPaperID = paperID;
     testSubmitted = false;
     const paperInfo = paperDatabase[paperID];
@@ -73,10 +73,9 @@ function startMCQTest(paperID) {
 
     document.body.style.overflow = 'hidden';
 
-    // 1. Build the basic HTML Structure
+    // 1. Build UI (Standard Code)
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
-            
             <div id="mcq-header" style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 <div style="display:flex; align-items:center; gap:20px;">
                     <button onclick="exitMCQTest()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">Exit</button>
@@ -113,38 +112,37 @@ function startMCQTest(paperID) {
         html += `</div></div>`;
     });
 
-    html += `
-                    </div>
-                    <button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; margin-bottom:20px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Submit & Grade Test</button>
-                    <div style="height: 150px; width: 100%;"></div> 
-                </div>
-            </div>
-        </div>
-    `;
+    html += `</div><button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; margin-bottom:20px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold;">Submit & Grade Test</button><div style="height: 150px; width: 100%;"></div></div></div></div>`;
     
     document.getElementById('container-econ-p3').innerHTML = html;
 
-    // 2. RESTORE PREVIOUS ATTEMPT (If available)
-    if (typeof StorageManager !== 'undefined') {
-        const saved = StorageManager.getMCQState(paperID);
-        if (saved && saved.answers) {
-            // Restore bubbles visually
-            saved.answers.forEach((ans, index) => {
-                if (ans) {
-                    const input = document.querySelector(`input[name="q${index}"][value="${ans}"]`);
+    // === NEW RESTORE LOGIC (CLOUD) ===
+    if (window.CloudManager) {
+        // Show loading state
+        document.getElementById('timer-display').innerText = "SYNCING...";
+        
+        const u = getUser();
+        const allData = await window.CloudManager.getAllData(u);
+        const savedAttempts = allData.papers ? allData.papers[paperID] : null;
+
+        if (savedAttempts) {
+            // Restore answers visually
+            Object.keys(savedAttempts).forEach(qNum => {
+                const index = parseInt(qNum) - 1; // Cloud uses "1", array uses 0
+                const ansData = savedAttempts[qNum];
+                if (ansData.answer) {
+                    const input = document.querySelector(`input[name="q${index}"][value="${ansData.answer}"]`);
                     if (input) {
                         input.checked = true;
-                        updateBubble(null, index, ans); // Highlight it
+                        updateBubble(null, index, ansData.answer);
                     }
                 }
             });
 
-            // If it was already finished, grade it immediately
-            if (saved.submitted) {
-                gradeMCQ(true); // 'true' means this is a restore, not a new submit
-                document.getElementById('timer-display').innerText = "COMPLETE";
-                return; // Stop here, don't start timer
-            }
+            // Auto-grade to show results
+            gradeMCQ(true); // 'true' means it's a restore
+            document.getElementById('timer-display').innerText = "COMPLETE";
+            return;
         }
     }
 
@@ -214,25 +212,36 @@ function gradeMCQ(isRestoring = false) {
     
     const answers = paperDatabase[currentPaperID].answers;
     let score = 0;
-    let userAnswers = []; // Collect for saving
+    
+    // Object to hold data for Cloud Saving
+    let cloudData = {}; 
     
     answers.forEach((correctLetter, index) => {
+        const qNum = index + 1;
         const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
         const userChoice = selectedInput ? selectedInput.value : null;
-        userAnswers.push(userChoice);
 
-        // Reset text colors
+        // Visual Marking Logic
         ['A', 'B', 'C', 'D'].forEach(l => {
             let lbl = document.getElementById(`label-q${index}-${l}`);
             if(lbl) lbl.style.color = '#555';
         });
 
-        // Highlight Logic
-        if (userChoice === correctLetter) {
-            score++;
+        const isCorrect = (userChoice === correctLetter);
+        if (isCorrect) score++;
+
+        // Add to Cloud Data Package
+        cloudData[qNum] = {
+            answer: userChoice,
+            score: isCorrect ? 1 : 0,
+            correctAnswer: correctLetter
+        };
+
+        // UI Coloring
+        if (isCorrect) {
             let correctLabel = document.getElementById(`label-q${index}-${correctLetter}`);
             if(correctLabel) {
-                correctLabel.style.backgroundColor = "#22c55e"; // Green
+                correctLabel.style.backgroundColor = "#22c55e";
                 correctLabel.style.borderColor = "#22c55e";
                 correctLabel.style.color = "white";
             }
@@ -244,11 +253,10 @@ function gradeMCQ(isRestoring = false) {
                 correctLabel.style.borderColor = "#22c55e";
                 correctLabel.style.color = "white";
             }
-            
             if (userChoice) {
                 let userLabel = document.getElementById(`label-q${index}-${userChoice}`);
                 if(userLabel) {
-                    userLabel.style.backgroundColor = "#ef4444"; // Red
+                    userLabel.style.backgroundColor = "#ef4444";
                     userLabel.style.borderColor = "#ef4444";
                     userLabel.style.color = "white";
                 }
@@ -257,32 +265,30 @@ function gradeMCQ(isRestoring = false) {
         }
     });
 
+    // Show Score
     const percent = Math.round((score / answers.length) * 100);
-    
-    // Show Results
     const resultBox = document.getElementById('mcq-result-box');
     if(resultBox) {
         resultBox.style.display = "block";
         resultBox.innerHTML = `
             <h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1>
             <h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>
-            <p style="font-size:1rem; color:#666; margin-top: 10px;">Your errors are highlighted in <span style="color:#ef4444; font-weight:bold;">Red</span>. The correct answers are <span style="color:#22c55e; font-weight:bold;">Green</span>.</p>
+            <p style="font-size:1rem; color:#666; margin-top: 10px;">Review your answers below.</p>
         `;
     }
 
     const subBtn = document.getElementById('submit-btn');
     if(subBtn) subBtn.style.display = "none";
-    
     const timerEl = document.getElementById('timer-display');
     if(timerEl) timerEl.innerText = "TEST COMPLETE";
     
-    // Smoothly scroll top
+    // Scroll to top
     const sheet = document.getElementById('answer-sheet-container');
     if(sheet) sheet.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // === SAVE TO STORAGE ===
-    if (!isRestoring && typeof StorageManager !== 'undefined') {
-        StorageManager.saveMCQState(currentPaperID, userAnswers, true, score);
+    // === SAVE TO CLOUD (BATCH) ===
+    if (!isRestoring && window.CloudManager) {
+        window.CloudManager.saveMCQBatch(getUser(), currentPaperID, cloudData);
     }
 }
 

@@ -66,6 +66,19 @@ window.CloudManager = {
         }
     },
 
+    // 5. SPECIAL: SAVE ALL MCQ ANSWERS AT ONCE
+    saveMCQBatch: async (user, paperId, allAnswers) => {
+        if (!user) return;
+        const safeUser = user.replace('.', '_');
+        
+        // Save the entire set of answers to the cloud
+        await set(ref(db, `students/${safeUser}/papers/${paperId}`), allAnswers);
+        
+        // Update leaderboard immediately
+        CloudManager.updateLeaderboard(safeUser);
+        console.log("MCQ Batch Saved!");
+    },
+
     // 4. GET GLOBAL LEADERBOARD
     getLeaderboard: async () => {
         const snapshot = await get(child(ref(db), `leaderboard`));
