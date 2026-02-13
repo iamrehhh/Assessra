@@ -449,25 +449,63 @@ function toggleScorecardPanel() {
 async function loadCloudScorecard() {
     const u = getUser();
     if(!u) return;
-    const data = await window.CloudManager.getAllData(u); // Fetch from Cloud
+
+    // Clear old lists
+    document.getElementById('sc-bus-p3').innerHTML = '';
+    document.getElementById('sc-bus-p4').innerHTML = '';
+    document.getElementById('sc-econ-p3').innerHTML = '';
+    document.getElementById('sc-econ-p4').innerHTML = '';
+
+    const data = await window.CloudManager.getAllData(u);
     const papers = data.papers || {};
 
-    const busList = document.getElementById('sc-list-business');
-    const econList = document.getElementById('sc-list-economics');
-    busList.innerHTML = ''; econList.innerHTML = '';
-
-    // 1. Add Total Score Buttons
-    busList.innerHTML += `<div class="paper-link" onclick="renderSubjectTotal('Business', '${u}')"><strong>📊 View Business Total</strong></div>`;
-    econList.innerHTML += `<div class="paper-link" onclick="renderSubjectTotal('Economics', '${u}')"><strong>📊 View Economics Total</strong></div>`;
-
-    // 2. List Attempted Papers
     Object.keys(papers).forEach(pid => {
-        const pTitle = paperData[pid] ? paperData[pid].title : pid;
-        const html = `<div class="paper-link" onclick="renderPaperScore('${pid}')">${pTitle} <span style="font-size:0.8rem; color:#888;">(${pid})</span></div>`;
+        // 1. Get Details
+        // If it's in paperData, use that title. If not, use ID.
+        const pTitle = (paperData && paperData[pid]) ? paperData[pid].title : pid;
         
-        if(pid.includes('bus') || pid.includes('9609')) busList.innerHTML += html;
-        else econList.innerHTML += html;
+        // 2. Classify the Paper (THE FIX)
+        const category = classifyPaper(pid);
+        
+        // 3. Generate HTML
+        const html = `<div class="paper-link" onclick="renderPaperScore('${pid}')">
+            ${pTitle} <span style="font-size:0.75rem; color:#999; display:block;">${pid}</span>
+        </div>`;
+
+        // 4. Inject into correct container
+        if (category.subject === 'business') {
+            if (category.paper === 'p3') document.getElementById('sc-bus-p3').innerHTML += html;
+            else document.getElementById('sc-bus-p4').innerHTML += html;
+        } 
+        else if (category.subject === 'economics') {
+            if (category.paper === 'p3') document.getElementById('sc-econ-p3').innerHTML += html;
+            else document.getElementById('sc-econ-p4').innerHTML += html;
+        }
     });
+}
+
+// === THE NEW CLASSIFIER FUNCTION ===
+function classifyPaper(pid) {
+    // 1. Explicit Economics ID (e.g., "econ_2024...")
+    if (pid.startsWith('econ_')) {
+        // Check if P3 or P4 based on numbers (e.g. 42 -> P4, 31 -> P3)
+        if (pid.includes('31') || pid.includes('32') || pid.includes('33')) return { subject: 'economics', paper: 'p3' };
+        return { subject: 'economics', paper: 'p4' };
+    }
+
+    // 2. Check Global Paper Data (Business Papers are usually here)
+    if (window.paperData && window.paperData[pid]) {
+        // Business Paper 3 usually has IDs like "2024_fm_32" (No prefix)
+        // Business Paper 4 usually has IDs like "2024_fm_42"
+        if (pid.includes('41') || pid.includes('42') || pid.includes('43')) return { subject: 'business', paper: 'p4' };
+        return { subject: 'business', paper: 'p3' };
+    }
+
+    // 3. Fallback for MCQ (Econ P3 often isn't in paperData global object)
+    // If it's not in paperData and has no prefix, it might be the Econ MCQ test
+    // BUT we need to be careful. Let's look for MCQ specific patterns if you have any.
+    // For now, if it's NOT in paperData, we assume it's Econ MCQ (Paper 3).
+    return { subject: 'economics', paper: 'p3' };
 }
 
 async function renderPaperScore(pid) {
