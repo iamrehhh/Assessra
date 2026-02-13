@@ -1,8 +1,89 @@
-// === SIDE MENU & MULTI-SUBJECT LOGIC ===
-function toggleSideMenu() {
-    document.getElementById('side-menu').classList.toggle('active');
-    document.getElementById('side-menu-overlay').classList.toggle('active');
+// =============================================
+// LOGIC.JS - FULLY RECONSTRUCTED & FIXED
+// Includes: Cloud Sync, Smart Sorting, UI Fixes
+// =============================================
+
+// === 1. GLOBAL UI & MENU MANAGEMENT ===
+
+// Helper to close ALL panels to prevent overlaps
+function closeAllPanels() {
+    ['side-menu', 'scorecard-panel', 'leaderboard-panel', 'chat-panel'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+    });
+    
+    ['side-menu-overlay', 'scorecard-overlay', 'leaderboard-overlay', 'chat-overlay'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+    });
 }
+
+// Right Side Main Menu
+function toggleSideMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('side-menu-overlay');
+    
+    if (menu.classList.contains('active')) {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        closeAllPanels(); // Force close others
+        menu.classList.add('active');
+        overlay.classList.add('active');
+    }
+}
+
+// Left Side Scorecard
+function toggleScorecardPanel() {
+    const panel = document.getElementById('scorecard-panel');
+    const overlay = document.getElementById('scorecard-overlay');
+
+    if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        closeAllPanels(); // Force close others
+        panel.classList.add('active');
+        overlay.classList.add('active');
+        loadCloudScorecard(); // Load data when opening
+    }
+}
+
+// Left Side Leaderboard
+function toggleLeaderboardPanel() {
+    const panel = document.getElementById('leaderboard-panel');
+    const overlay = document.getElementById('leaderboard-overlay');
+
+    if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        closeAllPanels(); // Force close others
+        panel.classList.add('active');
+        overlay.classList.add('active');
+        loadCloudLeaderboard(); // Load data when opening
+    }
+}
+
+// Chat Panel (Right Side)
+function toggleChat() {
+    const panel = document.getElementById('chat-panel');
+    const overlay = document.getElementById('chat-overlay');
+    const badge = document.getElementById('unread-badge'); 
+    
+    if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        closeAllPanels(); // Force close others
+        panel.classList.add('active');
+        overlay.classList.add('active'); // Use generic overlay logic if preferred, or keep chat-specific
+        if (badge) badge.classList.add('hidden'); 
+        localStorage.setItem('habibi_chat_last_read', Date.now());
+    }
+}
+
+// === 2. NAVIGATION & LOGIN LOGIC ===
 
 function toggleSubject(subId) {
     const content = document.getElementById(subId);
@@ -13,28 +94,15 @@ function switchPaperView(targetViewId) {
     document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
     const target = document.getElementById(`container-${targetViewId}`);
     if(target) target.classList.remove('hidden');
+    
     document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
     document.getElementById(`link-${targetViewId}`).classList.add('active');
-    toggleSideMenu();
+    
+    toggleSideMenu(); // Close menu
     setView('papers');
 }
 
-// === CHAT UI LOGIC ===
-function toggleChat() {
-    const panel = document.getElementById('chat-panel');
-    const overlay = document.getElementById('chat-overlay');
-    const badge = document.getElementById('unread-badge'); 
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) {
-        overlay.classList.remove('hidden');
-        if (badge) badge.classList.add('hidden'); 
-        localStorage.setItem('habibi_chat_last_read', Date.now());
-    } else {
-        overlay.classList.add('hidden');
-    }
-}
-
-// === AUTHORIZED USERS LIST ===
+// Allowed Users Configuration
 const ALLOWED_USERS = {
     "Jesan.Equebal": "virgin",
     "Newton.Mondal": "anime",
@@ -58,28 +126,36 @@ function tryLogin() {
     const p = document.getElementById('p-in').value.trim();
     if(ALLOWED_USERS[u] && ALLOWED_USERS[u] === p) {
         setUser(u);
-        const name = u.split('.')[0] || u;
-        document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
-        document.getElementById('login-layer').classList.add('hidden');
-        document.getElementById('app-layer').classList.remove('hidden');
-        setView('papers');
+        initApp(u);
     } else { alert("Invalid Username or Password."); }
+}
+
+function initApp(u) {
+    const name = u.split('.')[0] || u;
+    document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    document.getElementById('login-layer').classList.add('hidden');
+    document.getElementById('app-layer').classList.remove('hidden');
+    setView('papers');
 }
 
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
+    // Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
     });
-    document.getElementById(`view-${viewName}`).classList.remove('hidden');
+    // Show target view
+    const target = document.getElementById(`view-${viewName}`);
+    if(target) target.classList.remove('hidden');
 }
 
 function backToDash() { setView('papers'); }
 function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
 
-// === OPEN PAPER FUNCTION (CLOUD AWARE) ===
+// === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
+
 async function openPaper(pid) {
     const data = paperData[pid];
     document.getElementById('questions-container').innerHTML = `<div style="text-align:center; padding:50px; color:#888;">⏳ Fetching your answers...</div>`;
@@ -90,6 +166,7 @@ async function openPaper(pid) {
     const u = getUser();
     let attempts = {};
     
+    // FETCH FROM CLOUD
     try {
         if (window.CloudManager) {
             const allData = await window.CloudManager.getAllData(u);
@@ -134,6 +211,53 @@ async function openPaper(pid) {
     });
 }
 
+async function submitAnswer(pid, qn) {
+    const el = document.getElementById(`ans_${pid}_${qn}`);
+    const btn = event.target;
+    const ans = el.value.trim();
+    if(!ans) return alert("Please write an answer first.");
+
+    btn.innerText = "⏳ Strict Marking...";
+    btn.disabled = true;
+
+    const qData = paperData[pid].questions.find(q => q.n === qn);
+
+    try {
+        const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                question: qData.t,
+                case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
+                answer: ans,
+                marks: qData.m
+            })
+        });
+
+        const json = await res.json();
+
+        // SAVE TO CLOUD AND WAIT
+        await window.CloudManager.saveAttempt(getUser(), pid, qn, {
+            answer: ans,
+            score: json.score,
+            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
+            strengths: json.strengths,
+            weaknesses: json.weaknesses,
+            modelAnswer: json.model_answer
+        });
+        
+        await openPaper(pid); // Refresh view
+
+    } catch(e) {
+        console.error(e);
+        alert("Error: Server not responding or Save failed.");
+        btn.innerText = "Retry";
+        btn.disabled = false;
+    }
+}
+
+// === 4. HELPER FUNCTIONS ===
+
 function updateWordCount(el, limitStr) {
     if(!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
@@ -162,75 +286,39 @@ function toggleInsertMaximize() {
     btn.innerText = el.classList.contains('fullscreen') ? "⤡ Minimize" : "⤢ Maximize";
 }
 
-async function submitAnswer(pid, qn) {
-    const el = document.getElementById(`ans_${pid}_${qn}`);
-    const btn = event.target;
-    const ans = el.value.trim();
-    if(!ans) return alert("Please write an answer first.");
+// === 5. SCORECARD & LEADERBOARD LOGIC ===
 
-    btn.innerText = "⏳ Strict Marking...";
-    btn.disabled = true;
-
-    const qData = paperData[pid].questions.find(q => q.n === qn);
-
-    try {
-        const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                question: qData.t,
-                case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
-                answer: ans,
-                marks: qData.m
-            })
-        });
-
-        const json = await res.json();
-
-        // ⚠️ FIXED: Wait for cloud save before reloading
-        await window.CloudManager.saveAttempt(getUser(), pid, qn, {
-            answer: ans,
-            score: json.score,
-            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
-            strengths: json.strengths,
-            weaknesses: json.weaknesses,
-            modelAnswer: json.model_answer
-        });
-        
-        await openPaper(pid); 
-
-    } catch(e) {
-        console.error(e);
-        alert("Error: Server not responding or Save failed.");
-        btn.innerText = "Retry";
-        btn.disabled = false;
+function classifyPaper(pid) {
+    // 1. Explicit Economics ID
+    if (pid.startsWith('econ_')) {
+        if (pid.includes('31') || pid.includes('32') || pid.includes('33') || pid.includes('34')) return { subject: 'economics', paper: 'p3' };
+        return { subject: 'economics', paper: 'p4' };
     }
-}
-
-// === NEW SCORECARD LOGIC (SUBSECTIONS) ===
-function toggleScorecardPanel() {
-    const panel = document.getElementById('scorecard-panel');
-    document.getElementById('scorecard-overlay').classList.toggle('active');
-    panel.classList.toggle('active');
-    if(panel.classList.contains('active')) loadCloudScorecard();
+    // 2. Business Paper Check (fallback)
+    if (window.paperData && window.paperData[pid]) {
+        if (pid.includes('41') || pid.includes('42') || pid.includes('43')) return { subject: 'business', paper: 'p4' };
+        return { subject: 'business', paper: 'p3' };
+    }
+    // 3. Default (Assume Econ MCQ if unknown and not in Business data)
+    return { subject: 'economics', paper: 'p3' }; 
 }
 
 async function loadCloudScorecard() {
     const u = getUser();
     if(!u) return;
 
-    // Clear old lists
-    document.getElementById('sc-bus-p3').innerHTML = '';
-    document.getElementById('sc-bus-p4').innerHTML = '';
-    document.getElementById('sc-econ-p3').innerHTML = '';
-    document.getElementById('sc-econ-p4').innerHTML = '';
+    // Reset Containers
+    ['sc-bus-p3', 'sc-bus-p4', 'sc-econ-p3', 'sc-econ-p4'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = '';
+    });
 
     const data = await window.CloudManager.getAllData(u);
     const papers = data.papers || {};
 
     Object.keys(papers).forEach(pid => {
         const pTitle = (window.paperData && window.paperData[pid]) ? window.paperData[pid].title : pid;
-        const category = classifyPaper(pid); // Use the new classifier
+        const category = classifyPaper(pid);
         
         const html = `<div class="paper-link" onclick="renderPaperScore('${pid}')">
             ${pTitle} <span style="font-size:0.75rem; color:#999; display:block;">${pid}</span>
@@ -247,20 +335,6 @@ async function loadCloudScorecard() {
     });
 }
 
-function classifyPaper(pid) {
-    // ⚠️ FIXED: Correctly classifies 'econ_' IDs
-    if (pid.startsWith('econ_')) {
-        if (pid.includes('31') || pid.includes('32') || pid.includes('33') || pid.includes('34')) return { subject: 'economics', paper: 'p3' };
-        return { subject: 'economics', paper: 'p4' };
-    }
-    if (window.paperData && window.paperData[pid]) {
-        if (pid.includes('41') || pid.includes('42') || pid.includes('43')) return { subject: 'business', paper: 'p4' };
-        return { subject: 'business', paper: 'p3' };
-    }
-    return { subject: 'business', paper: 'p3' }; // Default fallback
-}
-
-// ⚠️ FIXED: Prevents "568 questions" glitch
 async function renderPaperScore(pid) {
     toggleScorecardPanel(); 
     setView('score-display'); 
@@ -269,9 +343,9 @@ async function renderPaperScore(pid) {
     const data = await window.CloudManager.getAllData(u);
     const attempts = data.papers[pid] || {};
     
-    // IF ESSAY PAPER
-    if (paperData[pid]) {
-        const pInfo = paperData[pid];
+    // IS IT AN ESSAY PAPER? (Business)
+    if (window.paperData && window.paperData[pid]) {
+        const pInfo = window.paperData[pid];
         document.getElementById('score-display-title').innerText = pInfo.title;
         let html = '', total = 0, max = 0;
 
@@ -296,7 +370,7 @@ async function renderPaperScore(pid) {
                 ${html}
             </div>`;
     } 
-    // IF MCQ PAPER
+    // IS IT AN MCQ PAPER? (Economics)
     else {
         let total = 0;
         Object.values(attempts).forEach(ans => { if(ans.score === 1) total++; });
@@ -335,14 +409,6 @@ async function renderSubjectTotal(subject, user) {
         </div>`;
 }
 
-// === LEADERBOARD LOGIC ===
-function toggleLeaderboardPanel() {
-    const panel = document.getElementById('leaderboard-panel');
-    document.getElementById('leaderboard-overlay').classList.toggle('active');
-    panel.classList.toggle('active');
-    if(panel.classList.contains('active')) loadCloudLeaderboard();
-}
-
 async function loadCloudLeaderboard() {
     const lb = await window.CloudManager.getLeaderboard();
     const sorted = Object.values(lb).sort((a,b) => b.total - a.total);
@@ -359,11 +425,7 @@ async function loadCloudLeaderboard() {
     document.getElementById('leaderboard-content').innerHTML = html + "</tbody></table>";
 }
 
+// === 6. INITIALIZATION ===
 if(getUser()) {
-    const u = getUser();
-    const name = u.split('.')[0] || u;
-    document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
-    document.getElementById('login-layer').classList.add('hidden');
-    document.getElementById('app-layer').classList.remove('hidden');
-    setView('papers');
+    initApp(getUser());
 }
