@@ -491,66 +491,71 @@ function toggleSubOptions(btn) {
 }
 
 // ==========================================
-// 2. FILTERING ACTIONS
+// 2. FILTERING ACTIONS (UPDATED FLOW)
 // ==========================================
 
 function filterLeaderboard(subject) {
-    // 1. Close Menu
+    // 1. Close the Slide-in Menu
     toggleFilterMenu(); 
     
-    // 2. Update UI Title
+    // 2. NOW we switch the view (This is the key change)
+    setView('leaderboard');
+
+    // 3. Render the specific data
     const container = document.getElementById('leaderboard-container');
     container.innerHTML = `<h3 style="text-align:center; color:#888;">Loading ${subject} Leaderboard...</h3>`;
 
-    // 3. Simulate Fetching Data (Replace with your real Firebase fetch)
     setTimeout(() => {
-        // Mock Data for Demo - Replace this with your actual DB call
-        // Example: loadLeaderboardData(subject);
         renderMockLeaderboard(subject); 
-    }, 500);
-}
-
-function renderMockLeaderboard(subject) {
-    const container = document.getElementById('leaderboard-container');
-    container.innerHTML = `
-        <div class="lb-header" style="background:#f0fdf4; padding:15px; border-radius:8px; margin-bottom:20px; text-align:center;">
-            <h3 style="margin:0; color:var(--lime-dark);">🏆 ${subject} Top Performers</h3>
-        </div>
-        <div class="lb-item"><span>1. 🥇 Abdul Rehan</span><span>92%</span></div>
-        <div class="lb-item"><span>2. 🥈 Student B</span><span>88%</span></div>
-        <div class="lb-item"><span>3. 🥉 Student C</span><span>85%</span></div>
-    `;
+    }, 300);
 }
 
 function filterScorecard(subject, paper) {
+    // 1. Close the Slide-in Menu
     toggleFilterMenu();
     
-    // 1. Get All Scores (assuming StorageManager exists)
-    const allScores = StorageManager.getHistory(); // You need to ensure this returns an array
+    // 2. NOW we switch the view
+    setView('scorecard');
+    
+    // 3. Get Data & Render
+    const allScores = typeof StorageManager !== 'undefined' ? StorageManager.getHistory() : [];
     const container = document.getElementById('score-table-container');
     
-    // 2. Filter Logic
+    // Filter Logic
     const filtered = allScores.filter(item => {
-        const matchSub = item.subject === subject; // Ensure your saved data has 'subject' property
+        const matchSub = item.subject === subject; 
         const matchPaper = paper === 'All' ? true : item.paper === paper;
         return matchSub && matchPaper;
     });
 
-    // 3. Render
+    // Render Logic
     if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px; color:#888;">No records found for ${subject} - ${paper}</div>`;
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px; color:#666;">
+                <h3>${subject} (${paper})</h3>
+                <p>No records found. Complete a paper to see it here!</p>
+            </div>`;
         return;
     }
 
-    let html = `<h3 style="margin-bottom:20px;">Results: ${subject} (${paper})</h3>`;
+    let html = `
+        <div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+            <h2 style="margin:0; color:var(--lime-dark);">${subject}</h2>
+            <span style="color:#888;">Filter: ${paper}</span>
+        </div>`;
+        
     filtered.forEach(s => {
         html += `
-            <div class="score-card-item" style="border-left: 4px solid var(--lime-primary); padding:15px; margin-bottom:10px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
-                <div style="display:flex; justify-content:space-between;">
-                    <strong>${s.paperID || 'Unknown Paper'}</strong>
-                    <span style="color:var(--lime-dark); font-weight:bold;">${s.score}%</span>
+            <div class="score-card-item" style="border-left: 5px solid var(--lime-primary); padding:15px; margin-bottom:10px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05); border-radius: 4px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="font-size:1.1rem; display:block;">${s.paperID || 'Unknown Paper'}</strong>
+                        <span style="font-size:0.85rem; color:#666;">${new Date(s.timestamp).toLocaleDateString()} • ${new Date(s.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="color:var(--lime-dark); font-weight:800; font-size:1.5rem;">${s.score}%</span>
+                    </div>
                 </div>
-                <div style="font-size:0.8rem; color:#666; margin-top:5px;">${new Date(s.timestamp).toLocaleDateString()}</div>
             </div>
         `;
     });
