@@ -2,88 +2,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
 import os
-import requests
 
 app = Flask(__name__)
-# Allow CORS for your specific domain to be safe, or * for testing
+# Allow CORS for all domains
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ==========================================
-# ⚠ IMPORTANT: PASTE YOUR API KEY BELOW
+# ⚠ PASTE YOUR API KEY BELOW
 # ==========================================
 genai.configure(api_key="AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg") 
 model = genai.GenerativeModel('models/gemini-2.5-flash')
-
-# ==========================================
-# ☁️ CLOUD DATABASE SETTINGS (JSONBIN.IO)
-# ==========================================
-BIN_ID = '698c12cdae596e708f21a63d'
-MASTER_KEY = '$2a$10$3OsrhYa0hGsfBLm7ZcSeLOnnr6rTgZ09aD/l2vptk9w1r7ks/NDlq'
-
-BIN_URL = f'https://api.jsonbin.io/v3/b/{BIN_ID}'
-HEADERS = {
-    'X-Master-Key': MASTER_KEY,
-    'Content-Type': 'application/json'
-}
-
-@app.route('/leaderboard', methods=['GET'])
-def get_leaderboard():
-    try:
-        # Fetch scores from the cloud
-        req = requests.get(BIN_URL, headers=HEADERS)
-        scores = req.json().get('record', {})
-        
-        # 🛡️ BULLETPROOF FIX: Filter out any garbage data
-        valid_scores = {k: v for k, v in scores.items() if isinstance(v, dict) and 'score' in v}
-        
-        # Sort users by score (highest first)
-        sorted_scores = sorted(valid_scores.items(), key=lambda x: x[1]['score'], reverse=True)
-        return jsonify(sorted_scores), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/update_score', methods=['POST'])
-def update_score():
-    data = request.json
-    user = data.get('username')
-    score = data.get('total_score')
-    papers = data.get('papers_completed')
-    
-    if not user: return jsonify({"error": "No user"}), 400
-    
-    try:
-        # 1. Get current scores from the cloud
-        req = requests.get(BIN_URL, headers=HEADERS)
-        current_scores = req.json().get('record', {})
-        
-        # 2. Update or add the specific user's stats
-        current_scores[user] = {"score": score, "papers": papers}
-        
-        # 3. Save it back to the cloud permanently
-        requests.put(BIN_URL, json=current_scores, headers=HEADERS)
-        
-        return jsonify({"status": "success"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/delete_user', methods=['GET'])
-def delete_user():
-    username = request.args.get('name')
-    if not username:
-        return "Please provide a name. Example: /delete_user?name=Username", 400
-
-    try:
-        req = requests.get(BIN_URL, headers=HEADERS)
-        scores = req.json().get('record', {})
-        
-        if username in scores:
-            del scores[username]
-            requests.put(BIN_URL, json=scores, headers=HEADERS)
-            return f"Deleted user: {username}", 200
-        else:
-            return f"User {username} not found.", 404
-    except Exception as e:
-        return f"Error: {str(e)}", 500
 
 @app.route('/mark', methods=['POST'])
 def mark():
