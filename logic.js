@@ -95,80 +95,112 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    // ... (your existing hiding code) ...
-
-    // ADD THIS BLOCK:
-    if (viewName === 'scorecard') {
-        updateStats(); // <--- CRITICAL: This runs the calculation!
-    }
+    // 1. Hide all views
+    // (Added 'tips' and 'workspace' to ensure everything closes properly)
+    const allViews = ['papers', 'formulae', 'definitions', 'scorecard', 'leaderboard', 'tips', 'workspace']; 
     
-    // ... (rest of your function) ...}
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
-        const el = document.getElementById(`view-${v}`);
+    allViews.forEach(v => {
+        const el = document.getElementById('view-' + v);
         if(el) el.classList.add('hidden');
+        
+        // Update button states
+        const btn = document.querySelector(`button[onclick="setView('${v}')"]`);
+        if(btn) btn.classList.remove('active');
     });
-    document.getElementById(`view-${viewName}`).classList.remove('hidden');
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase().includes(viewName.replace('leaderboard','🏆').replace('scorecard','scorecard'))) btn.classList.add('active');
-    });
-    if(viewName === 'scorecard') renderScorecard();
-    if(viewName === 'leaderboard') loadLeaderboard();
+
+    // 2. Show the target view
+    const target = document.getElementById('view-' + viewName);
+    if(target) target.classList.remove('hidden');
+    
+    // 3. Highlight the button (if it exists)
+    const activeBtn = document.querySelector(`button[onclick="setView('${viewName}')"]`);
+    if(activeBtn) activeBtn.classList.add('active');
+
+    // 4. Close side menu if open
+    if(typeof toggleSideMenu === 'function') {
+        document.getElementById('side-menu').classList.remove('active');
+        document.getElementById('side-menu-overlay').classList.remove('active');
+    }
+
+    // 5. CRITICAL FIX: Update Stats when opening scorecard
+    if (viewName === 'scorecard' && typeof updateStats === 'function') {
+        updateStats();
+    }
 }
 
 function backToDash() { setView('papers'); }
 function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
 
-function openPaper(pid) {
-    const data = paperData[pid];
-    const u = getUser();
-    const attempts = getAttempts(u)[pid] || {};
+function openPaper(paperID) {
+    // 1. Determine Subject & Paper Type automatically
+    let subject = 'Business'; // Default
+    let paperType = 'Paper 3'; 
 
-    document.getElementById('insert-pdf').src = data.pdf;
+    // Detect Economics
+    if (paperID.includes('econ') || (typeof econPaperData !== 'undefined' && econPaperData[paperID])) {
+        subject = 'Economics';
+    }
+
+    // Detect Paper 4
+    if (paperID.includes('p4') || paperID.includes('_4')) {
+        paperType = 'Paper 4';
+    }
+
+    // 2. CRITICAL FIX: Save to History immediately
+    // This makes it show up as "Viewed" in the scorecard even without a score
+    if (typeof StorageManager !== 'undefined') {
+        StorageManager.savePaperState(paperID, subject, paperType);
+    }
+
+    // 3. Setup Workspace UI
+    const workspace = document.getElementById('view-workspace');
+    const container = document.getElementById('questions-container');
+    const pdfFrame = document.getElementById('insert-pdf');
     
-    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
-    data.questions.forEach(q => {
-        const att = attempts[q.n] || {};
-        const done = att.score !== undefined;
-        
-        let aoHtml = '';
-        if(done) {
-            aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${att.ao3 || '-'}</span>
-            <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${att.ao4 || '-'}</span>
-            </div>`;
-        }
-
-        qHtml += `<div class="question-card">
-            <div class="q-header"><strong>Q${q.n}</strong><span class="q-badge">${q.m} Marks</span></div>
-            <p style="font-weight:600; margin-bottom:10px;">${q.t}</p>
-            ${q.l ? `<p class="word-limit">Limit: ${q.l} words</p>` : ''}
-            
-            <button class="expand-btn" id="btn_exp_${pid}_${q.n}" onclick="toggleExpand('ans_${pid}_${q.n}', 'btn_exp_${pid}_${q.n}')">⤢ Expand</button>
-            <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
-            <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
-
-            <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
-            
-            ${done ? `<div class="feedback-box">
-                <h3>Score: ${att.score}/${q.m}</h3>
-                ${aoHtml}
-                <p><strong>Strengths:</strong> ${att.strengths}</p>
-                <p><strong>Improvements:</strong> <span style="color:#d63031">${att.weaknesses}</span></p>
-                <div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div>
-            </div>` : ''}
-        </div>`;
-    });
-    document.getElementById('questions-container').innerHTML = qHtml;
+    // Switch View
     setView('workspace');
     
-    // Init word counts
-    data.questions.forEach(q => {
-        const el = document.getElementById(`ans_${pid}_${q.n}`);
-        if(el) updateWordCount(el, q.l);
-    });
+    // 4. Load Content
+    let data = null;
+    if (typeof paperData !== 'undefined' && paperData[paperID]) {
+        data = paperData[paperID];
+    } else if (typeof econPaperData !== 'undefined' && econPaperData[paperID]) {
+        data = econPaperData[paperID];
+    }
+
+    if(data) {
+        // Set PDF
+        if (pdfFrame) pdfFrame.src = data.pdf;
+        
+        // Render Title
+        let html = `
+            <div style="padding:20px; border-bottom:1px solid #eee;">
+                <h2 style="margin:0; color:var(--lime-dark);">${data.title || paperID}</h2>
+                <span style="color:#666; font-size:0.9rem;">${subject} • ${paperType}</span>
+            </div>
+            <div style="padding:20px;">
+        `;
+        
+        // Render Questions
+        if (data.questions && Array.isArray(data.questions)) {
+            data.questions.forEach(q => {
+                html += `
+                    <div class="question-card" style="margin-bottom:20px; background:#f9fafb; padding:15px; border-radius:8px; border-left:4px solid #ddd;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <strong style="color:#374151;">Q${q.n}</strong>
+                            <span style="background:#e5e7eb; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:bold; color:#555;">[${q.m} Marks]</span>
+                        </div>
+                        <p style="margin:0; color:#4b5563; line-height:1.6;">${q.t}</p>
+                    </div>
+                `;
+            });
+        } else {
+            html += `<p style="color:#666;">No questions extracted for this paper yet.</p>`;
+        }
+        
+        html += `</div>`;
+        if (container) container.innerHTML = html;
+    }
 }
 
 function updateWordCount(el, limitStr) {

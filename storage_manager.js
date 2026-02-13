@@ -33,21 +33,21 @@ const StorageManager = {
         return this._get(`Econ_${paperID}`);
     },
 
-    // --- SAVE ESSAY STATE (Mark as Viewed/Practiced) ---
+  // --- SAVE ESSAY STATE ---
     savePaperState: function(paperID, subject, paperType) {
         const key = `${subject}_${paperID}`;
         
-        // Only save if it's new (don't overwrite if they did self-marking before)
+        // Only save if it's new (so we don't overwrite existing progress)
         if (!this._get(key)) {
             const data = {
                 paperID: paperID,
                 subject: subject,
                 paper: paperType,
-                type: 'Essay', // Mark type
-                status: 'Practiced', // Show this instead of score
-                submitted: true, // Counts in stats
+                type: 'Essay',
+                status: 'Practiced', 
+                submitted: true, 
                 timestamp: Date.now(),
-                score: null // Null means "No Score Available"
+                score: null // IMPORTANT: No score for essays
             };
             this._save(key, data);
         }
