@@ -112,15 +112,35 @@ function setView(viewName) {
 function backToDash() { setView('papers'); }
 function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
 
-function openPaper(pid) {
+async function openPaper(pid) {
     const data = paperData[pid];
-    const u = getUser();
-    const attempts = getAttempts(u)[pid] || {};
-
-    document.getElementById('insert-pdf').src = data.pdf;
     
+    // Show a loading indicator so you know it's fetching
+    document.getElementById('questions-container').innerHTML = `<div style="text-align:center; padding:50px; color:#888;">⏳ Fetching your answers...</div>`;
+
+    // 1. Setup PDF
+    const pdfFrame = document.getElementById('insert-pdf');
+    if(pdfFrame && data.pdf) pdfFrame.src = data.pdf;
+    
+    // 2. FETCH DATA FROM CLOUD
+    const u = getUser();
+    let attempts = {};
+    
+    try {
+        if (window.CloudManager) {
+            const allData = await window.CloudManager.getAllData(u);
+            if (allData.papers && allData.papers[pid]) {
+                attempts = allData.papers[pid];
+            }
+        }
+    } catch (e) {
+        console.error("Error loading paper data:", e);
+    }
+
+    // 3. RENDER QUESTIONS (Standard Logic)
     let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
     data.questions.forEach(q => {
+        // Now 'att' comes from the Cloud data
         const att = attempts[q.n] || {};
         const done = att.score !== undefined;
         
@@ -154,6 +174,7 @@ function openPaper(pid) {
             </div>` : ''}
         </div>`;
     });
+
     document.getElementById('questions-container').innerHTML = qHtml;
     setView('workspace');
     
@@ -232,17 +253,23 @@ async function submitAnswer(pid, qn) {
         });
 
         const json = await res.json();
-       window.CloudManager.saveAttempt(getUser(), pid, qn, {
-    answer: ans,
-    score: json.score,
-    feedback: json.strengths,
-    modelAnswer: json.model_answer
-});
-        openPaper(pid);
+
+        // === KEY CHANGE: WAIT FOR CLOUD SAVE ===
+        await window.CloudManager.saveAttempt(getUser(), pid, qn, {
+            answer: ans,
+            score: json.score,
+            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
+            strengths: json.strengths,
+            weaknesses: json.weaknesses,
+            modelAnswer: json.model_answer
+        });
+        
+        // NOW reload the paper view (it will fetch the new data from cloud)
+        await openPaper(pid); 
 
     } catch(e) {
         console.error(e);
-        alert("Error: Server not responding.");
+        alert("Error: Server not responding or Save failed.");
         btn.innerText = "Retry";
         btn.disabled = false;
     }
