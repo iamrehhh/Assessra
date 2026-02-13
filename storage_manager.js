@@ -1,86 +1,76 @@
-// storage_manager.js
+// ==========================================
+// STORAGE MANAGER (Fixed for Multi-Subject)
+// ==========================================
 
 const StorageManager = {
-    getUser: () => localStorage.getItem('user'),
     
-    // === GENERIC SAVE/LOAD ===
-    getData: (user) => JSON.parse(localStorage.getItem(`habibi_data_${user}`) || '{}'),
-    saveData: (user, data) => localStorage.setItem(`habibi_data_${user}`, JSON.stringify(data)),
-
-    // === ESSAY HANDLING ===
-    saveEssay: (paperId, qNum, answerData) => {
-        const user = StorageManager.getUser();
-        if (!user) return;
-        
-        const data = StorageManager.getData(user);
-        if (!data.essays) data.essays = {};
-        if (!data.essays[paperId]) data.essays[paperId] = {};
-        
-        data.essays[paperId][qNum] = answerData;
-        StorageManager.saveData(user, data);
-        console.log(`Saved Essay: ${paperId} Q${qNum}`);
+    // --- GENERIC SAVE (Handles Prefixes) ---
+    _save: function(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
     },
 
-    getEssay: (paperId, qNum) => {
-        const user = StorageManager.getUser();
-        if (!user) return null;
-        const data = StorageManager.getData(user);
-        return data.essays?.[paperId]?.[qNum] || null;
+    _get: function(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
     },
 
-    // === MCQ HANDLING ===
-    saveMCQState: (paperId, answersArray, isSubmitted, score) => {
-        const user = StorageManager.getUser();
-        if (!user) return;
-
-        const data = StorageManager.getData(user);
-        if (!data.mcq) data.mcq = {};
-        
-        data.mcq[paperId] = {
-            answers: answersArray, // Array of selected letters ['A', 'C', null, 'D'...]
-            submitted: isSubmitted,
+    // --- SAVE MCQ STATE (Economics) ---
+    saveMCQState: function(paperID, answers, submitted, score) {
+        // We force a prefix to prevent collision with Business papers
+        const key = `Econ_${paperID}`; 
+        const data = {
+            paperID: paperID,
+            subject: 'Economics', // Explicitly save subject
+            paper: 'Paper 3 (MCQ)',
+            answers: answers,
+            submitted: submitted,
             score: score,
             timestamp: Date.now()
         };
-        StorageManager.saveData(user, data);
+        this._save(key, data);
     },
 
-    getMCQState: (paperId) => {
-        const user = StorageManager.getUser();
-        if (!user) return null;
-        const data = StorageManager.getData(user);
-        return data.mcq?.[paperId] || null;
+    getMCQState: function(paperID) {
+        return this._get(`Econ_${paperID}`);
     },
-    
-    // === SCORE SYNC CALCULATOR ===
-    calculateSubjectScores: () => {
-        const user = StorageManager.getUser();
-        if (!user) return { business: 0, economics: 0, total: 0 };
-        
-        const data = StorageManager.getData(user);
-        let scores = { business: 0, economics: 0, total: 0 };
-        
-        // Calculate Essay Scores
-        if(data.essays) {
-            Object.keys(data.essays).forEach(pid => {
-                const subject = pid.includes('9609') || pid.includes('bus') ? 'business' : 'economics';
-                Object.values(data.essays[pid]).forEach(q => {
-                    if(q.score) scores[subject] += q.score;
-                });
-            });
+
+    // --- SAVE BUSINESS/ESSAY STATE ---
+    savePaperState: function(paperID, subject, paperType) {
+        const key = `${subject}_${paperID}`;
+        const data = {
+            paperID: paperID,
+            subject: subject, // 'Business' or 'Economics'
+            paper: paperType, // 'Paper 3' or 'Paper 4'
+            status: 'Viewed',
+            timestamp: Date.now(),
+            score: 0 // Business papers might not have auto-grading
+        };
+        // Only save if it doesn't exist (to preserve original timestamp)
+        if (!this._get(key)) {
+            this._save(key, data);
         }
-        
-        // Calculate MCQ Scores
-        if(data.mcq) {
-            Object.keys(data.mcq).forEach(pid => {
-                const session = data.mcq[pid];
-                if(session.submitted && session.score) {
-                    scores.economics += session.score; // Assuming MCQs are Econ for now
-                }
-            });
+    },
+
+    // --- GET HISTORY FOR SCORECARD ---
+    getHistory: function() {
+        const history = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            
+            // Check for our known prefixes
+            if (key.startsWith('Econ_') || key.startsWith('Business_')) {
+                const item = JSON.parse(localStorage.getItem(key));
+                history.push(item);
+            }
         }
-        
-        scores.total = scores.business + scores.economics;
-        return scores;
+        return history.sort((a, b) => b.timestamp - a.timestamp);
+    },
+
+    // --- WIPE DATA ---
+    clearAll: function() {
+        if(confirm("Are you sure? This will delete ALL progress.")) {
+            localStorage.clear();
+            location.reload();
+        }
     }
 };

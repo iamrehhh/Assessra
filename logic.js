@@ -511,49 +511,67 @@ function filterLeaderboard(subject) {
 }
 
 function filterScorecard(subject, paper) {
-    // 1. Close the Slide-in Menu
-    toggleFilterMenu();
-    
-    // 2. NOW we switch the view
-    setView('scorecard');
-    
-    // 3. Get Data & Render
+    toggleFilterMenu(); // Close menu
+    setView('scorecard'); // Show screen
+
     const allScores = typeof StorageManager !== 'undefined' ? StorageManager.getHistory() : [];
     const container = document.getElementById('score-table-container');
     
-    // Filter Logic
+    // === STRICT FILTERING ===
     const filtered = allScores.filter(item => {
-        const matchSub = item.subject === subject; 
-        const matchPaper = paper === 'All' ? true : item.paper === paper;
+        // 1. Check Subject (Exact Match)
+        const matchSub = item.subject === subject;
+        
+        // 2. Check Paper (Handle "Paper 3" vs "Paper 3 (MCQ)")
+        let matchPaper = false;
+        if (paper === 'All') {
+            matchPaper = true;
+        } else {
+            // Flexible match: "Paper 3" matches "Paper 3" AND "Paper 3 (MCQ)"
+            matchPaper = item.paper.includes(paper);
+        }
+
         return matchSub && matchPaper;
     });
 
-    // Render Logic
+    // === RENDER ===
     if (filtered.length === 0) {
         container.innerHTML = `
-            <div style="text-align:center; padding:40px; color:#666;">
-                <h3>${subject} (${paper})</h3>
-                <p>No records found. Complete a paper to see it here!</p>
+            <div style="text-align:center; padding:50px; color:#888;">
+                <h3 style="margin:0;">${subject}</h3>
+                <p>${paper}</p>
+                <br>
+                <p>No attempts found for this category.</p>
+                <button onclick="setView('papers')" style="margin-top:10px; padding:8px 16px; background:var(--lime-primary); color:white; border:none; border-radius:6px; cursor:pointer;">Start a Paper</button>
             </div>`;
         return;
     }
 
     let html = `
-        <div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+        <div style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; color:var(--lime-dark);">${subject}</h2>
-            <span style="color:#888;">Filter: ${paper}</span>
+            <span style="background:#f3f4f6; padding:4px 12px; border-radius:20px; font-size:0.85rem; color:#555;">${paper}</span>
         </div>`;
         
     filtered.forEach(s => {
+        // Determine Color based on Score (Green for high, Orange for mid, Red for low/zero)
+        let borderCol = '#cbd5e1'; // Grey default
+        if (s.score >= 80) borderCol = '#22c55e';
+        else if (s.score >= 50) borderCol = '#f59e0b';
+        else if (s.score > 0) borderCol = '#ef4444';
+
         html += `
-            <div class="score-card-item" style="border-left: 5px solid var(--lime-primary); padding:15px; margin-bottom:10px; background:white; box-shadow:0 2px 4px rgba(0,0,0,0.05); border-radius: 4px;">
+            <div class="score-card-item" style="border-left: 5px solid ${borderCol}; padding:15px; margin-bottom:12px; background:white; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius: 6px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
-                        <strong style="font-size:1.1rem; display:block;">${s.paperID || 'Unknown Paper'}</strong>
-                        <span style="font-size:0.85rem; color:#666;">${new Date(s.timestamp).toLocaleDateString()} • ${new Date(s.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        <strong style="font-size:1.1rem; display:block; color:#1f2937;">${s.paperID.replace(/_/g, ' ').toUpperCase()}</strong>
+                        <div style="font-size:0.8rem; color:#666; margin-top:4px;">
+                            ${new Date(s.timestamp).toLocaleDateString()} • ${s.paper}
+                        </div>
                     </div>
                     <div style="text-align:right;">
-                        <span style="color:var(--lime-dark); font-weight:800; font-size:1.5rem;">${s.score}%</span>
+                        <span style="display:block; font-size:1.4rem; font-weight:800; color:${borderCol};">${s.score}%</span>
+                        <span style="font-size:0.75rem; color:#9ca3af;">${s.submitted ? 'Completed' : 'Viewed'}</span>
                     </div>
                 </div>
             </div>
