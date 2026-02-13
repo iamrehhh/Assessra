@@ -19,7 +19,11 @@ window.CloudManager = {
     saveAttempt: async (user, paperId, qNum, data) => {
         if (!user) return;
         const safeUser = user.replace('.', '_');
-        await set(ref(db, `students/${safeUser}/papers/${paperId}/${qNum}`), data);
+        const path = `students/${safeUser}/papers/${paperId}/${qNum}`;
+        await set(ref(db, path), data);
+        console.log("Saved to Cloud:", path);
+        
+        // Update Total Score for Leaderboard
         CloudManager.updateLeaderboard(safeUser);
     },
 
@@ -31,39 +35,45 @@ window.CloudManager = {
         CloudManager.updateLeaderboard(safeUser);
     },
 
-    // 3. GET DATA
+    // 3. GET ALL DATA
     getAllData: async (user) => {
         if (!user) return {};
         const safeUser = user.replace('.', '_');
-        const snapshot = await get(child(ref(db), `students/${safeUser}`));
-        return snapshot.exists() ? snapshot.val() : {};
+        try {
+            const snapshot = await get(child(ref(db), `students/${safeUser}`));
+            return snapshot.exists() ? snapshot.val() : {};
+        } catch (error) {
+            console.error("Error fetching data", error);
+            return {};
+        }
     },
 
-    // 4. UPDATE LEADERBOARD (THE FIX IS HERE)
+    // 4. UPDATE LEADERBOARD (STRICT CLASSIFICATION)
     updateLeaderboard: async (safeUser) => {
         const snapshot = await get(child(ref(db), `students/${safeUser}/papers`));
         if (snapshot.exists()) {
             const papers = snapshot.val();
-            let biz = 0, econ = 0;
+            let totalScore = 0;
+            let businessScore = 0;
+            let econScore = 0;
 
             Object.keys(papers).forEach(pid => {
-                let subject = '';
+                const questions = papers[pid];
+                let subject = 'business'; // Default to business
 
-                // === STRICT CLASSIFICATION LOGIC ===
+                // Check prefix
                 if (pid.startsWith('econ_')) {
                     subject = 'economics';
                 } else if (pid.startsWith('gp_')) {
-                    subject = 'general';
-                } else {
-                    // If it doesn't start with 'econ', it's Business (e.g., '2024_mj_31')
-                    subject = 'business';
+                    subject = 'general'; // If you add General Paper later
                 }
 
                 // Sum up scores
-                Object.values(papers[pid]).forEach(q => {
+                Object.values(questions).forEach(q => {
                     if (q.score) {
-                        if (subject === 'business') biz += q.score;
-                        else if (subject === 'economics') econ += q.score;
+                        totalScore += q.score;
+                        if (subject === 'business') businessScore += q.score;
+                        else if (subject === 'economics') econScore += q.score;
                     }
                 });
             });
@@ -71,9 +81,10 @@ window.CloudManager = {
             // Save to public leaderboard
             await update(ref(db, `leaderboard/${safeUser}`), {
                 name: safeUser.replace('_', '.'),
-                business: biz,
-                economics: econ,
-                total: biz + econ
+                total: totalScore,
+                business: businessScore,
+                economics: econScore,
+                last_active: Date.now()
             });
         }
     },
