@@ -1,6 +1,8 @@
+// File: cloud_storage.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
+// Your Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDQdGnwbZq_V7Hm6V8IAVz7bnTt25H622s",
     authDomain: "habibi-studies-chat.firebaseapp.com",
@@ -14,82 +16,70 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Make this globally available so logic.js can use it
 window.CloudManager = {
-    // 1. SAVE INDIVIDUAL ATTEMPT
+    // 1. SAVE SCORE TO CLOUD
     saveAttempt: async (user, paperId, qNum, data) => {
         if (!user) return;
-        const safeUser = user.replace('.', '_');
-        const path = `students/${safeUser}/papers/${paperId}/${qNum}`;
-        await set(ref(db, path), data);
-        console.log("Saved to Cloud:", path);
+        const safeUser = user.replace('.', '_'); // Firebase keys cannot contain dots
         
-        // Update Total Score for Leaderboard
+        // Save the specific answer
+        await set(ref(db, `students/${safeUser}/papers/${paperId}/${qNum}`), data);
+        
+        // Update the leaderboard stats immediately
         CloudManager.updateLeaderboard(safeUser);
     },
 
-    // 2. SAVE MCQ BATCH (For Paper 3)
-    saveMCQBatch: async (user, paperId, allAnswers) => {
-        if (!user) return;
-        const safeUser = user.replace('.', '_');
-        await set(ref(db, `students/${safeUser}/papers/${paperId}`), allAnswers);
-        CloudManager.updateLeaderboard(safeUser);
-    },
-
-    // 3. GET ALL DATA
+    // 2. FETCH ALL DATA FOR ONE USER (For Scorecard)
     getAllData: async (user) => {
         if (!user) return {};
         const safeUser = user.replace('.', '_');
-        try {
-            const snapshot = await get(child(ref(db), `students/${safeUser}`));
-            return snapshot.exists() ? snapshot.val() : {};
-        } catch (error) {
-            console.error("Error fetching data", error);
-            return {};
-        }
+        const snapshot = await get(child(ref(db), `students/${safeUser}`));
+        return snapshot.exists() ? snapshot.val() : {};
     },
 
-    // 4. UPDATE LEADERBOARD (STRICT CLASSIFICATION)
+    // 3. UPDATE LEADERBOARD TOTALS
     updateLeaderboard: async (safeUser) => {
         const snapshot = await get(child(ref(db), `students/${safeUser}/papers`));
         if (snapshot.exists()) {
             const papers = snapshot.val();
-            let totalScore = 0;
-            let businessScore = 0;
-            let econScore = 0;
+            let biz = 0, econ = 0;
 
+            // Calculate totals
             Object.keys(papers).forEach(pid => {
-                const questions = papers[pid];
-                let subject = 'business'; // Default to business
-
-                // Check prefix
-                if (pid.startsWith('econ_')) {
-                    subject = 'economics';
-                } else if (pid.startsWith('gp_')) {
-                    subject = 'general'; // If you add General Paper later
-                }
-
-                // Sum up scores
-                Object.values(questions).forEach(q => {
+                const subject = (pid.includes('bus') || pid.includes('9609')) ? 'business' : 'economics';
+                Object.values(papers[pid]).forEach(q => {
                     if (q.score) {
-                        totalScore += q.score;
-                        if (subject === 'business') businessScore += q.score;
-                        else if (subject === 'economics') econScore += q.score;
+                        if (subject === 'business') biz += q.score;
+                        else econ += q.score;
                     }
                 });
             });
 
-            // Save to public leaderboard
+            // Push to public leaderboard
             await update(ref(db, `leaderboard/${safeUser}`), {
                 name: safeUser.replace('_', '.'),
-                total: totalScore,
-                business: businessScore,
-                economics: econScore,
-                last_active: Date.now()
+                business: biz,
+                economics: econ,
+                total: biz + econ
             });
         }
     },
 
-    // 5. GET GLOBAL LEADERBOARD
+    // 5. SPECIAL: SAVE ALL MCQ ANSWERS AT ONCE
+    saveMCQBatch: async (user, paperId, allAnswers) => {
+        if (!user) return;
+        const safeUser = user.replace('.', '_');
+        
+        // Save the entire set of answers to the cloud
+        await set(ref(db, `students/${safeUser}/papers/${paperId}`), allAnswers);
+        
+        // Update leaderboard immediately
+        CloudManager.updateLeaderboard(safeUser);
+        console.log("MCQ Batch Saved!");
+    },
+
+    // 4. GET GLOBAL LEADERBOARD
     getLeaderboard: async () => {
         const snapshot = await get(child(ref(db), `leaderboard`));
         return snapshot.exists() ? snapshot.val() : {};
