@@ -95,7 +95,8 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
+    // Add 'score-display' to this list
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
     });
@@ -231,14 +232,12 @@ async function submitAnswer(pid, qn) {
         });
 
         const json = await res.json();
-        saveAttempt(getUser(), pid, qn, {
-            answer: ans,
-            score: json.score,
-            ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
-            strengths: json.strengths,
-            weaknesses: json.weaknesses,
-            modelAnswer: json.model_answer
-        });
+       window.CloudManager.saveAttempt(getUser(), pid, qn, {
+    answer: ans,
+    score: json.score,
+    feedback: json.strengths,
+    modelAnswer: json.model_answer
+});
         openPaper(pid);
 
     } catch(e) {
@@ -410,4 +409,120 @@ if(getUser()) {
     setView('papers');
     // Sync on auto-login
     setTimeout(syncScore, 1000);
+}
+
+// === NEW CLOUD SCORECARD LOGIC ===
+function toggleScorecardPanel() {
+    const panel = document.getElementById('scorecard-panel');
+    document.getElementById('scorecard-overlay').classList.toggle('active');
+    panel.classList.toggle('active');
+    if(panel.classList.contains('active')) loadCloudScorecard();
+}
+
+async function loadCloudScorecard() {
+    const u = getUser();
+    if(!u) return;
+    const data = await window.CloudManager.getAllData(u); // Fetch from Cloud
+    const papers = data.papers || {};
+
+    const busList = document.getElementById('sc-list-business');
+    const econList = document.getElementById('sc-list-economics');
+    busList.innerHTML = ''; econList.innerHTML = '';
+
+    // 1. Add Total Score Buttons
+    busList.innerHTML += `<div class="paper-link" onclick="renderSubjectTotal('Business', '${u}')"><strong>📊 View Business Total</strong></div>`;
+    econList.innerHTML += `<div class="paper-link" onclick="renderSubjectTotal('Economics', '${u}')"><strong>📊 View Economics Total</strong></div>`;
+
+    // 2. List Attempted Papers
+    Object.keys(papers).forEach(pid => {
+        const pTitle = paperData[pid] ? paperData[pid].title : pid;
+        const html = `<div class="paper-link" onclick="renderPaperScore('${pid}')">${pTitle} <span style="font-size:0.8rem; color:#888;">(${pid})</span></div>`;
+        
+        if(pid.includes('bus') || pid.includes('9609')) busList.innerHTML += html;
+        else econList.innerHTML += html;
+    });
+}
+
+async function renderPaperScore(pid) {
+    toggleScorecardPanel(); // Close menu
+    setView('score-display'); // Show display area
+    
+    const u = getUser();
+    const data = await window.CloudManager.getAllData(u);
+    const attempts = data.papers[pid] || {};
+    const pInfo = paperData[pid];
+
+    document.getElementById('score-display-title').innerText = pInfo.title;
+    let html = '', total = 0, max = 0;
+
+    // Loop through questions
+    Object.keys(attempts).forEach(qn => {
+        const score = attempts[qn].score || 0;
+        const qMax = pInfo.questions.find(q => q.n === qn)?.m || 20;
+        total += score;
+        max += qMax;
+        
+        html += `<div class="score-row">
+            <span><strong>Q${qn}</strong></span>
+            <span><span class="score-badge">${score} / ${qMax}</span></span>
+        </div>`;
+    });
+
+    // Final Render
+    document.getElementById('score-display-content').innerHTML = `
+        <div style="background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+            <div style="font-size:3rem; font-weight:800; color:var(--lime-dark);">${Math.round(total/max*100)}%</div>
+            <div style="color:#666; margin-bottom:20px;">Score: ${total} / ${max}</div>
+            ${html}
+        </div>`;
+}
+
+async function renderSubjectTotal(subject, user) {
+    toggleScorecardPanel();
+    setView('score-display');
+    const data = await window.CloudManager.getAllData(user);
+    const papers = data.papers || {};
+    let total = 0, count = 0;
+
+    Object.keys(papers).forEach(pid => {
+        const isTarget = subject === 'Business' ? (pid.includes('bus') || pid.includes('9609')) : (pid.includes('econ') || pid.includes('9708'));
+        if(isTarget) {
+            Object.values(papers[pid]).forEach(q => total += (q.score || 0));
+            count++;
+        }
+    });
+
+    document.getElementById('score-display-title').innerText = subject + " Overview";
+    document.getElementById('score-display-content').innerHTML = `
+        <div class="total-card">
+            <h3>Cumulative Score</h3>
+            <div style="font-size:5rem; font-weight:800; margin:20px 0;">${total}</div>
+            <p>Across ${count} papers attempted</p>
+        </div>`;
+}
+
+// === NEW LEADERBOARD LOGIC ===
+function toggleLeaderboardPanel() {
+    const panel = document.getElementById('leaderboard-panel');
+    document.getElementById('leaderboard-overlay').classList.toggle('active');
+    panel.classList.toggle('active');
+    if(panel.classList.contains('active')) loadCloudLeaderboard();
+}
+
+async function loadCloudLeaderboard() {
+    const lb = await window.CloudManager.getLeaderboard();
+    const sorted = Object.values(lb).sort((a,b) => b.total - a.total); // Sort by Total
+    
+    let html = `<table class="modern-table"><thead><tr><th>Rank</th><th>Name</th><th>Business</th><th>Econ</th></tr></thead><tbody>`;
+    
+    sorted.forEach((s, i) => {
+        html += `<tr>
+            <td>#${i+1}</td>
+            <td style="font-weight:bold;">${s.name}</td>
+            <td><span class="score-badge" style="background:#e0f2fe; color:#0284c7;">${s.business || 0}</span></td>
+            <td><span class="score-badge" style="background:#fef3c7; color:#d97706;">${s.economics || 0}</span></td>
+        </tr>`;
+    });
+    
+    document.getElementById('leaderboard-content').innerHTML = html + "</tbody></table>";
 }

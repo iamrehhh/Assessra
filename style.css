@@ -383,3 +383,33 @@ textarea.expanded {
 .paper-link:hover, .paper-link.active { 
     background: #f0f0f0; color: var(--lime-dark); border-left-color: var(--lime-primary); 
 }
+
+/* === LEFT SIDE MENU ANIMATION === */
+.side-menu.left-side {
+    right: auto;      /* Remove right-side positioning */
+    left: -350px;     /* Hide on the left */
+    border-right: 1px solid #ddd;
+    border-left: none;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.side-menu.left-side.active {
+    left: 0;          /* Slide into view */
+}
+
+/* === SCORECARD STYLES === */
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 1rem;
+}
+.total-card {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}

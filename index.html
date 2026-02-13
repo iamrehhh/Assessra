@@ -35,8 +35,8 @@
         <button class="nav-btn active" onclick="setView('papers')">Papers</button>
         <button class="nav-btn" onclick="setView('formulae')">Formulae</button>
         <button class="nav-btn" onclick="setView('definitions')">Definitions</button>
-        <button class="nav-btn" onclick="setView('scorecard')">Scorecard</button>
-        <button class="nav-btn" onclick="setView('leaderboard')">🏆 Leaderboard</button>
+        <button class="nav-btn" onclick="toggleScorecardPanel()"> Scorecard</button>
+<button class="nav-btn" onclick="toggleLeaderboardPanel()">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="toggleChat()" style="position: relative; color: #3b82f6; font-weight: 800;">
             <span style="font-size: 1.5rem; vertical-align: middle; margin-right: 5px;">💬</span>
             <span id="unread-badge" class="unread-badge hidden"></span>
@@ -620,7 +620,7 @@
 </div>
 </div>
 
-<script src="storage_manager.js"></script>
+<script type="module" src="cloud_storage.js"></script>
     <script src="business_p3.js"></script> <script src="business_p4.js"></script>
     <script src="economics_p3.js"></script>
     <script src="economics_p4.js"></script>
@@ -632,6 +632,44 @@
 
 </body>
 </html>
+
+<div id="scorecard-overlay" class="side-menu-overlay" onclick="toggleScorecardPanel()"></div>
+<div id="scorecard-panel" class="side-menu left-side">
+    <div class="menu-header">
+        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">My Performance</h3>
+        <button class="menu-close" onclick="toggleScorecardPanel()">✖</button>
+    </div>
+    
+    <div class="subject-group">
+        <button class="subject-btn" onclick="toggleSubject('score-sub-business')">Business <span>▼</span></button>
+        <div id="score-sub-business" class="subject-content expanded">
+            <div id="sc-list-business"></div>
+        </div>
+    </div>
+
+    <div class="subject-group">
+        <button class="subject-btn" onclick="toggleSubject('score-sub-econ')">Economics <span>▼</span></button>
+        <div id="score-sub-econ" class="subject-content">
+            <div id="sc-list-economics"></div>
+        </div>
+    </div>
+</div>
+
+<div id="leaderboard-overlay" class="side-menu-overlay" onclick="toggleLeaderboardPanel()"></div>
+<div id="leaderboard-panel" class="side-menu left-side">
+    <div class="menu-header">
+        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Class Rankings</h3>
+        <button class="menu-close" onclick="toggleLeaderboardPanel()">✖</button>
+    </div>
+    <div id="leaderboard-content" style="padding: 20px;"></div>
+</div>
+
+<div id="view-score-display" class="hidden" style="padding: 40px; text-align: center;">
+    <button class="nav-btn" onclick="setView('papers')" style="float:left;">← Back</button>
+    <div style="clear:both;"></div>
+    <h2 id="score-display-title" style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 20px;">Paper Details</h2>
+    <div id="score-display-content"></div>
+</div>
 
 </body>
 </html>
