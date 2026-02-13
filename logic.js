@@ -141,14 +141,31 @@ function initApp(u) {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
-    // Hide all main views
+    // 1. Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
     });
-    // Show target view
+
+    // 2. Show target view
     const target = document.getElementById(`view-${viewName}`);
     if(target) target.classList.remove('hidden');
+
+    // 3. Update Navigation Buttons (The Fix)
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        
+        // Match button text to view name
+        const text = btn.innerText.toLowerCase().trim();
+        
+        // Simple mapping check
+        if (text === viewName || 
+           (viewName === 'papers' && text === 'papers') ||
+           (viewName === 'formulae' && text === 'formulae') ||
+           (viewName === 'definitions' && text === 'definitions')) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function backToDash() { setView('papers'); }
