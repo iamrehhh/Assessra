@@ -353,13 +353,37 @@ textarea.expanded {
 }
 .side-menu-overlay.active { opacity: 1; pointer-events: auto; }
 
+/* === WIDER SLIDING PANELS === */
 .side-menu { 
-    position: fixed; top: 0; right: -350px; width: 300px; height: 100vh; 
-    background: white; z-index: 4001; box-shadow: -5px 0 25px rgba(0,0,0,0.1); 
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; 
-    display: flex; flex-direction: column; 
+    position: fixed; 
+    top: 0; 
+    width: 50vw; /* Takes up 50% of the screen width */
+    min-width: 350px; /* But never gets smaller than phone size */
+    height: 100vh; 
+    background: white; 
+    z-index: 4001; 
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1); 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column; 
+
+    /* Default (Right Side) hidden state */
+    right: -55vw; 
 }
+
 .side-menu.active { right: 0; }
+
+/* Left Side Menu (Scorecard/Leaderboard) hidden state */
+.side-menu.left-side {
+    right: auto;
+    left: -55vw; 
+    border-right: 1px solid #ddd;
+}
+
+.side-menu.left-side.active {
+    left: 0;
+}
 
 .menu-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 .menu-close { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #888; transition: 0.2s; }
