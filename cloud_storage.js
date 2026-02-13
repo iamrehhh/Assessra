@@ -15,7 +15,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 window.CloudManager = {
-    // 1. SAVE INDIVIDUAL ATTEMPT
+    // SAVE ATTEMPT
     saveAttempt: async (user, paperId, qNum, data) => {
         if (!user) return;
         const safeUser = user.replace('.', '_');
@@ -23,7 +23,7 @@ window.CloudManager = {
         CloudManager.updateLeaderboard(safeUser);
     },
 
-    // 2. SAVE MCQ BATCH (For Paper 3)
+    // SAVE MCQ BATCH
     saveMCQBatch: async (user, paperId, allAnswers) => {
         if (!user) return;
         const safeUser = user.replace('.', '_');
@@ -31,15 +31,17 @@ window.CloudManager = {
         CloudManager.updateLeaderboard(safeUser);
     },
 
-    // 3. GET DATA
+    // GET DATA
     getAllData: async (user) => {
         if (!user) return {};
         const safeUser = user.replace('.', '_');
-        const snapshot = await get(child(ref(db), `students/${safeUser}`));
-        return snapshot.exists() ? snapshot.val() : {};
+        try {
+            const snapshot = await get(child(ref(db), `students/${safeUser}`));
+            return snapshot.exists() ? snapshot.val() : {};
+        } catch (error) { return {}; }
     },
 
-    // 4. UPDATE LEADERBOARD (THE FIX IS HERE)
+    // UPDATE LEADERBOARD (STRICT FIX)
     updateLeaderboard: async (safeUser) => {
         const snapshot = await get(child(ref(db), `students/${safeUser}/papers`));
         if (snapshot.exists()) {
@@ -47,28 +49,26 @@ window.CloudManager = {
             let biz = 0, econ = 0;
 
             Object.keys(papers).forEach(pid => {
-                let subject = '';
+                let isEcon = false;
 
-                // === STRICT CLASSIFICATION LOGIC ===
-                if (pid.startsWith('econ_')) {
-                    subject = 'economics';
-                } else if (pid.startsWith('gp_')) {
-                    subject = 'general';
-                } else {
-                    // If it doesn't start with 'econ', it's Business (e.g., '2024_mj_31')
-                    subject = 'business';
-                }
-
-                // Sum up scores
+                // 1. Check ID Prefix
+                if (pid.startsWith('econ_')) isEcon = true;
+                
+                // 2. Double check 9708 vs 9609 patterns if prefix is missing
+                else if (pid.includes('9708')) isEcon = true;
+                
+                // 3. Everything else defaults to Business (9609)
+                
+                // Sum scores
                 Object.values(papers[pid]).forEach(q => {
                     if (q.score) {
-                        if (subject === 'business') biz += q.score;
-                        else if (subject === 'economics') econ += q.score;
+                        if (isEcon) econ += q.score;
+                        else biz += q.score;
                     }
                 });
             });
 
-            // Save to public leaderboard
+            // Push clean data to leaderboard
             await update(ref(db, `leaderboard/${safeUser}`), {
                 name: safeUser.replace('_', '.'),
                 business: biz,
@@ -78,7 +78,7 @@ window.CloudManager = {
         }
     },
 
-    // 5. GET GLOBAL LEADERBOARD
+    // GET LEADERBOARD
     getLeaderboard: async () => {
         const snapshot = await get(child(ref(db), `leaderboard`));
         return snapshot.exists() ? snapshot.val() : {};

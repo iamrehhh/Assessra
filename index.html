@@ -667,10 +667,21 @@
 <div id="leaderboard-overlay" class="side-menu-overlay" onclick="toggleLeaderboardPanel()"></div>
 <div id="leaderboard-panel" class="side-menu left-side">
     <div class="menu-header">
-        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Class Rankings</h3>
+        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Leaderboards</h3>
         <button class="menu-close" onclick="toggleLeaderboardPanel()">✖</button>
     </div>
-    <div id="leaderboard-content" style="padding: 20px;"></div>
+    
+    <div class="subject-group">
+        <div class="paper-link" onclick="switchLeaderboardView('overall')">🏆 Overall Rankings</div>
+        <div class="paper-link" onclick="switchLeaderboardView('business')">💼 Business (9609)</div>
+        <div class="paper-link" onclick="switchLeaderboardView('economics')">📈 Economics (9708)</div>
+    </div>
+</div>
+
+<div id="view-leaderboard" class="hidden" style="padding: 40px; text-align: center; max-width: 900px; margin: 0 auto;">
+    <h2 id="lb-title" style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 10px; font-family:'Playfair Display', serif;">Class Rankings</h2>
+    <p id="lb-subtitle" style="color: #666; margin-bottom: 30px;">Top performing students</p>
+    <div id="leaderboard-container"></div>
 </div>
 
 <div id="view-score-display" class="hidden" style="padding: 40px; text-align: center;">

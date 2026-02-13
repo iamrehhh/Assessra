@@ -49,20 +49,119 @@ function toggleScorecardPanel() {
     }
 }
 
-// Left Side Leaderboard
+// === LEADERBOARD LOGIC ===
+
+// 1. Toggle the Side Panel
 function toggleLeaderboardPanel() {
     const panel = document.getElementById('leaderboard-panel');
     const overlay = document.getElementById('leaderboard-overlay');
+    
+    // Close others first
+    closeAllPanels();
 
     if (panel.classList.contains('active')) {
         panel.classList.remove('active');
         overlay.classList.remove('active');
     } else {
-        closeAllPanels(); // Force close others
         panel.classList.add('active');
         overlay.classList.add('active');
-        loadCloudLeaderboard(); // Load data when opening
     }
+}
+
+// 2. Switch View (Called when clicking a button in the panel)
+async function switchLeaderboardView(category) {
+    // Close panel
+    toggleLeaderboardPanel();
+    
+    // Switch to main view
+    setView('leaderboard');
+    
+    // Update Titles
+    const titleEl = document.getElementById('lb-title');
+    const subEl = document.getElementById('lb-subtitle');
+    const container = document.getElementById('leaderboard-container');
+    
+    container.innerHTML = `<div style="padding:40px; color:#888;">⏳ Loading ${category} data...</div>`;
+
+    if (category === 'overall') {
+        titleEl.innerText = "🏆 Overall Class Rankings";
+        subEl.innerText = "Combined scores across all subjects";
+    } else if (category === 'business') {
+        titleEl.innerText = "💼 Business Leaderboard";
+        subEl.innerText = "Top performers in Business (9609)";
+    } else if (category === 'economics') {
+        titleEl.innerText = "📈 Economics Leaderboard";
+        subEl.innerText = "Top performers in Economics (9708)";
+    }
+
+    // Fetch and Render
+    await renderBigLeaderboard(category);
+}
+
+// 3. Render the Big Table
+async function renderBigLeaderboard(category) {
+    const lbData = await window.CloudManager.getLeaderboard();
+    const container = document.getElementById('leaderboard-container');
+    
+    // Convert to array
+    let sorted = Object.values(lbData);
+
+    // Filter & Sort based on Category
+    if (category === 'overall') {
+        sorted.sort((a, b) => (b.total || 0) - (a.total || 0));
+    } else if (category === 'business') {
+        sorted.sort((a, b) => (b.business || 0) - (a.business || 0));
+    } else if (category === 'economics') {
+        sorted.sort((a, b) => (b.economics || 0) - (a.economics || 0));
+    }
+
+    // Build Table Header
+    let scoreHeader = "Total Score";
+    if (category === 'business') scoreHeader = "Business Score";
+    if (category === 'economics') scoreHeader = "Econ Score";
+
+    let html = `<table class="modern-table" style="text-align:left;">
+        <thead>
+            <tr>
+                <th style="width:100px;">Rank</th>
+                <th>Student Name</th>
+                <th style="text-align:right;">${scoreHeader}</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+    sorted.forEach((s, index) => {
+        let score = 0;
+        if (category === 'overall') score = s.total || 0;
+        else if (category === 'business') score = s.business || 0;
+        else if (category === 'economics') score = s.economics || 0;
+
+        // Medals
+        let rankDisplay = `#${index + 1}`;
+        if (index === 0) rankDisplay = '🥇';
+        if (index === 1) rankDisplay = '🥈';
+        if (index === 2) rankDisplay = '🥉';
+
+        // Highlight current user
+        const isMe = (getUser() && s.name && getUser().includes(s.name));
+        const rowStyle = isMe ? 'background:#f0fdf4; border-left: 4px solid var(--lime-primary);' : '';
+
+        html += `
+            <tr style="${rowStyle}">
+                <td style="font-size:1.2rem; font-weight:bold;">${rankDisplay}</td>
+                <td style="font-weight:700; color:#333;">
+                    ${s.name} 
+                    ${isMe ? '<span style="font-size:0.8rem; color:var(--lime-dark); margin-left:5px;">(You)</span>' : ''}
+                </td>
+                <td style="text-align:right;">
+                    <span class="score-badge" style="font-size:1.1rem;">${score}</span>
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `</tbody></table>`;
+    container.innerHTML = html;
 }
 
 // Chat Panel (Right Side)
