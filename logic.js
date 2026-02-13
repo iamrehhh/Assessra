@@ -95,6 +95,14 @@ function tryLogin() {
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
+    // ... (your existing hiding code) ...
+
+    // ADD THIS BLOCK:
+    if (viewName === 'scorecard') {
+        updateStats(); // <--- CRITICAL: This runs the calculation!
+    }
+    
+    // ... (rest of your function) ...}
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if(el) el.classList.add('hidden');
@@ -511,38 +519,26 @@ function filterLeaderboard(subject) {
 }
 
 function filterScorecard(subject, paper) {
-    toggleFilterMenu(); // Close menu
-    setView('scorecard'); // Show screen
+    toggleFilterMenu();
+    setView('scorecard');
 
     const allScores = typeof StorageManager !== 'undefined' ? StorageManager.getHistory() : [];
     const container = document.getElementById('score-table-container');
     
-    // === STRICT FILTERING ===
+    // === FILTERING ===
     const filtered = allScores.filter(item => {
-        // 1. Check Subject (Exact Match)
         const matchSub = item.subject === subject;
-        
-        // 2. Check Paper (Handle "Paper 3" vs "Paper 3 (MCQ)")
         let matchPaper = false;
-        if (paper === 'All') {
-            matchPaper = true;
-        } else {
-            // Flexible match: "Paper 3" matches "Paper 3" AND "Paper 3 (MCQ)"
-            matchPaper = item.paper.includes(paper);
-        }
-
+        if (paper === 'All') matchPaper = true;
+        else matchPaper = item.paper.includes(paper);
         return matchSub && matchPaper;
     });
 
-    // === RENDER ===
     if (filtered.length === 0) {
         container.innerHTML = `
             <div style="text-align:center; padding:50px; color:#888;">
                 <h3 style="margin:0;">${subject}</h3>
-                <p>${paper}</p>
-                <br>
-                <p>No attempts found for this category.</p>
-                <button onclick="setView('papers')" style="margin-top:10px; padding:8px 16px; background:var(--lime-primary); color:white; border:none; border-radius:6px; cursor:pointer;">Start a Paper</button>
+                <p>No records found for ${paper}.</p>
             </div>`;
         return;
     }
@@ -554,11 +550,21 @@ function filterScorecard(subject, paper) {
         </div>`;
         
     filtered.forEach(s => {
-        // Determine Color based on Score (Green for high, Orange for mid, Red for low/zero)
-        let borderCol = '#cbd5e1'; // Grey default
-        if (s.score >= 80) borderCol = '#22c55e';
-        else if (s.score >= 50) borderCol = '#f59e0b';
-        else if (s.score > 0) borderCol = '#ef4444';
+        // === DISPLAY LOGIC ===
+        let scoreDisplay = "";
+        let borderCol = "#cbd5e1"; // Default Grey
+
+        if (s.type === 'MCQ' || (s.score !== null && s.score !== 0)) {
+            // It has a real score (MCQ or manually graded)
+            scoreDisplay = `${s.score}%`;
+            if (s.score >= 80) borderCol = '#22c55e'; // Green
+            else if (s.score >= 50) borderCol = '#f59e0b'; // Orange
+            else borderCol = '#ef4444'; // Red
+        } else {
+            // It is an Essay paper with no manual score
+            scoreDisplay = "Viewed"; 
+            borderCol = "#3b82f6"; // Blue for Practice
+        }
 
         html += `
             <div class="score-card-item" style="border-left: 5px solid ${borderCol}; padding:15px; margin-bottom:12px; background:white; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius: 6px;">
@@ -570,12 +576,76 @@ function filterScorecard(subject, paper) {
                         </div>
                     </div>
                     <div style="text-align:right;">
-                        <span style="display:block; font-size:1.4rem; font-weight:800; color:${borderCol};">${s.score}%</span>
-                        <span style="font-size:0.75rem; color:#9ca3af;">${s.submitted ? 'Completed' : 'Viewed'}</span>
+                        <span style="display:block; font-size:1.4rem; font-weight:800; color:${borderCol};">${scoreDisplay}</span>
                     </div>
                 </div>
             </div>
         `;
     });
     container.innerHTML = html;
+}
+
+// ==========================================
+// 3. STATS CALCULATOR (The Colored Boxes)
+// ==========================================
+function updateStats() {
+    // Safety check: If StorageManager isn't loaded, stop.
+    if (typeof StorageManager === 'undefined') return;
+
+    const history = StorageManager.getHistory();
+    const statsContainer = document.getElementById('stats-overview');
+    
+    if (!statsContainer) return;
+
+    // 1. Aggregate Data
+    let subjects = {}; 
+
+    history.forEach(item => {
+        // Create subject entry if it doesn't exist
+        if (!subjects[item.subject]) {
+            subjects[item.subject] = { totalScore: 0, count: 0, gradedCount: 0 };
+        }
+        
+        // Always count the attempt (for "Papers Attempted")
+        subjects[item.subject].count++; 
+        
+        // Only calculate average if it is a graded paper (like MCQ)
+        if (item.score !== null) {
+             subjects[item.subject].totalScore += item.score;
+             subjects[item.subject].gradedCount++;
+        }
+    });
+
+    // 2. Build HTML for the boxes
+    let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">`;
+
+    if (Object.keys(subjects).length === 0) {
+        html += `<div style="grid-column: 1/-1; text-align:center; color:#888;">No data yet. Open a paper to start!</div>`;
+    } else {
+        for (const [subName, data] of Object.entries(subjects)) {
+            // Calculate Average (only for graded papers)
+            let avgDisplay = "N/A";
+            let color = "#3b82f6"; // Blue default (for Viewed only)
+
+            if (data.gradedCount > 0) {
+                const avg = Math.round(data.totalScore / data.gradedCount);
+                avgDisplay = `${avg}%`;
+                
+                // Set Color based on Score
+                if (avg < 50) color = '#ef4444';      // Red
+                else if (avg < 80) color = '#f59e0b'; // Orange
+                else color = '#22c55e';               // Green
+            }
+
+            html += `
+                <div style="background:white; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05); text-align:center; border-top: 4px solid ${color};">
+                    <div style="font-size:0.9rem; color:#666; font-weight:bold; text-transform:uppercase;">${subName}</div>
+                    <div style="font-size:2.5rem; font-weight:800; color:${color}; margin:5px 0;">${avgDisplay}</div>
+                    <div style="font-size:0.8rem; color:#9ca3af;">${data.count} Papers Attempted</div>
+                </div>
+            `;
+        }
+    }
+    html += `</div>`;
+    statsContainer.innerHTML = html;
 }
