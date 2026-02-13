@@ -2,20 +2,21 @@
 // ECONOMICS PAPER 3 (MCQ) SPLIT-SCREEN ENGINE
 // ==========================================
 
+// ⚠️ FIXED: Added 'econ_' prefix to prevent clashing with Business Papers
 const paperDatabase = {
-    "2025_on_31": { 
+    "econ_2025_on_31": { 
         pdf: "9708_w25_qp_31.pdf", 
         answers: ['A', 'A', 'C', 'A', 'D', 'A', 'D', 'D', 'B', 'B', 'C', 'A', 'D', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'C', 'A', 'D', 'B', 'A', 'B', 'A', 'D', 'A', 'C'] 
     },
-    "2025_on_32": { 
+    "econ_2025_on_32": { 
         pdf: "9708_w25_qp_32.pdf", 
         answers: ['A', 'D', 'C', 'C', 'C', 'A', 'D', 'B', 'D', 'B', 'B', 'D', 'B', 'B', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'B', 'A', 'D', 'B', 'A', 'C', 'B', 'A', 'D'] 
     },
-    "2025_on_33": { 
+    "econ_2025_on_33": { 
         pdf: "9708_w25_qp_33.pdf", 
         answers: ['C', 'A', 'B', 'D', 'D', 'C', 'C', 'B', 'D', 'D', 'A', 'D', 'B', 'A', 'B', 'D', 'A', 'A', 'D', 'C', 'B', 'C', 'A', 'D', 'C', 'B', 'A', 'B', 'D', 'A'] 
     },
-    "2025_on_34": { 
+    "econ_2025_on_34": { 
         pdf: "9708_w25_qp_34.pdf", 
         answers: ['D', 'C', 'C', 'B', 'C', 'D', 'D', 'A', 'B', 'D', 'D', 'A', 'C', 'D', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'C', 'A', 'D', 'B', 'A', 'C', 'B', 'B', 'C'] 
     }
@@ -23,7 +24,7 @@ const paperDatabase = {
 
 let currentPaperID = "";
 let timerInterval;
-let timeRemaining = 75 * 60; // 75 minutes
+let timeRemaining = 75 * 60; 
 let testSubmitted = false;
 
 function loadMCQPapers() {
@@ -32,6 +33,7 @@ function loadMCQPapers() {
 
     document.body.style.overflow = 'auto';
 
+    // ⚠️ FIXED: Updated onclick IDs to match new 'econ_' keys
     container.innerHTML = `
         <div style="text-align:center; margin-bottom:30px;">
             <h2 style="font-size:2rem; color:var(--lime-dark); font-family:'Playfair Display', serif;">📈 Economics: Paper 3 (MCQ)</h2>
@@ -40,22 +42,22 @@ function loadMCQPapers() {
         
         <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
         <div class="papers-grid">
-            <div class="paper-card" onclick="startMCQTest('2025_on_31')">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_on_31')">
                 <span class="paper-tag">9708/31</span>
                 <h3>Economics MCQ (Variant 1)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
-            <div class="paper-card" onclick="startMCQTest('2025_on_32')">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_on_32')">
                 <span class="paper-tag">9708/32</span>
                 <h3>Economics MCQ (Variant 2)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
-            <div class="paper-card" onclick="startMCQTest('2025_on_33')">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_on_33')">
                 <span class="paper-tag">9708/33</span>
                 <h3>Economics MCQ (Variant 3)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
-            <div class="paper-card" onclick="startMCQTest('2025_on_34')">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_on_34')">
                 <span class="paper-tag">9708/34</span>
                 <h3>Economics MCQ (Variant 4)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
@@ -73,13 +75,12 @@ async function startMCQTest(paperID) {
 
     document.body.style.overflow = 'hidden';
 
-    // 1. Build UI (Standard Code)
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
             <div id="mcq-header" style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 <div style="display:flex; align-items:center; gap:20px;">
                     <button onclick="exitMCQTest()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">Exit</button>
-                    <h3 style="margin:0; color:var(--lime-dark);">9708 Economics / ${paperID.replace('_', ' ')}</h3>
+                    <h3 style="margin:0; color:var(--lime-dark);">9708 Economics / ${paperID.replace('econ_', '').replace('_', ' ')}</h3>
                 </div>
                 <div id="timer-display" style="font-size: 1.5rem; font-weight: bold; color: #dc2626; font-family: monospace;">01:15:00</div>
             </div>
@@ -116,19 +117,16 @@ async function startMCQTest(paperID) {
     
     document.getElementById('container-econ-p3').innerHTML = html;
 
-    // === NEW RESTORE LOGIC (CLOUD) ===
+    // RESTORE LOGIC
     if (window.CloudManager) {
-        // Show loading state
         document.getElementById('timer-display').innerText = "SYNCING...";
-        
         const u = getUser();
         const allData = await window.CloudManager.getAllData(u);
         const savedAttempts = allData.papers ? allData.papers[paperID] : null;
 
         if (savedAttempts) {
-            // Restore answers visually
             Object.keys(savedAttempts).forEach(qNum => {
-                const index = parseInt(qNum) - 1; // Cloud uses "1", array uses 0
+                const index = parseInt(qNum) - 1;
                 const ansData = savedAttempts[qNum];
                 if (ansData.answer) {
                     const input = document.querySelector(`input[name="q${index}"][value="${ansData.answer}"]`);
@@ -138,32 +136,20 @@ async function startMCQTest(paperID) {
                     }
                 }
             });
-
-            // Auto-grade to show results
-            gradeMCQ(true); // 'true' means it's a restore
+            gradeMCQ(true);
             document.getElementById('timer-display').innerText = "COMPLETE";
             return;
         }
     }
-
     startTimer();
 }
 
-// Visual effect for clicking a bubble
 window.updateBubble = function(input, qIndex, letter) {
     if(testSubmitted) return;
-    
-    // Reset all bubbles for this question
     ['A', 'B', 'C', 'D'].forEach(l => {
         let label = document.getElementById(`label-q${qIndex}-${l}`);
-        if(label) {
-            label.style.background = 'white';
-            label.style.borderColor = '#ccc';
-            label.style.color = '#555';
-        }
+        if(label) { label.style.background = 'white'; label.style.borderColor = '#ccc'; label.style.color = '#555'; }
     });
-
-    // Highlight selected
     let selectedLabel = document.getElementById(`label-q${qIndex}-${letter}`);
     if(selectedLabel) {
         selectedLabel.style.background = 'var(--lime-primary)';
@@ -175,24 +161,18 @@ window.updateBubble = function(input, qIndex, letter) {
 function startTimer() {
     timeRemaining = 75 * 60; 
     clearInterval(timerInterval);
-    
     timerInterval = setInterval(() => {
         if(testSubmitted) return; 
         timeRemaining--;
         let h = Math.floor(timeRemaining / 3600);
         let m = Math.floor((timeRemaining % 3600) / 60);
         let s = timeRemaining % 60;
-        
-        let displayH = String(h).padStart(2, '0');
-        let displayM = String(m).padStart(2, '0');
-        let displayS = String(s).padStart(2, '0');
-        
         const timerEl = document.getElementById('timer-display');
-        if(timerEl) timerEl.innerText = displayH + ":" + displayM + ":" + displayS;
+        if(timerEl) timerEl.innerText = String(h).padStart(2,'0') + ":" + String(m).padStart(2,'0') + ":" + String(s).padStart(2,'0');
 
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
-            alert("Time is up! Your test is being automatically submitted.");
+            alert("Time is up!");
             gradeMCQ();
         }
     }, 1000);
@@ -212,8 +192,6 @@ function gradeMCQ(isRestoring = false) {
     
     const answers = paperDatabase[currentPaperID].answers;
     let score = 0;
-    
-    // Object to hold data for Cloud Saving
     let cloudData = {}; 
     
     answers.forEach((correctLetter, index) => {
@@ -221,7 +199,7 @@ function gradeMCQ(isRestoring = false) {
         const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
         const userChoice = selectedInput ? selectedInput.value : null;
 
-        // Visual Marking Logic
+        // Visual Marking
         ['A', 'B', 'C', 'D'].forEach(l => {
             let lbl = document.getElementById(`label-q${index}-${l}`);
             if(lbl) lbl.style.color = '#555';
@@ -231,71 +209,42 @@ function gradeMCQ(isRestoring = false) {
         if (isCorrect) score++;
 
         // Add to Cloud Data Package
-        cloudData[qNum] = {
-            answer: userChoice,
-            score: isCorrect ? 1 : 0,
-            correctAnswer: correctLetter
-        };
+        cloudData[qNum] = { answer: userChoice, score: isCorrect ? 1 : 0, correctAnswer: correctLetter };
 
-        // UI Coloring
         if (isCorrect) {
-            let correctLabel = document.getElementById(`label-q${index}-${correctLetter}`);
-            if(correctLabel) {
-                correctLabel.style.backgroundColor = "#22c55e";
-                correctLabel.style.borderColor = "#22c55e";
-                correctLabel.style.color = "white";
-            }
+            let cl = document.getElementById(`label-q${index}-${correctLetter}`);
+            if(cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
             document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #22c55e";
         } else {
-            let correctLabel = document.getElementById(`label-q${index}-${correctLetter}`);
-            if(correctLabel) {
-                correctLabel.style.backgroundColor = "#22c55e";
-                correctLabel.style.borderColor = "#22c55e";
-                correctLabel.style.color = "white";
-            }
+            let cl = document.getElementById(`label-q${index}-${correctLetter}`);
+            if(cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
             if (userChoice) {
-                let userLabel = document.getElementById(`label-q${index}-${userChoice}`);
-                if(userLabel) {
-                    userLabel.style.backgroundColor = "#ef4444";
-                    userLabel.style.borderColor = "#ef4444";
-                    userLabel.style.color = "white";
-                }
+                let ul = document.getElementById(`label-q${index}-${userChoice}`);
+                if(ul) { ul.style.backgroundColor = "#ef4444"; ul.style.borderColor = "#ef4444"; ul.style.color = "white"; }
             }
             document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #ef4444";
         }
     });
 
-    // Show Score
     const percent = Math.round((score / answers.length) * 100);
     const resultBox = document.getElementById('mcq-result-box');
     if(resultBox) {
         resultBox.style.display = "block";
-        resultBox.innerHTML = `
-            <h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1>
-            <h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>
-            <p style="font-size:1rem; color:#666; margin-top: 10px;">Review your answers below.</p>
-        `;
+        resultBox.innerHTML = `<h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1><h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>`;
     }
 
     const subBtn = document.getElementById('submit-btn');
     if(subBtn) subBtn.style.display = "none";
-    const timerEl = document.getElementById('timer-display');
-    if(timerEl) timerEl.innerText = "TEST COMPLETE";
     
-    // Scroll to top
-    const sheet = document.getElementById('answer-sheet-container');
-    if(sheet) sheet.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // === SAVE TO CLOUD (BATCH) ===
-    if (!isRestoring && window.CloudManager) {
+    // ⚠️ FIXED: Ensures data is saved using the correct Cloud method
+    if (!isRestoring && window.CloudManager && window.CloudManager.saveMCQBatch) {
         window.CloudManager.saveMCQBatch(getUser(), currentPaperID, cloudData);
     }
 }
 
 function exitMCQTest() {
-    document.body.style.overflow = 'auto'; // Restore normal scrolling
+    document.body.style.overflow = 'auto'; 
     loadMCQPapers(); 
 }
 
-// Initial Load
 document.addEventListener("DOMContentLoaded", loadMCQPapers);

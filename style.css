@@ -432,3 +432,21 @@ textarea.expanded {
     border-left: 4px solid var(--lime-primary) !important;
     color: var(--lime-dark) !important;
 }
+
+/* Scorecard Subheaders */
+.paper-subsection-title {
+    background: #eee;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #fff;
+}
+.total-link {
+    background: #f0fdf4 !important;
+    border-left: 4px solid var(--lime-primary) !important;
+    color: var(--lime-dark) !important;
+}
