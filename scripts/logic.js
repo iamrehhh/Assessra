@@ -355,7 +355,7 @@ function backToDash() {
 
 // === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
 
-async function openPaper(pid) {
+async function openPaper(pid, preservedScrollTop = 0) {
     const data = paperData[pid];
 
     const u = getUser();
@@ -463,6 +463,12 @@ async function openPaper(pid) {
 
     // Setup resizable divider
     setupResizableDivider();
+
+    // Restore scroll if provided
+    if (preservedScrollTop > 0) {
+        const qPanel = document.getElementById('questions-panel');
+        if (qPanel) qPanel.scrollTop = preservedScrollTop;
+    }
 }
 
 function closePaperView() {
@@ -576,7 +582,13 @@ async function submitAnswer(pid, qn) {
             modelAnswer: json.model_answer
         });
 
-        await openPaper(pid); // Refresh view
+        // Get current scroll from closure or re-query if needed, 
+        // but better to get it from the panel currently in DOM before refresh
+        // Actually submitAnswer is called from the old DOM, so we can get it from document
+        const qPanel = document.getElementById('questions-panel');
+        const currentScroll = qPanel ? qPanel.scrollTop : 0;
+
+        await openPaper(pid, currentScroll); // Refresh view with scroll preserved
 
     } catch (e) {
         console.error(e);
