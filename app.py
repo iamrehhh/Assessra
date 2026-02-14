@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import google.generativeai as genai
+import requests
 import os
 
 app = Flask(__name__)
@@ -8,10 +8,52 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ==========================================
-# ⚠ PASTE YOUR API KEY BELOW
+# ⚠ API KEYS CONFIGURATION
 # ==========================================
-genai.configure(api_key="AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg") 
-model = genai.GenerativeModel('models/gemini-2.5-flash')
+# API Key for Paper Checking (Strict Marking)
+MARKING_API_KEY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
+
+# API Key for AI Tutor (Chat)
+# TODO: Replace with your second API key if you have one, or keep same for now.
+TUTOR_API_KEY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
+
+# Model Configuration
+MODEL_NAME = "gemini-2.5-flash"
+
+def generate_with_gemini(api_key, system_instruction, user_prompt):
+    """
+    Helper function to call Gemini API via REST to support multiple keys safely.
+    """
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
+    
+    payload = {
+        "contents": [{
+            "parts": [{"text": user_prompt}]
+        }],
+        "systemInstruction": {
+            "parts": [{"text": system_instruction}]
+        }
+    }
+    
+    headers = {'Content-Type': 'application/json'}
+    
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status()
+        result = response.json()
+        
+        # Extract text from response
+        if 'candidates' in result and result['candidates']:
+            content = result['candidates'][0]['content']['parts'][0]['text']
+            return content
+        else:
+            return None
+            
+    except Exception as e:
+        print(f"API Error: {e}")
+        if response.text:
+            print(f"Response: {response.text}")
+        return None
 
 @app.route('/mark', methods=['POST'])
 def mark():
@@ -55,7 +97,9 @@ def mark():
     system_prompt = f"""
     You are a Strict Senior Cambridge A-Level Business Examiner. 
     Mark the following answer with NO MERCY.
-    
+    """
+
+    user_prompt = f"""
     CASE STUDY CONTEXT:
     {case_study}
 
@@ -82,12 +126,13 @@ def mark():
     }}
     """
     
-    try:
-        response = model.generate_content(system_prompt)
-        text = response.text.replace('```json', '').replace('```', '').strip()
-        return text, 200, {'Content-Type': 'application/json'}
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    text = generate_with_gemini(MARKING_API_KEY, system_prompt, user_prompt)
+    
+    if text:
+        cleaned_text = text.replace('```json', '').replace('```', '').strip()
+        return cleaned_text, 200, {'Content-Type': 'application/json'}
+    else:
+        return jsonify({"error": "Failed to generate marking"}), 500
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -97,22 +142,25 @@ def chat():
     if not user_msg:
         return jsonify({"reply": "Please say something!"})
 
-    # Construct prompt for AI Tutor
-    prompt = f"""
+    system_prompt = """
     You are an expert Cambridge A-Level Business and Economics Tutor.
-    The student asks: "{user_msg}"
-    
     Respond concisely (under 100 words if possible) and accurately. 
     Use a friendly, encouraging tone. 
     If they ask about a specific syllabus topic, explain it simply.
     """
+
+    user_prompt = f"""
+    The student asks: "{user_msg}"
+    """
     
-    try:
-        response = model.generate_content(prompt)
-        text = response.text.replace('```', '').strip()
-        return jsonify({"reply": text})
-    except Exception as e:
+    text = generate_with_gemini(TUTOR_API_KEY, system_prompt, user_prompt)
+    
+    if text:
+        cleaned_text = text.replace('```', '').strip()
+        return jsonify({"reply": cleaned_text})
+    else:
         return jsonify({"reply": "Sorry, I'm having trouble thinking right now. Try again later!"})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
