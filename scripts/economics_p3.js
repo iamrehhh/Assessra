@@ -5,19 +5,19 @@
 // ⚠️ FIXED: Added 'econ_' prefix to prevent clashing with Business Papers
 const paperDatabase = {
     "econ_2025_on_31": { 
-        pdf: "9708_w25_qp_31.pdf", 
+        pdf: "papers/9708_w25_qp_31.pdf", 
         answers: ['A', 'A', 'C', 'A', 'D', 'A', 'D', 'D', 'B', 'B', 'C', 'A', 'D', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'C', 'A', 'D', 'B', 'A', 'B', 'A', 'D', 'A', 'C'] 
     },
     "econ_2025_on_32": { 
-        pdf: "9708_w25_qp_32.pdf", 
+        pdf: "papers/9708_w25_qp_32.pdf", 
         answers: ['A', 'D', 'C', 'C', 'C', 'A', 'D', 'B', 'D', 'B', 'B', 'D', 'B', 'B', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'B', 'A', 'D', 'B', 'A', 'C', 'B', 'A', 'D'] 
     },
     "econ_2025_on_33": { 
-        pdf: "9708_w25_qp_33.pdf", 
+        pdf: "papers/9708_w25_qp_33.pdf", 
         answers: ['C', 'A', 'B', 'D', 'D', 'C', 'C', 'B', 'D', 'D', 'A', 'D', 'B', 'A', 'B', 'D', 'A', 'A', 'D', 'C', 'B', 'C', 'A', 'D', 'C', 'B', 'A', 'B', 'D', 'A'] 
     },
     "econ_2025_on_34": { 
-        pdf: "9708_w25_qp_34.pdf", 
+        pdf: "papers/9708_w25_qp_34.pdf", 
         answers: ['D', 'C', 'C', 'B', 'C', 'D', 'D', 'A', 'B', 'D', 'D', 'A', 'C', 'D', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'C', 'A', 'D', 'B', 'A', 'C', 'B', 'B', 'C'] 
     }
 };

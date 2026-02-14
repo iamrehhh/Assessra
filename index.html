@@ -5,18 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habibi Studies</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
     <div id="login-layer" class="login-screen">
         <div class="login-card" style="text-align: left;">
-            <img src="logo.png" alt="Logo" style="width: 100%; height: auto; display: block; margin-bottom: 20px;">
+            <img src="assets/logo.png" alt="Logo"
+                style="width: 100%; height: auto; display: block; margin-bottom: 20px;">
             <input type="text" id="u-in" class="login-input" placeholder="username">
             <input type="password" id="p-in" class="login-input" placeholder="******">
             <button class="submit-btn" onclick="tryLogin()">Sign in</button>
@@ -1933,17 +1934,22 @@
         </div>
     </div>
 
-    <script type="module" src="cloud_storage.js"></script>
-    <script src="business_p3.js"></script>
-    <script src="business_p4.js"></script>
-    <script src="economics_p3.js"></script>
-    <script src="economics_p4.js"></script>
-    <script src="general_paper.js"></script>
+    <!-- External Scripts (Logic & Data) -->
+    <script src="scripts/storage_manager.js"></script>
+    <script src="scripts/cloud_storage.js"></script>
 
-    <script src="logic.js"></script>
+    <!-- Data Files -->
+    <script src="scripts/business_p3.js"></script>
+    <script src="scripts/business_p4.js"></script>
+    <script src="scripts/economics_p3.js"></script>
+    <script src="scripts/economics_p4.js"></script>
+    <script src="scripts/general_paper.js"></script>
 
-    <script type="module" src="chat.js"></script>
+    <!-- Chat Logic (Firebase) -->
+    <script src="scripts/chat.js" type="module"></script>
 
+    <!-- Main Logic -->
+    <script src="scripts/logic.js"></script>
 </body>
 
 </html>

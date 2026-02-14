@@ -13,7 +13,7 @@ Object.assign(paperData, {
     // --- MAY / JUNE 2025 (Variant 11) ---
     'gp_2025_mj_11': { 
         title: "Essay Paper 11", 
-        pdf: "8021_s25_qp_11.pdf", 
+        pdf: "papers/8021_s25_qp_11.pdf", 
         questions: [
             { n:'1', m:30, t:"To what extent does the government provide effective public services to the people of your country?", l:'600-700'},
             { n:'2', m:30, t:"Discuss the view that the news media should never be censored in your country.", l:'600-700'},
@@ -31,7 +31,7 @@ Object.assign(paperData, {
     // --- MAY / JUNE 2025 (Variant 12) ---
     'gp_2025_mj_12': { 
         title: "Essay Paper 12", 
-        pdf: "8021_s25_qp_12.pdf", 
+        pdf: "papers/8021_s25_qp_12.pdf", 
         questions: [
             { n:'1', m:30, t:"Governments should prioritise the needs of people living in rural areas over the needs of people living in cities. Discuss.", l:'600-700'},
             { n:'2', m:30, t:"To what extent do traditional arts and crafts provide an understanding of your country's history?", l:'600-700'},
@@ -49,7 +49,7 @@ Object.assign(paperData, {
     // --- MAY / JUNE 2025 (Variant 13) ---
     'gp_2025_mj_13': { 
         title: "Essay Paper 13", 
-        pdf: "8021_s25_qp_13.pdf", 
+        pdf: "papers/8021_s25_qp_13.pdf", 
         questions: [
             { n:'1', m:30, t:"Everyone must help their country in times of war. To what extent do you agree with this statement?", l:'600-700'},
             { n:'2', m:30, t:"To what extent should towns be designed to support people's needs?", l:'600-700'},
