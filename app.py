@@ -218,6 +218,29 @@ def chat():
     else:
         return jsonify({"reply": "Sorry, I'm having trouble thinking right now. Try again later!"})
 
+# ==========================================
+# VOCAB PROGRESS CLOUD STORAGE
+# ==========================================
+# Simple in-memory storage (replace with database for production)
+vocab_progress_db = {}
+
+@app.route('/save_vocab_progress', methods=['POST'])
+def save_vocab_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')  # Use 'default_user' if no login system
+    progress = data.get('progress', {})
+    
+    vocab_progress_db[user_id] = progress
+    return jsonify({"status": "success", "message": "Progress saved"})
+
+@app.route('/load_vocab_progress', methods=['POST'])
+def load_vocab_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    progress = vocab_progress_db.get(user_id, None)
+    return jsonify({"progress": progress})
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

@@ -216,18 +216,30 @@ let vocabScore = 0;
 let vocabAnswered = 0;
 
 // LOAD VOCAB QUIZ
-function loadVocabQuiz() {
+async function loadVocabQuiz() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    // Load saved progress from localStorage
-    const saved = localStorage.getItem('vocabProgress');
-    if (saved) {
-        const progress = JSON.parse(saved);
-        vocabScore = progress.score || 0;
-        vocabAnswered = progress.answered || 0;
-        currentQuestion = progress.current || 0;
-    } else {
+    // Load saved progress from cloud
+    try {
+        const response = await fetch('/load_vocab_progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: 'default_user' })
+        });
+        const data = await response.json();
+
+        if (data.progress) {
+            vocabScore = data.progress.score || 0;
+            vocabAnswered = data.progress.answered || 0;
+            currentQuestion = data.progress.current || 0;
+        } else {
+            currentQuestion = 0;
+            vocabScore = 0;
+            vocabAnswered = 0;
+        }
+    } catch (e) {
+        console.error('Failed to load progress:', e);
         currentQuestion = 0;
         vocabScore = 0;
         vocabAnswered = 0;
@@ -236,12 +248,23 @@ function loadVocabQuiz() {
     renderVocabQuestion();
 }
 
-function saveVocabProgress() {
-    localStorage.setItem('vocabProgress', JSON.stringify({
-        score: vocabScore,
-        answered: vocabAnswered,
-        current: currentQuestion
-    }));
+async function saveVocabProgress() {
+    try {
+        await fetch('/save_vocab_progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                progress: {
+                    score: vocabScore,
+                    answered: vocabAnswered,
+                    current: currentQuestion
+                }
+            })
+        });
+    } catch (e) {
+        console.error('Failed to save progress:', e);
+    }
 }
 
 function renderVocabQuestion() {
@@ -439,9 +462,22 @@ function nextVocabQuestion() {
     renderVocabQuestion();
 }
 
-function resetVocabQuiz() {
+async function resetVocabQuiz() {
     if (confirm('Are you sure you want to reset your progress? This will clear your score and start from the beginning.')) {
-        localStorage.removeItem('vocabProgress');
+        // Clear from cloud
+        try {
+            await fetch('/save_vocab_progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: 'default_user',
+                    progress: null
+                })
+            });
+        } catch (e) {
+            console.error('Failed to reset progress:', e);
+        }
+
         currentQuestion = 0;
         vocabScore = 0;
         vocabAnswered = 0;
@@ -449,12 +485,23 @@ function resetVocabQuiz() {
     }
 }
 
-function showVocabResults() {
+async function showVocabResults() {
     const container = document.getElementById('container-vocab');
     const percentage = Math.round((vocabScore / vocabAnswered) * 100);
 
-    // Clear progress
-    localStorage.removeItem('vocabProgress');
+    // Clear progress from cloud
+    try {
+        await fetch('/save_vocab_progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                progress: null
+            })
+        });
+    } catch (e) {
+        console.error('Failed to clear progress:', e);
+    }
 
     container.innerHTML = `
         <div style="max-width: 700px; margin: 0 auto; padding: 50px; text-align: center;">
