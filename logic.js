@@ -796,7 +796,12 @@ async function handleHomeAI() {
 
         // Typewriter effect or just text? Text is fine for now.
         if (responseDiv) {
-            responseDiv.innerHTML = `<strong style="color:var(--lime-dark);">AI Tutor:</strong> ${reply}`;
+            // Simple Markdown Parser for Bold and Newlines
+            let formattedReply = reply
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold **text**
+                .replace(/\n/g, '<br>'); // Newlines
+
+            responseDiv.innerHTML = `<strong style="color:var(--lime-dark);">AI Tutor:</strong> <div style="margin-top:5px;">${formattedReply}</div>`;
         }
 
     } catch (e) {
