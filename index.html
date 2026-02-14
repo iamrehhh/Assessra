@@ -1863,8 +1863,24 @@
                         <div class="cat-header" onclick="toggleCat('alevel')">AS & A Level <span class="arrow">▾</span>
                         </div>
                         <div id="cat-alevel" class="cat-body">
-                            <div class="subject-item" onclick="selectSubject('business')">Business (9609)</div>
-                            <div class="subject-item" onclick="selectSubject('economics')">Economics (9708)</div>
+                            <!-- BUSINESS SECTION -->
+                            <div class="subject-item has-children">
+                                <div class="sub-header" onclick="toggleSubCat('business')">Business (9609) <span
+                                        class="arrow">▸</span></div>
+                                <div id="sub-business" class="sub-body hidden">
+                                    <div class="paper-item" onclick="selectPaper('business', 'p3')">Paper 3</div>
+                                    <div class="paper-item" onclick="selectPaper('business', 'p4')">Paper 4</div>
+                                </div>
+                            </div>
+                            <!-- ECONOMICS SECTION -->
+                            <div class="subject-item has-children">
+                                <div class="sub-header" onclick="toggleSubCat('economics')">Economics (9708) <span
+                                        class="arrow">▸</span></div>
+                                <div id="sub-economics" class="sub-body hidden">
+                                    <div class="paper-item" onclick="selectPaper('economics', 'p3')">Paper 3</div>
+                                    <div class="paper-item" onclick="selectPaper('economics', 'p4')">Paper 4</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

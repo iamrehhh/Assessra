@@ -853,3 +853,40 @@ function deleteNote(index) {
     loadNotes();
     createNewNote();
 }
+
+// === NEW SUB-CATEGORY LOGIC ===
+
+function toggleSubCat(subId) {
+    const el = document.getElementById(`sub-${subId}`);
+    // Simple toggle hidden class
+    if (el) {
+        el.classList.toggle('hidden');
+        // Rotate arrow if we want? (Optional enhancement)
+    }
+}
+
+function selectPaper(subject, paper) {
+    toggleSubjectsPanel(); // Close right panel
+
+    // Switch to Papers view
+    setView('papers');
+
+    // Filter logic
+    // We want to show only the specific paper container.
+    // IDs are like 'container-bus-p3', 'container-econ-p4'
+    // Let's construct the expected ID segment.
+
+    const shortSub = subject === 'business' ? 'bus' : (subject === 'economics' ? 'econ' : subject);
+    const targetIdCheck = `container-${shortSub}-${paper}`;
+
+    const container = document.getElementById('view-papers');
+    const sections = container.querySelectorAll('.subject-container');
+
+    sections.forEach(section => {
+        if (section.id === targetIdCheck) {
+            section.classList.remove('hidden');
+        } else {
+            section.classList.add('hidden');
+        }
+    });
+}

@@ -974,11 +974,13 @@ textarea.expanded {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 4000;
+    background: rgba(0, 0, 0, 0.2);
+    /* Reduced opacity */
+    z-index: 2999;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    transition: 0.3s;
+    backdrop-filter: blur(2px);
 }
 
 .side-menu-overlay.active {
@@ -1490,4 +1492,33 @@ textarea.expanded {
 .ai-send-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
+}
+/* SUB-CATEGORY STYLES */
+.sub-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #444;
+}
+.sub-header:hover {
+    color: var(--lime-dark);
+}
+.sub-body {
+    padding-left: 20px;
+}
+.paper-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #666;
+    border-left: 2px solid #eee;
+    margin: 2px 0;
+    transition: 0.2s;
+}
+.paper-item:hover {
+    border-left-color: var(--lime-primary);
+    color: var(--lime-dark);
+    background: #f9f9f9;
 }
