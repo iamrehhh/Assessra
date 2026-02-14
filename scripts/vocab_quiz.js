@@ -431,7 +431,7 @@ async function selectVocabAnswer(selectedIdx) {
                     <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${example}</span>
                 </div>
                 
-                <button onclick="saveToNotes(${currentQuestion}, ${isCorrect})" id="save-note-btn" style="
+                <button id="save-note-btn" data-question-idx="${currentQuestion}" data-is-correct="${isCorrect}" style="
                     width: 100%;
                     padding: 14px;
                     margin-top: 20px;
@@ -449,6 +449,16 @@ async function selectVocabAnswer(selectedIdx) {
                 </button>
             </div>
         `;
+
+        // Attach event listener to save button
+        const saveBtn = document.getElementById('save-note-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', function () {
+                const qIdx = parseInt(this.getAttribute('data-question-idx'));
+                const wasCorrect = this.getAttribute('data-is-correct') === 'true';
+                saveToNotes(qIdx, wasCorrect);
+            });
+        }
     } catch (e) {
         console.error('Failed to fetch example:', e);
     }
