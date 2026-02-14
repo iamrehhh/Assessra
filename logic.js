@@ -285,7 +285,7 @@ function filterView(viewId, subject) {
             section.classList.remove('hidden');
         } else {
             const sectionSubject = section.getAttribute('data-subject');
-            if (sectionSubject === subject) {
+            if (sectionSubject && sectionSubject.includes(subject)) {
                 section.classList.remove('hidden');
             } else {
                 section.classList.add('hidden');
