@@ -701,9 +701,15 @@ async function initHome() {
 
 async function updateHomeStats(user) {
     try {
-        // Safety check for CloudManager
+        // Wait for CloudManager to initialize (module loads asynchronously)
+        let retries = 0;
+        while (!window.CloudManager && retries < 10) {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Wait 100ms
+            retries++;
+        }
+
         if (!window.CloudManager) {
-            console.warn("CloudManager not initialized");
+            console.warn("CloudManager failed to initialize after retries");
             document.getElementById('home-stat-papers').innerText = "0";
             document.getElementById('home-stat-score').innerText = "0";
             document.getElementById('home-stat-rank').innerText = "-";
