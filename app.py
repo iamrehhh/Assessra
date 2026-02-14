@@ -90,6 +90,50 @@ def mark():
         - If Application (AO2) is missing, CAP Total Score at 6.
         """
         word_guide = "250-350 words"
+    elif marks <= 4:
+        # CALCULATION QUESTIONS (2-4 marks)
+        if marks == 2:
+            rubric = """
+            STRICT 2-MARK CALCULATION RUBRIC:
+            1. VERIFY mathematical accuracy step-by-step.
+            2. Mark allocation:
+               - 1 mark for correct METHOD/WORKING shown (formula, substitution, or clear process)
+               - 1 mark for correct FINAL ANSWER (with appropriate units/formatting if required)
+            3. Award method mark even if final answer is incorrect (if working is shown).
+            4. Deductions:
+               - Missing or incorrect units: -1 mark
+               - Arithmetic errors: depends on working shown
+               - No working shown: Maximum 1 mark (only if answer is miraculously correct)
+            5. Set AO1=1, AO2=0, AO3=1, AO4=0 for breakdown (method=AO1, answer=AO3).
+            """
+        elif marks == 4:
+            rubric = """
+            STRICT 4-MARK CALCULATION RUBRIC:
+            1. VERIFY mathematical accuracy step-by-step.
+            2. Mark allocation:
+               - 2 marks for correct METHOD/WORKING shown (formula stated, correct substitution, clear process)
+               - 2 marks for correct FINAL ANSWER (with appropriate units/formatting)
+            3. Award method marks even if final answer is incorrect (if working is shown).
+            4. Partial credit breakdown:
+               - Full working, wrong answer: 2/4
+               - Partial working, wrong answer: 1/4
+               - No working, correct answer: 2/4 maximum
+            5. Deductions:
+               - Missing or incorrect units: -1 mark
+               - Minor arithmetic errors with correct method: -1 mark
+               - Major conceptual errors: -2 marks
+            6. Set AO1=2, AO2=0, AO3=2, AO4=0 for breakdown (method=AO1, answer=AO3).
+            """
+        else:
+            # 1 mark or 3 mark questions (rare)
+            rubric = f"""
+            STRICT {marks}-MARK CALCULATION RUBRIC:
+            1. VERIFY mathematical accuracy.
+            2. Award marks for correct method and correct answer proportionally.
+            3. For {marks} marks, split between method and answer.
+            4. Deduct for missing units, arithmetic errors, or lack of working.
+            """
+        word_guide = "Brief calculation with complete working shown"
     else:
         rubric = f"Mark strictly according to standard Cambridge conventions for {marks} marks."
         word_guide = "Appropriate length"
@@ -98,6 +142,15 @@ def mark():
     You are a Strict Senior Cambridge A-Level Business Examiner. 
     Mark the following answer with NO MERCY.
     """
+
+    # Updated user prompt with calculation-aware model answer instruction
+    model_answer_instruction = (
+        f"<For calculation questions: Show complete step-by-step working including: "
+        f"1) Formula/method stated, 2) Values substituted clearly, 3) Calculation steps shown, "
+        f"4) Final answer with units if required. "
+        f"For essay questions: Write a perfect A* model answer ({word_guide}) using paragraphs. "
+        f"Ensure it references the case study explicitly.>"
+    ) if marks <= 4 else f"<Write a perfect A* model answer ({word_guide}) using paragraphs. Ensure it references the case study explicitly.>"
 
     user_prompt = f"""
     CASE STUDY CONTEXT:
@@ -122,7 +175,7 @@ def mark():
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
         "strengths": "<Concise bullet points on what was done well>",
         "weaknesses": "<Concise bullet points on exact errors/omissions>",
-        "model_answer": "<Write a perfect A* model answer ({word_guide}) using paragraphs. Ensure it references the case study explicitly.>"
+        "model_answer": "{model_answer_instruction}"
     }}
     """
     
