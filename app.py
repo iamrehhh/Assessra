@@ -11,7 +11,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
 # API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
+MARKING_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
 
 # API Key for AI Tutor (Chat)
 # TODO: Replace with your second API key if you have one, or keep same for now.
