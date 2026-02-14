@@ -376,6 +376,35 @@ function showIdiomsContainer() {
     closeAllPanels();
 }
 
+// Show My Sentences Container
+function showSentencesContainer() {
+    // Hide all main views
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+    });
+
+    // Hide all subject containers
+    document.querySelectorAll('.subject-container').forEach(c => c.classList.add('hidden'));
+
+    // Show papers view and sentences container
+    const papersView = document.getElementById('view-papers');
+    if (papersView) papersView.classList.remove('hidden');
+
+    const sentencesContainer = document.getElementById('container-sentences');
+    if (sentencesContainer) {
+        sentencesContainer.classList.remove('hidden');
+        if (typeof loadMySentences === 'function') {
+            loadMySentences();
+        } else {
+            console.error("loadMySentences function not found. Check sentences_view.js");
+        }
+    }
+
+    closeAllPanels();
+}
+
+
 function backToDash() {
     document.body.style.overflow = 'auto';
     setView('papers');

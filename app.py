@@ -332,6 +332,63 @@ def load_idioms_progress():
     return jsonify({"progress": progress})
 
 # ==========================================
+# SENTENCE COLLECTION STORAGE
+# ==========================================
+SENTENCES_DB_FILE = 'sentences_data.json'
+
+# Load sentences database
+sentences_db: Dict[str, Any] = load_db(SENTENCES_DB_FILE)
+if not isinstance(sentences_db, dict):
+    sentences_db = {}
+
+@app.route('/save_sentence', methods=['POST'])
+def save_sentence():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    sentence_data = data.get('sentence_data', {})
+    
+    # Initialize user sentences if not exists
+    if user_id not in sentences_db:
+        sentences_db[user_id] = {'sentences': []}
+    
+    # Add timestamp
+    from datetime import datetime
+    sentence_data['timestamp'] = datetime.utcnow().isoformat() + 'Z'
+    
+    # Append sentence
+    sentences_db[user_id]['sentences'].append(sentence_data)
+    save_db(SENTENCES_DB_FILE, sentences_db)
+    
+    return jsonify({"status": "success", "message": "Sentence saved"})
+
+@app.route('/get_sentences', methods=['POST'])
+def get_sentences():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    if user_id not in sentences_db:
+        return jsonify({"sentences": []})
+    
+    return jsonify({"sentences": sentences_db[user_id].get('sentences', [])})
+
+@app.route('/delete_sentence', methods=['POST'])
+def delete_sentence():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    timestamp = data.get('timestamp')
+    
+    if user_id in sentences_db and 'sentences' in sentences_db[user_id]:
+        sentences_db[user_id]['sentences'] = [
+            s for s in sentences_db[user_id]['sentences'] 
+            if s.get('timestamp') != timestamp
+        ]
+        save_db(SENTENCES_DB_FILE, sentences_db)
+        return jsonify({"status": "success", "message": "Sentence deleted"})
+    
+    return jsonify({"status": "error", "message": "Sentence not found"})
+
+
+# ==========================================
 # VOCAB NOTES SYSTEM
 # ==========================================
 # Notes storage with default sections

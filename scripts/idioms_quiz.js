@@ -362,7 +362,21 @@ async function loadIdiomsQuiz() {
     const container = document.getElementById('container-idioms');
     if (!container) return;
 
-    // Load saved progress from cloud
+    // Load locally first
+    const localData = localStorage.getItem('idioms_progress_local');
+    if (localData) {
+        try {
+            const parsed = JSON.parse(localData);
+            idiomsScore = parsed.score || 0;
+            idiomsAnswered = parsed.answered || 0;
+            currentIdiomQuestion = parsed.current || 0;
+            renderIdiomQuestion();
+        } catch (e) {
+            console.error("Local idioms data parse error", e);
+        }
+    }
+
+    // Sync with cloud
     try {
         const response = await fetch('/load_idioms_progress', {
             method: 'POST',
@@ -372,41 +386,48 @@ async function loadIdiomsQuiz() {
         const data = await response.json();
 
         if (data.progress) {
-            idiomsScore = data.progress.score || 0;
-            idiomsAnswered = data.progress.answered || 0;
-            currentIdiomQuestion = data.progress.current || 0;
-        } else {
-            currentIdiomQuestion = 0;
-            idiomsScore = 0;
-            idiomsAnswered = 0;
+            const cloudAnswered = data.progress.answered || 0;
+            if (cloudAnswered > idiomsAnswered) {
+                idiomsScore = data.progress.score || 0;
+                idiomsAnswered = cloudAnswered;
+                currentIdiomQuestion = data.progress.current || 0;
+                renderIdiomQuestion();
+
+                localStorage.setItem('idioms_progress_local', JSON.stringify(data.progress));
+            }
         }
     } catch (e) {
-        console.error('Failed to load idioms progress:', e);
-        currentIdiomQuestion = 0;
-        idiomsScore = 0;
-        idiomsAnswered = 0;
+        console.error('Failed to load idioms progress from cloud:', e);
     }
 
-    renderIdiomQuestion();
+    if (idiomsAnswered === 0 && !localData) {
+        renderIdiomQuestion();
+    }
 }
 
 // Save idioms progress
 async function saveIdiomsProgress() {
+    const progressData = {
+        score: idiomsScore,
+        answered: idiomsAnswered,
+        current: currentIdiomQuestion
+    };
+
+    // Save to LocalStorage
+    localStorage.setItem('idioms_progress_local', JSON.stringify(progressData));
+
+    // Save to Cloud
     try {
         await fetch('/save_idioms_progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user_id: 'default_user',
-                progress: {
-                    score: idiomsScore,
-                    answered: idiomsAnswered,
-                    current: currentIdiomQuestion
-                }
+                progress: progressData
             })
         });
     } catch (e) {
-        console.error('Failed to save idioms progress:', e);
+        console.error('Failed to save idioms progress to cloud:', e);
     }
 }
 
@@ -554,10 +575,78 @@ async function selectIdiomAnswer(selectedIdx) {
             <p style="font-size: 1.15rem; color: #333;">
                 <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
             </p>
+            ${isCorrect ? `
+                <div id="sentence-prompt-idiom" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b; text-align: left;">
+                    <h4 style="color: #b45309; margin: 0 0 15px 0; font-size: 1.2rem;">✍️ Create Your Own Sentence!</h4>
+                    <p style="color: #78350f; margin-bottom: 15px; font-size: 0.95rem;">Write a sentence using the idiom "<strong>${q.idiom}</strong>" to help you remember it.</p>
+                    <textarea id="user-sentence-idiom" placeholder="Type your sentence here..." style="width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button onclick="saveIdiomSentence('${q.idiom.replace(/'/g, "\\'")}', '${q.options[q.correct].replace(/'/g, "\\'")}', 'idiom')" style="flex: 1; padding: 12px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">💾 Save Sentence</button>
+                        <button onclick="skipIdiomSentence()" style="flex: 1; padding: 12px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">⏭️ Skip</button>
+                    </div>
+                    <div id="sentence-feedback-idiom" style="margin-top: 10px; display: none;"></div>
+                </div>
+            ` : ''}
         </div>
     `;
 
+    if (!isCorrect) {
+        document.getElementById('next-idiom-btn').style.display = 'block';
+    }
+}
+
+async function saveIdiomSentence(idiom, meaning, type) {
+    const sentenceInput = document.getElementById('user-sentence-idiom');
+    const sentence = sentenceInput.value.trim();
+    const feedbackDiv = document.getElementById('sentence-feedback-idiom');
+
+    // Validation
+    if (!sentence) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">⚠️ Please enter a sentence first!</p>';
+        return;
+    }
+
+    if (!sentence.toLowerCase().includes(idiom.toLowerCase())) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = `<p style="color: #dc2626; font-weight: 600;">⚠️ Your sentence must include the idiom "${idiom}"!</p>`;
+        return;
+    }
+
+    // Save to backend
+    try {
+        await fetch('/save_sentence', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                sentence_data: {
+                    type: type,
+                    idiom: idiom,
+                    meaning: meaning,
+                    userSentence: sentence
+                }
+            })
+        });
+
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved successfully!</p>';
+
+        setTimeout(() => {
+            document.getElementById('next-idiom-btn').style.display = 'block';
+            document.getElementById('sentence-prompt-idiom').style.opacity = '0.6';
+            sentenceInput.disabled = true;
+        }, 800);
+    } catch (e) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">❌ Failed to save. Please try again.</p>';
+        console.error('Failed to save idiom sentence:', e);
+    }
+}
+
+function skipIdiomSentence() {
     document.getElementById('next-idiom-btn').style.display = 'block';
+    document.getElementById('sentence-prompt-idiom').style.opacity = '0.6';
 }
 
 function nextIdiomQuestion() {

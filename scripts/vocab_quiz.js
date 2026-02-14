@@ -220,7 +220,21 @@ async function loadVocabQuiz() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    // Load saved progress from cloud
+    // Load locally first for speed and reliability
+    const localData = localStorage.getItem('vocab_progress_local');
+    if (localData) {
+        try {
+            const parsed = JSON.parse(localData);
+            vocabScore = parsed.score || 0;
+            vocabAnswered = parsed.answered || 0;
+            currentQuestion = parsed.current || 0;
+            renderVocabQuestion(); // Render immediately with local data
+        } catch (e) {
+            console.error("Local data parse error", e);
+        }
+    }
+
+    // Then sync with cloud (background)
     try {
         const response = await fetch('/load_vocab_progress', {
             method: 'POST',
@@ -230,41 +244,50 @@ async function loadVocabQuiz() {
         const data = await response.json();
 
         if (data.progress) {
-            vocabScore = data.progress.score || 0;
-            vocabAnswered = data.progress.answered || 0;
-            currentQuestion = data.progress.current || 0;
-        } else {
-            console.log("No saved vocab progress found, starting fresh.");
-            currentQuestion = 0;
-            vocabScore = 0;
-            vocabAnswered = 0;
+            // Only overwrite if cloud has MORE progress (optional, but safer to trust local if user was offline)
+            // For now, let's say if local is empty, use cloud. If both exist, use the one with higher answered count.
+            const cloudAnswered = data.progress.answered || 0;
+            if (cloudAnswered > vocabAnswered) {
+                vocabScore = data.progress.score || 0;
+                vocabAnswered = cloudAnswered;
+                currentQuestion = data.progress.current || 0;
+                renderVocabQuestion(); // Re-render with cloud data
+
+                // Update local to match cloud
+                localStorage.setItem('vocab_progress_local', JSON.stringify(data.progress));
+            }
         }
     } catch (e) {
-        console.error('Failed to load progress:', e);
-        currentQuestion = 0;
-        vocabScore = 0;
-        vocabAnswered = 0;
+        console.error('Failed to load cloud progress, relying on local:', e);
     }
 
-    renderVocabQuestion();
+    if (vocabAnswered === 0 && !localData) {
+        renderVocabQuestion();
+    }
 }
 
 async function saveVocabProgress() {
+    const progressData = {
+        score: vocabScore,
+        answered: vocabAnswered,
+        current: currentQuestion
+    };
+
+    // Save to LocalStorage (Instant)
+    localStorage.setItem('vocab_progress_local', JSON.stringify(progressData));
+
+    // Save to Cloud (Async)
     try {
         await fetch('/save_vocab_progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user_id: 'default_user',
-                progress: {
-                    score: vocabScore,
-                    answered: vocabAnswered,
-                    current: currentQuestion
-                }
+                progress: progressData
             })
         });
     } catch (e) {
-        console.error('Failed to save progress:', e);
+        console.error('Failed to save progress to cloud:', e);
     }
 }
 
@@ -431,13 +454,81 @@ async function selectVocabAnswer(selectedIdx) {
                     <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example:</strong><br>
                     <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${example}</span>
                 </div>
+                ${isCorrect ? `
+                    <div id="sentence-prompt" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b;">
+                        <h4 style="color: #b45309; margin: 0 0 15px 0; font-size: 1.2rem;">✍️ Create Your Own Sentence!</h4>
+                        <p style="color: #78350f; margin-bottom: 15px; font-size: 0.95rem;">Write a sentence using the word "<strong>${q.word}</strong>" to help you remember it.</p>
+                        <textarea id="user-sentence" placeholder="Type your sentence here..." style="width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button onclick="saveSentence('${q.word}', '${q.options[q.correct].replace(/'/g, "\\'")}', 'vocab')" style="flex: 1; padding: 12px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">💾 Save Sentence</button>
+                            <button onclick="skipSentence()" style="flex: 1; padding: 12px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">⏭️ Skip</button>
+                        </div>
+                        <div id="sentence-feedback" style="margin-top: 10px; display: none;"></div>
+                    </div>
+                ` : ''}
             </div>
         `;
     } catch (e) {
         console.error('Failed to fetch example:', e);
     }
 
+    if (!isCorrect) {
+        document.getElementById('next-vocab-btn').style.display = 'block';
+    }
+}
+
+async function saveSentence(word, definition, type) {
+    const sentenceInput = document.getElementById('user-sentence');
+    const sentence = sentenceInput.value.trim();
+    const feedbackDiv = document.getElementById('sentence-feedback');
+    
+    // Validation
+    if (!sentence) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">⚠️ Please enter a sentence first!</p>';
+        return;
+    }
+    
+    if (!sentence.toLowerCase().includes(word.toLowerCase())) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = `<p style="color: #dc2626; font-weight: 600;">⚠️ Your sentence must include the word "${word}"!</p>`;
+        return;
+    }
+    
+    // Save to backend
+    try {
+        await fetch('/save_sentence', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                sentence_data: {
+                    type: type,
+                    word: word,
+                    definition: definition,
+                    userSentence: sentence
+                }
+            })
+        });
+        
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved successfully!</p>';
+        
+        setTimeout(() => {
+            document.getElementById('next-vocab-btn').style.display = 'block';
+            document.getElementById('sentence-prompt').style.opacity = '0.6';
+            sentenceInput.disabled = true;
+        }, 800);
+    } catch (e) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">❌ Failed to save. Please try again.</p>';
+        console.error('Failed to save sentence:', e);
+    }
+}
+
+function skipSentence() {
     document.getElementById('next-vocab-btn').style.display = 'block';
+    document.getElementById('sentence-prompt').style.opacity = '0.6';
 }
 
 async function getAIExample(word) {
