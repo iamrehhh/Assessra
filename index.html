@@ -59,7 +59,7 @@
                     <div class="nav-item-wrapper">
                         <button class="nav-btn">Others ▾</button>
                         <div class="dropdown-menu">
-                            <div class="dropdown-item" onclick="alert('Vocab coming soon!')">Vocab</div>
+                            <div class="dropdown-item" onclick="showVocabContainer()">Vocab</div>
                             <div class="dropdown-item" onclick="alert('Idioms coming soon!')">Idioms</div>
                         </div>
                     </div>
@@ -190,6 +190,10 @@
                 </div>
 
                 <div id="container-econ-p4" class="subject-container hidden">
+                </div>
+
+                <!-- VOCABULARY QUIZ -->
+                <div id="container-vocab" class="subject-container hidden">
                 </div>
 
             </div>
@@ -2017,6 +2021,7 @@
     <script src="scripts/economics_p3.js"></script>
     <script src="scripts/economics_p4.js"></script>
     <script src="scripts/general_paper.js"></script>
+    <script src="scripts/vocab_quiz.js"></script>
 
     <!-- Chat Logic (Firebase) -->
     <script src="scripts/chat.js" type="module"></script>
