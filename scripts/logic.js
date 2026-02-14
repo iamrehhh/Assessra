@@ -411,14 +411,27 @@ async function openPaper(pid) {
             </div>
 
             <!-- Split Screen Container -->
-            <div style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
+            <div id="split-container" style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
                 <!-- Left: PDF Viewer (60%) -->
-                <div style="flex: 6; height: 100%; border-right: 2px solid #ddd;">
+                <div id="pdf-panel" style="flex: 6; height: 100%; position: relative;">
                     <iframe src="${data.pdf}#toolbar=0&navpanes=0&scrollbar=1&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
                 </div>
                 
+                <!-- Draggable Divider -->
+                <div id="divider" style="
+                    width: 8px;
+                    height: 100%;
+                    background: #ddd;
+                    cursor: col-resize;
+                    position: relative;
+                    flex-shrink: 0;
+                    transition: background 0.2s;
+                " onmouseenter="this.style.background='var(--lime-primary)'" onmouseleave="this.style.background='#ddd'">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 3px; height: 40px; background: white; border-radius: 2px; pointer-events: none;"></div>
+                </div>
+                
                 <!-- Right: Questions Panel (40%) -->
-                <div style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;" id="questions-container">
+                <div id="questions-panel" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;" id="questions-container">
                     ${qHtml}
                     <div style="height: 100px;"></div>
                 </div>
@@ -447,12 +460,59 @@ async function openPaper(pid) {
         const el = document.getElementById(`ans_${pid}_${q.n}`);
         if (el) updateWordCount(el, q.l);
     });
+
+    // Setup resizable divider
+    setupResizableDivider();
 }
 
-// New helper function to close paper view
 function closePaperView() {
     document.body.style.overflow = 'auto';
     setView('papers');
+}
+
+// Setup resizable divider for split-screen
+function setupResizableDivider() {
+    const divider = document.getElementById('divider');
+    const pdfPanel = document.getElementById('pdf-panel');
+    const questionsPanel = document.getElementById('questions-panel');
+    const container = document.getElementById('split-container');
+
+    if (!divider || !pdfPanel || !questionsPanel || !container) return;
+
+    let isDragging = false;
+
+    divider.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const newLeftWidth = e.clientX - containerRect.left;
+        const containerWidth = containerRect.width;
+
+        // Calculate percentage (min 20%, max 80%)
+        let leftPercent = (newLeftWidth / containerWidth) * 100;
+        leftPercent = Math.max(20, Math.min(80, leftPercent));
+
+        const rightPercent = 100 - leftPercent;
+
+        // Update flex values proportionally
+        pdfPanel.style.flex = leftPercent;
+        questionsPanel.style.flex = rightPercent;
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        }
+    });
 }
 
 async function submitAnswer(pid, qn) {
