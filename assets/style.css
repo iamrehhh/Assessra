@@ -446,10 +446,20 @@ body {
 }
 
 .app-logo {
-    height: 80px;
-    /* Increased from 60px for better prominence */
-    width: auto;
+    height: 150px;
+    /* Increased to fill the circle area */
+    width: 150px;
+    /* Make it circular/square as requested */
+    object-fit: contain;
     margin-right: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    /* Optional: if they want the logo itself circular */
+    transition: transform 0.2s;
+}
+
+.app-logo:hover {
+    transform: scale(1.05);
 }
 
 .nav-btn {
@@ -1188,12 +1198,7 @@ textarea.expanded {
 /* === NEW UI COMPONENTS === */
 
 /* Logo */
-.app-logo {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-    cursor: pointer;
-}
+/* Logo style removed to use main definition */
 
 /* Subjects Panel (Right Side) */
 .side-panel-right {
