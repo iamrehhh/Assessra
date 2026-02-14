@@ -219,18 +219,40 @@ def chat():
         return jsonify({"reply": "Sorry, I'm having trouble thinking right now. Try again later!"})
 
 # ==========================================
+import json
+import os
+
+# ==========================================
 # VOCAB PROGRESS CLOUD STORAGE
 # ==========================================
-# Simple in-memory storage (replace with database for production)
-vocab_progress_db = {}
+VOCAB_DB_FILE = 'vocab_data.json'
+IDIOMS_DB_FILE = 'idioms_data.json'
+
+def load_db(filename):
+    if os.path.exists(filename):
+        try:
+            with open(filename, 'r') as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_db(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f)
+
+# Load data on startup
+vocab_progress_db = load_db(VOCAB_DB_FILE)
+idioms_progress_db = load_db(IDIOMS_DB_FILE)
 
 @app.route('/save_vocab_progress', methods=['POST'])
 def save_vocab_progress():
     data = request.json
-    user_id = data.get('user_id', 'default_user')  # Use 'default_user' if no login system
+    user_id = data.get('user_id', 'default_user')
     progress = data.get('progress', {})
     
     vocab_progress_db[user_id] = progress
+    save_db(VOCAB_DB_FILE, vocab_progress_db)
     return jsonify({"status": "success", "message": "Progress saved"})
 
 @app.route('/load_vocab_progress', methods=['POST'])
@@ -244,7 +266,6 @@ def load_vocab_progress():
 # ==========================================
 # IDIOMS PROGRESS CLOUD STORAGE
 # ==========================================
-idioms_progress_db = {}
 
 @app.route('/save_idioms_progress', methods=['POST'])
 def save_idioms_progress():
@@ -253,6 +274,7 @@ def save_idioms_progress():
     progress = data.get('progress', {})
     
     idioms_progress_db[user_id] = progress
+    save_db(IDIOMS_DB_FILE, idioms_progress_db)
     return jsonify({"status": "success", "message": "idioms progress saved"})
 
 @app.route('/load_idioms_progress', methods=['POST'])
