@@ -234,6 +234,7 @@ async function loadVocabQuiz() {
             vocabAnswered = data.progress.answered || 0;
             currentQuestion = data.progress.current || 0;
         } else {
+            console.log("No saved vocab progress found, starting fresh.");
             currentQuestion = 0;
             vocabScore = 0;
             vocabAnswered = 0;

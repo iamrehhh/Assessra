@@ -347,6 +347,35 @@ function showVocabContainer() {
     closeAllPanels();
 }
 
+// Show Idioms Container and load quiz
+function showIdiomsContainer() {
+    // Hide all main views
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+    });
+
+    // Hide all subject containers
+    document.querySelectorAll('.subject-container').forEach(c => c.classList.add('hidden'));
+
+    // Show papers view and idioms container
+    const papersView = document.getElementById('view-papers');
+    if (papersView) papersView.classList.remove('hidden');
+
+    const idiomsContainer = document.getElementById('container-idioms');
+    if (idiomsContainer) {
+        idiomsContainer.classList.remove('hidden');
+        if (typeof loadIdiomsQuiz === 'function') {
+            if (idiomsQuestions.length === 0) initIdiomsQuiz(); // Initialize if needed
+            loadIdiomsQuiz();
+        } else {
+            console.error("loadIdiomsQuiz function not found. Check idioms_quiz.js");
+        }
+    }
+
+    closeAllPanels();
+}
+
 function backToDash() {
     document.body.style.overflow = 'auto';
     setView('papers');

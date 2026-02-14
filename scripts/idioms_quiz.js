@@ -347,15 +347,13 @@ function initIdiomsQuiz() {
     });
 }
 
-// Show idioms container
-async function showIdiomsContainer() {
-    hideAllViews();
-    document.getElementById('container-idioms').classList.remove('hidden');
-
+// Load idioms view (called from logic.js)
+async function loadIdiomsView() {
+    // Logic is now handled in logic.js showIdiomsContainer
+    // This function can just ensure init
     if (idiomsQuestions.length === 0) {
         initIdiomsQuiz();
     }
-
     await loadIdiomsQuiz();
 }
 
@@ -592,3 +590,7 @@ async function resetIdiomsQuiz() {
         renderIdiomQuestion();
     }
 }
+
+// Expose to window for logic.js
+window.loadIdiomsQuiz = loadIdiomsQuiz;
+window.initIdiomsQuiz = initIdiomsQuiz;
