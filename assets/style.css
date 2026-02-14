@@ -446,9 +446,9 @@ body {
 }
 
 .app-logo {
-    height: 110px;
-    /* Reduced to 110px to fix layout */
-    width: 110px;
+    height: 90px;
+    /* Reduced to 90px to fix layout */
+    width: 90px;
     /* Make it circular/square as requested */
     object-fit: contain;
     margin-right: 20px;
