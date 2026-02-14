@@ -799,7 +799,8 @@ async function handleHomeAI() {
             // Simple Markdown Parser for Bold and Newlines
             let formattedReply = reply
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold **text**
-                .replace(/\n/g, '<br>'); // Newlines
+                .replace(/\n\n/g, '<br><br>') // Double newline = Paragraph break
+                .replace(/\n/g, '<br>'); // Single newline = Line break
 
             responseDiv.innerHTML = `<strong style="color:var(--lime-dark);">AI Tutor:</strong> <div style="margin-top:5px;">${formattedReply}</div>`;
         }

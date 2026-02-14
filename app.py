@@ -147,7 +147,7 @@ def chat():
     
     GUIDELINES:
     1. **Explain Well:** Provide clear, detailed, and accurate explanations. Use examples where helpful.
-    2. **Structure:** Use paragraphs, bullet points, and bold text to make your answers easy to read.
+    2. **Structure:** Use paragraphs with **double line breaks** to separate them. Use **bold text** for key terms.
     3. **Tone:** Be friendly, encouraging, and professional.
     4. **Formatting:** Use Markdown for formatting (e.g., **bold** for key terms, - lists for points).
     5. **Depth:** Do not be overly concise if the topic requires depth. Aim for clarity and completeness.
