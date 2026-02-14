@@ -194,52 +194,83 @@ function renderVocabQuestion() {
 
     const q = vocabQuestions[currentQuestion];
     const qNum = currentQuestion + 1;
+    const percentage = vocabAnswered > 0 ? Math.round((vocabScore / vocabAnswered) * 100) : 0;
 
     const html = `
-        <div style="max-width: 800px; margin: 0 auto; padding: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 style="color: var(--lime-dark); margin: 0;">Vocabulary Quiz</h2>
-                <div style="background: #f0fdf4; padding: 10px 20px; border-radius: 8px;">
-                    <strong>Progress:</strong> ${qNum} / ${vocabQuestions.length}
+        <div style="display: flex; gap: 30px; padding: 30px; max-width: 1400px; margin: 0 auto;">
+            <!-- Left: Scorecard Panel -->
+            <div style="flex: 0 0 300px; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 20px;">
+                <h3 style="color: var(--lime-dark); margin-top: 0; margin-bottom: 20px; font-size: 1.3rem; border-bottom: 2px solid var(--lime-primary); padding-bottom: 10px;">📊 Scorecard</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 3rem; font-weight: bold; color: var(--lime-dark); text-align: center;">${percentage}%</div>
+                    <div style="text-align: center; color: #666; margin-top: 5px;">${vocabScore} / ${vocabAnswered} Correct</div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666;">Questions Answered:</span>
+                        <strong>${vocabAnswered}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666;">Current Question:</span>
+                        <strong>${qNum} / ${vocabQuestions.length}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #666;">Remaining:</span>
+                        <strong>${vocabQuestions.length - qNum}</strong>
+                    </div>
+                </div>
+
+                <div style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; background: var(--lime-primary); width: ${(qNum / vocabQuestions.length) * 100}%; transition: width 0.3s;"></div>
+                </div>
+                <div style="text-align: center; color: #888; font-size: 0.85rem; margin-top: 5px;">
+                    ${Math.round((qNum / vocabQuestions.length) * 100)}% Complete
                 </div>
             </div>
 
-            <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                <div style="margin-bottom: 10px; color: #666; font-size: 0.9rem;">Category: ${q.category}</div>
-                <h3 style="font-size: 1.5rem; margin-bottom: 30px; color: #333;">What does "<strong>${q.word}</strong>" mean?</h3>
+            <!-- Right: Question Area -->
+            <div style="flex: 1;">
+                <h2 style="color: var(--lime-dark); margin-top: 0; margin-bottom: 30px;">Vocabulary Quiz</h2>
 
-                <div id="vocab-options" style="display: flex; flex-direction: column; gap: 15px;">
-                    ${q.options.map((opt, idx) => `
-                        <button class="vocab-option" data-index="${idx}" onclick="selectVocabAnswer(${idx})" style="
-                            padding: 15px 20px;
-                            border: 2px solid #ddd;
-                            border-radius: 8px;
-                            background: white;
-                            text-align: left;
-                            font-size: 1.1rem;
-                            cursor: pointer;
-                            transition: all 0.2s;
-                        ">
-                            <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}
-                        </button>
-                    `).join('')}
+                <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9rem;">Category: ${q.category}</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 30px; color: #333;">What does "<strong>${q.word}</strong>" mean?</h3>
+
+                    <div id="vocab-options" style="display: flex; flex-direction: column; gap: 15px;">
+                        ${q.options.map((opt, idx) => `
+                            <button class="vocab-option" data-index="${idx}" onclick="selectVocabAnswer(${idx})" style="
+                                padding: 15px 20px;
+                                border: 2px solid #ddd;
+                                border-radius: 8px;
+                                background: white;
+                                text-align: left;
+                                font-size: 1.1rem;
+                                cursor: pointer;
+                                transition: all 0.2s;
+                            ">
+                                <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="vocab-feedback" style="display: none; margin-top: 30px; padding: 20px; border-radius: 8px;"></div>
+
+                    <button id="next-vocab-btn" onclick="nextVocabQuestion()" style="
+                        display: none;
+                        width: 100%;
+                        padding: 15px;
+                        margin-top: 20px;
+                        background: var(--lime-primary);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        cursor: pointer;
+                    ">Next Question →</button>
                 </div>
-
-                <div id="vocab-feedback" style="display: none; margin-top: 30px; padding: 20px; border-radius: 8px;"></div>
-
-                <button id="next-vocab-btn" onclick="nextVocabQuestion()" style="
-                    display: none;
-                    width: 100%;
-                    padding: 15px;
-                    margin-top: 20px;
-                    background: var(--lime-primary);
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    font-size: 1.1rem;
-                    font-weight: bold;
-                    cursor: pointer;
-                ">Next Question →</button>
             </div>
         </div>
     `;
@@ -272,7 +303,7 @@ async function selectVocabAnswer(selectedIdx) {
     vocabAnswered++;
     if (isCorrect) vocabScore++;
 
-    // Fetch AI definition
+    // Fetch AI example
     const feedback = document.getElementById('vocab-feedback');
     feedback.style.display = 'block';
     feedback.innerHTML = `
@@ -283,13 +314,13 @@ async function selectVocabAnswer(selectedIdx) {
             <p style="font-size: 1.1rem; margin-bottom: 15px;">
                 <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
             </p>
-            <div style="text-align: center; color: #666;">⏳ Loading definition...</div>
+            <div style="text-align: center; color: #666;">⏳ Loading example...</div>
         </div>
     `;
 
-    // Fetch AI definition
+    // Fetch AI example
     try {
-        const definition = await getAIDefinition(q.word);
+        const example = await getAIExample(q.word);
         feedback.innerHTML = `
             <div style="text-align: center;">
                 <h3 style="color: ${isCorrect ? '#22c55e' : '#ef4444'}; margin-bottom: 15px;">
@@ -299,32 +330,32 @@ async function selectVocabAnswer(selectedIdx) {
                     <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
                 </p>
                 <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border-left: 4px solid var(--lime-primary);">
-                    <strong style="color: var(--lime-dark);">Definition:</strong><br>
-                    <span style="font-style: italic; color: #333;">${definition}</span>
+                    <strong style="color: var(--lime-dark);">Example:</strong><br>
+                    <span style="font-style: italic; color: #333;">${example}</span>
                 </div>
             </div>
         `;
     } catch (e) {
-        console.error('Failed to fetch definition:', e);
+        console.error('Failed to fetch example:', e);
     }
 
     document.getElementById('next-vocab-btn').style.display = 'block';
 }
 
-async function getAIDefinition(word) {
+async function getAIExample(word) {
     try {
         const response = await fetch('/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: `Define the word "${word}" in one clear, academic sentence. Be concise.`
+                message: `Create one example sentence using the word "${word}" that clearly demonstrates its meaning. Make it contextual and academic.`
             })
         });
 
         const data = await response.json();
-        return data.message || "Definition unavailable.";
+        return data.message || "Example unavailable.";
     } catch (e) {
-        return "Definition unavailable.";
+        return "Example unavailable.";
     }
 }
 
