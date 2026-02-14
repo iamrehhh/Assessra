@@ -472,7 +472,7 @@ body {
 .nav {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 25px;
 }
 
 .nav-item-wrapper {

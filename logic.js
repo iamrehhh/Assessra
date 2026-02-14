@@ -688,6 +688,7 @@ async function initHome() {
                             <input type="text" class="ai-input-home" placeholder="Explain price elasticity..." id="home-ai-input" onkeypress="handleHomeAIEnter(event)">
                             <button class="ai-send-btn" onclick="handleHomeAI()">➜</button>
                         </div>
+                        <div id="home-ai-response" style="margin-top:15px; font-size:0.95rem; line-height:1.5;"></div>
                     </div>
                 </div>
             </div>
@@ -767,12 +768,44 @@ function handleHomeAIEnter(e) {
     if (e.key === 'Enter') handleHomeAI();
 }
 
-function handleHomeAI() {
+async function handleHomeAI() {
     const input = document.getElementById('home-ai-input');
+    const responseDiv = document.getElementById('home-ai-response');
     const txt = input.value.trim();
-    if (txt) {
-        alert("AI Tutor: That is a great question! This feature is being connected to the backend. Stay tuned!");
-        input.value = '';
+
+    if (!txt) return;
+
+    // Loading State
+    const originalPlaceholder = input.placeholder;
+    input.value = '';
+    input.placeholder = "Thinking...";
+    input.disabled = true;
+    if (responseDiv) responseDiv.innerHTML = '<span style="color:#888;">Thinking...</span>';
+
+    try {
+        const res = await fetch('http://127.0.0.1:5000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: txt })
+        });
+
+        if (!res.ok) throw new Error("Server error");
+
+        const data = await res.json();
+        const reply = data.reply || "No response.";
+
+        // Typewriter effect or just text? Text is fine for now.
+        if (responseDiv) {
+            responseDiv.innerHTML = `<strong style="color:var(--lime-dark);">AI Tutor:</strong> ${reply}`;
+        }
+
+    } catch (e) {
+        console.error(e);
+        if (responseDiv) responseDiv.innerHTML = `<span style="color:red;">Error: Is the backend server running? (python app.py)</span>`;
+    } finally {
+        input.disabled = false;
+        input.placeholder = originalPlaceholder;
+        input.focus();
     }
 }
 

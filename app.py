@@ -89,5 +89,30 @@ def mark():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_msg = data.get('message', '')
+    
+    if not user_msg:
+        return jsonify({"reply": "Please say something!"})
+
+    # Construct prompt for AI Tutor
+    prompt = f"""
+    You are an expert Cambridge A-Level Business and Economics Tutor.
+    The student asks: "{user_msg}"
+    
+    Respond concisely (under 100 words if possible) and accurately. 
+    Use a friendly, encouraging tone. 
+    If they ask about a specific syllabus topic, explain it simply.
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        text = response.text.replace('```', '').strip()
+        return jsonify({"reply": text})
+    except Exception as e:
+        return jsonify({"reply": "Sorry, I'm having trouble thinking right now. Try again later!"})
+
 if __name__ == '__main__':
     app.run(port=5000)
