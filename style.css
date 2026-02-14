@@ -456,7 +456,7 @@ body {
     border: none;
     font-weight: 700;
     color: #666;
-    padding: 10px 20px;
+    padding: 10px 15px;
     cursor: pointer;
     transition: 0.3s;
     font-size: 1rem;
@@ -472,12 +472,16 @@ body {
 .nav {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 15px;
+    flex-wrap: wrap;
+    /* Prevent overflow */
 }
 
 .nav-item-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    /* Fix vertical alignment */
+    align-items: center;
 }
 
 .dropdown-menu {
