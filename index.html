@@ -60,6 +60,7 @@
                         <button class="nav-btn">Others ▾</button>
                         <div class="dropdown-menu">
                             <div class="dropdown-item" onclick="showVocabContainer()">Vocab</div>
+                            <div class="dropdown-item" onclick="showNotesContainer()">My Notes</div>
                             <div class="dropdown-item" onclick="alert('Idioms coming soon!')">Idioms</div>
                         </div>
                     </div>
@@ -194,6 +195,70 @@
 
                 <!-- VOCABULARY QUIZ -->
                 <div id="container-vocab" class="subject-container hidden">
+                </div>
+
+                <!-- NOTES CONTAINER -->
+                <div id="container-notes" class="subject-container hidden">
+                    <div style="max-width: 1400px; margin: 0 auto; padding: 30px;">
+                        <!-- Header -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                            <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin: 0;">📚 My Vocab Notes</h1>
+                            <div style="display: flex; gap: 15px;">
+                                <input type="text" id="notes-search" placeholder="🔍 Search words..." style="
+                                    padding: 12px 20px;
+                                    border: 2px solid #ddd;
+                                    border-radius: 8px;
+                                    font-size: 1rem;
+                                    width: 300px;
+                                    transition: border-color 0.2s;
+                                " onkeyup="filterNotes(this.value)">
+                                <button onclick="exportNotesToPDF()" style="
+                                    padding: 12px 24px;
+                                    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 8px;
+                                    font-weight: 700;
+                                    cursor: pointer;
+                                    transition: all 0.2s;
+                                    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(239, 68, 68, 0.4)';"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.3)';">
+                                    📄 Export PDF
+                                </button>
+                                <button onclick="showAddSectionModal()" style="
+                                    padding: 12px 24px;
+                                    background: linear-gradient(135deg, var(--lime-primary) 0%, #16a34a 100%);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 8px;
+                                    font-weight: 700;
+                                    cursor: pointer;
+                                    transition: all 0.2s;
+                                    box-shadow: 0 4px 12px rgba(132, 204, 22, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(132, 204, 22, 0.4)';"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(132, 204, 22, 0.3)';">
+                                    ➕ New Section
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Notes Sections Container -->
+                        <div id="notes-sections-container"
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 30px;">
+                            <!-- Dynamically populated -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="notes-empty-state" class="hidden"
+                            style="text-align: center; padding: 80px 20px; color: #888;">
+                            <div style="font-size: 5rem; margin-bottom: 20px;">📝</div>
+                            <h2 style="color: #666; margin-bottom: 15px;">No Notes Yet</h2>
+                            <p style="font-size: 1.1rem;">Start saving words from the Vocab Quiz to build your personal
+                                vocabulary collection!</p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -2022,6 +2087,7 @@
     <script src="scripts/economics_p4.js"></script>
     <script src="scripts/general_paper.js"></script>
     <script src="scripts/vocab_quiz.js"></script>
+    <script src="scripts/notes.js"></script>
 
     <!-- Chat Logic (Firebase) -->
     <script src="scripts/chat.js" type="module"></script>
