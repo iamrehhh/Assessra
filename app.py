@@ -10,11 +10,14 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ==========================================
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
-# API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
+# Primary API Key for Paper Checking (Strict Marking)
+MARKING_API_KEY_PRIMARY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
 
-# API Key for AI Tutor (Chat)
-# TODO: Replace with your second API key if you have one, or keep same for now.
+# Secondary API Key for Fallback (when primary runs out of tokens)
+# TODO: PASTE YOUR SECOND API KEY HERE
+MARKING_API_KEY_SECONDARY = "PASTE_YOUR_SECOND_API_KEY_HERE"
+
+# API Key for AI Tutor (Chat) - DO NOT MODIFY THIS
 TUTOR_API_KEY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
 
 # Model Configuration
@@ -23,6 +26,7 @@ MODEL_NAME = "gemini-2.5-flash"
 def generate_with_gemini(api_key, system_instruction, user_prompt):
     """
     Helper function to call Gemini API via REST to support multiple keys safely.
+    Returns (result_text, error_code) where error_code indicates the type of failure.
     """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
     
@@ -39,21 +43,56 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
     
     try:
         response = requests.post(url, json=payload, headers=headers)
+        
+        # Check for quota/token errors before raising
+        if response.status_code == 429:
+            print(f"API Rate Limit/Quota Exceeded (429)")
+            return None, 429
+        elif response.status_code == 403:
+            print(f"API Quota Exceeded or Permission Denied (403)")
+            return None, 403
+        
         response.raise_for_status()
         result = response.json()
         
         # Extract text from response
         if 'candidates' in result and result['candidates']:
             content = result['candidates'][0]['content']['parts'][0]['text']
-            return content
+            return content, None
         else:
-            return None
+            return None, None
             
     except Exception as e:
         print(f"API Error: {e}")
-        if response.text:
-            print(f"Response: {response.text}")
-        return None
+        try:
+            if 'response' in locals() and response.text:
+                print(f"Response: {response.text}")
+                # Check for quota errors in response text
+                if 'quota' in response.text.lower() or 'limit' in response.text.lower():
+                    return None, 429
+        except:
+            pass
+        return None, None
+
+def generate_with_fallback(system_instruction, user_prompt):
+    """
+    Tries primary API key first, falls back to secondary if primary fails due to quota/tokens.
+    """
+    # Try primary API
+    result, error_code = generate_with_gemini(MARKING_API_KEY_PRIMARY, system_instruction, user_prompt)
+    
+    # If primary failed due to quota/rate limit, try secondary
+    if result is None and error_code in [429, 403]:
+        print("Primary API quota exhausted, switching to secondary API...")
+        result, error_code = generate_with_gemini(MARKING_API_KEY_SECONDARY, system_instruction, user_prompt)
+        
+        if result:
+            print("Secondary API succeeded!")
+        else:
+            print("Secondary API also failed.")
+    
+    # Return just the result (for backward compatibility)
+    return result
 
 @app.route('/mark', methods=['POST'])
 def mark():
@@ -179,7 +218,7 @@ def mark():
     }}
     """
     
-    text = generate_with_gemini(MARKING_API_KEY, system_prompt, user_prompt)
+    text = generate_with_fallback(system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
@@ -210,7 +249,8 @@ def chat():
     The student asks: "{user_msg}"
     """
     
-    text = generate_with_gemini(TUTOR_API_KEY, system_prompt, user_prompt)
+    # Tutor uses dedicated API key - no fallback
+    text, _ = generate_with_gemini(TUTOR_API_KEY, system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```', '').strip()
@@ -229,7 +269,7 @@ from typing import Dict, Any
 VOCAB_DB_FILE = 'vocab_data.json'
 IDIOMS_DB_FILE = 'idioms_data.json'
 
-def load_db(filename):
+def load_db(filename) -> Dict[str, Any]:
     if os.path.exists(filename):
         try:
             with open(filename, 'r') as f:
