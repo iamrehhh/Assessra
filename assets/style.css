@@ -446,8 +446,8 @@ body {
 }
 
 .app-logo {
-    height: 60px;
-    /* Increased from 45px */
+    height: 80px;
+    /* Increased from 60px for better prominence */
     width: auto;
     margin-right: 20px;
 }
