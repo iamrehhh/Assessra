@@ -241,6 +241,78 @@ def load_vocab_progress():
     progress = vocab_progress_db.get(user_id, None)
     return jsonify({"progress": progress})
 
+# ==========================================
+# VOCAB NOTES SYSTEM
+# ==========================================
+# Notes storage with default sections
+notes_db = {}
+
+def get_default_notes():
+    return {
+        'Wrong Vocab': [],
+        'Correct Vocab': []
+    }
+
+@app.route('/save_note', methods=['POST'])
+def save_note():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    note_section = data.get('section', 'Wrong Vocab')  # Default to Wrong Vocab
+    word_data = data.get('word_data', {})
+    
+    # Initialize user notes if not exists
+    if user_id not in notes_db:
+        notes_db[user_id] = get_default_notes()
+    
+    # Create section if doesn't exist
+    if note_section not in notes_db[user_id]:
+        notes_db[user_id][note_section] = []
+    
+    # Check if word already exists in this section
+    existing = next((item for item in notes_db[user_id][note_section] if item['word'] == word_data.get('word')), None)
+    if not existing:
+        notes_db[user_id][note_section].append(word_data)
+    
+    return jsonify({"status": "success", "message": f"Saved to {note_section}"})
+
+@app.route('/get_notes', methods=['POST'])
+def get_notes():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    # Initialize if not exists
+    if user_id not in notes_db:
+        notes_db[user_id] = get_default_notes()
+    
+    return jsonify({"notes": notes_db[user_id]})
+
+@app.route('/update_notes', methods=['POST'])
+def update_notes():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    notes = data.get('notes', {})
+    
+    # Ensure default sections exist
+    if 'Wrong Vocab' not in notes:
+        notes['Wrong Vocab'] = []
+    if 'Correct Vocab' not in notes:
+        notes['Correct Vocab'] = []
+    
+    notes_db[user_id] = notes
+    return jsonify({"status": "success", "message": "Notes updated"})
+
+@app.route('/delete_note_item', methods=['POST'])
+def delete_note_item():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    section = data.get('section')
+    word = data.get('word')
+    
+    if user_id in notes_db and section in notes_db[user_id]:
+        notes_db[user_id][section] = [item for item in notes_db[user_id][section] if item['word'] != word]
+    
+    return jsonify({"status": "success", "message": "Note deleted"})
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

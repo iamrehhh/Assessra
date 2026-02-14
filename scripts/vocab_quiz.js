@@ -214,7 +214,6 @@ const vocabQuestions = shuffleArray(vocabQuestionsBank);
 let currentQuestion = 0;
 let vocabScore = 0;
 let vocabAnswered = 0;
-let mistakesList = [];  // Track incorrect answers
 
 // LOAD VOCAB QUIZ
 async function loadVocabQuiz() {
@@ -234,19 +233,16 @@ async function loadVocabQuiz() {
             vocabScore = data.progress.score || 0;
             vocabAnswered = data.progress.answered || 0;
             currentQuestion = data.progress.current || 0;
-            mistakesList = data.progress.mistakes || [];
         } else {
             currentQuestion = 0;
             vocabScore = 0;
             vocabAnswered = 0;
-            mistakesList = [];
         }
     } catch (e) {
         console.error('Failed to load progress:', e);
         currentQuestion = 0;
         vocabScore = 0;
         vocabAnswered = 0;
-        mistakesList = [];
     }
 
     renderVocabQuestion();
@@ -262,8 +258,7 @@ async function saveVocabProgress() {
                 progress: {
                     score: vocabScore,
                     answered: vocabAnswered,
-                    current: currentQuestion,
-                    mistakes: mistakesList
+                    current: currentQuestion
                 }
             })
         });
@@ -318,32 +313,6 @@ function renderVocabQuestion() {
                 <div style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 8px; font-weight: 600;">
                     ${Math.round((qNum / vocabQuestions.length) * 100)}% Complete
                 </div>
-
-                ${mistakesList.length > 0 ? `
-                    <div style="background: #fee2e2; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 2px solid #ef4444;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <span style="font-size: 1.5rem;">❌</span>
-                            <h4 style="margin: 0; color: #dc2626; font-size: 1.2rem;">Mistakes (${mistakesList.length})</h4>
-                        </div>
-                        <div style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
-                            ${mistakesList.map((mistake, idx) => `
-                                <button onclick="jumpToQuestion(${mistake.questionIndex})" style="
-                                    padding: 10px 12px;
-                                    background: white;
-                                    border: 1px solid #fca5a5;
-                                    border-radius: 6px;
-                                    text-align: left;
-                                    cursor: pointer;
-                                    transition: all 0.2s;
-                                    font-size: 0.95rem;
-                                " onmouseover="this.style.background='#fff1f2'; this.style.borderColor='#dc2626';" onmouseout="this.style.background='white'; this.style.borderColor='#fca5a5';">
-                                    <strong style="color: #dc2626;">${mistake.word}</strong>
-                                    <div style="font-size: 0.85rem; color: #666; margin-top: 4px;">Q${mistake.questionIndex + 1} • ${mistake.category}</div>
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                ` : ''}
 
                 <button onclick="resetVocabQuiz()" style="width: 100%; margin-top: 20px; padding: 12px; background: white; border: 2px solid var(--lime-primary); color: var(--lime-dark); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='var(--lime-primary)'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='var(--lime-dark)';">
                     🔄 Reset Progress
@@ -426,22 +395,7 @@ async function selectVocabAnswer(selectedIdx) {
     }
 
     vocabAnswered++;
-    if (isCorrect) {
-        vocabScore++;
-    } else {
-        // Track mistake
-        const mistake = {
-            questionIndex: currentQuestion,
-            word: q.word,
-            category: q.category,
-            correctAnswer: q.options[q.correct],
-            userAnswer: q.options[selectedIdx]
-        };
-        // Add to mistakes list if not already there
-        if (!mistakesList.some(m => m.questionIndex === currentQuestion)) {
-            mistakesList.push(mistake);
-        }
-    }
+    if (isCorrect) vocabScore++;
 
     // Save progress
     saveVocabProgress();
@@ -476,6 +430,23 @@ async function selectVocabAnswer(selectedIdx) {
                     <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example:</strong><br>
                     <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${example}</span>
                 </div>
+                
+                <button onclick="saveToNotes(${currentQuestion}, ${isCorrect})" id="save-note-btn" style="
+                    width: 100%;
+                    padding: 14px;
+                    margin-top: 20px;
+                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59, 130, 246, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
+                    📝 Save to Notes
+                </button>
             </div>
         `;
     } catch (e) {
