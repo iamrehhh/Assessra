@@ -323,17 +323,16 @@ function filterView(viewId, subject) {
     closeAllPanels();
 }
 
-function backToDash() { setView('papers'); }
-function toggleInsert() { document.getElementById('insert-panel').classList.toggle('show'); }
+function backToDash() {
+    document.body.style.overflow = 'auto';
+    setView('papers');
+}
+// toggleInsert removed - no longer needed with split-screen view
 
 // === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
 
 async function openPaper(pid) {
     const data = paperData[pid];
-    document.getElementById('questions-container').innerHTML = `<div style="text-align:center; padding:50px; color:#888;">⏳ Fetching your answers...</div>`;
-
-    const pdfFrame = document.getElementById('insert-pdf');
-    if (pdfFrame && data.pdf) pdfFrame.src = data.pdf;
 
     const u = getUser();
     let attempts = {};
@@ -348,7 +347,8 @@ async function openPaper(pid) {
         }
     } catch (e) { console.error("Error loading paper data:", e); }
 
-    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark);">${data.title}</h2>`;
+    // Generate questions HTML
+    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark); border-bottom:2px solid #eee; padding-bottom:10px;">${data.title}</h2>`;
     data.questions.forEach(q => {
         const att = attempts[q.n] || {};
         const done = att.score !== undefined;
@@ -375,12 +375,60 @@ async function openPaper(pid) {
         </div>`;
     });
 
-    document.getElementById('questions-container').innerHTML = qHtml;
-    setView('workspace');
+    // Generate fullscreen split-screen layout
+    const splitScreenHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
+            <!-- Header -->
+            <div style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
+                    <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
+                </div>
+            </div>
+
+            <!-- Split Screen Container -->
+            <div style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
+                <!-- Left: PDF Viewer (60%) -->
+                <div style="flex: 6; height: 100%; border-right: 2px solid #ddd;">
+                    <iframe src="${data.pdf}#toolbar=0&navpanes=0&scrollbar=1&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
+                </div>
+                
+                <!-- Right: Questions Panel (40%) -->
+                <div style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;" id="questions-container">
+                    ${qHtml}
+                    <div style="height: 100px;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Inject into workspace view
+    const workspaceView = document.getElementById('view-workspace');
+    if (workspaceView) {
+        workspaceView.innerHTML = splitScreenHTML;
+        workspaceView.classList.remove('hidden');
+    }
+
+    // Hide other views
+    ['papers', 'scorecard', 'leaderboard', 'tips', 'score-display', 'home', 'formulae', 'definitions'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+    });
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    // Initialize word counts
     data.questions.forEach(q => {
         const el = document.getElementById(`ans_${pid}_${q.n}`);
         if (el) updateWordCount(el, q.l);
     });
+}
+
+// New helper function to close paper view
+function closePaperView() {
+    document.body.style.overflow = 'auto';
+    setView('papers');
 }
 
 async function submitAnswer(pid, qn) {
@@ -451,12 +499,7 @@ function toggleExpand(textAreaId, btnId) {
     }
 }
 
-function toggleInsertMaximize() {
-    const el = document.getElementById('insert-panel');
-    const btn = document.querySelector('.maximize-insert-btn');
-    el.classList.toggle('fullscreen');
-    btn.innerText = el.classList.contains('fullscreen') ? "⤡ Minimize" : "⤢ Maximize";
-}
+// toggleInsertMaximize removed - no longer needed with split-screen view
 
 // === 5. SCORECARD & LEADERBOARD LOGIC ===
 
