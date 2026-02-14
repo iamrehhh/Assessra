@@ -9,12 +9,12 @@
 function closeAllPanels() {
     ['side-menu', 'scorecard-panel', 'leaderboard-panel', 'chat-panel'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.classList.remove('active');
+        if (el) el.classList.remove('active');
     });
-    
+
     ['side-menu-overlay', 'scorecard-overlay', 'leaderboard-overlay', 'chat-overlay'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.classList.remove('active');
+        if (el) el.classList.remove('active');
     });
 }
 
@@ -22,7 +22,7 @@ function closeAllPanels() {
 function toggleSideMenu() {
     const menu = document.getElementById('side-menu');
     const overlay = document.getElementById('side-menu-overlay');
-    
+
     if (menu.classList.contains('active')) {
         menu.classList.remove('active');
         overlay.classList.remove('active');
@@ -55,7 +55,7 @@ function toggleScorecardPanel() {
 function toggleLeaderboardPanel() {
     const panel = document.getElementById('leaderboard-panel');
     const overlay = document.getElementById('leaderboard-overlay');
-    
+
     // Check if it is currently open
     if (panel.classList.contains('active')) {
         // IF OPEN: Close it
@@ -63,7 +63,7 @@ function toggleLeaderboardPanel() {
         overlay.classList.remove('active');
     } else {
         // IF CLOSED: Close others first, then open this one
-        closeAllPanels(); 
+        closeAllPanels();
         panel.classList.add('active');
         overlay.classList.add('active');
     }
@@ -73,15 +73,15 @@ function toggleLeaderboardPanel() {
 async function switchLeaderboardView(category) {
     // Close panel
     toggleLeaderboardPanel();
-    
+
     // Switch to main view
     setView('leaderboard');
-    
+
     // Update Titles
     const titleEl = document.getElementById('lb-title');
     const subEl = document.getElementById('lb-subtitle');
     const container = document.getElementById('leaderboard-container');
-    
+
     container.innerHTML = `<div style="padding:40px; color:#888;">⏳ Loading ${category} data...</div>`;
 
     if (category === 'overall') {
@@ -103,7 +103,7 @@ async function switchLeaderboardView(category) {
 async function renderBigLeaderboard(category) {
     const lbData = await window.CloudManager.getLeaderboard();
     const container = document.getElementById('leaderboard-container');
-    
+
     // Convert to array
     let sorted = Object.values(lbData);
 
@@ -169,8 +169,8 @@ async function renderBigLeaderboard(category) {
 function toggleChat() {
     const panel = document.getElementById('chat-panel');
     const overlay = document.getElementById('chat-overlay');
-    const badge = document.getElementById('unread-badge'); 
-    
+    const badge = document.getElementById('unread-badge');
+
     if (panel.classList.contains('active')) {
         panel.classList.remove('active');
         overlay.classList.remove('active');
@@ -178,7 +178,7 @@ function toggleChat() {
         closeAllPanels(); // Force close others
         panel.classList.add('active');
         overlay.classList.add('active'); // Use generic overlay logic if preferred, or keep chat-specific
-        if (badge) badge.classList.add('hidden'); 
+        if (badge) badge.classList.add('hidden');
         localStorage.setItem('habibi_chat_last_read', Date.now());
     }
 }
@@ -193,11 +193,11 @@ function toggleSubject(subId) {
 function switchPaperView(targetViewId) {
     document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
     const target = document.getElementById(`container-${targetViewId}`);
-    if(target) target.classList.remove('hidden');
-    
+    if (target) target.classList.remove('hidden');
+
     document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
     document.getElementById(`link-${targetViewId}`).classList.add('active');
-    
+
     toggleSideMenu(); // Close menu
     setView('papers');
 }
@@ -224,7 +224,7 @@ function setUser(u) { localStorage.setItem('user', u); }
 function tryLogin() {
     const u = document.getElementById('u-in').value.trim();
     const p = document.getElementById('p-in').value.trim();
-    if(ALLOWED_USERS[u] && ALLOWED_USERS[u] === p) {
+    if (ALLOWED_USERS[u] && ALLOWED_USERS[u] === p) {
         setUser(u);
         initApp(u);
     } else { alert("Invalid Username or Password."); }
@@ -244,28 +244,59 @@ function setView(viewName) {
     // 1. Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
-        if(el) el.classList.add('hidden');
+        if (el) el.classList.add('hidden');
     });
 
     // 2. Show target view
     const target = document.getElementById(`view-${viewName}`);
-    if(target) target.classList.remove('hidden');
+    if (target) target.classList.remove('hidden');
 
     // 3. Update Navigation Buttons (The Fix)
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
-        
+
         // Match button text to view name
         const text = btn.innerText.toLowerCase().trim();
-        
-        // Simple mapping check
-        if (text === viewName || 
-           (viewName === 'papers' && text === 'papers') ||
-           (viewName === 'formulae' && text === 'formulae') ||
-           (viewName === 'definitions' && text === 'definitions')) {
+
+        // Simple mapping check (Updated for Dropdowns)
+        if (text.includes(viewName) ||
+            (viewName === 'papers' && text.includes('papers')) ||
+            (viewName === 'formulae' && text.includes('formulae')) ||
+            (viewName === 'definitions' && text.includes('definitions'))) {
             btn.classList.add('active');
         }
     });
+}
+
+function filterView(viewId, subject) {
+    // 1. Switch to the main view
+    setView(viewId);
+
+    // 2. Initial state: Show all, hide none
+    const container = document.getElementById(`view-${viewId}`);
+    if (!container) return;
+
+    // 3. Find all relevant sections
+    const sections = container.querySelectorAll('.formula-section, .def-section');
+
+    // 4. Toggle visibility
+    sections.forEach(section => {
+        if (!subject || subject === 'all') {
+            section.classList.remove('hidden');
+        } else {
+            const sectionSubject = section.getAttribute('data-subject');
+            if (sectionSubject === subject) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        }
+    });
+
+    // 5. Allow event bubbling to close menu
+    event.stopPropagation();
+    toggleSideMenu(); // Close if open
+    closeAllPanels();
 }
 
 function backToDash() { setView('papers'); }
@@ -278,11 +309,11 @@ async function openPaper(pid) {
     document.getElementById('questions-container').innerHTML = `<div style="text-align:center; padding:50px; color:#888;">⏳ Fetching your answers...</div>`;
 
     const pdfFrame = document.getElementById('insert-pdf');
-    if(pdfFrame && data.pdf) pdfFrame.src = data.pdf;
-    
+    if (pdfFrame && data.pdf) pdfFrame.src = data.pdf;
+
     const u = getUser();
     let attempts = {};
-    
+
     // FETCH FROM CLOUD
     try {
         if (window.CloudManager) {
@@ -297,9 +328,9 @@ async function openPaper(pid) {
     data.questions.forEach(q => {
         const att = attempts[q.n] || {};
         const done = att.score !== undefined;
-        
+
         let aoHtml = '';
-        if(done) {
+        if (done) {
             aoHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
             <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${att.ao1 || '-'}</span>
             <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${att.ao2 || '-'}</span>
@@ -324,7 +355,7 @@ async function openPaper(pid) {
     setView('workspace');
     data.questions.forEach(q => {
         const el = document.getElementById(`ans_${pid}_${q.n}`);
-        if(el) updateWordCount(el, q.l);
+        if (el) updateWordCount(el, q.l);
     });
 }
 
@@ -332,7 +363,7 @@ async function submitAnswer(pid, qn) {
     const el = document.getElementById(`ans_${pid}_${qn}`);
     const btn = event.target;
     const ans = el.value.trim();
-    if(!ans) return alert("Please write an answer first.");
+    if (!ans) return alert("Please write an answer first.");
 
     btn.innerText = "⏳ Strict Marking...";
     btn.disabled = true;
@@ -342,7 +373,7 @@ async function submitAnswer(pid, qn) {
     try {
         const res = await fetch('https://ultimate-exam-guide.onrender.com/mark', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 question: qData.t,
                 case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
@@ -362,10 +393,10 @@ async function submitAnswer(pid, qn) {
             weaknesses: json.weaknesses,
             modelAnswer: json.model_answer
         });
-        
+
         await openPaper(pid); // Refresh view
 
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         alert("Error: Server not responding or Save failed.");
         btn.innerText = "Retry";
@@ -376,11 +407,11 @@ async function submitAnswer(pid, qn) {
 // === 4. HELPER FUNCTIONS ===
 
 function updateWordCount(el, limitStr) {
-    if(!limitStr) return;
+    if (!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
     const wcId = el.id.replace('ans_', 'wc_');
     const wcEl = document.getElementById(wcId);
-    if(wcEl) {
+    if (wcEl) {
         wcEl.innerText = `${count} words (${limitStr})`;
         wcEl.classList.toggle('bad', count < parseInt(limitStr.split('-')[0]));
         wcEl.classList.toggle('good', count >= parseInt(limitStr.split('-')[0]));
@@ -390,7 +421,7 @@ function updateWordCount(el, limitStr) {
 function toggleExpand(textAreaId, btnId) {
     const el = document.getElementById(textAreaId);
     const btn = document.getElementById(btnId);
-    if(el) {
+    if (el) {
         el.classList.toggle('expanded');
         btn.innerText = el.classList.contains('expanded') ? "⤡ Shrink" : "⤢ Expand";
     }
@@ -417,17 +448,17 @@ function classifyPaper(pid) {
         return { subject: 'business', paper: 'p3' };
     }
     // 3. Default (Assume Econ MCQ if unknown and not in Business data)
-    return { subject: 'economics', paper: 'p3' }; 
+    return { subject: 'economics', paper: 'p3' };
 }
 
 async function loadCloudScorecard() {
     const u = getUser();
-    if(!u) return;
+    if (!u) return;
 
     // Reset Containers
     ['sc-bus-p3', 'sc-bus-p4', 'sc-econ-p3', 'sc-econ-p4'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.innerHTML = '';
+        if (el) el.innerHTML = '';
     });
 
     const data = await window.CloudManager.getAllData(u);
@@ -436,7 +467,7 @@ async function loadCloudScorecard() {
     Object.keys(papers).forEach(pid => {
         const pTitle = (window.paperData && window.paperData[pid]) ? window.paperData[pid].title : pid;
         const category = classifyPaper(pid);
-        
+
         const html = `<div class="paper-link" onclick="renderPaperScore('${pid}')">
             ${pTitle} <span style="font-size:0.75rem; color:#999; display:block;">${pid}</span>
         </div>`;
@@ -444,7 +475,7 @@ async function loadCloudScorecard() {
         if (category.subject === 'business') {
             if (category.paper === 'p3') document.getElementById('sc-bus-p3').innerHTML += html;
             else document.getElementById('sc-bus-p4').innerHTML += html;
-        } 
+        }
         else if (category.subject === 'economics') {
             if (category.paper === 'p3') document.getElementById('sc-econ-p3').innerHTML += html;
             else document.getElementById('sc-econ-p4').innerHTML += html;
@@ -453,13 +484,13 @@ async function loadCloudScorecard() {
 }
 
 async function renderPaperScore(pid) {
-    toggleScorecardPanel(); 
-    setView('score-display'); 
-    
+    toggleScorecardPanel();
+    setView('score-display');
+
     const u = getUser();
     const data = await window.CloudManager.getAllData(u);
     const attempts = data.papers[pid] || {};
-    
+
     // IS IT AN ESSAY PAPER? (Business)
     if (window.paperData && window.paperData[pid]) {
         const pInfo = window.paperData[pid];
@@ -472,30 +503,30 @@ async function renderPaperScore(pid) {
             const qMax = q.m || 20;
             total += score;
             max += qMax;
-            
+
             html += `<div class="score-row">
                 <span><strong>Q${q.n}</strong></span>
                 <span><span class="score-badge">${score} / ${qMax}</span></span>
             </div>`;
         });
 
-        const percent = max > 0 ? Math.round(total/max*100) : 0;
+        const percent = max > 0 ? Math.round(total / max * 100) : 0;
         document.getElementById('score-display-content').innerHTML = `
             <div style="background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
                 <div style="font-size:3rem; font-weight:800; color:var(--lime-dark);">${percent}%</div>
                 <div style="color:#666; margin-bottom:20px;">Score: ${total} / ${max}</div>
                 ${html}
             </div>`;
-    } 
+    }
     // IS IT AN MCQ PAPER? (Economics)
     else {
         let total = 0;
-        Object.values(attempts).forEach(ans => { if(ans.score === 1) total++; });
-        
+        Object.values(attempts).forEach(ans => { if (ans.score === 1) total++; });
+
         document.getElementById('score-display-title').innerText = "MCQ Result: " + pid;
         document.getElementById('score-display-content').innerHTML = `
             <div style="background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-                <div style="font-size:3rem; font-weight:800; color:#3b82f6;">${Math.round(total/30*100)}%</div>
+                <div style="font-size:3rem; font-weight:800; color:#3b82f6;">${Math.round(total / 30 * 100)}%</div>
                 <div style="color:#666; margin-bottom:20px;">Score: ${total} / 30</div>
                 <p>To review individual answers, please open the paper from the main menu.</p>
             </div>`;
@@ -511,7 +542,7 @@ async function renderSubjectTotal(subject, user) {
 
     Object.keys(papers).forEach(pid => {
         const isTarget = subject === 'Business' ? (!pid.startsWith('econ_')) : (pid.startsWith('econ_'));
-        if(isTarget) {
+        if (isTarget) {
             Object.values(papers[pid]).forEach(q => total += (q.score || 0));
             count++;
         }
@@ -528,12 +559,12 @@ async function renderSubjectTotal(subject, user) {
 
 async function loadCloudLeaderboard() {
     const lb = await window.CloudManager.getLeaderboard();
-    const sorted = Object.values(lb).sort((a,b) => b.total - a.total);
-    
+    const sorted = Object.values(lb).sort((a, b) => b.total - a.total);
+
     let html = `<table class="modern-table"><thead><tr><th>Rank</th><th>Name</th><th>Business</th><th>Econ</th></tr></thead><tbody>`;
     sorted.forEach((s, i) => {
         html += `<tr>
-            <td>#${i+1}</td>
+            <td>#${i + 1}</td>
             <td style="font-weight:bold;">${s.name}</td>
             <td><span class="score-badge" style="background:#e0f2fe; color:#0284c7;">${s.business || 0}</span></td>
             <td><span class="score-badge" style="background:#fef3c7; color:#d97706;">${s.economics || 0}</span></td>
@@ -543,6 +574,6 @@ async function loadCloudLeaderboard() {
 }
 
 // === 6. INITIALIZATION ===
-if(getUser()) {
+if (getUser()) {
     initApp(getUser());
 }
