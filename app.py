@@ -221,6 +221,7 @@ def chat():
 # ==========================================
 import json
 import os
+from typing import Dict, Any
 
 # ==========================================
 # VOCAB PROGRESS CLOUD STORAGE
@@ -242,11 +243,11 @@ def save_db(filename, data):
         json.dump(data, f)
 
 # Load data on startup
-vocab_progress_db = load_db(VOCAB_DB_FILE)
+vocab_progress_db: Dict[str, Any] = load_db(VOCAB_DB_FILE)
 if not isinstance(vocab_progress_db, dict):
     vocab_progress_db = {}
 
-idioms_progress_db = load_db(IDIOMS_DB_FILE)
+idioms_progress_db: Dict[str, Any] = load_db(IDIOMS_DB_FILE)
 if not isinstance(idioms_progress_db, dict):
     idioms_progress_db = {}
 
