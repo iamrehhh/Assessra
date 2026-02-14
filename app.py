@@ -242,6 +242,28 @@ def load_vocab_progress():
     return jsonify({"progress": progress})
 
 # ==========================================
+# IDIOMS PROGRESS CLOUD STORAGE
+# ==========================================
+idioms_progress_db = {}
+
+@app.route('/save_idioms_progress', methods=['POST'])
+def save_idioms_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    progress = data.get('progress', {})
+    
+    idioms_progress_db[user_id] = progress
+    return jsonify({"status": "success", "message": "idioms progress saved"})
+
+@app.route('/load_idioms_progress', methods=['POST'])
+def load_idioms_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    progress = idioms_progress_db.get(user_id, None)
+    return jsonify({"progress": progress})
+
+# ==========================================
 # VOCAB NOTES SYSTEM
 # ==========================================
 # Notes storage with default sections

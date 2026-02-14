@@ -430,35 +430,8 @@ async function selectVocabAnswer(selectedIdx) {
                     <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example:</strong><br>
                     <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${example}</span>
                 </div>
-                
-                <button id="save-note-btn" data-question-idx="${currentQuestion}" data-is-correct="${isCorrect}" style="
-                    width: 100%;
-                    padding: 14px;
-                    margin-top: 20px;
-                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59, 130, 246, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
-                    📝 Save to Notes
-                </button>
             </div>
         `;
-
-        // Attach event listener to save button
-        const saveBtn = document.getElementById('save-note-btn');
-        if (saveBtn) {
-            saveBtn.addEventListener('click', function () {
-                const qIdx = parseInt(this.getAttribute('data-question-idx'));
-                const wasCorrect = this.getAttribute('data-is-correct') === 'true';
-                saveToNotes(qIdx, wasCorrect);
-            });
-        }
     } catch (e) {
         console.error('Failed to fetch example:', e);
     }
