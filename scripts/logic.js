@@ -480,6 +480,26 @@ function setupResizableDivider() {
     if (!divider || !pdfPanel || !questionsPanel || !container) return;
 
     let isDragging = false;
+    let animationFrameId = null;
+    let currentX = 0;
+
+    const updatePanels = () => {
+        const containerRect = container.getBoundingClientRect();
+        const newLeftWidth = currentX - containerRect.left;
+        const containerWidth = containerRect.width;
+
+        // Calculate percentage (min 20%, max 80%)
+        let leftPercent = (newLeftWidth / containerWidth) * 100;
+        leftPercent = Math.max(20, Math.min(80, leftPercent));
+
+        const rightPercent = 100 - leftPercent;
+
+        // Update flex values proportionally
+        pdfPanel.style.flex = leftPercent;
+        questionsPanel.style.flex = rightPercent;
+
+        animationFrameId = null;
+    };
 
     divider.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -511,6 +531,12 @@ function setupResizableDivider() {
             isDragging = false;
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+
+            // Cancel any pending animation frame
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
         }
     });
 }
