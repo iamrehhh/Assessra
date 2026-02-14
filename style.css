@@ -1187,6 +1187,7 @@ textarea.expanded {
     height: 40px;
     width: auto;
     object-fit: contain;
+    cursor: pointer;
 }
 
 /* Subjects Panel (Right Side) */
@@ -1493,6 +1494,7 @@ textarea.expanded {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
 }
+
 /* SUB-CATEGORY STYLES */
 .sub-header {
     display: flex;
@@ -1502,12 +1504,15 @@ textarea.expanded {
     font-weight: 500;
     color: #444;
 }
+
 .sub-header:hover {
     color: var(--lime-dark);
 }
+
 .sub-body {
     padding-left: 20px;
 }
+
 .paper-item {
     padding: 8px 15px;
     cursor: pointer;
@@ -1517,6 +1522,7 @@ textarea.expanded {
     margin: 2px 0;
     transition: 0.2s;
 }
+
 .paper-item:hover {
     border-left-color: var(--lime-primary);
     color: var(--lime-dark);
