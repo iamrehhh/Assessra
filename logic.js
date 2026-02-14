@@ -7,29 +7,45 @@
 
 // Helper to close ALL panels to prevent overlaps
 function closeAllPanels() {
-    ['side-menu', 'scorecard-panel', 'leaderboard-panel', 'chat-panel'].forEach(id => {
+    ['subjects-panel', 'notes-panel', 'scorecard-panel', 'leaderboard-panel', 'chat-panel'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('active');
     });
 
-    ['side-menu-overlay', 'scorecard-overlay', 'leaderboard-overlay', 'chat-overlay'].forEach(id => {
+    ['subjects-overlay', 'notes-overlay', 'scorecard-overlay', 'leaderboard-overlay', 'chat-overlay'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('active');
     });
 }
 
-// Right Side Main Menu
-function toggleSideMenu() {
-    const menu = document.getElementById('side-menu');
-    const overlay = document.getElementById('side-menu-overlay');
+// Right Side Subjects Panel
+function toggleSubjectsPanel() {
+    const panel = document.getElementById('subjects-panel');
+    const overlay = document.getElementById('subjects-overlay');
 
-    if (menu.classList.contains('active')) {
-        menu.classList.remove('active');
+    if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
         overlay.classList.remove('active');
     } else {
         closeAllPanels(); // Force close others
-        menu.classList.add('active');
+        panel.classList.add('active');
         overlay.classList.add('active');
+    }
+}
+
+// Left Side Notes Panel
+function toggleNotesPanel() {
+    const panel = document.getElementById('notes-panel');
+    const overlay = document.getElementById('notes-overlay');
+
+    if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        closeAllPanels(); // Force close others
+        panel.classList.add('active');
+        overlay.classList.add('active');
+        loadNotes(); // Load notes when opening
     }
 }
 
@@ -198,7 +214,7 @@ function switchPaperView(targetViewId) {
     document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
     document.getElementById(`link-${targetViewId}`).classList.add('active');
 
-    toggleSideMenu(); // Close menu
+    closeAllPanels(); // Close menu
     setView('papers');
 }
 
@@ -231,18 +247,17 @@ function tryLogin() {
 }
 
 function initApp(u) {
-    const name = u.split('.')[0] || u;
-    document.getElementById('welcome-msg').innerText = `Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
     document.getElementById('login-layer').classList.add('hidden');
     document.getElementById('app-layer').classList.remove('hidden');
-    setView('papers');
+    initHome();
+    setView('home');
 }
 
 function doLogout() { localStorage.removeItem('user'); location.reload(); }
 
 function setView(viewName) {
     // 1. Hide all main views
-    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display'].forEach(v => {
+    ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.classList.add('hidden');
     });
@@ -277,14 +292,24 @@ function filterView(viewId, subject) {
     if (!container) return;
 
     // 3. Find all relevant sections
-    const sections = container.querySelectorAll('.formula-section, .def-section');
+    const sections = container.querySelectorAll('.formula-section, .def-section, .subject-container');
 
     // 4. Toggle visibility
     sections.forEach(section => {
+        // Special handling for subject containers (papers) if we use this for papers too
+        // But logic.js originally only had formula-section and def-section.
+        // I added .subject-container to the querySelector.
+        // I need to ensure subject-container has data-subject if I want it to filter.
+        // Or I can just manually handle it in selectSubject.
+        // For now, let's keep the original logic for formulae/definitions.
+
         if (!subject || subject === 'all') {
             section.classList.remove('hidden');
         } else {
             const sectionSubject = section.getAttribute('data-subject');
+            // If it's a paper container, it might not have data-subject yet.
+            // But if I add it, this works.
+
             if (sectionSubject && sectionSubject.includes(subject)) {
                 section.classList.remove('hidden');
             } else {
@@ -295,7 +320,6 @@ function filterView(viewId, subject) {
 
     // 5. Allow event bubbling to close menu
     event.stopPropagation();
-    toggleSideMenu(); // Close if open
     closeAllPanels();
 }
 
@@ -576,4 +600,256 @@ async function loadCloudLeaderboard() {
 // === 6. INITIALIZATION ===
 if (getUser()) {
     initApp(getUser());
+}
+// === NEW LOGIC FOR UI OVERHAUL ===
+
+// Subject Accordion
+function toggleCat(catId) {
+    const el = document.getElementById(`cat-${catId}`);
+    if (el) el.classList.toggle('hidden');
+    // Simple toggle. CSS transition handled by flow or we can add max-height if we want animation.
+}
+
+function selectSubject(subject) {
+    toggleSubjectsPanel(); // Close right panel
+
+    // Switch to Papers view
+    setView('papers');
+
+    // Filter papers by subject
+    // We reuse filterView logic but specific for papers container if needed.
+    // Or just manually:
+    const container = document.getElementById('view-papers');
+    const sections = container.querySelectorAll('.subject-container');
+
+    sections.forEach(section => {
+        // Check ID or data-subject. 
+        // IDs are 'container-bus-p3', 'container-econ-p3', etc.
+        const id = section.id || '';
+        if (subject === 'business') {
+            if (id.includes('bus')) section.classList.remove('hidden');
+            else section.classList.add('hidden');
+        } else if (subject === 'economics') {
+            if (id.includes('econ')) section.classList.remove('hidden');
+            else section.classList.add('hidden');
+        } else {
+            section.classList.remove('hidden');
+        }
+    });
+}
+
+// === HOME PAGE LOGIC ===
+
+async function initHome() {
+    const u = getUser();
+    if (!u) return;
+
+    const name = u.split('.')[0] || 'Student';
+    // Random Quote
+    const quotes = [
+        "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        "The only way to do great work is to love what you do.",
+        "Believe you can and you're halfway there.",
+        "Education is the most powerful weapon which you can use to change the world.",
+        "Difficult roads often lead to beautiful destinations.",
+        "Don't watch the clock; do what it does. Keep going."
+    ];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+    // Insert into DOM
+    const view = document.getElementById('view-home');
+    if (view) {
+        view.innerHTML = `
+            <div class="welcome-header">
+                <h1>Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}</h1>
+                <p class="motivation-quote">"${quote}"</p>
+            </div>
+            
+            <div class="home-grid">
+                <div class="stat-card-home">
+                    <div class="stat-label">Business Papers</div>
+                    <div class="stat-value" id="home-stat-papers">-</div>
+                </div>
+                <div class="stat-card-home">
+                    <div class="stat-label">Average Score</div>
+                    <div class="stat-value" id="home-stat-score">-</div>
+                </div>
+                <div class="stat-card-home">
+                    <div class="stat-label">Class Rank</div>
+                    <div class="stat-value" id="home-stat-rank">-</div>
+                </div>
+                
+                <div class="ai-tutor-home">
+                    <div style="font-size:3rem;">🤖</div>
+                    <div class="ai-content">
+                        <h3 style="margin:0; color:var(--lime-dark);">AI Personal Tutor</h3>
+                        <p style="color:#666; margin-top:5px;">Ask me anything about Business or Economics!</p>
+                        <div class="ai-input-group">
+                            <input type="text" class="ai-input-home" placeholder="Explain price elasticity..." id="home-ai-input" onkeypress="handleHomeAIEnter(event)">
+                            <button class="ai-send-btn" onclick="handleHomeAI()">➜</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Fetch Stats
+        updateHomeStats(u);
+    }
+}
+
+async function updateHomeStats(user) {
+    try {
+        // Safety check for CloudManager
+        if (!window.CloudManager) {
+            console.warn("CloudManager not initialized");
+            document.getElementById('home-stat-papers').innerText = "0";
+            document.getElementById('home-stat-score').innerText = "0";
+            document.getElementById('home-stat-rank').innerText = "-";
+            return;
+        }
+
+        // Get User Data
+        const userData = await window.CloudManager.getAllData(user);
+        const papers = userData.papers || {};
+
+        // Calculate Business Papers Count
+        let busCount = 0;
+        let totalScore = 0;
+
+        Object.keys(papers).forEach(pid => {
+            const type = classifyPaper(pid);
+            if (type.subject === 'business') {
+                const attempts = papers[pid];
+                let isAttempted = false;
+                Object.values(attempts).forEach(q => {
+                    if (q.score !== undefined) {
+                        isAttempted = true;
+                        totalScore += (q.score || 0);
+                    }
+                });
+                if (isAttempted) busCount++;
+            }
+        });
+
+        const elPapers = document.getElementById('home-stat-papers');
+        if (elPapers) elPapers.innerText = busCount;
+
+        // Calculate Rank and Score
+        const lb = await window.CloudManager.getLeaderboard();
+
+        const sortedTotal = Object.values(lb).sort((a, b) => (b.total || 0) - (a.total || 0));
+        let myRank = '-';
+        let myTotalScore = 0;
+
+        sortedTotal.forEach((s, i) => {
+            if (user && s.name && user.toLowerCase().includes(s.name.toLowerCase())) {
+                myRank = `#${i + 1}`;
+                myTotalScore = s.total || 0;
+            }
+        });
+
+        const elRank = document.getElementById('home-stat-rank');
+        if (elRank) elRank.innerText = myRank;
+
+        const elScore = document.getElementById('home-stat-score');
+        if (elScore) elScore.innerText = myTotalScore;
+
+        const label = document.querySelector('#view-home .stat-card-home:nth-child(2) .stat-label');
+        if (label) label.innerText = "Cumulative Score";
+
+    } catch (e) {
+        console.error("Stats Error", e);
+    }
+}
+
+function handleHomeAIEnter(e) {
+    if (e.key === 'Enter') handleHomeAI();
+}
+
+function handleHomeAI() {
+    const input = document.getElementById('home-ai-input');
+    const txt = input.value.trim();
+    if (txt) {
+        alert("AI Tutor: That is a great question! This feature is being connected to the backend. Stay tuned!");
+        input.value = '';
+    }
+}
+
+// === NOTES LOGIC ===
+
+function loadNotes() {
+    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    const container = document.getElementById('saved-notes-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (notes.length === 0) {
+        container.innerHTML = '<div style="color:#aaa; text-align:center; padding:20px;">No notes yet. Create one!</div>';
+        return;
+    }
+
+    notes.forEach((note, index) => {
+        const div = document.createElement('div');
+        div.className = 'saved-note-item';
+        // Check for title or use text excerpt
+        let displayTitle = note.title;
+        if (!displayTitle) {
+            displayTitle = note.text ? note.text.substring(0, 20) + (note.text.length > 20 ? '...' : '') : 'Untitled Note';
+        }
+
+        div.innerHTML = `
+            <span onclick="openNote(${index})" style="flex:1;">${displayTitle}</span>
+            <button class="delete-note-btn" onclick="deleteNote(${index})">🗑</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function createNewNote() {
+    const editor = document.getElementById('note-editor');
+    editor.value = '';
+    editor.dataset.index = ''; // Clear current index
+    editor.focus();
+}
+
+function saveCurrentNote() {
+    const editor = document.getElementById('note-editor');
+    const text = editor.value;
+    if (!text.trim()) return alert("Empty note!");
+
+    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    const idx = editor.dataset.index;
+
+    // Generate Title from first line
+    const title = text.split('\n')[0].substring(0, 30);
+    const noteObj = { title, text, date: new Date().toISOString() };
+
+    if (idx !== '' && idx !== undefined && idx !== null && notes[idx]) {
+        notes[idx] = noteObj;
+    } else {
+        notes.unshift(noteObj);
+    }
+
+    localStorage.setItem('habibi_notes', JSON.stringify(notes));
+    loadNotes();
+    alert("Note saved!");
+}
+
+function openNote(index) {
+    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    if (notes[index]) {
+        const editor = document.getElementById('note-editor');
+        editor.value = notes[index].text;
+        editor.dataset.index = index;
+    }
+}
+
+function deleteNote(index) {
+    if (!confirm("Delete this note?")) return;
+    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    notes.splice(index, 1);
+    localStorage.setItem('habibi_notes', JSON.stringify(notes));
+    loadNotes();
+    createNewNote();
 }

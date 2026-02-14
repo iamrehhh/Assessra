@@ -1177,3 +1177,317 @@ textarea.expanded {
     border-left: 4px solid var(--lime-primary) !important;
     color: var(--lime-dark) !important;
 }
+
+/* === NEW UI COMPONENTS === */
+
+/* Logo */
+.app-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Subjects Panel (Right Side) */
+.side-panel-right {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    /* Start hidden */
+    width: 350px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 3000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel-right.active {
+    right: 0;
+}
+
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+}
+
+.panel-header h2 {
+    margin: 0;
+    color: var(--lime-dark);
+    font-family: 'Playfair Display', serif;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--danger);
+}
+
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Subject Categories (Accordion) */
+.subject-category {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cat-header {
+    padding: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    transition: background 0.2s;
+}
+
+.cat-header:hover {
+    background: #f9f9f9;
+    color: var(--lime-dark);
+}
+
+.cat-body {
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+    overflow: hidden;
+    /* transition is handled via class toggle or max-height if preferred, but simple utility for now */
+}
+
+.cat-body.hidden {
+    display: none;
+}
+
+.subject-item {
+    padding: 15px 30px;
+    color: #555;
+    cursor: pointer;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    transition: 0.2s;
+}
+
+.subject-item:hover {
+    background: #eee;
+    color: var(--lime-dark);
+    border-left-color: var(--lime-primary);
+}
+
+/* Notes Panel (Left Side - Enhancing .side-menu) */
+/* .side-menu class already exists and handles left-side logic if .left-side is added. 
+   In index.html I used class="side-menu" for notes-panel, but it needs "left-side" class to be on the left.
+   I will update index.html to add "left-side" class to notes-panel, or add styling here to force it if ID matches.
+*/
+#notes-panel {
+    width: 400px;
+    border-right: 1px solid #ddd;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.notes-controls {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+}
+
+.note-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.note-btn.new {
+    background: rgba(0, 0, 0, 0.05);
+    /* Adjusted for white bg of side-menu if it's white? No, side-menu is usually white, but header text suggests dark? */
+    /* Wait, side-menu background is usually white in this app based on other styles, let's check. 
+       .side-menu has default bg? No specific bg in viewed lines. 
+       Actually, previous view showed .side-menu definition, I missed if it had bg. 
+       Let's assume white bg.
+    */
+    background: #f0f0f0;
+    color: #333;
+}
+
+.note-btn.new:hover {
+    background: #e0e0e0;
+}
+
+.note-btn.save {
+    background: var(--lime-primary);
+    color: white;
+}
+
+.note-btn.save:hover {
+    background: var(--lime-light);
+    color: var(--lime-dark);
+}
+
+#note-editor {
+    width: 100%;
+    height: 300px;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.saved-note-item {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
+}
+
+.saved-note-item:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.delete-note-btn {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Home View Styles */
+#view-home {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.welcome-header {
+    margin-bottom: 40px;
+}
+
+.welcome-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--lime-dark);
+    margin-bottom: 10px;
+}
+
+.motivation-quote {
+    font-style: italic;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.stat-card-home {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--lime-dark);
+    margin: 15px 0;
+}
+
+.stat-label {
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.ai-tutor-home {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+    border: 1px solid var(--lime-light);
+}
+
+.ai-content {
+    flex: 1;
+}
+
+.ai-input-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.ai-input-home {
+    flex: 1;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    outline: none;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.ai-send-btn {
+    background: var(--lime-dark);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: 0.2s;
+}
+
+.ai-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
+}

@@ -28,20 +28,19 @@
 
             <div class="app-header">
                 <div class="header-left">
-                    <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
-                    <div>
-                        <h2 style="color:var(--lime-dark); margin:0;">Habibi Studies</h2>
-                        <div id="welcome-msg" class="welcome-text"></div>
-                    </div>
+                    <img src="assets/logo.png" alt="The One" style="height: 40px;">
                 </div>
+                <!-- Changed 'nav' to match new requirements -->
                 <div class="nav">
-                    <button class="nav-btn active" onclick="setView('papers')">Papers</button>
+                    <!-- Replaced Papers with Subjects -->
+                    <button class="nav-btn" onclick="toggleSubjectsPanel()">Subjects</button>
 
                     <div class="nav-item-wrapper">
                         <button class="nav-btn" onclick="setView('formulae')">Formulae ▾</button>
                         <div class="dropdown-menu">
                             <div class="dropdown-item" onclick="filterView('formulae', 'business')">Business</div>
                             <!-- Add Economics here if needed, currently all formulae are Business -->
+                            <div class="dropdown-item" onclick="filterView('formulae', 'economics')">Economics</div>
                         </div>
                     </div>
 
@@ -54,13 +53,25 @@
                     </div>
 
                     <button class="nav-btn" onclick="toggleScorecardPanel()"> Scorecard</button>
+                    <!-- Others Dropdown -->
+                    <div class="nav-item-wrapper">
+                        <button class="nav-btn">Others ▾</button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="alert('Vocab coming soon!')">Vocab</div>
+                            <div class="dropdown-item" onclick="alert('Idioms coming soon!')">Idioms</div>
+                        </div>
+                    </div>
+
                     <button class="nav-btn" onclick="toggleLeaderboardPanel()">🏆 Leaderboard</button>
                     <button class="nav-btn" onclick="setView('tips')"
                         style="font-size: 1.5rem; padding: 5px 15px;">💡</button>
                     <button class="nav-btn" onclick="doLogout()">Logout</button>
-                    <button class="hamburger-btn" onclick="toggleSideMenu()">☰</button>
+                    <button class="hamburger-btn" onclick="toggleNotesPanel()">☰</button>
                 </div>
             </div>
+
+            <!-- HOME VIEW -->
+            <div id="view-home" class="hidden"></div>
 
             <div id="view-papers">
 
@@ -1833,34 +1844,45 @@
                 </div>
             </div>
 
-            <div id="side-menu-overlay" class="side-menu-overlay" onclick="toggleSideMenu()"></div>
-            <div id="side-menu" class="side-menu">
-                <div class="menu-header">
-                    <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Subjects
-                    </h3>
-                    <button class="menu-close" onclick="toggleSideMenu()">✖</button>
+            <!-- SUBJECTS SIDE PANEL (RIGHT) -->
+            <div id="subjects-overlay" class="side-menu-overlay" onclick="toggleSubjectsPanel()"></div>
+            <div id="subjects-panel" class="side-panel-right">
+                <div class="panel-header">
+                    <h2>Subjects</h2>
+                    <button class="close-btn" onclick="toggleSubjectsPanel()">×</button>
                 </div>
-
-                <div class="subject-group">
-                    <button class="subject-btn" onclick="toggleSubject('sub-business')">Business
-                        <span>▼</span></button>
-                    <div id="sub-business" class="subject-content expanded">
-                        <div id="link-bus-p3" class="paper-link active" onclick="switchPaperView('bus-p3')">Paper 3
+                <div class="panel-content">
+                    <div class="subject-category">
+                        <div class="cat-header" onclick="toggleCat('igcse')">IGCSE <span class="arrow">▸</span></div>
+                        <div id="cat-igcse" class="cat-body hidden">
+                            <div class="subject-item" style="color:#999; font-style:italic; padding:10px;">Coming Soon
+                            </div>
                         </div>
-                        <div id="link-bus-p4" class="paper-link" onclick="switchPaperView('bus-p4')">Paper 4</div>
+                    </div>
+                    <div class="subject-category">
+                        <div class="cat-header" onclick="toggleCat('alevel')">AS & A Level <span class="arrow">▾</span>
+                        </div>
+                        <div id="cat-alevel" class="cat-body">
+                            <div class="subject-item" onclick="selectSubject('business')">Business (9609)</div>
+                            <div class="subject-item" onclick="selectSubject('economics')">Economics (9708)</div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="subject-group">
-                    <button class="subject-btn" onclick="toggleSubject('sub-econ')">Economics
-                        <span>▼</span></button>
-                    <div id="sub-econ" class="subject-content">
-                        <div id="link-econ-p3" class="paper-link" onclick="switchPaperView('econ-p3')">Paper 3 (MCQ)
-                        </div>
-                        <div id="link-econ-p4" class="paper-link" onclick="switchPaperView('econ-p4')">Paper 4</div>
+            <!-- NOTES PANEL (LEFT) -->
+            <div id="notes-overlay" class="side-menu-overlay" onclick="toggleNotesPanel()"></div>
+            <div id="notes-panel" class="side-menu left-side">
+                <button class="menu-close" onclick="toggleNotesPanel()">×</button>
+                <div class="menu-content">
+                    <h2 style="color:white; margin-bottom:20px;">My Notes</h2>
+                    <div class="notes-controls">
+                        <button class="note-btn new" onclick="createNewNote()">+ New Note</button>
+                        <button class="note-btn save" onclick="saveCurrentNote()">💾 Save</button>
                     </div>
+                    <textarea id="note-editor" placeholder="Write your notes here..."></textarea>
+                    <div id="saved-notes-list"></div>
                 </div>
-
             </div>
 
             <div id="chat-overlay" class="chat-overlay hidden" onclick="toggleChat()"></div>
