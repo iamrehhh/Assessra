@@ -1935,6 +1935,78 @@
         </div>
     </div>
 
+    <!-- Scorecard Panel -->
+    <div id="scorecard-overlay" class="side-menu-overlay" onclick="toggleScorecardPanel()"></div>
+    <div id="scorecard-panel" class="side-menu left-side">
+        <div class="menu-header">
+            <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">My Performance</h3>
+            <button class="menu-close" onclick="toggleScorecardPanel()">✖</button>
+        </div>
+
+        <div class="subject-group">
+            <button class="subject-btn" onclick="toggleSubject('score-sub-business')">Business (9609)
+                <span>▼</span></button>
+            <div id="score-sub-business" class="subject-content expanded">
+                <div class="paper-link total-link" onclick="renderSubjectTotal('Business', getUser())">
+                    <strong>📊 View Business Total</strong>
+                </div>
+                <div class="paper-subsection-title">Paper 3 (Case Study)</div>
+                <div id="sc-bus-p3"></div>
+                <div class="paper-subsection-title">Paper 4 (Strategy)</div>
+                <div id="sc-bus-p4"></div>
+            </div>
+        </div>
+
+        <div class="subject-group">
+            <button class="subject-btn" onclick="toggleSubject('score-sub-econ')">Economics (9708)
+                <span>▼</span></button>
+            <div id="score-sub-econ" class="subject-content">
+                <div class="paper-link total-link" onclick="renderSubjectTotal('Economics', getUser())">
+                    <strong>📊 View Economics Total</strong>
+                </div>
+                <div class="paper-subsection-title">Paper 3 (MCQ)</div>
+                <div id="sc-econ-p3"></div>
+                <div class="paper-subsection-title">Paper 4 (Data/Essay)</div>
+                <div id="sc-econ-p4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Panel -->
+    <div id="leaderboard-overlay" class="side-menu-overlay" onclick="toggleLeaderboardPanel()"></div>
+    <div id="leaderboard-panel" class="side-menu left-side">
+        <div class="menu-header">
+            <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Leaderboards</h3>
+            <button class="menu-close" onclick="toggleLeaderboardPanel()">✖</button>
+        </div>
+
+        <div class="subject-group">
+            <div class="paper-link" onclick="switchLeaderboardView('overall')">🏆 Overall Rankings</div>
+            <div class="paper-link" onclick="switchLeaderboardView('business')">💼 Business (9609)</div>
+            <div class="paper-link" onclick="switchLeaderboardView('economics')">📈 Economics (9708)</div>
+        </div>
+    </div>
+
+    <!-- Leaderboard View -->
+    <div id="view-leaderboard" class="hidden"
+        style="padding: 40px; text-align: center; max-width: 900px; margin: 0 auto;">
+        <h2 id="lb-title"
+            style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 10px; font-family:'Playfair Display', serif;">
+            Class Rankings</h2>
+        <p id="lb-subtitle" style="color: #666; margin-bottom: 30px;">Top performing students</p>
+        <div id="leaderboard-container"></div>
+    </div>
+
+    <!-- Score Display View -->
+    <div id="view-score-display" class="hidden" style="padding: 40px; text-align: center;">
+        <button class="nav-btn" onclick="setView('papers')" style="float:left;">← Back</button>
+        <div style="clear:both;"></div>
+        <h2 id="score-display-title" style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 20px;">Paper
+            Details
+        </h2>
+        <div id="score-display-content"></div>
+    </div>
+
     <!-- External Scripts (Logic & Data) -->
     <script src="scripts/storage_manager.js"></script>
     <script src="scripts/cloud_storage.js"></script>
@@ -1951,75 +2023,6 @@
 
     <!-- Main Logic -->
     <script src="scripts/logic.js"></script>
-</body>
-
-</html>
-
-<div id="scorecard-overlay" class="side-menu-overlay" onclick="toggleScorecardPanel()"></div>
-<div id="scorecard-panel" class="side-menu left-side">
-    <div class="menu-header">
-        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">My Performance</h3>
-        <button class="menu-close" onclick="toggleScorecardPanel()">✖</button>
-    </div>
-
-    <div class="subject-group">
-        <button class="subject-btn" onclick="toggleSubject('score-sub-business')">Business (9609)
-            <span>▼</span></button>
-        <div id="score-sub-business" class="subject-content expanded">
-            <div class="paper-link total-link" onclick="renderSubjectTotal('Business', getUser())">
-                <strong>📊 View Business Total</strong>
-            </div>
-            <div class="paper-subsection-title">Paper 3 (Case Study)</div>
-            <div id="sc-bus-p3"></div>
-            <div class="paper-subsection-title">Paper 4 (Strategy)</div>
-            <div id="sc-bus-p4"></div>
-        </div>
-    </div>
-
-    <div class="subject-group">
-        <button class="subject-btn" onclick="toggleSubject('score-sub-econ')">Economics (9708) <span>▼</span></button>
-        <div id="score-sub-econ" class="subject-content">
-            <div class="paper-link total-link" onclick="renderSubjectTotal('Economics', getUser())">
-                <strong>📊 View Economics Total</strong>
-            </div>
-            <div class="paper-subsection-title">Paper 3 (MCQ)</div>
-            <div id="sc-econ-p3"></div>
-            <div class="paper-subsection-title">Paper 4 (Data/Essay)</div>
-            <div id="sc-econ-p4"></div>
-        </div>
-    </div>
-</div>
-
-<div id="leaderboard-overlay" class="side-menu-overlay" onclick="toggleLeaderboardPanel()"></div>
-<div id="leaderboard-panel" class="side-menu left-side">
-    <div class="menu-header">
-        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Leaderboards</h3>
-        <button class="menu-close" onclick="toggleLeaderboardPanel()">✖</button>
-    </div>
-
-    <div class="subject-group">
-        <div class="paper-link" onclick="switchLeaderboardView('overall')">🏆 Overall Rankings</div>
-        <div class="paper-link" onclick="switchLeaderboardView('business')">💼 Business (9609)</div>
-        <div class="paper-link" onclick="switchLeaderboardView('economics')">📈 Economics (9708)</div>
-    </div>
-</div>
-
-<div id="view-leaderboard" class="hidden" style="padding: 40px; text-align: center; max-width: 900px; margin: 0 auto;">
-    <h2 id="lb-title"
-        style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 10px; font-family:'Playfair Display', serif;">
-        Class Rankings</h2>
-    <p id="lb-subtitle" style="color: #666; margin-bottom: 30px;">Top performing students</p>
-    <div id="leaderboard-container"></div>
-</div>
-
-<div id="view-score-display" class="hidden" style="padding: 40px; text-align: center;">
-    <button class="nav-btn" onclick="setView('papers')" style="float:left;">← Back</button>
-    <div style="clear:both;"></div>
-    <h2 id="score-display-title" style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 20px;">Paper Details
-    </h2>
-    <div id="score-display-content"></div>
-</div>
-
 </body>
 
 </html>
