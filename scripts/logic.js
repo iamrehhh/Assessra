@@ -981,7 +981,8 @@ async function updateHomeStats(user) {
 
         Object.keys(papers).forEach(pid => {
             const type = classifyPaper(pid);
-            if (type.subject === 'business') {
+            // Count ALL papers, not just business
+            if (type.subject) {
                 const attempts = papers[pid];
                 let isAttempted = false;
                 Object.values(attempts).forEach(q => {
