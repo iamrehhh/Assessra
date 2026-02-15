@@ -104,56 +104,50 @@ const StorageManager = {
         const data = StorageManager.getData(user);
         const today = new Date().setHours(0, 0, 0, 0);
         let todayScore = 0;
-        let activityDates = new Set();
+        let dailyScores = {}; // Map date -> score
 
-        // Check Essays
-        if (data.essays) {
-            Object.values(data.essays).forEach(paper => {
-                Object.values(paper).forEach(q => {
-                    if (q.timestamp) {
-                        const date = new Date(q.timestamp).setHours(0, 0, 0, 0);
-                        if (date === today && q.score) todayScore += q.score;
-                        if (q.score > 0) activityDates.add(date);
-                    }
-                });
-            });
-        }
-
-        // Check MCQs
-        if (data.mcq) {
-            Object.values(data.mcq).forEach(session => {
-                if (session.timestamp) {
-                    const date = new Date(session.timestamp).setHours(0, 0, 0, 0);
-                    if (date === today && session.score) todayScore += session.score;
-                    if (session.score > 0) activityDates.add(date);
+        // Helper to sum scores by date
+        const aggregate = (source) => {
+            if (!source) return;
+            Object.values(source).forEach(item => {
+                // Item could be a paper object (containing questions) or a session object
+                if (item.timestamp && item.score) { // MCQ Session
+                    const d = new Date(item.timestamp).setHours(0, 0, 0, 0);
+                    dailyScores[d] = (dailyScores[d] || 0) + item.score;
+                } else if (typeof item === 'object') { // Paper with questions
+                    Object.values(item).forEach(q => {
+                        if (q.timestamp && q.score) {
+                            const d = new Date(q.timestamp).setHours(0, 0, 0, 0);
+                            dailyScores[d] = (dailyScores[d] || 0) + q.score;
+                        }
+                    });
                 }
             });
-        }
+        };
 
-        // Calculate Streak
+        aggregate(data.essays);
+        aggregate(data.mcq);
+
+        todayScore = dailyScores[today] || 0;
+
+        // Calculate Streak (Strict 50pt Threshold)
         let streak = 0;
-        let checkDate = today;
-        // If today has activity, include today in streak? Usually streaks count completed days OR current chain.
-        // Let's count current chain including today if active.
+        // Check Yesterday first
+        let checkDate = today - 86400000;
 
-        // Simple Logic: Iterate backwards from today
         while (true) {
-            if (activityDates.has(checkDate)) {
+            const s = dailyScores[checkDate] || 0;
+            if (s >= 50) {
                 streak++;
-                checkDate -= 86400000; // Go back 1 day
+                checkDate -= 86400000;
             } else {
-                // If today has no activity yet, streak shouldn't reset to 0 immediately if yesterday had activity?
-                // Standard Logic: Streak allows missing today provided yesterday was active.
-                if (checkDate === today && streak === 0) {
-                    checkDate -= 86400000;
-                    continue;
-                }
-                break;
+                break; // Broken streak
             }
         }
 
-        return { todayScore, streak: Math.max(streak, 1) }; // Default 1 for motivation? Or 0. Let's start with calculated.
-        // Actually, user screenshot shows "1 days strong". If just started, maybe 1?
-        // Let's return Math.max(streak, 0) but handle display logic in UI.
+        // Add Today if target met
+        if (todayScore >= 50) streak++;
+
+        return { todayScore, streak };
     }
 };

@@ -960,29 +960,40 @@ async function initHome() {
                         </div>
                     </div>
 
-                    <!-- TODAY'S PROGRESS (NEW FEATURE) -->
-                    <div class="glass-panel" style="margin-top:20px; padding:20px; display:flex; align-items:center; justify-content:space-between;">
-                        <div style="flex:1;">
-                            <h3 style="margin:0 0 10px 0; font-size:1.1rem; color:#333;">Today's Progress</h3>
-                            
-                            <!-- Progress Bar -->
-                            <div style="background:#eee; height:8px; border-radius:4px; overflow:hidden; margin-bottom:10px; width:100%;">
-                                <div id="daily-progress-bar" style="width:0%; height:100%; background:var(--lime-primary); transition:width 0.5s ease;"></div>
+                    <!-- TODAY'S PROGRESS (CUSTOM DESIGN) -->
+                    <div class="glass-panel" style="margin-top:20px; padding:25px; position:relative; overflow:hidden;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:15px;">
+                            <div>
+                                <h3 style="margin:0; font-size:1.2rem; color:var(--lime-dark); font-weight:800;">Daily Target 🎯</h3>
+                                <p style="margin:5px 0 0 0; color:#666; font-size:0.9rem;" id="daily-msg">Let's hit 50 points today!</p>
                             </div>
-                            
-                            <p style="margin:0; font-size:0.9rem; color:#666;">
-                                You've scored <strong id="daily-score">0</strong> of <strong>50</strong> targeted points
-                            </p>
-                             <div class="continue-subtitle" style="margin-top:5px; font-size:0.8rem; cursor:pointer; color:var(--lime-dark);">
-                                Update Target ↗
+                            <div style="text-align:right;">
+                                <div style="font-size:2rem; font-weight:800; color:var(--lime-primary); line-height:1;" id="daily-score-big">0</div>
+                                <span style="font-size:0.8rem; color:#888; letter-spacing:1px; text-transform:uppercase;">/ 50 PTS</span>
                             </div>
                         </div>
 
-                        <!-- Streak Display -->
-                        <div style="margin-left:20px; text-align:center; background:#fff; padding:15px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); border:1px solid #eee;">
-                            <div style="font-size:2rem;">🔥</div>
-                            <div style="font-size:1.2rem; font-weight:bold; color:#333;" id="streak-days">1</div>
-                            <div style="font-size:0.8rem; color:#888;">days strong</div>
+                        <!-- Custom Progress Bar -->
+                        <div style="background:rgba(0,0,0,0.05); height:12px; border-radius:6px; overflow:hidden; position:relative;">
+                            <div id="daily-progress-bar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--lime-primary), var(--lime-dark)); border-radius:6px; transition:width 0.8s cubic-bezier(0.25, 1, 0.5, 1); box-shadow:0 0 15px rgba(46, 213, 115, 0.4);"></div>
+                        </div>
+
+                        <!-- Streak Badge (Bottom Right Absolute or Inline?) Let's make it inline below -->
+                        <div style="margin-top:20px; display:flex; gap:15px; border-top:1px solid #eee; padding-top:15px;">
+                            <div style="flex:1; display:flex; align-items:center; gap:10px;">
+                                <div style="font-size:1.5rem;">⚡</div> <!-- Lightning for unique look -->
+                                <div>
+                                    <div style="font-weight:bold; color:#333; font-size:1.1rem;" id="streak-days">0</div>
+                                    <div style="font-size:0.75rem; color:#888; text-transform:uppercase; font-weight:bold;">Day Streak</div>
+                                </div>
+                            </div>
+                             <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-end; opacity:0.7;">
+                                <div style="font-size:1.2rem; filter:grayscale(1);">🏆</div>
+                                <div style="text-align:right;">
+                                    <div style="font-weight:bold; color:#333; font-size:1rem;" id="home-stat-score-mini">-</div>
+                                    <div style="font-size:0.75rem; color:#888;">Total Score</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1027,24 +1038,38 @@ async function updateHomeStats(user) {
     // 1. Daily Progress
     if (window.StorageManager && window.StorageManager.getDailyStats) {
         const daily = window.StorageManager.getDailyStats();
+        const maxScore = 50;
 
         // Update Score Text
-        const scoreEl = document.getElementById('daily-score');
-        if (scoreEl) scoreEl.innerText = daily.todayScore;
+        const scoreEl = document.getElementById('daily-score-big');
+        if (scoreEl) {
+            scoreEl.innerText = daily.todayScore;
+            // Animation pop logic could go here
+        }
 
         // Update Streak
         const streakEl = document.getElementById('streak-days');
-        if (streakEl) streakEl.innerText = daily.streak || 1;
+        if (streakEl) streakEl.innerText = daily.streak || 0;
 
         // Update Progress Bar
         const bar = document.getElementById('daily-progress-bar');
-        const maxScore = 50;
         const percentage = Math.min((daily.todayScore / maxScore) * 100, 100);
 
         if (bar) {
             bar.style.width = `${percentage}%`;
-            // If full, maybe change color or add glow?
-            if (percentage >= 100) bar.style.boxShadow = '0 0 10px var(--lime-primary)';
+        }
+
+        // Dynamic Msg
+        const msgEl = document.getElementById('daily-msg');
+        if (msgEl) {
+            if (daily.todayScore >= 50) {
+                msgEl.innerText = "Target smashed! You're on fire! 🔥";
+                msgEl.style.color = "var(--lime-dark)";
+            } else if (daily.todayScore > 25) {
+                msgEl.innerText = "Halfway there! Keep pushing!";
+            } else {
+                msgEl.innerText = "Start solving to build your streak!";
+            }
         }
     }
 
@@ -1059,7 +1084,7 @@ async function updateHomeStats(user) {
         if (!window.CloudManager) {
             console.warn("CloudManager failed to initialize after retries");
             document.getElementById('home-stat-papers').innerText = "0";
-            document.getElementById('home-stat-score').innerText = "0";
+            document.getElementById('home-stat-score-mini').innerText = "0"; // Mini score
             document.getElementById('home-stat-rank').innerText = "-";
             return;
         }
@@ -1071,6 +1096,19 @@ async function updateHomeStats(user) {
         // Calculate Business Papers Count
         let busCount = 0;
         let totalScore = 0;
+
+        const data = await window.CloudManager.getPublicData('leaderboard');
+        if (data) {
+            const sorted = Object.values(data).sort((a, b) => (b.total || 0) - (a.total || 0));
+            const myRank = sorted.findIndex(s => user && s.name && user.includes(s.name));
+            const myData = sorted[myRank];
+
+            document.getElementById('home-stat-rank').innerText = myRank !== -1 ? `#${myRank + 1}` : '-';
+            // document.getElementById('home-stat-score').innerText = myData ? (myData.total || 0) : '0'; // Old large card removed
+            const scoreVal = myData ? (myData.total || 0) : '0';
+            const miniScore = document.getElementById('home-stat-score-mini');
+            if (miniScore) miniScore.innerText = scoreVal;
+        }
 
         Object.keys(papers).forEach(pid => {
             const type = classifyPaper(pid);
