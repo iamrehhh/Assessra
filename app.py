@@ -332,6 +332,61 @@ def load_idioms_progress():
     return jsonify({"progress": progress})
 
 # ==========================================
+# VOCAB SETS PROGRESS (Monthly Organization)
+# ==========================================
+VOCAB_SETS_DB_FILE = 'vocab_sets_data.json'
+
+vocab_sets_db: Dict[str, Any] = load_db(VOCAB_SETS_DB_FILE)
+if not isinstance(vocab_sets_db, dict):
+    vocab_sets_db = {}
+
+@app.route('/save_vocab_sets_progress', methods=['POST'])
+def save_vocab_sets_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    progress = data.get('progress', {})
+    
+    vocab_sets_db[user_id] = progress
+    save_db(VOCAB_SETS_DB_FILE, vocab_sets_db)
+    return jsonify({"status": "success", "message": "Vocab sets progress saved"})
+
+@app.route('/load_vocab_sets_progress', methods=['POST'])
+def load_vocab_sets_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    progress = vocab_sets_db.get(user_id, None)
+    return jsonify({"progress": progress})
+
+# ==========================================
+# IDIOMS SETS PROGRESS (Monthly Organization)
+# ==========================================
+IDIOMS_SETS_DB_FILE = 'idioms_sets_data.json'
+
+idioms_sets_db: Dict[str, Any] = load_db(IDIOMS_SETS_DB_FILE)
+if not isinstance(idioms_sets_db, dict):
+    idioms_sets_db = {}
+
+@app.route('/save_idioms_sets_progress', methods=['POST'])
+def save_idioms_sets_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    progress = data.get('progress', {})
+    
+    idioms_sets_db[user_id] = progress
+    save_db(IDIOMS_SETS_DB_FILE, idioms_sets_db)
+    return jsonify({"status": "success", "message": "Idioms sets progress saved"})
+
+@app.route('/load_idioms_sets_progress', methods=['POST'])
+def load_idioms_sets_progress():
+    data = request.json
+    user_id = data.get('user_id', 'default_user')
+    
+    progress = idioms_sets_db.get(user_id, None)
+    return jsonify({"progress": progress})
+
+
+# ==========================================
 # SENTENCE COLLECTION STORAGE
 # ==========================================
 SENTENCES_DB_FILE = 'sentences_data.json'

@@ -323,7 +323,7 @@ function filterView(viewId, subject) {
     closeAllPanels();
 }
 
-// Show Vocab Container and load quiz
+// Show Vocab Container and load monthly sets
 function showVocabContainer() {
     // Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
@@ -341,13 +341,18 @@ function showVocabContainer() {
     const vocabContainer = document.getElementById('container-vocab');
     if (vocabContainer) {
         vocabContainer.classList.remove('hidden');
-        loadVocabQuiz();
+        // Use new monthly sets system
+        if (typeof initVocabSets === 'function') {
+            initVocabSets();
+        } else {
+            console.error("initVocabSets function not found. Check vocab_sets.js");
+        }
     }
 
     closeAllPanels();
 }
 
-// Show Idioms Container and load quiz
+// Show Idioms Container and load monthly sets
 function showIdiomsContainer() {
     // Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
@@ -365,11 +370,11 @@ function showIdiomsContainer() {
     const idiomsContainer = document.getElementById('container-idioms');
     if (idiomsContainer) {
         idiomsContainer.classList.remove('hidden');
-        if (typeof loadIdiomsQuiz === 'function') {
-            if (idiomsQuestions.length === 0) initIdiomsQuiz(); // Initialize if needed
-            loadIdiomsQuiz();
+        // Use new monthly sets system
+        if (typeof initIdiomsSets === 'function') {
+            initIdiomsSets();
         } else {
-            console.error("loadIdiomsQuiz function not found. Check idioms_quiz.js");
+            console.error("initIdiomsSets function not found. Check idioms_sets.js");
         }
     }
 
