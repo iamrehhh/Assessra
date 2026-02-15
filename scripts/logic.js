@@ -890,9 +890,22 @@ async function loadCloudLeaderboard() {
     document.getElementById('leaderboard-content').innerHTML = html + "</tbody></table>";
 }
 
-// === 6. INITIALIZATION ===
+// === 6. INITIALIZATION (WAIT FOR CLOUD MANAGER) ===
+async function waitForCloudManager() {
+    let attempts = 0;
+    while (!window.CloudManager && attempts < 50) { // Wait up to 5 seconds
+        await new Promise(r => setTimeout(r, 100));
+        attempts++;
+    }
+    if (!window.CloudManager) {
+        console.warn("CloudManager failed to load in time.");
+    }
+}
+
 if (getUser()) {
-    initApp(getUser());
+    waitForCloudManager().then(() => {
+        initApp(getUser());
+    });
 }
 // === NEW LOGIC FOR UI OVERHAUL ===
 
