@@ -1400,57 +1400,182 @@ textarea.expanded {
 }
 
 /* Home View Styles */
+/* Home View Styles - Revamped */
 #view-home {
     padding: 40px;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+/* Decoration Orb for Background */
+.decoration-orb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    top: -200px;
+    right: -200px;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .welcome-header {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
+    position: relative;
 }
 
 .welcome-header h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-size: 3.5rem;
+    color: var(--lime-dark);
+    margin-bottom: 15px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.motivation-quote {
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+    color: #555;
+    font-size: 1.15rem;
+    max-width: 700px;
+    line-height: 1.6;
+    border-left: 4px solid var(--lime-primary);
+    padding-left: 20px;
+}
+
+/* Home Grid Layout - 2 Columns on large screens */
+.home-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .home-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Left Column Container */
+.home-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Glassmorphism Panel styles */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+/* Continue Learning Card */
+.continue-card {
+    padding: 30px;
+    border-left: 6px solid var(--lime-primary);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.continue-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(74, 222, 128, 0.15);
+}
+
+.continue-label {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.continue-title {
+    font-size: 1.6rem;
+    font-weight: 700;
     color: var(--lime-dark);
     margin-bottom: 10px;
 }
 
-.motivation-quote {
-    font-style: italic;
+.continue-subtitle {
     color: #666;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.home-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+/* Stats Row in Right Column */
+.home-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.stat-card-home {
-    background: white;
-    padding: 30px;
+.stat-card-glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.stat-card-glass:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-color: var(--lime-primary);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    background: var(--lime-light);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.stat-info {
+    text-align: right;
 }
 
 .stat-value {
-    font-size: 3.5rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: var(--lime-dark);
-    margin: 15px 0;
+    margin: 0;
+    line-height: 1;
 }
 
 .stat-label {
     color: #888;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
+    margin-top: 5px;
 }
 
 

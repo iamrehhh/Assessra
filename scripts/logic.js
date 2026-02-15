@@ -875,6 +875,7 @@ async function initHome() {
 
     const name = u.split('.')[0] || 'Student';
     // Random Quote
+    // Generate random quote
     const quotes = [
         "Success is not final, failure is not fatal: it is the courage to continue that counts.",
         "The only way to do great work is to love what you do.",
@@ -888,27 +889,63 @@ async function initHome() {
     // Insert into DOM
     const view = document.getElementById('view-home');
     if (view) {
+        // Find last viewed or suggested activity (Simulated logic for now - allows future expansion)
+        // In a real scenario, we'd check localStorage for 'lastOpenedPaper'
+        let suggestedTitle = "Continue Vocabulary";
+        let suggestedSubtitle = "Batch 1 • 50 Questions";
+        let suggestedAction = "showVocabContainer()";
+        let suggestedLabel = "Recommended for you";
+
         view.innerHTML = `
+            <div class="decoration-orb"></div>
+            
             <div class="welcome-header">
                 <h1>Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}</h1>
                 <p class="motivation-quote">"${quote}"</p>
             </div>
             
             <div class="home-grid">
-                <div class="stat-card-home">
-                    <div class="stat-label">Business Papers</div>
-                    <div class="stat-value" id="home-stat-papers">-</div>
-                </div>
-                <div class="stat-card-home">
-                    <div class="stat-label">Average Score</div>
-                    <div class="stat-value" id="home-stat-score">-</div>
-                </div>
-                <div class="stat-card-home">
-                    <div class="stat-label">Class Rank</div>
-                    <div class="stat-value" id="home-stat-rank">-</div>
-                </div>
-                
+                <!-- LEFT COLUMN: Actionable Content -->
+                <div class="home-left-col">
+                    <div class="glass-panel continue-card" onclick="${suggestedAction}">
+                        <div class="continue-label">
+                            <span>⚡</span> ${suggestedLabel}
+                        </div>
+                        <div class="continue-title">${suggestedTitle}</div>
+                        <div class="continue-subtitle">
+                           ${suggestedSubtitle} <span style="margin-left:auto">➜</span>
+                        </div>
+                    </div>
 
+                    <!-- Quick Actions Row could go here in future -->
+                </div>
+
+                <!-- RIGHT COLUMN: Stats & Progress -->
+                <div class="home-right-col">
+                    <div class="stat-card-glass">
+                        <div class="stat-icon">📄</div>
+                        <div class="stat-info">
+                             <div class="stat-value" id="home-stat-papers">-</div>
+                             <div class="stat-label">Papers Done</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card-glass">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                             <div class="stat-value" id="home-stat-score">-</div>
+                             <div class="stat-label">Avg. Score</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card-glass">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                             <div class="stat-value" id="home-stat-rank">-</div>
+                             <div class="stat-label">Class Rank</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
 
