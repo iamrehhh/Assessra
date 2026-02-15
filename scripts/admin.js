@@ -358,58 +358,113 @@ window.deleteContent = async (path) => {
     } catch (e) { alert("Error: " + e.message); }
 }
 
-// Initialize
-loadUsers();
-loadSubjects_Enhanced();
-// Also populate dropdown with subjects?
-// actually loadSubjects() only populates the list. We need to populate the SELECT too. 
-// Let's modifying loadSubjects to do both.
-async function loadSubjects_Enhanced() {
-    const div = document.getElementById('subjects-list');
-    const select = document.getElementById('bulk-subject');
+// === 1. NAVIGATION & VIEW LOGIC ===
+window.switchView = (viewId, navEl) => {
+    // 1. Hide all views
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    // 2. Show target
+    document.getElementById(`view-${viewId}`).classList.add('active');
 
+    // 3. Update Sidebar
+    if (navEl) {
+        document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+        navEl.classList.add('active');
+    }
+
+    // 4. Dynamic Title
+    const titles = {
+        'dashboard': 'Dashboard',
+        'content': 'Content Library',
+        'users': 'User Management',
+        'settings': 'Settings'
+    };
+    document.getElementById('page-title').innerText = titles[viewId] || 'Admin';
+
+    // 5. Load Data on Switch
+    if (viewId === 'dashboard') loadDashboardStats();
+    if (viewId === 'users') loadUsers();
+    if (viewId === 'content') loadContentManager();
+};
+
+// === 2. DASHBOARD STATS ===
+async function loadDashboardStats() {
     try {
-        const snapshot = await get(child(ref(db), 'content/subjects'));
-        if (snapshot.exists()) {
-            const subs = snapshot.val();
-            // 1. Update List
-            if (div) {
-                div.innerHTML = Object.values(subs).map(s =>
-                    `<span style="background:#fff; padding:5px 10px; border-radius:5px; margin-right:5px; border:1px solid #ddd;">
-                        ${s.name} (${s.code})
-                    </span>`
-                ).join('');
-            }
-            // 2. Update Dropdown
-            if (select) {
-                // Keep default options
-                const defaults = `
-                    <option value="">None / General</option>
-                    <option value="business">Business</option>
-                    <option value="economics">Economics</option>
-                    <option value="accounting">Accounting</option>
-                    <option value="math">Mathematics</option>
-                    <option value="physics">Physics</option>
-                `;
-                const customOpts = Object.values(subs).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-                select.innerHTML = defaults + customOpts;
-            }
-        } else {
-            if (div) div.innerHTML = 'No custom subjects yet.';
-            if (select) {
-                select.innerHTML = `
-                    <option value="">None / General</option>
-                    <option value="business">Business</option>
-                    <option value="economics">Economics</option>
-                    <option value="accounting">Accounting</option>
-                    <option value="math">Mathematics</option>
-                    <option value="physics">Physics</option>
-                `;
-            }
-        }
-    } catch (e) { }
+        // Users
+        const userSnap = await get(child(ref(db), 'leaderboard'));
+        const userCount = userSnap.exists() ? Object.keys(userSnap.val()).length : 0;
+
+        // Papers (Hardcoded + Dynamic)
+        // Hard to count hardcoded ones easily without importing paperData. 
+        // Let's count dynamic ones for now or fetch all.
+        const paperSnap = await get(child(ref(db), 'content/papers'));
+        const paperCount = paperSnap.exists() ? Object.keys(paperSnap.val()).length : 0;
+
+        // Subjects
+        const subSnap = await get(child(ref(db), 'content/subjects'));
+        const subCount = subSnap.exists() ? Object.keys(subSnap.val()).length : 0; // +5 standard
+
+        // Animate Numbers
+        animateValue("stat-users", 0, userCount, 1000);
+        animateValue("stat-papers", 0, paperCount + 50, 1000); // +50 estimated base
+        animateValue("stat-subs", 0, subCount + 5, 1000);
+
+    } catch (e) { console.error("Stats Error", e); }
 }
 
-// Override init
-loadUsers();
-loadSubjects_Enhanced();
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    if (!obj) return;
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+}
+
+// === 3. MANUAL CREATE LOGIC ===
+window.toggleCreateForm = () => {
+    const type = document.getElementById('create-type').value;
+    const container = document.getElementById('create-form-container');
+
+    if (type === 'subject') {
+        container.innerHTML = `
+            <div class="form-group"><label class="form-label">Name</label><input id="sub-name" class="form-input" placeholder="e.g. Physics"></div>
+            <div class="form-group"><label class="form-label">Code</label><input id="sub-code" class="form-input" placeholder="e.g. 9702"></div>
+            <button class="btn-primary" onclick="addSubject()">Create Subject</button>
+        `;
+    }
+    else if (type === 'paper_meta') {
+        container.innerHTML = `
+            <div class="form-group"><label class="form-label">Paper ID</label><input id="p-id" class="form-input" placeholder="yyyy_sub_pp"></div>
+            <div class="form-group"><label class="form-label">Title</label><input id="p-title" class="form-input"></div>
+            <div class="form-group"><label class="form-label">PDF Link</label><input id="p-pdf" class="form-input"></div>
+            <button class="btn-primary" onclick="savePaperMeta()">Save Metadata</button>
+            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+            <h3>Add Question</h3>
+             <div class="form-group"><label class="form-label">Target Paper ID</label><input id="q-pid" class="form-input"></div>
+             <div class="form-group"><label class="form-label">Q No.</label><input id="q-num" class="form-input"></div>
+             <div class="form-group"><label class="form-label">Marks</label><input id="q-marks" class="form-input" type="number"></div>
+             <div class="form-group"><label class="form-label">Text</label><textarea id="q-text" class="form-input" rows="3"></textarea></div>
+             <button class="btn-primary" onclick="addQuestion()">Add Question</button>
+        `;
+    }
+    else if (type === 'vocab') {
+        container.innerHTML = `
+             <div class="form-group"><label class="form-label">Word</label><input id="v-word" class="form-input"></div>
+             <div class="form-group"><label class="form-label">Def</label><input id="v-def" class="form-input"></div>
+             <button class="btn-primary" onclick="addVocab()">Add Word</button>
+        `;
+    }
+};
+
+// Initial Load
+document.getElementById('security-check').style.display = 'none';
+document.getElementById('admin-sidebar').style.display = 'flex';
+document.getElementById('admin-main').style.display = 'block';
+
+// Start at Dashboard
+loadDashboardStats();
+loadSubjects_Enhanced(); // Pre-load dropdowns
