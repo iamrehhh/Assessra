@@ -482,13 +482,15 @@ h2 {
 }
 
 .login-logo-img {
-    width: 180px;
-    /* Enlarged from 120px */
-    height: 180px;
+    width: 220px;
+    /* Further enlarged from 180px */
+    height: 220px;
     object-fit: contain;
     margin-bottom: 30px;
-    /* Increased margin */
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+    mix-blend-mode: multiply;
+    /* Blends white background with card */
+    filter: none;
+    /* Removed drop shadow to avoid box outline */
 }
 
 .login-title {
