@@ -15,11 +15,11 @@ MARKING_API_KEY_PRIMARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
 
 # Secondary API Key for Fallback (when primary runs out of tokens)
 # TODO: PASTE YOUR SECOND API KEY HERE
-MARKING_API_KEY_SECONDARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
+MARKING_API_KEY_SECONDARY = "AIzaSyBD6Uu3G5EGs-kSOeUG0ZUpbLmyUNvNrtk"
 
 # Tertiary API Key for Extra Fallback (when secondary runs out)
 # TODO: PASTE YOUR THIRD API KEY HERE
-MARKING_API_KEY_TERTIARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
+MARKING_API_KEY_TERTIARY = "AIzaSyAZICuZj-jMdbY98Xm5uwso8NPJkTZah_4"
 
 # API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
