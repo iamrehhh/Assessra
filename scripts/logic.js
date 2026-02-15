@@ -938,6 +938,7 @@ async function initHome() {
             <div class="home-grid">
                 <!-- LEFT COLUMN: Actionable Content -->
                 <div class="home-left-col">
+                    <!-- Continue Card -->
                     <div class="glass-panel continue-card" onclick="${suggestedAction}">
                         <div class="continue-label">
                             <span>⚡</span> ${suggestedLabel}
@@ -945,6 +946,32 @@ async function initHome() {
                         <div class="continue-title">${suggestedTitle}</div>
                         <div class="continue-subtitle">
                            ${suggestedSubtitle} <span style="margin-left:auto">➜</span>
+                        </div>
+                    </div>
+
+                    <!-- TODAY'S PROGRESS (NEW FEATURE) -->
+                    <div class="glass-panel" style="margin-top:20px; padding:20px; display:flex; align-items:center; justify-content:space-between;">
+                        <div style="flex:1;">
+                            <h3 style="margin:0 0 10px 0; font-size:1.1rem; color:#333;">Today's Progress</h3>
+                            
+                            <!-- Progress Bar -->
+                            <div style="background:#eee; height:8px; border-radius:4px; overflow:hidden; margin-bottom:10px; width:100%;">
+                                <div id="daily-progress-bar" style="width:0%; height:100%; background:var(--lime-primary); transition:width 0.5s ease;"></div>
+                            </div>
+                            
+                            <p style="margin:0; font-size:0.9rem; color:#666;">
+                                You've scored <strong id="daily-score">0</strong> of <strong>50</strong> targeted points
+                            </p>
+                             <div class="continue-subtitle" style="margin-top:5px; font-size:0.8rem; cursor:pointer; color:var(--lime-dark);">
+                                Update Target ↗
+                            </div>
+                        </div>
+
+                        <!-- Streak Display -->
+                        <div style="margin-left:20px; text-align:center; background:#fff; padding:15px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); border:1px solid #eee;">
+                            <div style="font-size:2rem;">🔥</div>
+                            <div style="font-size:1.2rem; font-weight:bold; color:#333;" id="streak-days">1</div>
+                            <div style="font-size:0.8rem; color:#888;">days strong</div>
                         </div>
                     </div>
 
@@ -986,6 +1013,30 @@ async function initHome() {
 }
 
 async function updateHomeStats(user) {
+    // 1. Daily Progress
+    if (window.StorageManager && window.StorageManager.getDailyStats) {
+        const daily = window.StorageManager.getDailyStats();
+
+        // Update Score Text
+        const scoreEl = document.getElementById('daily-score');
+        if (scoreEl) scoreEl.innerText = daily.todayScore;
+
+        // Update Streak
+        const streakEl = document.getElementById('streak-days');
+        if (streakEl) streakEl.innerText = daily.streak || 1;
+
+        // Update Progress Bar
+        const bar = document.getElementById('daily-progress-bar');
+        const maxScore = 50;
+        const percentage = Math.min((daily.todayScore / maxScore) * 100, 100);
+
+        if (bar) {
+            bar.style.width = `${percentage}%`;
+            // If full, maybe change color or add glow?
+            if (percentage >= 100) bar.style.boxShadow = '0 0 10px var(--lime-primary)';
+        }
+    }
+
     try {
         // Wait for CloudManager to initialize (module loads asynchronously)
         let retries = 0;
