@@ -378,6 +378,13 @@ function showVocabContainer() {
         }
     }
 
+    // --- SAVE LAST ACTIVITY ---
+    localStorage.setItem('habibi_last_activity', JSON.stringify({
+        type: 'vocab',
+        title: 'Vocabulary Builder',
+        subtitle: 'Master new words'
+    }));
+
     closeAllPanels();
 }
 
@@ -406,6 +413,13 @@ function showIdiomsContainer() {
             console.error("initIdiomsSets function not found. Check idioms_sets.js");
         }
     }
+
+    // --- SAVE LAST ACTIVITY ---
+    localStorage.setItem('habibi_last_activity', JSON.stringify({
+        type: 'idioms',
+        title: 'Idioms & Phrases',
+        subtitle: 'Expand your expressions'
+    }));
 
     closeAllPanels();
 }
@@ -462,6 +476,14 @@ async function openPaper(pid, preservedScrollTop = 0) {
             }
         }
     }
+
+    // --- SAVE LAST ACTIVITY ---
+    localStorage.setItem('habibi_last_activity', JSON.stringify({
+        type: 'paper',
+        id: pid,
+        title: data ? data.title : pid,
+        subtitle: 'Resume Paper'
+    }));
 
     if (!data) return alert("Paper not found or loading...");
 
@@ -911,13 +933,14 @@ function selectSubject(subject) {
 
 // === HOME PAGE LOGIC ===
 
+// === HOME PAGE LOGIC ===
+
 async function initHome() {
     const u = getUser();
     if (!u) return;
 
     const name = u.split('.')[0] || 'Student';
     // Random Quote
-    // Generate random quote
     const quotes = [
         "Success is not final, failure is not fatal: it is the courage to continue that counts.",
         "The only way to do great work is to love what you do.",
@@ -931,12 +954,37 @@ async function initHome() {
     // Insert into DOM
     const view = document.getElementById('view-home');
     if (view) {
-        // Find last viewed or suggested activity (Simulated logic for now - allows future expansion)
-        // In a real scenario, we'd check localStorage for 'lastOpenedPaper'
-        let suggestedTitle = "Continue Vocabulary";
-        let suggestedSubtitle = "Batch 1 • 50 Questions";
-        let suggestedAction = "showVocabContainer()";
-        let suggestedLabel = "Recommended for you";
+        // --- CONTINUE CARD LOGIC ---
+        let suggestedTitle = "Continue Learning";
+        let suggestedSubtitle = "Pick up where you left off";
+        let suggestedAction = "setView('papers')"; // Default fallback
+        let suggestedLabel = "Welcome Back";
+
+        try {
+            const lastActivity = JSON.parse(localStorage.getItem('habibi_last_activity'));
+            if (lastActivity) {
+                suggestedTitle = lastActivity.title || "Continue Session";
+                suggestedSubtitle = lastActivity.subtitle || "Resume your progress";
+                // If it's a function call string, use it. If it's a paper ID, open it.
+                if (lastActivity.type === 'paper') {
+                    suggestedAction = `openPaper('${lastActivity.id}')`;
+                    suggestedLabel = "Resume Paper";
+                } else if (lastActivity.type === 'vocab') {
+                    suggestedAction = "showVocabContainer()";
+                    suggestedLabel = "Continue Vocabulary";
+                    suggestedTitle = "Vocabulary Builder";
+                    suggestedSubtitle = "Master new words";
+                } else if (lastActivity.type === 'idioms') {
+                    suggestedAction = "showIdiomsContainer()";
+                    suggestedLabel = "Continue Idioms";
+                    suggestedTitle = "Idioms & Phrases";
+                    suggestedSubtitle = "Expand your expressions";
+                }
+            }
+        } catch (e) { console.error("Error reading last activity", e); }
+
+        // --- DAILY TARGET LOGIC ---
+        // We will fetch real stats in updateHomeStats, but here we set the skeleton matching the Continue Card style
 
         view.innerHTML = `
             <div class="decoration-orb"></div>
@@ -960,44 +1008,32 @@ async function initHome() {
                         </div>
                     </div>
 
-                    <!-- TODAY'S PROGRESS (CUSTOM DESIGN) -->
-                    <div class="glass-panel" style="margin-top:20px; padding:25px; position:relative; overflow:hidden;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:15px;">
-                            <div>
-                                <h3 style="margin:0; font-size:1.2rem; color:var(--lime-dark); font-weight:800;">Daily Target 🎯</h3>
-                                <p style="margin:5px 0 0 0; color:#666; font-size:0.9rem;" id="daily-msg">Let's hit 50 points today!</p>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="font-size:2rem; font-weight:800; color:var(--lime-primary); line-height:1;" id="daily-score-big">0</div>
-                                <span style="font-size:0.8rem; color:#888; letter-spacing:1px; text-transform:uppercase;">/ 50 PTS</span>
+                    <!-- DAILY TARGET (Redesigned to match Continue Card) -->
+                    <!-- Added onclick to maybe scroll to papers or just visual feedback -->
+                    <div class="glass-panel continue-card" id="daily-target-card" style="border-left-color: #3b82f6; position: relative; overflow: hidden;"> 
+                        <div class="continue-label" style="color: #60a5fa;">
+                            <span>🎯</span> Daily Goal
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
+                            <div class="continue-title" style="margin-bottom: 0; color: #1e293b;">Daily Target</div>
+                            <div style="text-align: right;">
+                                <span id="daily-score-big" style="font-size: 1.8rem; font-weight: 800; color: #3b82f6;">0</span>
+                                <span style="font-size: 0.9rem; color: #94a3b8; font-weight: 600;">/ 50 PTS</span>
                             </div>
                         </div>
-
-                        <!-- Custom Progress Bar -->
-                        <div style="background:rgba(0,0,0,0.05); height:12px; border-radius:6px; overflow:hidden; position:relative;">
-                            <div id="daily-progress-bar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--lime-primary), var(--lime-dark)); border-radius:6px; transition:width 0.8s cubic-bezier(0.25, 1, 0.5, 1); box-shadow:0 0 15px rgba(46, 213, 115, 0.4);"></div>
+                        
+                        <!-- Progress Bar Container -->
+                        <div style="height: 8px; background: #e2e8f0; border-radius: 4px; margin-top: 15px; overflow: hidden; position: relative;">
+                            <div id="daily-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
                         </div>
-
-                        <!-- Streak Badge (Bottom Right Absolute or Inline?) Let's make it inline below -->
-                        <div style="margin-top:20px; display:flex; gap:15px; border-top:1px solid #eee; padding-top:15px;">
-                            <div style="flex:1; display:flex; align-items:center; gap:10px;">
-                                <div style="font-size:1.5rem;">⚡</div> <!-- Lightning for unique look -->
-                                <div>
-                                    <div style="font-weight:bold; color:#333; font-size:1.1rem;" id="streak-days">0</div>
-                                    <div style="font-size:0.75rem; color:#888; text-transform:uppercase; font-weight:bold;">Day Streak</div>
-                                </div>
-                            </div>
-                             <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-end; opacity:0.7;">
-                                <div style="font-size:1.2rem; filter:grayscale(1);">🏆</div>
-                                <div style="text-align:right;">
-                                    <div style="font-weight:bold; color:#333; font-size:1rem;" id="home-stat-score-mini">-</div>
-                                    <div style="font-size:0.75rem; color:#888;">Total Score</div>
-                                </div>
-                            </div>
+                        
+                        <div class="continue-subtitle" style="margin-top: 15px; font-size: 0.9rem;">
+                           <span id="daily-msg">Let's hit 50 points today!</span> 
+                           <span style="margin-left:auto; display: flex; align-items: center; gap: 5px;">
+                                <span style="font-size: 1.2rem;">🔥</span> <span id="streak-days" style="font-weight: 700; color: #f59e0b;">0</span> Day Streak
+                           </span>
                         </div>
                     </div>
-
-                    <!-- Quick Actions Row could go here in future -->
                 </div>
 
                 <!-- RIGHT COLUMN: Stats & Progress -->
@@ -1035,16 +1071,35 @@ async function initHome() {
 }
 
 async function updateHomeStats(user) {
-    // 1. Daily Progress
+    // 1. Daily Progress & Reset Logic
     if (window.StorageManager && window.StorageManager.getDailyStats) {
-        const daily = window.StorageManager.getDailyStats();
+        // Enforce Reset if New Day
+        const todayStr = new Date().toDateString();
+        const lastDate = localStorage.getItem('habibi_last_date');
+
+        if (lastDate !== todayStr) {
+            // It's a new day! Reset daily score
+            // StorageManager might handle this, but let's force it to be safe or update storage
+            // If StorageManager doesn't expose reset, we might need to manually reset logic in localstorage
+            // Assuming StorageManager stores in 'habibi_daily_stats'
+            let stats = JSON.parse(localStorage.getItem('habibi_daily_stats') || '{}');
+
+            // Check if we kept the streak or lost it
+            // Logic: If yesterday we didn't hit target (50), streak might reset to 0 depending on strictness
+            // For now, simpler logic: just reset today's score to 0
+            stats.todayScore = 0;
+            stats.date = todayStr; // Update date
+            localStorage.setItem('habibi_daily_stats', JSON.stringify(stats));
+            localStorage.setItem('habibi_last_date', todayStr);
+        }
+
+        const daily = window.StorageManager.getDailyStats(); // Should return updated stats
         const maxScore = 50;
 
         // Update Score Text
         const scoreEl = document.getElementById('daily-score-big');
         if (scoreEl) {
             scoreEl.innerText = daily.todayScore;
-            // Animation pop logic could go here
         }
 
         // Update Streak
@@ -1057,18 +1112,29 @@ async function updateHomeStats(user) {
 
         if (bar) {
             bar.style.width = `${percentage}%`;
+
+            // Color Logic based on progress
+            if (percentage >= 100) {
+                bar.style.background = "linear-gradient(90deg, #10b981, #059669)"; // Green for completion
+                document.getElementById('daily-target-card').style.borderLeftColor = "#10b981";
+            } else if (percentage >= 50) {
+                bar.style.background = "linear-gradient(90deg, #f59e0b, #d97706)"; // Orange/Yellow for half
+            }
         }
 
         // Dynamic Msg
         const msgEl = document.getElementById('daily-msg');
         if (msgEl) {
             if (daily.todayScore >= 50) {
-                msgEl.innerText = "Target smashed! You're on fire! 🔥";
-                msgEl.style.color = "var(--lime-dark)";
+                msgEl.innerText = "Target smashed! 🚀";
+                msgEl.style.color = "#10b981";
+                msgEl.style.fontWeight = "700";
             } else if (daily.todayScore > 25) {
                 msgEl.innerText = "Halfway there! Keep pushing!";
+                msgEl.style.color = "#333";
             } else {
-                msgEl.innerText = "Start solving to build your streak!";
+                msgEl.innerText = "Let's hit 50 points today!";
+                msgEl.style.color = "#666";
             }
         }
     }
@@ -1156,6 +1222,7 @@ async function updateHomeStats(user) {
         console.error("Stats Error", e);
     }
 }
+
 
 
 
