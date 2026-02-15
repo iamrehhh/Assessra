@@ -17,6 +17,10 @@ MARKING_API_KEY_PRIMARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
 # TODO: PASTE YOUR SECOND API KEY HERE
 MARKING_API_KEY_SECONDARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
 
+# Tertiary API Key for Extra Fallback (when secondary runs out)
+# TODO: PASTE YOUR THIRD API KEY HERE
+MARKING_API_KEY_TERTIARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
+
 # API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
 
@@ -76,23 +80,35 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
 
 def generate_with_fallback(system_instruction, user_prompt):
     """
-    Tries primary API key first, falls back to secondary if primary fails due to quota/tokens.
+    Tries primary API key first, falls back to secondary, then tertiary if needed.
     """
-    # Try primary API
+    # 1. Try Primary API
     result, error_code = generate_with_gemini(MARKING_API_KEY_PRIMARY, system_instruction, user_prompt)
     
-    # If primary failed due to quota/rate limit, try secondary
-    if result is None and error_code in [429, 403]:
-        print("Primary API quota exhausted, switching to secondary API...")
+    if result:
+        return result
+
+    # 2. Try Secondary API if Primary failed due to quota
+    if error_code in [429, 403]:
+        print("Primary API quota exhausted, switching to SECONDARY API...")
         result, error_code = generate_with_gemini(MARKING_API_KEY_SECONDARY, system_instruction, user_prompt)
         
         if result:
             print("Secondary API succeeded!")
-        else:
-            print("Secondary API also failed.")
+            return result
     
-    # Return just the result (for backward compatibility)
-    return result
+    # 3. Try Tertiary API if Secondary also failed due to quota
+    if error_code in [429, 403]:
+        print("Secondary API quota exhausted, switching to TERTIARY API...")
+        result, error_code = generate_with_gemini(MARKING_API_KEY_TERTIARY, system_instruction, user_prompt)
+        
+        if result:
+            print("Tertiary API succeeded!")
+            return result
+        else:
+            print("Tertiary API also failed (or other error).")
+    
+    return None
 
 @app.route('/mark', methods=['POST'])
 def mark():
