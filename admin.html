@@ -440,10 +440,12 @@
 
     </div>
 
-    <!-- Firebase -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
-    <script type="module" src="scripts/admin.js"></script>
+    <!-- Firebase SDKs (COMPAT for local file:// access) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
+    <!-- Admin Logic (Classic Script) -->
+    <script src="scripts/admin.js"></script>
 
     <!-- UI Scripts -->
     <script>
