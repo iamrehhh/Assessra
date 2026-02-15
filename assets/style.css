@@ -205,9 +205,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
 
 :root {
-    --lime-primary: #9ED348;
-    --lime-dark: #3B6245;
-    --lime-light: #F1FAF0;
+    --lime-primary: #16A34A;
+    --lime-dark: #14532D;
+    --lime-light: #f0fdf4;
     --glass-bg: rgba(255, 255, 255, 0.95);
     --text-dark: #1a1a1a;
     --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
