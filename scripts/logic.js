@@ -1344,6 +1344,7 @@ async function loadDynamicContent() {
     loadDynamicExtras('definitions');
 }
 
+// === 3. LOAD FORMULAE & DEFINITIONS (Targeted) ===
 async function loadDynamicExtras(type) {
     try {
         const data = await window.CloudManager.getPublicData(`content/${type}`);
@@ -1353,55 +1354,72 @@ async function loadDynamicExtras(type) {
         const view = document.getElementById(containerId);
         if (!view) return;
 
-        // Create a dedicated container for dynamic extras if missing
-        let extraContainer = document.getElementById(`dynamic-${type}-container`);
-        if (!extraContainer) {
-            extraContainer = document.createElement('div');
-            extraContainer.id = `dynamic-${type}-container`;
-            extraContainer.className = type === 'formulae' ? 'formula-section' : 'def-section';
-            extraContainer.setAttribute('data-subject', 'dynamic'); // Show always or filter?
-
-            // For now, let's make it visible for 'business' and 'economics' by default or just generic
-            // Modify filterView to show 'dynamic' subject? 
-            // Or just allow it to be shown.
-
-            extraContainer.innerHTML = `<h3 class="chapter-title" style="color:#e056fd; margin-top:30px;">✨ Community ${type.charAt(0).toUpperCase() + type.slice(1)}</h3>`;
-
-            const grid = document.createElement('div');
-            grid.className = type === 'formulae' ? 'formula-grid' : 'def-grid'; // Check class name in CSS
-            // definition view uses 'def-card' directly inside? No, let's check index.html
-            // index.html: <div class="def-section"> <h3>...</h3> <div class="def-grid"> <div class="def-card">...
-            // actually index.html definitions are just <div class="def-card"> inside <div class="def-section">?
-            // Let's assume standard grid.
-            if (type === 'definitions') grid.style.display = 'grid'; // formatting fallback
-
-            extraContainer.appendChild(grid);
-            view.appendChild(extraContainer);
-        }
-
-        const grid = extraContainer.querySelector('div'); // The grid div we added
-        grid.innerHTML = ''; // Requesting fresh render
-
+        // Group by Subject
+        const grouped = {};
         Object.values(data).forEach(item => {
-            const div = document.createElement('div');
-            if (type === 'formulae') {
-                div.className = 'formula-card';
-                div.innerHTML = `
-                    <div class="f-title">${item.title}</div>
-                    <div class="f-body">${item.body}</div>
-                `;
-            } else {
-                div.className = 'def-card';
-                div.innerHTML = `
-                    <div class="d-term">${item.term || item.word}</div>
-                    <div class="d-desc">${item.desc || item.def}</div>
-                `;
+            const sub = item.subject || 'general'; // Default to general if no tag
+            if (!grouped[sub]) grouped[sub] = [];
+            grouped[sub].push(item);
+        });
+
+        // Render Groups
+        Object.keys(grouped).forEach(sub => {
+            // Check if section exists (e.g., business-formulae)
+            // Hardcoded sections don't have IDs usually, they are filtered by classes or data-attributes.
+            // In logic.js filterView, it hides/shows based on classes like 'container-bus-p4' but for formulae??
+            // checking filterView: 
+            // if (viewName === 'formulae' || viewName === 'definitions') { ... 
+            // document.querySelectorAll('.formula-section, .def-section').forEach(el => {
+            //   if (el.dataset.subject === subject) el.classList.remove('hidden'); ...
+
+            // So we need to create a section with data-subject="{sub}"
+
+            // 1. Try to find existing dynamic section for this subject
+            let sectionId = `dynamic-${type}-${sub}`;
+            let section = document.getElementById(sectionId);
+
+            if (!section) {
+                section = document.createElement('div');
+                section.id = sectionId;
+                section.className = type === 'formulae' ? 'formula-section' : 'def-section';
+                section.setAttribute('data-subject', sub);
+
+                // Add Header for Custom Subjects (don't duplicate header for known ones if not needed, but safe to add)
+                // Actually, existing hardcoded sections have headers? 
+                // Let's add a sub-header "Community [Subject] Content"
+                section.innerHTML = `<h3 class="chapter-title" style="color:#e056fd; margin-top:20px; font-size:1.2rem;">✨ Extra ${sub} Content</h3>`;
+
+                const grid = document.createElement('div');
+                grid.className = type === 'formulae' ? 'formula-grid' : 'def-grid';
+                if (type === 'definitions') grid.style.display = 'grid';
+
+                section.appendChild(grid);
+                view.appendChild(section);
             }
-            grid.appendChild(div);
+
+            const grid = section.querySelector('div'); // The grid div
+            grid.innerHTML = ''; // Clear
+
+            grouped[sub].forEach(item => {
+                const div = document.createElement('div');
+                if (type === 'formulae') {
+                    div.className = 'formula-card';
+                    div.innerHTML = `
+                        <div class="f-title">${item.title}</div>
+                        <div class="f-body">${item.body}</div>
+                    `;
+                } else {
+                    div.className = 'def-card';
+                    div.innerHTML = `
+                        <div class="d-term">${item.term || item.word}</div>
+                        <div class="d-desc">${item.desc || item.def}</div>
+                    `;
+                }
+                grid.appendChild(div);
+            });
         });
 
     } catch (e) { console.error(`Error loading ${type}`, e); }
 }
 
-window.loadDynamicPapers = loadDynamicContent;
 

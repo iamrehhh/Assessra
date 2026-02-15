@@ -250,15 +250,29 @@
         <div class="glass-card">
             <h2 class="section-title">🚀 Bulk Operations</h2>
 
-            <div class="form-group">
-                <label class="form-label">Operation Type</label>
-                <select id="bulk-type" class="form-select" onchange="toggleBulkHint()">
-                    <option value="papers">Bulk Papers (JSON Array)</option>
-                    <option value="vocab">Bulk Vocabulary (CSV: Word,Def)</option>
-                    <option value="idioms">Bulk Idioms (CSV: Word,Def)</option>
-                    <option value="formulae">Bulk Formulae (JSON Array)</option>
-                    <option value="definitions">Bulk Definitions (JSON Array)</option>
-                </select>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div class="form-group">
+                    <label class="form-label">Operation Type</label>
+                    <select id="bulk-type" class="form-select" onchange="toggleBulkHint()">
+                        <option value="papers">Bulk Papers (JSON Array)</option>
+                        <option value="vocab">Bulk Vocabulary (CSV: Word,Def)</option>
+                        <option value="idioms">Bulk Idioms (CSV: Word,Def)</option>
+                        <option value="formulae">Bulk Formulae (JSON Array)</option>
+                        <option value="definitions">Bulk Definitions (JSON Array)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target Subject (Optional)</label>
+                    <select id="bulk-subject" class="form-select">
+                        <option value="">None / General</option>
+                        <option value="business">Business</option>
+                        <option value="economics">Economics</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="math">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <!-- Will be populated dynamically too -->
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
@@ -272,32 +286,59 @@
             <button class="btn-primary" onclick="processBulkUpload()">Process Bulk Upload 🚀</button>
         </div>
 
+        <!-- 5. Content Management (File Manager) -->
+        <div class="glass-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 class="section-title" style="margin-bottom:0;">📂 File Manager</h2>
+                <button onclick="loadContentManager()"
+                    style="background:#eee; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">↻
+                    Refresh</button>
+            </div>
+            <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">View and delete uploaded content.</p>
+
+            <div class="form-group">
+                <label class="form-label">Filter by Type</label>
+                <select id="manage-type" class="form-select" onchange="loadContentManager()">
+                    <option value="papers">Papers</option>
+                    <option value="subjects">Subjects</option>
+                    <option value="formulae">Formulae</option>
+                    <option value="definitions">Definitions</option>
+                    <option value="vocab">Vocabulary</option>
+                    <option value="idioms">Idioms</option>
+                </select>
+            </div>
+
+            <div id="content-manager-list"
+                style="margin-top:20px; max-height:400px; overflow-y:auto; border:1px solid #eee; padding:10px; border-radius:8px;">
+                <!-- Dynamic List -->
+                <div style="text-align:center; color:#999; padding:20px;">Select a category to load.</div>
+            </div>
+        </div>
+
         <!-- 5. Vocab/Idioms (Manual) -->
         <div class="glass-card">
             <h2 class="section-title">📖 Dictionary Management (Manual)</h2>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <h3>Add Vocabulary</h3>
-                    <div class="form-group">
-                        <input type="text" id="v-word" class="form-input" placeholder="Word">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="v-def" class="form-input" placeholder="Definition">
-                    </div>
-                    <button class="btn-primary" onclick="addVocab()">Add Word</button>
-                </div>
-                <div>
-                    <h3>Add Idiom</h3>
-                    <div class="form-group">
-                        <input type="text" id="i-word" class="form-input" placeholder="Idiom">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="i-def" class="form-input" placeholder="Meaning">
-                    </div>
-                    <button class="btn-primary" onclick="addIdiom()">Add Idiom</button>
-                </div>
+            <h3>Add Vocabulary</h3>
+            <div class="form-group">
+                <input type="text" id="v-word" class="form-input" placeholder="Word">
             </div>
+            <div class="form-group">
+                <input type="text" id="v-def" class="form-input" placeholder="Definition">
+            </div>
+            <button class="btn-primary" onclick="addVocab()">Add Word</button>
         </div>
+        <div>
+            <h3>Add Idiom</h3>
+            <div class="form-group">
+                <input type="text" id="i-word" class="form-input" placeholder="Idiom">
+            </div>
+            <div class="form-group">
+                <input type="text" id="i-def" class="form-input" placeholder="Meaning">
+            </div>
+            <button class="btn-primary" onclick="addIdiom()">Add Idiom</button>
+        </div>
+    </div>
+    </div>
     </div>
 
     <!-- Firebase SDKs -->

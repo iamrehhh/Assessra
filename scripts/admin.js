@@ -222,23 +222,30 @@ async function loadSubjects() {
     } catch (e) { }
 }
 
-// === 7. BULK OPERATIONS ===
+// === 7. BULK OPERATIONS & TARGETED UPLOAD ===
 window.toggleBulkHint = () => {
     const type = document.getElementById('bulk-type').value;
     const hint = document.getElementById('bulk-hint');
     if (type === 'papers') hint.innerText = 'Format: JSON Array of Objects [{"id":"...", "title":"...", "pdf":"...", "questions":[]}]';
     if (type === 'vocab') hint.innerText = 'Format: CSV (Word, Definition) - One per line';
     if (type === 'idioms') hint.innerText = 'Format: CSV (Idiom, Meaning) - One per line';
-    if (type === 'formulae') hint.innerText = 'Format: JSON Array [{"title":"...", "body":"...", "subject":"business"}]';
-    if (type === 'definitions') hint.innerText = 'Format: JSON Array [{"term":"...", "desc":"...", "subject":"business"}]';
+    if (type === 'formulae') hint.innerText = 'Format: JSON Array [{"title":"...", "body":"..."}] (Subject auto-tagged)';
+    if (type === 'definitions') hint.innerText = 'Format: JSON Array [{"term":"...", "desc":"..."}] (Subject auto-tagged)';
 };
 
 window.processBulkUpload = async () => {
     const type = document.getElementById('bulk-type').value;
     const raw = document.getElementById('bulk-data').value.trim();
+    const targetSubject = document.getElementById('bulk-subject').value;
+
     if (!raw) return alert("No data to process.");
 
-    if (!confirm(`Ready to upload bulk ${type}? This might overwrite data.`)) return;
+    // Validation: Require subject for subject-specific content
+    if (['formulae', 'definitions'].includes(type) && !targetSubject) {
+        return alert("Please select a Target Subject for Formulae/Definitions.");
+    }
+
+    if (!confirm(`Ready to upload bulk ${type} to '${targetSubject || 'General'}'?`)) return;
 
     try {
         // A. JSON HANDLING
@@ -252,20 +259,21 @@ window.processBulkUpload = async () => {
             if (type === 'papers') {
                 for (const p of data) {
                     if (p.id) {
+                        // Tag with subject if selected
+                        if (targetSubject && !p.id.includes(targetSubject)) {
+                            // Optional: Auto-append subject to ID or just add metadata?
+                            // Let's just add metadata 'subject' property
+                            p.subject = targetSubject;
+                        }
                         await set(ref(db, `content/papers/${p.id}`), p);
                     }
                 }
             }
-            if (type === 'formulae') {
-                // Push each formula
-                for (const f of data) {
-                    await push(ref(db, `content/formulae`), f);
-                }
-            }
-            if (type === 'definitions') {
-                // Push each def
-                for (const d of data) {
-                    await push(ref(db, `content/definitions`), d);
+            if (type === 'formulae' || type === 'definitions') {
+                // Push each item with subject tag
+                for (const item of data) {
+                    item.subject = targetSubject; // FORCE tag
+                    await push(ref(db, `content/${type}`), item);
                 }
             }
         }
@@ -280,7 +288,7 @@ window.processBulkUpload = async () => {
                 const parts = line.split(',');
                 if (parts.length >= 2) {
                     const word = parts[0].trim();
-                    const def = parts.slice(1).join(',').trim(); // Handle commas in def
+                    const def = parts.slice(1).join(',').trim();
                     if (word && def) {
                         await push(ref(db, targetNode), { word, def });
                         count++;
@@ -293,6 +301,7 @@ window.processBulkUpload = async () => {
         }
 
         document.getElementById('bulk-data').value = '';
+        loadContentManager(); // Refresh list
 
     } catch (e) {
         alert("Bulk Error: " + e.message);
@@ -300,6 +309,107 @@ window.processBulkUpload = async () => {
     }
 };
 
+// === 8. CONTENT MANAGER (VIEW & DELETE) ===
+window.loadContentManager = async () => {
+    const list = document.getElementById('content-manager-list');
+    const type = document.getElementById('manage-type').value; // papers, subjects, formulae, ...
+
+    list.innerHTML = 'Loading...';
+
+    try {
+        const snapshot = await get(child(ref(db), `content/${type}`));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            list.innerHTML = '';
+
+            Object.keys(data).forEach(key => {
+                const item = data[key];
+                const div = document.createElement('div');
+                div.style.cssText = 'display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; align-items:center;';
+
+                let label = key;
+                if (item.name) label = `${item.name} (${item.code})`; // Subject
+                else if (item.title) label = `${item.title} <span style="font-size:0.8em; color:#888;">${item.subject || ''}</span>`; // Paper/Formula
+                else if (item.term) label = `${item.term} <span style="font-size:0.8em; color:#888;">${item.subject || ''}</span>`; // Def
+                else if (item.word) label = item.word; // Vocab/Idiom
+
+                div.innerHTML = `
+                    <div>${label}</div>
+                    <button onclick="deleteContent('content/${type}/${key}')" class="delete-btn">Delete</button>
+                `;
+                list.appendChild(div);
+            });
+        } else {
+            list.innerHTML = '<div style="padding:20px; text-align:center;">No content found.</div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div style="color:red;">Error loading content.</div>';
+    }
+};
+
+window.deleteContent = async (path) => {
+    if (!confirm("Are you sure you want to delete this? This cannot be undone.")) return;
+    try {
+        await remove(ref(db, path));
+        alert("Deleted.");
+        loadContentManager(); // Refresh
+        // If subject deleted, refresh subjects list too
+        if (path.includes('subjects')) loadSubjects_Enhanced();
+    } catch (e) { alert("Error: " + e.message); }
+}
+
 // Initialize
 loadUsers();
-loadSubjects();
+loadSubjects_Enhanced();
+// Also populate dropdown with subjects?
+// actually loadSubjects() only populates the list. We need to populate the SELECT too. 
+// Let's modifying loadSubjects to do both.
+async function loadSubjects_Enhanced() {
+    const div = document.getElementById('subjects-list');
+    const select = document.getElementById('bulk-subject');
+
+    try {
+        const snapshot = await get(child(ref(db), 'content/subjects'));
+        if (snapshot.exists()) {
+            const subs = snapshot.val();
+            // 1. Update List
+            if (div) {
+                div.innerHTML = Object.values(subs).map(s =>
+                    `<span style="background:#fff; padding:5px 10px; border-radius:5px; margin-right:5px; border:1px solid #ddd;">
+                        ${s.name} (${s.code})
+                    </span>`
+                ).join('');
+            }
+            // 2. Update Dropdown
+            if (select) {
+                // Keep default options
+                const defaults = `
+                    <option value="">None / General</option>
+                    <option value="business">Business</option>
+                    <option value="economics">Economics</option>
+                    <option value="accounting">Accounting</option>
+                    <option value="math">Mathematics</option>
+                    <option value="physics">Physics</option>
+                `;
+                const customOpts = Object.values(subs).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                select.innerHTML = defaults + customOpts;
+            }
+        } else {
+            if (div) div.innerHTML = 'No custom subjects yet.';
+            if (select) {
+                select.innerHTML = `
+                    <option value="">None / General</option>
+                    <option value="business">Business</option>
+                    <option value="economics">Economics</option>
+                    <option value="accounting">Accounting</option>
+                    <option value="math">Mathematics</option>
+                    <option value="physics">Physics</option>
+                `;
+            }
+        }
+    } catch (e) { }
+}
+
+// Override init
+loadUsers();
+loadSubjects_Enhanced();
