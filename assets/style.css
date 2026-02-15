@@ -591,12 +591,12 @@ h2 {
     border: none;
     font-weight: 700;
     color: #666;
-    padding: 10px 15px;
-    /* Restored padding for breathing room */
+    padding: 10px 12px;
+    /* Reduced padding again to fit */
     cursor: pointer;
     transition: 0.3s;
-    font-size: 1rem;
-    /* Restored font size */
+    font-size: 0.95rem;
+    /* Reduced font size to save space */
     white-space: nowrap;
     /* Prevent text wrapping */
 }
@@ -611,8 +611,8 @@ h2 {
 .nav {
     display: flex;
     align-items: center;
-    gap: 25px;
-    /* Increased from 10px to 25px per user request */
+    gap: 15px;
+    /* Reduced gap from 25px to prevent overflow */
     flex-wrap: nowrap;
     width: 100%;
     /* Allow it to take space if needed */
