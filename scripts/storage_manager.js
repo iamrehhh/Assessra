@@ -1,7 +1,7 @@
 // storage_manager.js
 
 const StorageManager = {
-    getUser: () => localStorage.getItem('user'),
+    getUser: () => localStorage.getItem('user') || 'default_user',
 
     // === GENERIC SAVE/LOAD ===
     getData: (user) => JSON.parse(localStorage.getItem(`habibi_data_${user}`) || '{}'),
@@ -157,7 +157,9 @@ const StorageManager = {
         // Check Yesterday first
         let checkDate = today - 86400000;
 
-        while (true) {
+        // Safety break to prevent infinite loops (e.g. max 365 days)
+        let paramCheck = 0;
+        while (paramCheck < 365) {
             const s = dailyScores[checkDate] || 0;
             if (s >= 50) {
                 streak++;
@@ -165,6 +167,7 @@ const StorageManager = {
             } else {
                 break; // Broken streak
             }
+            paramCheck++;
         }
 
         // Add Today if target met
