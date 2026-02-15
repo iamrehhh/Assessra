@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Habibi Studies</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+
+    <style>
+        body {
+            background-color: #f0fdf4;
+            /* Match main theme */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .admin-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #1e3a29;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #1e3a29;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 10px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #2ed573;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #26af61;
+        }
+
+        /* Table */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            background: rgba(0, 0, 0, 0.02);
+            color: #666;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Security Check Overlay -->
+    <div id="security-check"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; justify-content:center; align-items:center;">
+        <h2>🔒 Verifying Admin Access...</h2>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-container hidden" id="admin-content">
+        <div class="admin-header">
+            <div>
+                <h1 class="admin-title">Admin Dashboard</h1>
+                <p style="color:#666;">Manage users, leaderboard, and content.</p>
+            </div>
+            <button class="logout-btn" onclick="adminLogout()">Logout</button>
+        </div>
+
+        <!-- 1. User Management -->
+        <div class="glass-card">
+            <h2 class="section-title">👥 User Management</h2>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Total Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <tr>
+                            <td colspan="3">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2. Content Upload -->
+        <div class="glass-card">
+            <h2 class="section-title">📝 Upload Paper / Content</h2>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Add Paper Metadata -->
+                <div>
+                    <h3>Add New Paper</h3>
+                    <div class="form-group">
+                        <label class="form-label">Paper ID (e.g. 2025_bus_31)</label>
+                        <input type="text" id="p-id" class="form-input" placeholder="yyyy_sub_pp">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input type="text" id="p-title" class="form-input" placeholder="May/June 2025 Paper 31">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PDF Link</label>
+                        <input type="text" id="p-pdf" class="form-input" placeholder="https://...">
+                    </div>
+                    <button class="btn-primary" onclick="savePaperMeta()">Save Paper Metadata</button>
+                </div>
+
+                <!-- Add Question -->
+                <div>
+                    <h3>Add Question to Paper</h3>
+                    <div class="form-group">
+                        <label class="form-label">Target Paper ID</label>
+                        <input type="text" id="q-pid" class="form-input" placeholder="2025_bus_31">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Question Number (e.g. 1a)</label>
+                        <input type="text" id="q-num" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Marks</label>
+                        <input type="number" id="q-marks" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Question Text</label>
+                        <textarea id="q-text" class="form-input" rows="3"></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="addQuestion()">Add Question</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Vocab/Idioms -->
+        <div class="glass-card">
+            <h2 class="section-title">📖 Dictionary Management</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>Add Vocabulary</h3>
+                    <div class="form-group">
+                        <input type="text" id="v-word" class="form-input" placeholder="Word">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="v-def" class="form-input" placeholder="Definition">
+                    </div>
+                    <button class="btn-primary" onclick="addVocab()">Add Word</button>
+                </div>
+                <div>
+                    <h3>Add Idiom</h3>
+                    <div class="form-group">
+                        <input type="text" id="i-word" class="form-input" placeholder="Idiom">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="i-def" class="form-input" placeholder="Meaning">
+                    </div>
+                    <button class="btn-primary" onclick="addIdiom()">Add Idiom</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
+
+    <!-- Admin Logic -->
+    <script type="module" src="scripts/admin.js"></script>
+
+</body>
+
+</html>

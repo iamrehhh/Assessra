@@ -53,12 +53,12 @@ window.CloudManager = {
 
                 // 1. Check ID Prefix
                 if (pid.startsWith('econ_')) isEcon = true;
-                
+
                 // 2. Double check 9708 vs 9609 patterns if prefix is missing
                 else if (pid.includes('9708')) isEcon = true;
-                
+
                 // 3. Everything else defaults to Business (9609)
-                
+
                 // Sum scores
                 Object.values(papers[pid]).forEach(q => {
                     if (q.score) {
@@ -82,5 +82,29 @@ window.CloudManager = {
     getLeaderboard: async () => {
         const snapshot = await get(child(ref(db), `leaderboard`));
         return snapshot.exists() ? snapshot.val() : {};
+    },
+
+    // === DYNAMIC CONTENT ===
+    getPaper: async (pid) => {
+        try {
+            const snapshot = await get(child(ref(db), `content/papers/${pid}`));
+            if (snapshot.exists()) {
+                const p = snapshot.val();
+                // Ensure structure matches local paperData
+                // Local: { title: "", pdf: "", questions: [{n, m, t, l}] }
+                // Cloud: { id, title, pdf, questions: [ or { } ] }
+
+                // If questions is object/array, normalize
+                return p;
+            }
+        } catch (e) { console.error(e); }
+        return null;
+    },
+
+    getAllDynamicPapers: async () => {
+        try {
+            const snapshot = await get(child(ref(db), `content/papers`));
+            return snapshot.exists() ? snapshot.val() : {};
+        } catch (e) { return {}; }
     }
 };

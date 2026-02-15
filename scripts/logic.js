@@ -251,6 +251,7 @@ function initApp(u) {
     document.getElementById('login-layer').classList.add('hidden');
     document.getElementById('app-layer').classList.remove('hidden');
     initHome();
+    if (window.loadDynamicPapers) window.loadDynamicPapers();
     setView('home');
 }
 
@@ -421,12 +422,26 @@ function backToDash() {
 // === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
 
 async function openPaper(pid, preservedScrollTop = 0) {
-    const data = paperData[pid];
-
+    let data = paperData[pid];
     const u = getUser();
+
+    // 1. Try Cloud if not local
+    if (!data && window.CloudManager) {
+        const cloudPaper = await window.CloudManager.getPaper(pid);
+        if (cloudPaper) {
+            data = cloudPaper;
+            // Normalize questions if needed (Cloud might store as object, we need array for logic)
+            if (data.questions && !Array.isArray(data.questions)) {
+                data.questions = Object.values(data.questions);
+            }
+        }
+    }
+
+    if (!data) return alert("Paper not found or loading...");
+
     let attempts = {};
 
-    // FETCH FROM CLOUD
+    // FETCH ATTEMPTS FROM CLOUD
     try {
         if (window.CloudManager) {
             const allData = await window.CloudManager.getAllData(u);
@@ -1204,4 +1219,48 @@ ensurePaperData('2024_mj_41', 'May/June 2024 Paper 41');
 ensurePaperData('econ_2024_fm_32', 'Economics Feb/March 2024 P32');
 ensurePaperData('econ_2024_mj_31', 'Economics May/June 2024 P31');
 ensurePaperData('econ_2024_mj_41', 'Economics May/June 2024 P41');
+
+
+// === DYNAMIC CONTENT LOADER ===
+async function loadDynamicPapers() {
+    if (!window.CloudManager || !window.CloudManager.getAllDynamicPapers) return;
+
+    try {
+        const papers = await window.CloudManager.getAllDynamicPapers();
+        if (!papers) return;
+
+        const container = document.getElementById('dynamic-papers-grid');
+        if (!container) return;
+        container.innerHTML = ''; // Clear existing
+
+        const paperIds = Object.keys(papers);
+        if (paperIds.length === 0) return;
+
+        // Show parent container
+        const section = document.getElementById('container-dynamic');
+        if (section) section.classList.remove('hidden');
+
+        paperIds.forEach(pid => {
+            const p = papers[pid];
+            const card = document.createElement('div');
+            card.className = 'paper-card';
+            card.onclick = () => openPaper(p.id);
+
+            // Try to parse subject from ID for tag
+            let tag = 'Extra';
+            const pidLower = p.id.toLowerCase();
+            if (pidLower.includes('bus') || pidLower.includes('9609')) tag = 'Business';
+            if (pidLower.includes('econ') || pidLower.includes('9708')) tag = 'Economics';
+            if (pidLower.includes('acc') || pidLower.includes('9706')) tag = 'Accounting';
+
+            card.innerHTML = `
+                <span class="paper-tag">${tag}</span>
+                <h3>${p.title}</h3>
+                <p style="color:#888; margin-top:5px;">Community • PDF Available</p>
+            `;
+            container.appendChild(card);
+        });
+    } catch (e) { console.error("Dynamic Load Error:", e); }
+}
+window.loadDynamicPapers = loadDynamicPapers;
 
