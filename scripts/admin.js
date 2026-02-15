@@ -182,4 +182,124 @@ window.addIdiom = async () => {
 };
 
 // Initialize
+// === 6. SUBJECT MANAGEMENT ===
+window.addSubject = async () => {
+    const name = document.getElementById('sub-name').value.trim();
+    const code = document.getElementById('sub-code').value.trim();
+    if (!name || !code) return alert("Name and Code required!");
+
+    try {
+        const sid = name.toLowerCase().replace(/\s+/g, '_');
+        await set(ref(db, `content/subjects/${sid}`), {
+            name: name,
+            code: code,
+            id: sid
+        });
+        alert(`Subject '${name}' created!`);
+        document.getElementById('sub-name').value = '';
+        document.getElementById('sub-code').value = '';
+        loadSubjects();
+    } catch (e) { alert("Error: " + e.message); }
+};
+
+async function loadSubjects() {
+    const div = document.getElementById('subjects-list');
+    if (!div) return;
+    div.innerHTML = 'Loading subjects...';
+
+    try {
+        const snapshot = await get(child(ref(db), 'content/subjects'));
+        if (snapshot.exists()) {
+            const subs = snapshot.val();
+            div.innerHTML = Object.values(subs).map(s =>
+                `<span style="background:#fff; padding:5px 10px; border-radius:5px; margin-right:5px; border:1px solid #ddd;">
+                    ${s.name} (${s.code})
+                </span>`
+            ).join('');
+        } else {
+            div.innerHTML = 'No custom subjects yet.';
+        }
+    } catch (e) { }
+}
+
+// === 7. BULK OPERATIONS ===
+window.toggleBulkHint = () => {
+    const type = document.getElementById('bulk-type').value;
+    const hint = document.getElementById('bulk-hint');
+    if (type === 'papers') hint.innerText = 'Format: JSON Array of Objects [{"id":"...", "title":"...", "pdf":"...", "questions":[]}]';
+    if (type === 'vocab') hint.innerText = 'Format: CSV (Word, Definition) - One per line';
+    if (type === 'idioms') hint.innerText = 'Format: CSV (Idiom, Meaning) - One per line';
+    if (type === 'formulae') hint.innerText = 'Format: JSON Array [{"title":"...", "body":"...", "subject":"business"}]';
+    if (type === 'definitions') hint.innerText = 'Format: JSON Array [{"term":"...", "desc":"...", "subject":"business"}]';
+};
+
+window.processBulkUpload = async () => {
+    const type = document.getElementById('bulk-type').value;
+    const raw = document.getElementById('bulk-data').value.trim();
+    if (!raw) return alert("No data to process.");
+
+    if (!confirm(`Ready to upload bulk ${type}? This might overwrite data.`)) return;
+
+    try {
+        // A. JSON HANDLING
+        if (['papers', 'formulae', 'definitions'].includes(type)) {
+            let data;
+            try { data = JSON.parse(raw); }
+            catch (e) { return alert("Invalid JSON! Please check format."); }
+
+            if (!Array.isArray(data)) return alert("Data must be a JSON Array [ ... ]");
+
+            if (type === 'papers') {
+                for (const p of data) {
+                    if (p.id) {
+                        await set(ref(db, `content/papers/${p.id}`), p);
+                    }
+                }
+            }
+            if (type === 'formulae') {
+                // Push each formula
+                for (const f of data) {
+                    await push(ref(db, `content/formulae`), f);
+                }
+            }
+            if (type === 'definitions') {
+                // Push each def
+                for (const d of data) {
+                    await push(ref(db, `content/definitions`), d);
+                }
+            }
+        }
+
+        // B. CSV HANDLING
+        if (['vocab', 'idioms'].includes(type)) {
+            const lines = raw.split('\n');
+            let count = 0;
+            const targetNode = type === 'vocab' ? 'content/vocab' : 'content/idioms';
+
+            for (const line of lines) {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const word = parts[0].trim();
+                    const def = parts.slice(1).join(',').trim(); // Handle commas in def
+                    if (word && def) {
+                        await push(ref(db, targetNode), { word, def });
+                        count++;
+                    }
+                }
+            }
+            alert(`Uploaded ${count} items to ${type}!`);
+        } else {
+            alert(`Bulk ${type} upload complete!`);
+        }
+
+        document.getElementById('bulk-data').value = '';
+
+    } catch (e) {
+        alert("Bulk Error: " + e.message);
+        console.error(e);
+    }
+};
+
+// Initialize
 loadUsers();
+loadSubjects();

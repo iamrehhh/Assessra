@@ -106,5 +106,13 @@ window.CloudManager = {
             const snapshot = await get(child(ref(db), `content/papers`));
             return snapshot.exists() ? snapshot.val() : {};
         } catch (e) { return {}; }
+    },
+
+    // GENERIC PUBLIC FETCH
+    getPublicData: async (path) => {
+        try {
+            const snapshot = await get(child(ref(db), path));
+            return snapshot.exists() ? snapshot.val() : {};
+        } catch (e) { return {}; }
     }
 };

@@ -1236,46 +1236,172 @@ ensurePaperData('econ_2024_mj_31', 'Economics May/June 2024 P31');
 ensurePaperData('econ_2024_mj_41', 'Economics May/June 2024 P41');
 
 
-// === DYNAMIC CONTENT LOADER ===
-async function loadDynamicPapers() {
-    if (!window.CloudManager || !window.CloudManager.getAllDynamicPapers) return;
+// === DYNAMIC CONTENT LOADER (Subjects & Papers) ===
+async function loadDynamicContent() {
+    if (!window.CloudManager || !window.CloudManager.getPublicData) return;
 
+    // 1. LOAD SUBJECTS & CREATE SECTIONS
+    let customSubjects = [];
     try {
-        const papers = await window.CloudManager.getAllDynamicPapers();
-        if (!papers) return;
+        const subjects = await window.CloudManager.getPublicData('content/subjects');
+        const papersView = document.getElementById('view-papers');
+        const dynamicContainer = document.getElementById('container-dynamic');
 
-        const container = document.getElementById('dynamic-papers-grid');
-        if (!container) return;
-        container.innerHTML = ''; // Clear existing
+        if (subjects && papersView && dynamicContainer) {
+            customSubjects = Object.values(subjects);
+            customSubjects.forEach(sub => {
+                const containerId = `container-${sub.id}`;
+                const gridId = `${sub.id}-papers-grid`;
+
+                // Create Section if missing
+                if (!document.getElementById(containerId)) {
+                    const div = document.createElement('div');
+                    div.id = containerId;
+                    div.className = 'subject-container';
+                    div.style.marginTop = '40px';
+                    div.style.borderTop = '1px solid #eee';
+                    div.style.paddingTop = '20px';
+
+                    div.innerHTML = `
+                        <div class="series-header">
+                            <div class="series-name" style="font-size:1.5rem; color:var(--lime-dark);">
+                                ${sub.name} <span style="font-size:1rem; color:#888;">(${sub.code})</span>
+                            </div>
+                        </div>
+                        <div id="${gridId}" class="papers-grid"></div>
+                    `;
+                    // Insert custom subjects BEFORE the general community section
+                    papersView.insertBefore(div, dynamicContainer);
+                }
+            });
+        }
+    } catch (e) { console.error("Subject Load Error", e); }
+
+    // 2. LOAD & DISTRIBUTE PAPERS
+    try {
+        const papers = await window.CloudManager.getPublicData('content/papers');
+        if (!papers) return;
 
         const paperIds = Object.keys(papers);
         if (paperIds.length === 0) return;
 
-        // Show parent container
-        const section = document.getElementById('container-dynamic');
-        if (section) section.classList.remove('hidden');
+        // Ensure General Container is visible
+        const dynamicSection = document.getElementById('container-dynamic');
+        if (dynamicSection) dynamicSection.classList.remove('hidden');
+
+        // Clear all dynamic grids first (to prevent duplicates on re-run)
+        const genericGrid = document.getElementById('dynamic-papers-grid');
+        if (genericGrid) genericGrid.innerHTML = '';
+
+        customSubjects.forEach(sub => {
+            const g = document.getElementById(`${sub.id}-papers-grid`);
+            if (g) g.innerHTML = '';
+        });
 
         paperIds.forEach(pid => {
             const p = papers[pid];
+            const pidLower = p.id.toLowerCase();
+
+            // Create Card
             const card = document.createElement('div');
             card.className = 'paper-card';
             card.onclick = () => openPaper(p.id);
 
-            // Try to parse subject from ID for tag
+            // Determine Tag
             let tag = 'Extra';
-            const pidLower = p.id.toLowerCase();
             if (pidLower.includes('bus') || pidLower.includes('9609')) tag = 'Business';
-            if (pidLower.includes('econ') || pidLower.includes('9708')) tag = 'Economics';
-            if (pidLower.includes('acc') || pidLower.includes('9706')) tag = 'Accounting';
+            else if (pidLower.includes('econ') || pidLower.includes('9708')) tag = 'Economics';
+            else tag = p.id.split('_')[1] || 'Community'; // Fallback tag
 
             card.innerHTML = `
-                <span class="paper-tag">${tag}</span>
+                <span class="paper-tag" style="text-transform:capitalize;">${tag}</span>
                 <h3>${p.title}</h3>
-                <p style="color:#888; margin-top:5px;">Community • PDF Available</p>
+                <p style="color:#888; margin-top:5px;">PDF Available</p>
             `;
-            container.appendChild(card);
+
+            // Distribute to Subject Grid vs General Grid
+            let placed = false;
+            for (const sub of customSubjects) {
+                // If paper ID contains subject ID (e.g. 'physics_9702')
+                if (pidLower.includes(sub.id)) {
+                    const subGrid = document.getElementById(`${sub.id}-papers-grid`);
+                    if (subGrid) {
+                        subGrid.appendChild(card);
+                        placed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!placed && genericGrid) {
+                genericGrid.appendChild(card);
+            }
         });
     } catch (e) { console.error("Dynamic Load Error:", e); }
+
+    // 3. LOAD FORMULAE & DEFINITIONS
+    loadDynamicExtras('formulae');
+    loadDynamicExtras('definitions');
 }
-window.loadDynamicPapers = loadDynamicPapers;
+
+async function loadDynamicExtras(type) {
+    try {
+        const data = await window.CloudManager.getPublicData(`content/${type}`);
+        if (!data) return;
+
+        const containerId = type === 'formulae' ? 'view-formulae' : 'view-definitions';
+        const view = document.getElementById(containerId);
+        if (!view) return;
+
+        // Create a dedicated container for dynamic extras if missing
+        let extraContainer = document.getElementById(`dynamic-${type}-container`);
+        if (!extraContainer) {
+            extraContainer = document.createElement('div');
+            extraContainer.id = `dynamic-${type}-container`;
+            extraContainer.className = type === 'formulae' ? 'formula-section' : 'def-section';
+            extraContainer.setAttribute('data-subject', 'dynamic'); // Show always or filter?
+
+            // For now, let's make it visible for 'business' and 'economics' by default or just generic
+            // Modify filterView to show 'dynamic' subject? 
+            // Or just allow it to be shown.
+
+            extraContainer.innerHTML = `<h3 class="chapter-title" style="color:#e056fd; margin-top:30px;">✨ Community ${type.charAt(0).toUpperCase() + type.slice(1)}</h3>`;
+
+            const grid = document.createElement('div');
+            grid.className = type === 'formulae' ? 'formula-grid' : 'def-grid'; // Check class name in CSS
+            // definition view uses 'def-card' directly inside? No, let's check index.html
+            // index.html: <div class="def-section"> <h3>...</h3> <div class="def-grid"> <div class="def-card">...
+            // actually index.html definitions are just <div class="def-card"> inside <div class="def-section">?
+            // Let's assume standard grid.
+            if (type === 'definitions') grid.style.display = 'grid'; // formatting fallback
+
+            extraContainer.appendChild(grid);
+            view.appendChild(extraContainer);
+        }
+
+        const grid = extraContainer.querySelector('div'); // The grid div we added
+        grid.innerHTML = ''; // Requesting fresh render
+
+        Object.values(data).forEach(item => {
+            const div = document.createElement('div');
+            if (type === 'formulae') {
+                div.className = 'formula-card';
+                div.innerHTML = `
+                    <div class="f-title">${item.title}</div>
+                    <div class="f-body">${item.body}</div>
+                `;
+            } else {
+                div.className = 'def-card';
+                div.innerHTML = `
+                    <div class="d-term">${item.term || item.word}</div>
+                    <div class="d-desc">${item.desc || item.def}</div>
+                `;
+            }
+            grid.appendChild(div);
+        });
+
+    } catch (e) { console.error(`Error loading ${type}`, e); }
+}
+
+window.loadDynamicPapers = loadDynamicContent;
 

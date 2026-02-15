@@ -221,9 +221,60 @@
             </div>
         </div>
 
-        <!-- 3. Vocab/Idioms -->
+        <!-- 3. Subject Management -->
         <div class="glass-card">
-            <h2 class="section-title">📖 Dictionary Management</h2>
+            <h2 class="section-title">📚 Subject Management</h2>
+            <div style="display:flex; gap: 20px;">
+                <div style="flex:1;">
+                    <div class="form-group">
+                        <label class="form-label">Subject Name (e.g. Physics)</label>
+                        <input type="text" id="sub-name" class="form-input" placeholder="Physics">
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="form-group">
+                        <label class="form-label">Subject Code (e.g. 9702)</label>
+                        <input type="text" id="sub-code" class="form-input" placeholder="9702">
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <button class="btn-primary" style="margin-top:28px;" onclick="addSubject()">Create Subject</button>
+                </div>
+            </div>
+            <div id="subjects-list" style="margin-top:20px; color:#666; font-size:0.9rem;">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+
+        <!-- 4. Bulk Operations -->
+        <div class="glass-card">
+            <h2 class="section-title">🚀 Bulk Operations</h2>
+
+            <div class="form-group">
+                <label class="form-label">Operation Type</label>
+                <select id="bulk-type" class="form-select" onchange="toggleBulkHint()">
+                    <option value="papers">Bulk Papers (JSON Array)</option>
+                    <option value="vocab">Bulk Vocabulary (CSV: Word,Def)</option>
+                    <option value="idioms">Bulk Idioms (CSV: Word,Def)</option>
+                    <option value="formulae">Bulk Formulae (JSON Array)</option>
+                    <option value="definitions">Bulk Definitions (JSON Array)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Paste Data Here</label>
+                <textarea id="bulk-data" class="form-input" rows="10"
+                    placeholder='[{"id":"...", "title":"..."}]'></textarea>
+                <p id="bulk-hint" style="font-size:0.8rem; color:#888; margin-top:5px;">Format: JSON Array of Objects
+                </p>
+            </div>
+
+            <button class="btn-primary" onclick="processBulkUpload()">Process Bulk Upload 🚀</button>
+        </div>
+
+        <!-- 5. Vocab/Idioms (Manual) -->
+        <div class="glass-card">
+            <h2 class="section-title">📖 Dictionary Management (Manual)</h2>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <h3>Add Vocabulary</h3>
