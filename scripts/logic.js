@@ -235,7 +235,7 @@ const ALLOWED_USERS = {
     "Abdul.Rehan": "jipmat"
 };
 
-function getUser() { return localStorage.getItem('user'); }
+function getUser() { return localStorage.getItem('user') || 'default_user'; }
 function setUser(u) { localStorage.setItem('user', u); }
 
 function tryLogin() {
@@ -714,6 +714,15 @@ async function submitAnswer(pid, qn) {
             weaknesses: json.weaknesses,
             modelAnswer: json.model_answer
         });
+
+        // SAVE TO LOCAL STORAGE (For Daily Target)
+        if (window.StorageManager) {
+            window.StorageManager.saveEssay(pid, qn, {
+                answer: ans,
+                score: json.score,
+                timestamp: Date.now()
+            });
+        }
 
         // Get current scroll from closure or re-query if needed, 
         // but better to get it from the panel currently in DOM before refresh
