@@ -4,6 +4,7 @@
 // =============================================
 
 // === 1. GLOBAL UI & MENU MANAGEMENT ===
+// Updated: Force Refresh v1.1
 
 // Helper to close ALL panels to prevent overlaps
 function closeAllPanels() {
