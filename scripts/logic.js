@@ -1010,27 +1010,28 @@ async function initHome() {
 
                     <!-- DAILY TARGET (Redesigned to match Continue Card) -->
                     <!-- Added onclick to maybe scroll to papers or just visual feedback -->
-                    <div class="glass-panel continue-card" id="daily-target-card" style="border-left-color: #3b82f6; position: relative; overflow: hidden;"> 
-                        <div class="continue-label" style="color: #60a5fa;">
+                    <!-- DAILY TARGET (Green Theme & Golden Thunder) -->
+                    <div class="glass-panel continue-card" id="daily-target-card" style="border-left-color: var(--lime-primary); position: relative; overflow: hidden;"> 
+                        <div class="continue-label" style="color: var(--lime-dark);">
                             <span>🎯</span> Daily Goal
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
                             <div class="continue-title" style="margin-bottom: 0; color: #1e293b;">Daily Target</div>
                             <div style="text-align: right;">
-                                <span id="daily-score-big" style="font-size: 1.8rem; font-weight: 800; color: #3b82f6;">0</span>
+                                <span id="daily-score-big" style="font-size: 1.8rem; font-weight: 800; color: var(--lime-dark);">0</span>
                                 <span style="font-size: 0.9rem; color: #94a3b8; font-weight: 600;">/ 50 PTS</span>
                             </div>
                         </div>
                         
                         <!-- Progress Bar Container -->
                         <div style="height: 8px; background: #e2e8f0; border-radius: 4px; margin-top: 15px; overflow: hidden; position: relative;">
-                            <div id="daily-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+                            <div id="daily-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--lime-primary), var(--lime-dark)); border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
                         </div>
                         
                         <div class="continue-subtitle" style="margin-top: 15px; font-size: 0.9rem;">
                            <span id="daily-msg">Let's hit 50 points today!</span> 
                            <span style="margin-left:auto; display: flex; align-items: center; gap: 5px;">
-                                <span style="font-size: 1.2rem;">🔥</span> <span id="streak-days" style="font-weight: 700; color: #f59e0b;">0</span> Day Streak
+                                <span style="font-size: 1.2rem; color: #f59e0b;">⚡</span> <span id="streak-days" style="font-weight: 700; color: #f59e0b;">0</span> Day Streak
                            </span>
                         </div>
                     </div>
@@ -1117,8 +1118,10 @@ async function updateHomeStats(user) {
             if (percentage >= 100) {
                 bar.style.background = "linear-gradient(90deg, #10b981, #059669)"; // Green for completion
                 document.getElementById('daily-target-card').style.borderLeftColor = "#10b981";
-            } else if (percentage >= 50) {
-                bar.style.background = "linear-gradient(90deg, #f59e0b, #d97706)"; // Orange/Yellow for half
+            } else {
+                // Default Green (same as inline style)
+                bar.style.background = "linear-gradient(90deg, var(--lime-primary), var(--lime-dark))";
+                document.getElementById('daily-target-card').style.borderLeftColor = "var(--lime-primary)";
             }
         }
 
