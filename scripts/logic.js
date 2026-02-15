@@ -1273,31 +1273,6 @@ async function loadDynamicContent() {
                     // Insert custom subjects BEFORE the general community section
                     papersView.insertBefore(div, dynamicContainer);
                 }
-
-                // C. ADD TO NAV DROPDOWN
-                const navDropdown = document.getElementById('nav-dropdown-papers');
-                if (navDropdown) {
-                    // Check if already exists in nav
-                    const existingItem = Array.from(navDropdown.children).find(c => c.innerText.includes(sub.name));
-                    if (!existingItem) {
-                        const item = document.createElement('div');
-                        item.className = 'dropdown-item';
-                        item.innerText = sub.name;
-                        item.onclick = () => {
-                            // 1. Switch to papers view
-                            setView('papers');
-                            // 2. Clear filters (show all) OR filter specifically?
-                            // For now, let's just scroll to the section
-                            const target = document.getElementById(containerId);
-                            if (target) {
-                                target.scrollIntoView({ behavior: 'smooth' });
-                                // Also ensure it's visible if we have filtering logic later
-                                target.classList.remove('hidden');
-                            }
-                        };
-                        navDropdown.appendChild(item);
-                    }
-                }
             });
         }
     } catch (e) { console.error("Subject Load Error", e); }
