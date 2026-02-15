@@ -907,18 +907,7 @@ async function initHome() {
                     <div class="stat-value" id="home-stat-rank">-</div>
                 </div>
                 
-                <div class="ai-tutor-home">
-                    <div style="font-size:3rem;">🤖</div>
-                    <div class="ai-content">
-                        <h3 style="margin:0; color:var(--lime-dark);">AI Personal Tutor</h3>
-                        <p style="color:#666; margin-top:5px;">Ask me anything about Business or Economics!</p>
-                        <div class="ai-input-group">
-                            <input type="text" class="ai-input-home" placeholder="Explain price elasticity..." id="home-ai-input" onkeypress="handleHomeAIEnter(event)">
-                            <button class="ai-send-btn" onclick="handleHomeAI()">➜</button>
-                        </div>
-                        <div id="home-ai-response" style="margin-top:15px; font-size:0.95rem; line-height:1.5;"></div>
-                    </div>
-                </div>
+
             </div>
         `;
 
