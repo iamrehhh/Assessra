@@ -235,7 +235,7 @@ const ALLOWED_USERS = {
     "Abdul.Rehan": "jipmat"
 };
 
-function getUser() { return localStorage.getItem('user') || 'default_user'; }
+function getUser() { return localStorage.getItem('user'); }
 function setUser(u) { localStorage.setItem('user', u); }
 
 function tryLogin() {
