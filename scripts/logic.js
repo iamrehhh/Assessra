@@ -998,56 +998,8 @@ async function updateHomeStats(user) {
     }
 }
 
-function handleHomeAIEnter(e) {
-    if (e.key === 'Enter') handleHomeAI();
-}
 
-async function handleHomeAI() {
-    const input = document.getElementById('home-ai-input');
-    const responseDiv = document.getElementById('home-ai-response');
-    const txt = input.value.trim();
 
-    if (!txt) return;
-
-    // Loading State
-    const originalPlaceholder = input.placeholder;
-    input.value = '';
-    input.placeholder = "Thinking...";
-    input.disabled = true;
-    if (responseDiv) responseDiv.innerHTML = '<span style="color:#888;">Thinking...</span>';
-
-    try {
-        const res = await fetch('https://ultimate-exam-guide.onrender.com/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: txt })
-        });
-
-        if (!res.ok) throw new Error("Server error");
-
-        const data = await res.json();
-        const reply = data.reply || "No response.";
-
-        // Typewriter effect or just text? Text is fine for now.
-        if (responseDiv) {
-            // Simple Markdown Parser for Bold and Newlines
-            let formattedReply = reply
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold **text**
-                .replace(/\n\n/g, '<br><br>') // Double newline = Paragraph break
-                .replace(/\n/g, '<br>'); // Single newline = Line break
-
-            responseDiv.innerHTML = `<strong style="color:var(--lime-dark);">AI Tutor:</strong> <div style="margin-top:5px;">${formattedReply}</div>`;
-        }
-
-    } catch (e) {
-        console.error(e);
-        if (responseDiv) responseDiv.innerHTML = `<span style="color:red;">Error: Is the backend server running? (python app.py)</span>`;
-    } finally {
-        input.disabled = false;
-        input.placeholder = originalPlaceholder;
-        input.focus();
-    }
-}
 
 // === NOTES LOGIC ===
 

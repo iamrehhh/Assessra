@@ -17,7 +17,7 @@ MARKING_API_KEY_PRIMARY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg"
 # TODO: PASTE YOUR SECOND API KEY HERE
 MARKING_API_KEY_SECONDARY = "AIzaSyD3i_NyAvFzBy94LAQsR4gFzfa9O5Nf8cM"
 
-# API Key for AI Tutor (Chat) - DO NOT MODIFY THIS
+# API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
 
 # Model Configuration
@@ -226,37 +226,7 @@ def mark():
     else:
         return jsonify({"error": "Failed to generate marking"}), 500
 
-@app.route('/chat', methods=['POST'])
-def chat():
-    data = request.json
-    user_msg = data.get('message', '')
-    
-    if not user_msg:
-        return jsonify({"reply": "Please say something!"})
 
-    system_prompt = """
-    You are an expert Cambridge A-Level Business and Economics Tutor.
-    
-    GUIDELINES:
-    1. **Explain Well:** Provide clear, detailed, and accurate explanations. Use examples where helpful.
-    2. **Structure:** Use paragraphs with **double line breaks** to separate them. Use **bold text** for key terms.
-    3. **Tone:** Be friendly, encouraging, and professional.
-    4. **Formatting:** Use Markdown for formatting (e.g., **bold** for key terms, - lists for points).
-    5. **Depth:** Do not be overly concise if the topic requires depth. Aim for clarity and completeness.
-    """
-
-    user_prompt = f"""
-    The student asks: "{user_msg}"
-    """
-    
-    # Tutor uses dedicated API key - no fallback
-    text, _ = generate_with_gemini(TUTOR_API_KEY, system_prompt, user_prompt)
-    
-    if text:
-        cleaned_text = text.replace('```', '').strip()
-        return jsonify({"reply": cleaned_text})
-    else:
-        return jsonify({"reply": "Sorry, I'm having trouble thinking right now. Try again later!"})
 
 # ==========================================
 import json
