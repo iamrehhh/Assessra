@@ -458,34 +458,95 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.8);
+    background: radial-gradient(circle at center, #f0fdf4, #dcfce7 60%, #fff);
+    /* Soft green gradient */
     backdrop-filter: blur(10px);
     z-index: 1000;
 }
 
 .login-card {
-    background: white;
-    padding: 50px;
-    width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    /* Glassmorphism base */
+    backdrop-filter: blur(20px);
+    padding: 60px 40px;
+    /* Increased padding */
+    width: 420px;
     border-radius: 24px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 20px 50px rgba(22, 163, 74, 0.15);
+    /* Soft, deep shadow */
     text-align: center;
-    border: 1px solid var(--lime-light);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-logo-img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+}
+
+.login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #1a2e1a;
+    /* Dark green/black */
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .login-input {
     width: 100%;
-    padding: 15px;
-    margin: 10px 0;
+    padding: 16px;
+    margin: 12px 0;
     border-radius: 12px;
-    border: 2px solid #eee;
+    border: 1px solid #e0e0e0;
     font-size: 1rem;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    color: #333;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .login-input:focus {
     border-color: var(--lime-primary);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
     outline: none;
+}
+
+.login-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, var(--lime-primary), var(--lime-dark));
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 10px 20px rgba(22, 163, 74, 0.2);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(22, 163, 74, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(1px);
 }
 
 .app-header {
