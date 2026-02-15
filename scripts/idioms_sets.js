@@ -63,7 +63,7 @@ async function loadIdiomsSetsProgress() {
         const response = await fetch('/load_idioms_sets_progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: 'default_user' })
+            body: JSON.stringify({ user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user' })
         });
         const data = await response.json();
 
@@ -84,7 +84,7 @@ async function saveIdiomsSetsProgress() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id: 'default_user',
+                user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 progress: idiomsSetsProgress
             })
         });
@@ -508,7 +508,7 @@ async function saveSentenceAndCompleteIdioms() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id: 'default_user',
+                user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 sentence_data: {
                     type: 'idiom',
                     idiom: idiomsForSentence.map(i => i.idiom).join(', '),

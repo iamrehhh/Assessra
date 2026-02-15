@@ -5929,7 +5929,7 @@ async function loadVocabSetsProgress() {
         const response = await fetch('/load_vocab_sets_progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: 'default_user' })
+            body: JSON.stringify({ user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user' })
         });
         const data = await response.json();
 
@@ -5953,7 +5953,7 @@ async function saveVocabSetsProgress() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id: 'default_user',
+                user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 progress: vocabSetsProgress
             })
         });
@@ -6366,7 +6366,7 @@ async function saveSentenceAndComplete() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id: 'default_user',
+                user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 sentence_data: {
                     type: 'vocab',
                     word: correctWords.map(w => w.word).join(', '),

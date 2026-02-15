@@ -251,8 +251,13 @@ function initApp(u) {
     document.getElementById('login-layer').classList.add('hidden');
     document.getElementById('app-layer').classList.remove('hidden');
     initHome();
-    if (window.loadDynamicPapers) window.loadDynamicPapers();
-    // setView('home'); // Removed to allow restore logic below
+    if (window.loadDynamicPapers && window.CloudManager) {
+        try {
+            window.loadDynamicPapers();
+        } catch (e) { console.warn("Dynamic papers failed:", e); }
+    } else {
+        console.warn("CloudManager not ready or Dynamic Papers script missing.");
+    }
 
     // Admin Button Removed per user request
 
@@ -1231,7 +1236,8 @@ async function updateHomeStats(user) {
 // === NOTES LOGIC ===
 
 function loadNotes() {
-    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    if (!window.StorageManager) return;
+    const notes = window.StorageManager.getNotes();
     const container = document.getElementById('saved-notes-list');
     if (!container) return;
     container.innerHTML = '';
@@ -1244,15 +1250,13 @@ function loadNotes() {
     notes.forEach((note, index) => {
         const div = document.createElement('div');
         div.className = 'saved-note-item';
-        // Check for title or use text excerpt
-        let displayTitle = note.title;
-        if (!displayTitle) {
-            displayTitle = note.text ? note.text.substring(0, 20) + (note.text.length > 20 ? '...' : '') : 'Untitled Note';
-        }
+        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;";
+
+        let displayTitle = note.title || (note.text ? note.text.substring(0, 20) + '...' : 'Untitled Note');
 
         div.innerHTML = `
             <span onclick="openNote(${index})" style="flex:1;">${displayTitle}</span>
-            <button class="delete-note-btn" onclick="deleteNote(${index})">🗑</button>
+            <button onclick="deleteNote(${index})" style="background:none; border:none; cursor:pointer; color:red;">🗑</button>
         `;
         container.appendChild(div);
     });
@@ -1260,20 +1264,23 @@ function loadNotes() {
 
 function createNewNote() {
     const editor = document.getElementById('note-editor');
-    editor.value = '';
-    editor.dataset.index = ''; // Clear current index
-    editor.focus();
+    if (editor) {
+        editor.value = '';
+        editor.dataset.index = '';
+        editor.focus();
+    }
 }
 
 function saveCurrentNote() {
+    if (!window.StorageManager) return;
     const editor = document.getElementById('note-editor');
     const text = editor.value;
     if (!text.trim()) return alert("Empty note!");
 
-    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
+    const notes = window.StorageManager.getNotes();
     const idx = editor.dataset.index;
 
-    // Generate Title from first line
+    // Generate Title
     const title = text.split('\n')[0].substring(0, 30);
     const noteObj = { title, text, date: new Date().toISOString() };
 
@@ -1283,7 +1290,7 @@ function saveCurrentNote() {
         notes.unshift(noteObj);
     }
 
-    localStorage.setItem('habibi_notes', JSON.stringify(notes));
+    window.StorageManager.saveNotes(notes);
     loadNotes();
     alert("Note saved!");
 }

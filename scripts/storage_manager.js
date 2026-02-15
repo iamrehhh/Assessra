@@ -4,8 +4,23 @@ const StorageManager = {
     getUser: () => localStorage.getItem('user') || 'default_user',
 
     // === GENERIC SAVE/LOAD ===
-    getData: (user) => JSON.parse(localStorage.getItem(`habibi_data_${user}`) || '{}'),
-    saveData: (user, data) => localStorage.setItem(`habibi_data_${user}`, JSON.stringify(data)),
+    getData: (user) => {
+        try {
+            const raw = localStorage.getItem(`habibi_data_${user}`);
+            return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+            console.error("Data corruption detected for user:", user, e);
+            return {}; // Fallback to empty object to prevent crash
+        }
+    },
+    saveData: (user, data) => {
+        try {
+            localStorage.setItem(`habibi_data_${user}`, JSON.stringify(data));
+        } catch (e) {
+            console.error("Storage full or error saving data:", e);
+            alert("Warning: Storage full. Some progress may not be saved.");
+        }
+    },
 
     // === ESSAY HANDLING ===
     saveEssay: (paperId, qNum, answerData) => {
@@ -18,11 +33,6 @@ const StorageManager = {
 
         // Ensure answerData is object to store timestamp
         if (typeof answerData !== 'object') {
-            // Should verify if this breaks existing strings, but based on inspection it seems to be object with score
-            // If string (just answer text), wrap it?
-            // Existing code uses q.score. So answerData MUST be object or have score property attached.
-            // If answerData is just string, q.score would be undefined.
-            // Let's assume object for now as per plan context.
             answerData = { answer: answerData };
         }
 
@@ -49,9 +59,9 @@ const StorageManager = {
         if (!data.mcq) data.mcq = {};
 
         data.mcq[paperId] = {
-            answers: answersArray, // Array of selected letters ['A', 'C', null, 'D'...]
-            submitted: isSubmitted,
-            score: score,
+            answers: answersArray || [], // Ensure array
+            submitted: !!isSubmitted,
+            score: typeof score === 'number' ? score : 0,
             timestamp: Date.now()
         };
         StorageManager.saveData(user, data);
@@ -66,6 +76,8 @@ const StorageManager = {
 
     // === AD-HOC DAILY POINTS (Vocab/Idioms) ===
     addDailyPoints: (type, amount) => {
+        if (!amount || amount <= 0) return; // Ignore zero or negative
+
         const user = StorageManager.getUser();
         if (!user) return;
         const data = StorageManager.getData(user);
@@ -97,9 +109,11 @@ const StorageManager = {
         if (data.essays) {
             Object.keys(data.essays).forEach(pid => {
                 const subject = pid.includes('9609') || pid.includes('bus') ? 'business' : 'economics';
-                Object.values(data.essays[pid]).forEach(q => {
-                    if (q.score) scores[subject] += q.score;
-                });
+                if (data.essays[pid]) {
+                    Object.values(data.essays[pid]).forEach(q => {
+                        if (q && typeof q.score === 'number') scores[subject] += q.score;
+                    });
+                }
             });
         }
 
@@ -107,8 +121,10 @@ const StorageManager = {
         if (data.mcq) {
             Object.keys(data.mcq).forEach(pid => {
                 const session = data.mcq[pid];
-                if (session.submitted && session.score) {
-                    scores.economics += session.score; // Assuming MCQs are Econ for now
+                if (session && session.submitted && typeof session.score === 'number') {
+                    // Refined Subject Detection for MCQs
+                    const isBiz = pid.includes('9609') || pid.includes('bus');
+                    scores[isBiz ? 'business' : 'economics'] += session.score;
                 }
             });
         }
@@ -131,13 +147,15 @@ const StorageManager = {
         const aggregate = (source) => {
             if (!source) return;
             Object.values(source).forEach(item => {
+                if (!item) return;
+
                 // Item could be a paper object (containing questions) or a session object
-                if (item.timestamp && item.score) { // MCQ Session
+                if (item.timestamp && typeof item.score === 'number') { // MCQ Session or Daily Item
                     const d = new Date(item.timestamp).setHours(0, 0, 0, 0);
                     dailyScores[d] = (dailyScores[d] || 0) + item.score;
                 } else if (typeof item === 'object') { // Paper with questions
                     Object.values(item).forEach(q => {
-                        if (q.timestamp && q.score) {
+                        if (q && q.timestamp && typeof q.score === 'number') {
                             const d = new Date(q.timestamp).setHours(0, 0, 0, 0);
                             dailyScores[d] = (dailyScores[d] || 0) + q.score;
                         }
@@ -154,10 +172,9 @@ const StorageManager = {
 
         // Calculate Streak (Strict 50pt Threshold)
         let streak = 0;
-        // Check Yesterday first
-        let checkDate = today - 86400000;
+        let checkDate = today - 86400000; // Start checking from yesterday
 
-        // Safety break to prevent infinite loops (e.g. max 365 days)
+        // Safety break: Max 365 days lookback
         let paramCheck = 0;
         while (paramCheck < 365) {
             const s = dailyScores[checkDate] || 0;
@@ -170,9 +187,26 @@ const StorageManager = {
             paramCheck++;
         }
 
-        // Add Today if target met
+        // Add Today to streak if target met
         if (todayScore >= 50) streak++;
 
         return { todayScore, streak };
+    },
+    // === NOTES HANDLING ===
+    getNotes: () => {
+        const user = StorageManager.getUser();
+        if (!user) return [];
+        try {
+            const raw = localStorage.getItem(`habibi_notes_${user}`);
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) { return []; }
+    },
+
+    saveNotes: (notes) => {
+        const user = StorageManager.getUser();
+        if (!user) return;
+        localStorage.setItem(`habibi_notes_${user}`, JSON.stringify(notes));
     }
 };
+
+window.StorageManager = StorageManager;

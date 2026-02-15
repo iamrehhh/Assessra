@@ -12,7 +12,7 @@ async function loadMySentences() {
         const response = await fetch('/get_sentences', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: 'default_user' })
+            body: JSON.stringify({ user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user' })
         });
         const data = await response.json();
         renderSentencesView(data.sentences || []);
@@ -118,7 +118,7 @@ async function deleteSentence(timestamp) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id: 'default_user',
+                user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 timestamp: timestamp
             })
         });

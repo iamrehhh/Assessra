@@ -4,27 +4,27 @@
 
 // ⚠️ FIXED: Added 'econ_' prefix to prevent clashing with Business Papers
 const paperDatabase = {
-    "econ_2025_on_31": { 
-        pdf: "papers/9708_w25_qp_31.pdf", 
-        answers: ['A', 'A', 'C', 'A', 'D', 'A', 'D', 'D', 'B', 'B', 'C', 'A', 'D', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'C', 'A', 'D', 'B', 'A', 'B', 'A', 'D', 'A', 'C'] 
+    "econ_2025_on_31": {
+        pdf: "papers/9708_w25_qp_31.pdf",
+        answers: ['A', 'A', 'C', 'A', 'D', 'A', 'D', 'D', 'B', 'B', 'C', 'A', 'D', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'C', 'A', 'D', 'B', 'A', 'B', 'A', 'D', 'A', 'C']
     },
-    "econ_2025_on_32": { 
-        pdf: "papers/9708_w25_qp_32.pdf", 
-        answers: ['A', 'D', 'C', 'C', 'C', 'A', 'D', 'B', 'D', 'B', 'B', 'D', 'B', 'B', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'B', 'A', 'D', 'B', 'A', 'C', 'B', 'A', 'D'] 
+    "econ_2025_on_32": {
+        pdf: "papers/9708_w25_qp_32.pdf",
+        answers: ['A', 'D', 'C', 'C', 'C', 'A', 'D', 'B', 'D', 'B', 'B', 'D', 'B', 'B', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'B', 'A', 'D', 'B', 'A', 'C', 'B', 'A', 'D']
     },
-    "econ_2025_on_33": { 
-        pdf: "papers/9708_w25_qp_33.pdf", 
-        answers: ['C', 'A', 'B', 'D', 'D', 'C', 'C', 'B', 'D', 'D', 'A', 'D', 'B', 'A', 'B', 'D', 'A', 'A', 'D', 'C', 'B', 'C', 'A', 'D', 'C', 'B', 'A', 'B', 'D', 'A'] 
+    "econ_2025_on_33": {
+        pdf: "papers/9708_w25_qp_33.pdf",
+        answers: ['C', 'A', 'B', 'D', 'D', 'C', 'C', 'B', 'D', 'D', 'A', 'D', 'B', 'A', 'B', 'D', 'A', 'A', 'D', 'C', 'B', 'C', 'A', 'D', 'C', 'B', 'A', 'B', 'D', 'A']
     },
-    "econ_2025_on_34": { 
-        pdf: "papers/9708_w25_qp_34.pdf", 
-        answers: ['D', 'C', 'C', 'B', 'C', 'D', 'D', 'A', 'B', 'D', 'D', 'A', 'C', 'D', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'C', 'A', 'D', 'B', 'A', 'C', 'B', 'B', 'C'] 
+    "econ_2025_on_34": {
+        pdf: "papers/9708_w25_qp_34.pdf",
+        answers: ['D', 'C', 'C', 'B', 'C', 'D', 'D', 'A', 'B', 'D', 'D', 'A', 'C', 'D', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'C', 'A', 'D', 'B', 'A', 'C', 'B', 'B', 'C']
     }
 };
 
 let currentPaperID = "";
 let timerInterval;
-let timeRemaining = 75 * 60; 
+let timeRemaining = 75 * 60;
 let testSubmitted = false;
 
 function loadMCQPapers() {
@@ -70,8 +70,8 @@ async function startMCQTest(paperID) {
     currentPaperID = paperID;
     testSubmitted = false;
     const paperInfo = paperDatabase[paperID];
-    
-    if(!paperInfo) { alert("Paper data not found!"); return; }
+
+    if (!paperInfo) { alert("Paper data not found!"); return; }
 
     document.body.style.overflow = 'hidden';
 
@@ -94,7 +94,7 @@ async function startMCQTest(paperID) {
                     <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Answer Sheet</h3>
                     <div id="bubble-grid" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
     `;
-    
+
     paperInfo.answers.forEach((correctLetter, index) => {
         let qNum = index + 1;
         html += `
@@ -114,7 +114,7 @@ async function startMCQTest(paperID) {
     });
 
     html += `</div><button id="submit-btn" onclick="confirmSubmission()" class="nav-btn" style="background:var(--lime-primary); width:100%; padding:20px; font-size:1.2rem; margin-top:30px; margin-bottom:20px; color:white; border-radius: 12px; cursor: pointer; border: none; font-weight: bold;">Submit & Grade Test</button><div style="height: 150px; width: 100%;"></div></div></div></div>`;
-    
+
     document.getElementById('container-econ-p3').innerHTML = html;
 
     // RESTORE LOGIC
@@ -144,14 +144,14 @@ async function startMCQTest(paperID) {
     startTimer();
 }
 
-window.updateBubble = function(input, qIndex, letter) {
-    if(testSubmitted) return;
+window.updateBubble = function (input, qIndex, letter) {
+    if (testSubmitted) return;
     ['A', 'B', 'C', 'D'].forEach(l => {
         let label = document.getElementById(`label-q${qIndex}-${l}`);
-        if(label) { label.style.background = 'white'; label.style.borderColor = '#ccc'; label.style.color = '#555'; }
+        if (label) { label.style.background = 'white'; label.style.borderColor = '#ccc'; label.style.color = '#555'; }
     });
     let selectedLabel = document.getElementById(`label-q${qIndex}-${letter}`);
-    if(selectedLabel) {
+    if (selectedLabel) {
         selectedLabel.style.background = 'var(--lime-primary)';
         selectedLabel.style.borderColor = 'var(--lime-primary)';
         selectedLabel.style.color = 'white';
@@ -159,16 +159,16 @@ window.updateBubble = function(input, qIndex, letter) {
 };
 
 function startTimer() {
-    timeRemaining = 75 * 60; 
+    timeRemaining = 75 * 60;
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-        if(testSubmitted) return; 
+        if (testSubmitted) return;
         timeRemaining--;
         let h = Math.floor(timeRemaining / 3600);
         let m = Math.floor((timeRemaining % 3600) / 60);
         let s = timeRemaining % 60;
         const timerEl = document.getElementById('timer-display');
-        if(timerEl) timerEl.innerText = String(h).padStart(2,'0') + ":" + String(m).padStart(2,'0') + ":" + String(s).padStart(2,'0');
+        if (timerEl) timerEl.innerText = String(h).padStart(2, '0') + ":" + String(m).padStart(2, '0') + ":" + String(s).padStart(2, '0');
 
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
@@ -179,21 +179,21 @@ function startTimer() {
 }
 
 function confirmSubmission() {
-    if(testSubmitted) return;
-    if(confirm("Are you ready to submit your answers for grading?")) {
+    if (testSubmitted) return;
+    if (confirm("Are you ready to submit your answers for grading?")) {
         gradeMCQ();
     }
 }
 
 function gradeMCQ(isRestoring = false) {
-    if(testSubmitted && !isRestoring) return;
+    if (testSubmitted && !isRestoring) return;
     testSubmitted = true;
     clearInterval(timerInterval);
-    
+
     const answers = paperDatabase[currentPaperID].answers;
     let score = 0;
-    let cloudData = {}; 
-    
+    let cloudData = {};
+
     answers.forEach((correctLetter, index) => {
         const qNum = index + 1;
         const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
@@ -202,7 +202,7 @@ function gradeMCQ(isRestoring = false) {
         // Visual Marking
         ['A', 'B', 'C', 'D'].forEach(l => {
             let lbl = document.getElementById(`label-q${index}-${l}`);
-            if(lbl) lbl.style.color = '#555';
+            if (lbl) lbl.style.color = '#555';
         });
 
         const isCorrect = (userChoice === correctLetter);
@@ -213,14 +213,14 @@ function gradeMCQ(isRestoring = false) {
 
         if (isCorrect) {
             let cl = document.getElementById(`label-q${index}-${correctLetter}`);
-            if(cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
+            if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
             document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #22c55e";
         } else {
             let cl = document.getElementById(`label-q${index}-${correctLetter}`);
-            if(cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
+            if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
             if (userChoice) {
                 let ul = document.getElementById(`label-q${index}-${userChoice}`);
-                if(ul) { ul.style.backgroundColor = "#ef4444"; ul.style.borderColor = "#ef4444"; ul.style.color = "white"; }
+                if (ul) { ul.style.backgroundColor = "#ef4444"; ul.style.borderColor = "#ef4444"; ul.style.color = "white"; }
             }
             document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #ef4444";
         }
@@ -228,23 +228,28 @@ function gradeMCQ(isRestoring = false) {
 
     const percent = Math.round((score / answers.length) * 100);
     const resultBox = document.getElementById('mcq-result-box');
-    if(resultBox) {
+    if (resultBox) {
         resultBox.style.display = "block";
         resultBox.innerHTML = `<h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1><h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>`;
     }
 
     const subBtn = document.getElementById('submit-btn');
-    if(subBtn) subBtn.style.display = "none";
-    
+    if (subBtn) subBtn.style.display = "none";
+
     // ⚠️ FIXED: Ensures data is saved using the correct Cloud method
     if (!isRestoring && window.CloudManager && window.CloudManager.saveMCQBatch) {
         window.CloudManager.saveMCQBatch(getUser(), currentPaperID, cloudData);
     }
+
+    // Add to Daily Target
+    if (!isRestoring && window.StorageManager) {
+        window.StorageManager.addDailyPoints('economics', score);
+    }
 }
 
 function exitMCQTest() {
-    document.body.style.overflow = 'auto'; 
-    loadMCQPapers(); 
+    document.body.style.overflow = 'auto';
+    loadMCQPapers();
 }
 
 document.addEventListener("DOMContentLoaded", loadMCQPapers);
