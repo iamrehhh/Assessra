@@ -7,8 +7,12 @@ if (CURRENT_USER !== 'Abdul.Rehan') {
     alert("⛔ ACCESS DENIED: Admins only.");
     window.location.href = 'index.html';
 } else {
-    document.getElementById('security-check').style.display = 'none';
-    document.getElementById('admin-content').classList.remove('hidden');
+    // Show new Admin UI
+    const secCheck = document.getElementById('security-check');
+    if (secCheck) secCheck.style.display = 'none';
+
+    document.getElementById('admin-sidebar').style.display = 'flex';
+    document.getElementById('admin-main').style.display = 'block';
 }
 
 // === 2. FIREBASE CONFIG ===
