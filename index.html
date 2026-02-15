@@ -34,8 +34,15 @@
                 </div>
                 <!-- Changed 'nav' to match new requirements -->
                 <div class="nav">
-                    <!-- Replaced Papers with Subjects -->
-                    <button class="nav-btn" onclick="toggleSubjectsPanel()">Subjects</button>
+                    <!-- Replaced Papers with Subjects Dropdown -->
+                    <div class="nav-item-wrapper">
+                        <button class="nav-btn" onclick="setView('papers')">Papers ▾</button>
+                        <div class="dropdown-menu" id="nav-dropdown-papers">
+                            <div class="dropdown-item" onclick="filterView('papers', 'business')">Business</div>
+                            <div class="dropdown-item" onclick="filterView('papers', 'economics')">Economics</div>
+                            <!-- Dynamic Subjects Injected Here -->
+                        </div>
+                    </div>
 
                     <div class="nav-item-wrapper">
                         <button class="nav-btn" onclick="setView('formulae')">Formulae ▾</button>
