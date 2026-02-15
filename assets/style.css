@@ -490,10 +490,14 @@ h2 {
 
 .app-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    /* Changed from space-between to bring nav closer */
     align-items: center;
+    gap: 30px;
+    /* Space between Logo and Nav */
     background: var(--glass-bg);
-    padding: 20px 30px;
+    padding: 15px 30px;
+    /* Reduced vertical padding slightly since logo is big */
     border-radius: 20px;
     margin-bottom: 30px;
     border: 1px solid white;
@@ -503,14 +507,15 @@ h2 {
 .header-left {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    /* Prevent logo compression */
 }
 
 .app-logo {
     height: 90px;
-    /* Enlarged from 60px */
     width: 90px;
     object-fit: contain;
-    margin-right: 20px;
+    /* margin-right: 20px; Removed margin since we use gap in parent */
     cursor: pointer;
     border-radius: 50%;
     transition: transform 0.2s;
@@ -525,12 +530,12 @@ h2 {
     border: none;
     font-weight: 700;
     color: #666;
-    padding: 10px 12px;
-    /* Slightly reduced padding to ensure fit */
+    padding: 10px 15px;
+    /* Restored padding for breathing room */
     cursor: pointer;
     transition: 0.3s;
-    font-size: 0.95rem;
-    /* Slightly reduced font size */
+    font-size: 1rem;
+    /* Restored font size */
     white-space: nowrap;
     /* Prevent text wrapping */
 }
@@ -545,10 +550,11 @@ h2 {
 .nav {
     display: flex;
     align-items: center;
-    gap: 10px;
-    /* Reduced gap from 15px */
+    gap: 25px;
+    /* Increased from 10px to 25px per user request */
     flex-wrap: nowrap;
-    /* Force one row */
+    width: 100%;
+    /* Allow it to take space if needed */
 }
 
 .nav-item-wrapper {
