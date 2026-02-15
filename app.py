@@ -11,11 +11,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
 # Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
+MARKING_API_KEY_PRIMARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg" 
 
 # Secondary API Key for Fallback (when primary runs out of tokens)
 # TODO: PASTE YOUR SECOND API KEY HERE
-MARKING_API_KEY_SECONDARY = "AIzaSyD3i_NyAvFzBy94LAQsR4gFzfa9O5Nf8cM"
+MARKING_API_KEY_SECONDARY = "AIzaSyC538XHLbFMn0wLEKPcizwM6F1PQyxVdqg"
 
 # API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
