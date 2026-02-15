@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import os
@@ -109,6 +109,17 @@ def generate_with_fallback(system_instruction, user_prompt):
             print("Tertiary API also failed (or other error).")
     
     return None
+
+# ==========================================
+# STATIC FILE SERVING (Frontend)
+# ==========================================
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory('.', path)
 
 @app.route('/mark', methods=['POST'])
 def mark():
