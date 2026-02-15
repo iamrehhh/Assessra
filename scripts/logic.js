@@ -956,7 +956,7 @@ function selectSubject(subject) {
 // === HOME PAGE LOGIC ===
 
 async function initHome() {
-    const u = getUser();
+    const u = window.StorageManager ? window.StorageManager.getUser() : localStorage.getItem('user');
     if (!u) return;
 
     const name = u.split('.')[0] || 'Student';

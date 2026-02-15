@@ -150,14 +150,20 @@ const StorageManager = {
                 if (!item) return;
 
                 // Item could be a paper object (containing questions) or a session object
-                if (item.timestamp && typeof item.score === 'number') { // MCQ Session or Daily Item
-                    const d = new Date(item.timestamp).setHours(0, 0, 0, 0);
-                    dailyScores[d] = (dailyScores[d] || 0) + item.score;
+                if (item.timestamp && item.score != null) { // MCQ Session or Daily Item
+                    const score = Number(item.score);
+                    if (!isNaN(score)) {
+                        const d = new Date(item.timestamp).setHours(0, 0, 0, 0);
+                        dailyScores[d] = (dailyScores[d] || 0) + score;
+                    }
                 } else if (typeof item === 'object') { // Paper with questions
                     Object.values(item).forEach(q => {
-                        if (q && q.timestamp && typeof q.score === 'number') {
-                            const d = new Date(q.timestamp).setHours(0, 0, 0, 0);
-                            dailyScores[d] = (dailyScores[d] || 0) + q.score;
+                        if (q && q.timestamp && q.score != null) {
+                            const score = Number(q.score);
+                            if (!isNaN(score)) {
+                                const d = new Date(q.timestamp).setHours(0, 0, 0, 0);
+                                dailyScores[d] = (dailyScores[d] || 0) + score;
+                            }
                         }
                     });
                 }
