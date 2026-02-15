@@ -934,7 +934,7 @@ async function initHome() {
                         <div class="stat-icon">🎯</div>
                         <div class="stat-info">
                              <div class="stat-value" id="home-stat-score">-</div>
-                             <div class="stat-label">Avg. Score</div>
+                             <div class="stat-label">Cumulative Score</div>
                         </div>
                     </div>
                     
