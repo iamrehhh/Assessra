@@ -410,6 +410,10 @@ function selectSetAnswerIdioms(selectedIdx) {
     } else {
         idiomsForSentence.push({ idiom: q.idiom, meaning: q.options[q.correct] });
         setScoreIdioms++;
+        // Add to Daily Target
+        if (window.StorageManager) {
+            window.StorageManager.addDailyPoints('idioms', 1);
+        }
     }
 
     const feedback = document.getElementById('idioms-set-feedback');

@@ -294,6 +294,11 @@ function setView(viewName) {
     const target = document.getElementById(`view-${viewName}`);
     if (target) target.classList.remove('hidden');
 
+    // Refresh Home Stats if entering Home view
+    if (viewName === 'home' && window.updateHomeStats && window.StorageManager) {
+        window.updateHomeStats(window.StorageManager.getUser());
+    }
+
     // 3. Update Navigation Buttons
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');

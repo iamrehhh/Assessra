@@ -6240,6 +6240,10 @@ function selectSetAnswer(selectedIdx) {
         options[selectedIdx].style.color = 'white';
     } else {
         setScoreVocab++;
+        // Add to Daily Target
+        if (window.StorageManager) {
+            window.StorageManager.addDailyPoints('vocab', 1);
+        }
     }
 
     // Show feedback
