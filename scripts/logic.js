@@ -1087,25 +1087,8 @@ async function initHome() {
 async function updateHomeStats(user) {
     // 1. Daily Progress & Reset Logic
     if (window.StorageManager && window.StorageManager.getDailyStats) {
-        // Enforce Reset if New Day
-        const todayStr = new Date().toDateString();
-        const lastDate = localStorage.getItem('habibi_last_date');
-
-        if (lastDate !== todayStr) {
-            // It's a new day! Reset daily score
-            // StorageManager might handle this, but let's force it to be safe or update storage
-            // If StorageManager doesn't expose reset, we might need to manually reset logic in localstorage
-            // Assuming StorageManager stores in 'habibi_daily_stats'
-            let stats = JSON.parse(localStorage.getItem('habibi_daily_stats') || '{}');
-
-            // Check if we kept the streak or lost it
-            // Logic: If yesterday we didn't hit target (50), streak might reset to 0 depending on strictness
-            // For now, simpler logic: just reset today's score to 0
-            stats.todayScore = 0;
-            stats.date = todayStr; // Update date
-            localStorage.setItem('habibi_daily_stats', JSON.stringify(stats));
-            localStorage.setItem('habibi_last_date', todayStr);
-        }
+        // Logic simplified: StorageManager calculates stats dynamically based on timestamps.
+        // No manual reset needed here.
 
         const daily = window.StorageManager.getDailyStats(); // Should return updated stats
         const maxScore = 50;

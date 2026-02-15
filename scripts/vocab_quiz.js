@@ -424,6 +424,11 @@ async function selectVocabAnswer(selectedIdx) {
     // Save progress
     saveVocabProgress();
 
+    // Add to Daily Target
+    if (window.StorageManager) {
+        window.StorageManager.addDailyPoints('vocab', 1);
+    }
+
     // Fetch AI example
     const feedback = document.getElementById('vocab-feedback');
     feedback.style.display = 'block';

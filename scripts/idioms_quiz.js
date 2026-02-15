@@ -564,6 +564,11 @@ async function selectIdiomAnswer(selectedIdx) {
     // Save progress
     saveIdiomsProgress();
 
+    // Add to Daily Target
+    if (window.StorageManager) {
+        window.StorageManager.addDailyPoints('idioms', 1);
+    }
+
     // Show feedback
     const feedback = document.getElementById('idiom-feedback');
     feedback.style.display = 'block';

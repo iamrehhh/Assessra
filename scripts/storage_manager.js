@@ -64,6 +64,27 @@ const StorageManager = {
         return data.mcq?.[paperId] || null;
     },
 
+    // === AD-HOC DAILY POINTS (Vocab/Idioms) ===
+    addDailyPoints: (type, amount) => {
+        const user = StorageManager.getUser();
+        if (!user) return;
+        const data = StorageManager.getData(user);
+
+        if (!data.daily_progress) data.daily_progress = {};
+
+        // Key by date to ensure separation
+        const todayStr = new Date().toDateString(); // "Sun Feb 15 2026"
+        const key = `${type}_${todayStr}`;
+
+        const current = data.daily_progress[key] || { score: 0, timestamp: Date.now() };
+        current.score += amount;
+        current.timestamp = Date.now();
+
+        data.daily_progress[key] = current;
+        StorageManager.saveData(user, data);
+        console.log(`Added ${amount} pts to ${type}`);
+    },
+
     // === SCORE SYNC CALCULATOR ===
     calculateSubjectScores: () => {
         const user = StorageManager.getUser();
@@ -127,6 +148,7 @@ const StorageManager = {
 
         aggregate(data.essays);
         aggregate(data.mcq);
+        aggregate(data.daily_progress);
 
         todayScore = dailyScores[today] || 0;
 
