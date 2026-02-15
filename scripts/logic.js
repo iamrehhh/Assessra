@@ -252,7 +252,7 @@ function initApp(u) {
     document.getElementById('app-layer').classList.remove('hidden');
     initHome();
     if (window.loadDynamicPapers) window.loadDynamicPapers();
-    setView('home');
+    // setView('home'); // Removed to allow restore logic below
 
     // Admin Button Injection
     if (u === 'Abdul.Rehan') {
@@ -268,11 +268,22 @@ function initApp(u) {
             nav.appendChild(btn);
         }
     }
+
+    // Restore Last View
+    const lastView = localStorage.getItem('lastView') || 'home';
+    setView(lastView);
 }
 
-function doLogout() { localStorage.removeItem('user'); location.reload(); }
+function doLogout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('lastView'); // Clear view state on logout
+    location.reload();
+}
 
 function setView(viewName) {
+    // Save state
+    localStorage.setItem('lastView', viewName);
+
     // 1. Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
@@ -283,7 +294,7 @@ function setView(viewName) {
     const target = document.getElementById(`view-${viewName}`);
     if (target) target.classList.remove('hidden');
 
-    // 3. Update Navigation Buttons (The Fix)
+    // 3. Update Navigation Buttons
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
 
