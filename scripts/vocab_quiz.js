@@ -481,20 +481,20 @@ async function saveSentence(word, definition, type) {
     const sentenceInput = document.getElementById('user-sentence');
     const sentence = sentenceInput.value.trim();
     const feedbackDiv = document.getElementById('sentence-feedback');
-    
+
     // Validation
     if (!sentence) {
         feedbackDiv.style.display = 'block';
         feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">⚠️ Please enter a sentence first!</p>';
         return;
     }
-    
+
     if (!sentence.toLowerCase().includes(word.toLowerCase())) {
         feedbackDiv.style.display = 'block';
         feedbackDiv.innerHTML = `<p style="color: #dc2626; font-weight: 600;">⚠️ Your sentence must include the word "${word}"!</p>`;
         return;
     }
-    
+
     // Save to backend
     try {
         await fetch('/save_sentence', {
@@ -510,10 +510,10 @@ async function saveSentence(word, definition, type) {
                 }
             })
         });
-        
+
         feedbackDiv.style.display = 'block';
         feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved successfully!</p>';
-        
+
         setTimeout(() => {
             document.getElementById('next-vocab-btn').style.display = 'block';
             document.getElementById('sentence-prompt').style.opacity = '0.6';
@@ -618,8 +618,11 @@ async function showVocabResults() {
 }
 
 // Initialize on load
+// Initialize on load - DISABLED to allow vocab_sets.js to take over
+/*
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('container-vocab')) {
         loadVocabQuiz();
     }
 });
+*/

@@ -683,3 +683,4 @@ async function resetIdiomsQuiz() {
 // Expose to window for logic.js
 window.loadIdiomsQuiz = loadIdiomsQuiz;
 window.initIdiomsQuiz = initIdiomsQuiz;
+window.idiomsData = idiomsData;

@@ -34,6 +34,7 @@ let currentSetQuestionsIdioms = [];
 let currentQuestionIdioms = 0;
 let setScoreIdioms = 0;
 let idiomsForSentence = [];
+let currentAttemptsIdioms = []; // Track full attempt details
 
 // Global progress
 let idiomsSetsProgress = {};
@@ -177,6 +178,11 @@ function renderSetsGridIdioms(month) {
         let statusIcon = '⭕';
         let statusColor = '#e5e7eb';
         let textColor = '#9ca3af';
+        let clickHandler = `onclick="startSetIdioms('${month}', ${setNum})"`;
+
+        // Check if we can generate questions (should be always yes for idioms now)
+        // But let's check just in case
+        const hasQuestions = true;
 
         if (setData) {
             if (setData.completed) {
@@ -184,6 +190,7 @@ function renderSetsGridIdioms(month) {
                 statusIcon = '✅';
                 statusColor = '#22c55e';
                 textColor = '#16a34a';
+                clickHandler = `onclick="reviewSetIdioms('${month}', ${setNum})"`;
             } else {
                 status = 'in-progress';
                 statusIcon = '🔄';
@@ -193,7 +200,7 @@ function renderSetsGridIdioms(month) {
         }
 
         return `
-                    <button onclick="startSetIdioms('${month}', ${setNum})" style="
+                    <button ${clickHandler} style="
                         background: ${status === 'completed' ? '#f0fdf4' : status === 'in-progress' ? '#fffbeb' : 'white'};
                         border: 3px solid ${statusColor};
                         border-radius: 12px;
@@ -229,24 +236,90 @@ function startSetIdioms(month, setNumber) {
     currentQuestionIdioms = 0;
     setScoreIdioms = 0;
     idiomsForSentence = [];
+    currentAttemptsIdioms = []; // Reset attempts
 
     currentSetQuestionsIdioms = generateSetQuestionsIdioms(month, setNumber);
+
+    // Safety check
+    if (currentSetQuestionsIdioms.length === 0) {
+        alert("Could not load questions. Please try refreshing the page.");
+        return;
+    }
 
     renderSetQuestionIdioms();
 }
 
 function generateSetQuestionsIdioms(month, setNumber) {
-    // Placeholder - will use proper idioms when bank is loaded
-    // For now generates sample idioms to demonstrate structure
-    const placeholderIdioms = [
-        { idiom: "A blessing in disguise", options: ["A bad event", "A curse", "Something that seems bad but turns out good", "A surprise"], correct: 2 },
-        { idiom: "Break a leg", options: ["Have an accident", "Good luck", "Take a rest", "Stop trying"], correct: 1 },
-        { idiom: "Hit the nail on the head", options: ["Miss the point", "Be exactly right", "Use a hammer", "Avoid the issue"], correct: 1 },
-        { idiom: "Piece of cake", options: ["Something difficult", "Something very easy", "Dessert", "A celebration"], correct: 1 },
-        { idiom: "Spill the beans", options: ["Make a mess", "Cook dinner", "Reveal a secret", "Tell a joke"], correct: 2 }
-    ];
+    // Ensure data is available
+    if (!window.idiomsData || window.idiomsData.length === 0) {
+        console.error("Idioms data not loaded");
+        return [];
+    }
 
-    return placeholderIdioms;
+    const pool = window.idiomsData;
+    const questionsPerSet = 5;
+
+    // Calculate a deterministic seed/start index
+    // We want the same questions for the same set every time for consistency
+    const monthIndex = MONTH_NAMES_IDIOMS.indexOf(month);
+
+    // Calculate total sets before this month
+    let totalSetsBefore = 0;
+    for (let i = 0; i < monthIndex; i++) {
+        totalSetsBefore += MONTHS_CONFIG_IDIOMS[MONTH_NAMES_IDIOMS[i]];
+    }
+
+    const globalSetIndex = totalSetsBefore + (setNumber - 1);
+    const startIdx = (globalSetIndex * questionsPerSet) % pool.length;
+
+    const setQuestions = [];
+
+    for (let i = 0; i < questionsPerSet; i++) {
+        // Use modulo to cycle through if we exceed pool length
+        const dataIndex = (startIdx + i) % pool.length;
+        const item = pool[dataIndex];
+
+        // Use the existing helper to generate options
+        // Assuming generateIdiomOptions is available globally or we recreate it
+        // generateIdiomOptions is in idioms_quiz.js but NOT exposed.
+        // We should replicate the logic or expose it. 
+        // Let's implement local logic for safety to avoid dependency hell.
+
+        const optionsObj = generateIdiomOptionsLocal(item.meaning, item.idiom, pool);
+
+        setQuestions.push({
+            idiom: item.idiom,
+            options: optionsObj.options,
+            correct: optionsObj.correct,
+            category: "General" // Idioms don't have categories in the main file yet
+        });
+    }
+
+    return setQuestions;
+}
+
+// Local helper to generate options (copied from idioms_quiz.js logic)
+function generateIdiomOptionsLocal(correctMeaning, correctIdiom, pool) {
+    // Get other meanings ensuring they're semantically close but distinct
+    const allMeanings = pool
+        .filter(item => item.meaning !== correctMeaning && item.idiom !== correctIdiom)
+        .map(item => item.meaning);
+
+    // Shuffle and pick 3 distractors. 
+    // We use a simple random here because distractors don't strictly need to be deterministic 
+    // as long as the main question is. But deterministic is better.
+    // Let's just use random for now as it's simpler and fine for distractors.
+    const shuffled = allMeanings.sort(() => 0.5 - Math.random());
+    const distractors = shuffled.slice(0, 3);
+
+    // Combine with correct answer and shuffle
+    const options = [correctMeaning, ...distractors];
+    const shuffledOptions = options.sort(() => 0.5 - Math.random());
+
+    // Find correct index
+    const correctIndex = shuffledOptions.indexOf(correctMeaning);
+
+    return { options: shuffledOptions, correct: correctIndex };
 }
 
 function renderSetQuestionIdioms() {
@@ -312,6 +385,13 @@ function renderSetQuestionIdioms() {
 function selectSetAnswerIdioms(selectedIdx) {
     const q = currentSetQuestionsIdioms[currentQuestionIdioms];
     const isCorrect = selectedIdx === q.correct;
+
+    // Track attempt
+    currentAttemptsIdioms.push({
+        question: { ...q },
+        userAnswer: selectedIdx,
+        isCorrect: isCorrect
+    });
 
     document.querySelectorAll('.idioms-set-option').forEach(btn => {
         btn.disabled = true;
@@ -419,26 +499,25 @@ async function saveSentenceAndCompleteIdioms() {
     }
 
     try {
-        for (const item of idiomsForSentence) {
-            await fetch('/save_sentence', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user_id: 'default_user',
-                    sentence_data: {
-                        type: 'idiom',
-                        idiom: item.idiom,
-                        meaning: item.meaning,
-                        userSentence: sentence
-                    }
-                })
-            });
-        }
+        // Save using proper endpoint
+        await fetch('/save_sentence', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                sentence_data: {
+                    type: 'idiom',
+                    idiom: idiomsForSentence.map(i => i.idiom).join(', '),
+                    meaning: idiomsForSentence.map(i => i.meaning).join(', '),
+                    userSentence: sentence
+                }
+            })
+        });
 
         feedbackDiv.style.display = 'block';
         feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved!</p>';
 
-        setTimeout(() => completeSetIdioms(), 1000);
+        setTimeout(() => completeSetIdioms(sentence), 1000);
     } catch (e) {
         feedbackDiv.style.display = 'block';
         feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">❌ Failed to save.</p>';
@@ -447,10 +526,10 @@ async function saveSentenceAndCompleteIdioms() {
 }
 
 function skipSentenceAndCompleteIdioms() {
-    completeSetIdioms();
+    completeSetIdioms(null);
 }
 
-function completeSetIdioms() {
+function completeSetIdioms(userSentence = null) {
     if (!idiomsSetsProgress[currentMonthIdioms]) {
         idiomsSetsProgress[currentMonthIdioms] = {};
     }
@@ -458,11 +537,94 @@ function completeSetIdioms() {
     idiomsSetsProgress[currentMonthIdioms][`set_${currentSetNumberIdioms}`] = {
         completed: true,
         score: setScoreIdioms,
-        idioms: idiomsForSentence.map(item => item.idiom)
+        timestamp: new Date().toISOString(),
+        attempts: currentAttemptsIdioms,
+        userSentence: userSentence
     };
 
     saveIdiomsSetsProgress();
     renderMonthSelectionIdioms();
+}
+
+// ==========================================
+// REVIEW MODE
+// ==========================================
+
+function reviewSetIdioms(month, setNumber) {
+    const setKey = `set_${setNumber}`;
+    const setData = idiomsSetsProgress[month][setKey];
+
+    if (!setData || !setData.attempts) {
+        alert("No attempt data found for this set!");
+        return;
+    }
+
+    const container = document.getElementById('container-idioms');
+    if (!container) return;
+
+    const html = `
+        <div style="max-width: 900px; margin: 40px auto; padding: 30px;">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <button onclick="backToMonthViewIdioms()" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    ← Back to ${month}
+                </button>
+                <h1 style="color: var(--lime-dark); font-size: 2rem; margin: 0;">Review: Set ${setNumber}</h1>
+                <button onclick="startSetIdioms('${month}', ${setNumber})" style="padding: 10px 20px; background: var(--lime-primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    🔄 Re-attempt
+                </button>
+            </div>
+            
+            <!-- Score Summary -->
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setData.score}/5 Correct</div>
+                <div style="color: #666;">Completed on ${new Date(setData.timestamp).toLocaleString()}</div>
+            </div>
+            
+            <!-- Questions Review -->
+            ${setData.attempts.map((attempt, idx) => {
+        const q = attempt.question;
+        const isCorrect = attempt.isCorrect;
+        return `
+                    <div style="background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; border-left: 5px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: var(--lime-dark); margin: 0;">Question ${idx + 1}: ${q.idiom}</h3>
+                            <span style="font-size: 1.5rem;">${isCorrect ? '✅' : '❌'}</span>
+                        </div>
+                        
+                        ${q.options.map((opt, optIdx) => {
+            let optStyle = 'background: #f9fafb; border: 2px solid #e5e7eb;';
+            if (optIdx === q.correct) {
+                optStyle = 'background: #22c55e; border: 2px solid #22c55e; color: white;';
+            } else if (optIdx === attempt.userAnswer && !isCorrect) {
+                optStyle = 'background: #ef4444; border: 2px solid #ef4444; color: white;';
+            }
+            return `
+                            <div style="${optStyle} padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <span style="font-weight: 700; margin-right: 10px;">${String.fromCharCode(65 + optIdx)}.</span>
+                                ${opt}
+                                ${optIdx === q.correct ? ' <span style="margin-left: 10px;">✓ Correct Answer</span>' : ''}
+                                ${optIdx === attempt.userAnswer && !isCorrect ? ' <span style="margin-left: 10px;">✗ Your Answer</span>' : ''}
+                            </div>
+                        `;
+        }).join('')}
+                    </div>
+                `;
+    }).join('')}
+            
+            <!-- User Sentence -->
+            ${setData.userSentence ? `
+                <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 12px; padding: 25px; margin-top: 30px;">
+                    <h3 style="color: #b45309; margin: 0 0 15px 0;">✍️ Your Sentence</h3>
+                    <p style="font-size: 1.1rem; color: #78350f; font-style: italic; margin: 0;">
+                        "${setData.userSentence}"
+                    </p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+
+    container.innerHTML = html;
 }
 
 // ==========================================
@@ -478,3 +640,4 @@ window.backToMonthViewIdioms = backToMonthViewIdioms;
 window.saveSentenceAndCompleteIdioms = saveSentenceAndCompleteIdioms;
 window.skipSentenceAndCompleteIdioms = skipSentenceAndCompleteIdioms;
 window.completeSetIdioms = completeSetIdioms;
+window.reviewSetIdioms = reviewSetIdioms;

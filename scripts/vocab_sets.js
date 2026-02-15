@@ -838,12 +838,45 @@ async function saveSentenceAndComplete() {
         return;
     }
 
-    feedbackDiv.style.display = 'block';
-    feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved!</p>';
+    try {
+        // Prepare words for saving
+        // Get correct words from currentAttempts
+        const correctWords = currentAttempts
+            .filter(attempt => attempt.isCorrect)
+            .map(attempt => ({
+                word: attempt.question.word,
+                definition: attempt.question.options[attempt.question.correct]
+            }));
 
-    setTimeout(() => {
-        completeSet(sentence); // Pass sentence to completeSet
-    }, 500);
+        // We'll save it as one entry with joined words/definitions
+        // This is a design choice; alternative is saving one entry per word.
+        // Given the UI allows one sentence for multiple words, saving as one entry makes sense.
+
+        await fetch('/save_sentence', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: 'default_user',
+                sentence_data: {
+                    type: 'vocab',
+                    word: correctWords.map(w => w.word).join(', '),
+                    definition: correctWords.map(w => w.definition).join(' | '),
+                    userSentence: sentence
+                }
+            })
+        });
+
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved!</p>';
+
+        setTimeout(() => {
+            completeSet(sentence); // Pass sentence to completeSet
+        }, 500);
+    } catch (e) {
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">❌ Failed to save.</p>';
+        console.error(e);
+    }
 }
 
 function skipSentenceAndComplete() {
