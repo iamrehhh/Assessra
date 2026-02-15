@@ -506,15 +506,13 @@ h2 {
 }
 
 .app-logo {
-    height: 60px;
-    /* Reduced to 60px to fit all buttons in one row */
-    width: 60px;
-    /* Make it circular/square as requested */
+    height: 90px;
+    /* Enlarged from 60px */
+    width: 90px;
     object-fit: contain;
     margin-right: 20px;
     cursor: pointer;
     border-radius: 50%;
-    /* Optional: if they want the logo itself circular */
     transition: transform 0.2s;
 }
 
@@ -527,10 +525,14 @@ h2 {
     border: none;
     font-weight: 700;
     color: #666;
-    padding: 10px 15px;
+    padding: 10px 12px;
+    /* Slightly reduced padding to ensure fit */
     cursor: pointer;
     transition: 0.3s;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    /* Slightly reduced font size */
+    white-space: nowrap;
+    /* Prevent text wrapping */
 }
 
 .nav-btn.active {
@@ -543,9 +545,10 @@ h2 {
 .nav {
     display: flex;
     align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    /* Prevent overflow */
+    gap: 10px;
+    /* Reduced gap from 15px */
+    flex-wrap: nowrap;
+    /* Force one row */
 }
 
 .nav-item-wrapper {
