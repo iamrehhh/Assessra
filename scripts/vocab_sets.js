@@ -314,40 +314,38 @@ const vocabQuestionsPool = [
 
 // Import existing vocab questions from vocab_quiz.js
 // For now, we'll define a subset here and expand later
+// Generate unique questions for each set (NO REPEATS)
 function generateSetQuestions(month, setNumber) {
-    // If vocabQuestionsPool is empty or too small, use placeholders
-    if (vocabQuestionsPool.length < 5) {
-        const placeholderQuestions = [
-            { word: "Mendacious", options: ["Truthful", "Deceitful", "Brave", "Silent"], correct: 1, category: "Deception" },
-            { word: "Perspicacious", options: ["Dull", "Perceptive", "Brave", "Quiet"], correct: 1, category: "Intelligence" },
-            { word: "Avarice", options: ["Extreme greed", "Generosity", "Charity", "Kindness"], correct: 0, category: "Greed" },
-            { word: "Ephemeral", options: ["Lasting very briefly", "Permanent", "Eternal", "Enduring"], correct: 0, category: "Temporary" },
-            { word: "Laconic", options: ["Verbose", "Brief in speech", "Cowardly", "Greedy"], correct: 1, category: "Silence" }
-        ];
-        return placeholderQuestions;
+    // Calculate global set index across all months
+    const monthIndex = MONTH_NAMES.indexOf(month);
+    let totalSetsBefore = 0;
+    for (let i = 0; i < monthIndex; i++) {
+        totalSetsBefore += MONTHS_CONFIG[MONTH_NAMES[i]];
+    }
+    const globalSetIndex = totalSetsBefore + (setNumber - 1);
+
+    // Calculate question indices for this set (5 questions per set)
+    const startQuestionIndex = globalSetIndex * 5;
+    const endQuestionIndex = startQuestionIndex + 5;
+
+    // Check if we have enough questions
+    if (startQuestionIndex >= vocabQuestionsPool.length) {
+        return null; // Not enough questions - will show "Coming Soon"
     }
 
-    // Calculate a unique seed for this specific month+set combination
-    const monthIndex = MONTH_NAMES.indexOf(month);
-    const seed = (monthIndex * 100) + setNumber;
+    // Get 5 unique questions for this set
+    const setQuestions = [];
+    for (let i = startQuestionIndex; i < endQuestionIndex && i < vocabQuestionsPool.length; i++) {
+        // Use modulo when we run out to recycle, but still maintain uniqueness within set
+        setQuestions.push({ ...vocabQuestionsPool[i % vocabQuestionsPool.length] });
+    }
 
-    // Shuffle with consistent seed for this set
-    const shuffled = [...vocabQuestionsPool].sort((a, b) => {
-        // Simple seeded random
-        const hash = (str) => {
-            let h = 0;
-            for (let i = 0; i < str.length; i++) {
-                h = ((h << 5) - h) + str.charCodeAt(i);
-                h = h & h;
-            }
-            return h;
-        };
-        return hash(a.word + seed) - hash(b.word + seed);
-    });
+    // If less than 5 questions available, return null (Coming Soon)
+    if (setQuestions.length < 5) {
+        return null;
+    }
 
-    // Take first 5 questions from shuffled array
-    const startIdx = ((seed * 7) % (shuffled.length - 5)); // Vary starting position
-    return shuffled.slice(startIdx, startIdx + 5);
+    return setQuestions;
 }
 
 // Month configuration (days per month for 2026)
@@ -374,11 +372,26 @@ let currentSetNumber = null;
 let currentSetQuestions = [];
 let currentQuestion = 0;
 let setScore = 0;
-let wordsForSentence = []; // Words from correct answers
+let currentAttempts = []; // NEW: Track full attempt details
 
-// Global progress data structure
+// Global progress data structure - ENHANCED
 let vocabSetsProgress = {
-    // Structure: { 'January': { 'set_1': {completed: true, score: 5, words: ['word1', 'word2']}, ... }, ... }
+    // Structure: { 
+    //   'January': { 
+    //     'set_1': {
+    //       completed: true, 
+    //       score: 4,
+    //       timestamp: '2026-02-15T09:30:00',
+    //       attempts: [
+    //         { question: {...}, userAnswer: 2, isCorrect: true },
+    //         ...
+    //       ],
+    //       userSentence: 'My example sentence here'
+    //     }, 
+    //     ... 
+    //   }, 
+    //   ... 
+    // }
 };
 
 // ==========================================
@@ -526,38 +539,54 @@ function renderSetsGrid(month) {
         const setKey = `set_${setNum}`;
         const setData = monthProgress[setKey];
 
+        // Check if set has questions available
+        const setQuestions = generateSetQuestions(month, setNum);
+        const hasQuestions = setQuestions !== null;
+
         let status = 'not-started';
         let statusIcon = '⭕';
         let statusColor = '#e5e7eb';
         let textColor = '#9ca3af';
+        let clickHandler = '';
 
-        if (setData) {
+        if (!hasQuestions) {
+            // No questions available for this set yet
+            status = 'coming-soon';
+            statusIcon = '🔒';
+            statusColor = '#d1d5db';
+            textColor = '#9ca3af';
+        } else if (setData) {
             if (setData.completed) {
                 status = 'completed';
                 statusIcon = '✅';
                 statusColor = '#22c55e';
                 textColor = '#16a34a';
+                clickHandler = `onclick="reviewSet('${month}', ${setNum})"`;
             } else {
                 status = 'in-progress';
                 statusIcon = '🔄';
                 statusColor = '#fbbf24';
                 textColor = '#d97706';
+                clickHandler = `onclick="startSet('${month}', ${setNum})"`;
             }
+        } else if (hasQuestions) {
+            clickHandler = `onclick="startSet('${month}', ${setNum})"`;
         }
 
         return `
-                    <button onclick="startSet('${month}', ${setNum})" style="
-                        background: ${status === 'completed' ? '#f0fdf4' : status === 'in-progress' ? '#fffbeb' : 'white'};
+                    <button ${clickHandler} style="
+                        background: ${status === 'completed' ? '#f0fdf4' : status === 'in-progress' ? '#fffbeb' : status === 'coming-soon' ? '#f9fafb' : 'white'};
                         border: 3px solid ${statusColor};
                         border-radius: 12px;
                         padding: 20px 15px;
-                        cursor: pointer;
+                        cursor: ${status === 'coming-soon' ? 'not-allowed' : 'pointer'};
                         transition: all 0.2s;
                         text-align: center;
-                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    " ${status !== 'coming-soon' ? `onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"` : ''}>
                         <div style="font-size: 2rem; margin-bottom: 8px;">${statusIcon}</div>
                         <div style="font-weight: 700; font-size: 1.05rem; color: ${textColor};">Set ${setNum}</div>
                         ${setData ? `<div style="font-size: 0.85rem; color: #888; margin-top: 5px;">${setData.score || 0}/5</div>` : ''}
+                        ${status === 'coming-soon' ? `<div style="font-size: 0.75rem; color: #999; margin-top: 5px;">Coming Soon</div>` : ''}
                     </button>
                 `;
     }).join('')}
@@ -581,31 +610,21 @@ function startSet(month, setNumber) {
     currentSetNumber = setNumber;
     currentQuestion = 0;
     setScore = 0;
-    wordsForSentence = [];
+    currentAttempts = []; // Reset attempts tracking
 
     // Generate 5 unique questions for this set
-    // TODO: When we have 1800+ questions, we'll use proper set allocation
-    // For now, we'll use the recycling approach
     currentSetQuestions = generateSetQuestions(month, setNumber);
+
+    // Check if set has questions
+    if (!currentSetQuestions) {
+        alert("This set doesn't have questions yet. Coming soon!");
+        return;
+    }
 
     renderSetQuestion();
 }
 
-function generateSetQuestions(month, setNumber) {
-    // TODO: Implement proper allocation when we have 1800+ questions
-    // For now, return placeholder structure
-    // This will be replaced once we populate vocabQuestionsPool
 
-    const placeholderQuestions = [
-        { word: "Mendacious", options: ["Truthful", "Deceitful", "Brave", "Silent"], correct: 1, category: "Deception" },
-        { word: "Perspicacious", options: ["Dull", "Perceptive", "Brave", "Quiet"], correct: 1, category: "Intelligence" },
-        { word: "Avarice", options: ["Extreme greed", "Generosity", "Charity", "Kindness"], correct: 0, category: "Greed" },
-        { word: "Ephemeral", options: ["Lasting very briefly", "Permanent", "Eternal", "Enduring"], correct: 0, category: "Temporary" },
-        { word: "Laconic", options: ["Verbose", "Brief in speech", "Cowardly", "Greedy"], correct: 1, category: "Silence" }
-    ];
-
-    return placeholderQuestions;
-}
 
 function renderSetQuestion() {
     const container = document.getElementById('container-vocab');
@@ -690,6 +709,13 @@ function selectSetAnswer(selectedIdx) {
     const q = currentSetQuestions[currentQuestion];
     const isCorrect = selectedIdx === q.correct;
 
+    // Save full attempt details for review later
+    currentAttempts.push({
+        question: { ...q },
+        userAnswer: selectedIdx,
+        isCorrect: isCorrect
+    });
+
     // Disable all options
     document.querySelectorAll('.vocab-set-option').forEach(btn => {
         btn.disabled = true;
@@ -707,8 +733,6 @@ function selectSetAnswer(selectedIdx) {
         options[selectedIdx].style.borderColor = '#ef4444';
         options[selectedIdx].style.color = 'white';
     } else {
-        // Track word for sentence creation
-        wordsForSentence.push({ word: q.word, definition: q.options[q.correct] });
         setScore++;
     }
 
@@ -745,9 +769,13 @@ function renderSentenceCreation() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    // Only show words from correct answers
-    const wordsToDisplay = wordsForSentence.length > 0 ? wordsForSentence :
-        [{ word: "No words", definition: "You didn't answer any questions correctly" }];
+    // Extract words from correct answers (from currentAttempts)
+    const correctWords = currentAttempts
+        .filter(attempt => attempt.isCorrect)
+        .map(attempt => ({
+            word: attempt.question.word,
+            definition: attempt.question.options[attempt.question.correct]
+        }));
 
     const html = `
         <div style="max-width: 800px; margin: 60px auto; padding: 40px;">
@@ -756,10 +784,10 @@ function renderSentenceCreation() {
                 <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
                 <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 15px;">Set ${currentSetNumber} Complete!</h1>
                 <div style="font-size: 2rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setScore}/5 Correct</div>
-                <p style="color: #666; font-size: 1.1rem;">Great job! ${wordsForSentence.length > 0 ? 'Now practice these words by creating sentences.' : ''}</p>
+                <p style="color: #666; font-size: 1.1rem;">Great job! ${correctWords.length > 0 ? 'Now practice these words by creating sentences.' : ''}</p>
             </div>
 
-            ${wordsForSentence.length > 0 ? `
+            ${correctWords.length > 0 ? `
                 <!-- Sentence Creation (Optional) -->
                 <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 16px; padding: 30px; margin-bottom: 30px; border-left: 5px solid #f59e0b;">
                     <h2 style="color: #b45309; margin: 0 0 20px 0; font-size: 1.6rem;">✍️ Create Sentences (Optional)</h2>
@@ -768,7 +796,7 @@ function renderSentenceCreation() {
                     <!-- Words List -->
                     <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 10px;">
                         <strong style="color: #b45309;">Your Words:</strong>
-                        ${wordsForSentence.map(item => `<span style="display: inline-block; margin: 5px 10px 5px 0; padding: 5px 12px; background: #fef3c7; border-radius: 6px; font-weight: 600;">${item.word}</span>`).join('')}
+                        ${correctWords.map(item => `<span style="display: inline-block; margin: 5px 10px 5px 0; padding: 5px 12px; background: #fef3c7; border-radius: 6px; font-weight: 600;">${item.word}</span>`).join('')}
                     </div>
 
                     <!-- Sentence Input -->
@@ -788,7 +816,7 @@ function renderSentenceCreation() {
             ` : `
                 <!-- No Correct Answers -->
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <button onclick="completeSet()" style="padding: 15px 40px; background: var(--lime-primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#84cc16'" onmouseout="this.style.background='var(--lime-primary)'">
+                    <button onclick="completeSet(null)" style="padding: 15px 40px; background: var(--lime-primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#84cc16'" onmouseout="this.style.background='var(--lime-primary)'">
                         Continue to ${currentMonth}
                     </button>
                 </div>
@@ -810,43 +838,20 @@ async function saveSentenceAndComplete() {
         return;
     }
 
-    // Save sentence to backend
-    try {
-        for (const item of wordsForSentence) {
-            await fetch('/save_sentence', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user_id: 'default_user',
-                    sentence_data: {
-                        type: 'vocab',
-                        word: item.word,
-                        definition: item.definition,
-                        userSentence: sentence
-                    }
-                })
-            });
-        }
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved!</p>';
 
-        feedbackDiv.style.display = 'block';
-        feedbackDiv.innerHTML = '<p style="color: #16a34a; font-weight: 600;">✅ Sentence saved successfully!</p>';
-
-        setTimeout(() => {
-            completeSet();
-        }, 1000);
-    } catch (e) {
-        feedbackDiv.style.display = 'block';
-        feedbackDiv.innerHTML = '<p style="color: #dc2626; font-weight: 600;">❌ Failed to save. Please try again.</p>';
-        console.error('Failed to save sentence:', e);
-    }
+    setTimeout(() => {
+        completeSet(sentence); // Pass sentence to completeSet
+    }, 500);
 }
 
 function skipSentenceAndComplete() {
-    completeSet();
+    completeSet(null); // No sentence
 }
 
-function completeSet() {
-    // Mark set as completed
+function completeSet(userSentence = null) {
+    // Mark set as completed with ENHANCED data
     if (!vocabSetsProgress[currentMonth]) {
         vocabSetsProgress[currentMonth] = {};
     }
@@ -854,7 +859,9 @@ function completeSet() {
     vocabSetsProgress[currentMonth][`set_${currentSetNumber}`] = {
         completed: true,
         score: setScore,
-        words: wordsForSentence.map(item => item.word)
+        timestamp: new Date().toISOString(),
+        attempts: currentAttempts, // Save full attempts
+        userSentence: userSentence // Save user's sentence if provided
     };
 
     saveVocabSetsProgress();
@@ -864,12 +871,98 @@ function completeSet() {
 }
 
 // ==========================================
+// REVIEW MODE
+// ==========================================
+
+function reviewSet(month, setNumber) {
+    const setKey = `set_${setNumber}`;
+    const setData = vocabSetsProgress[month][setKey];
+
+    if (!setData || !setData.attempts) {
+        alert("No attempt data found for this set!");
+        return;
+    }
+
+    const container = document.getElementById('container-vocab');
+    if (!container) return;
+
+    const html = `
+        <div style="max-width: 900px; margin: 40px auto; padding: 30px;">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <button onclick="renderMonthSelection()" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    ← Back to ${month}
+                </button>
+                <h1 style="color: var(--lime-dark); font-size: 2rem; margin: 0;">Review: Set ${setNumber}</h1>
+                <button onclick="startSet('${month}', ${setNumber})" style="padding: 10px 20px; background: var(--lime-primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    🔄 Re-attempt
+                </button>
+            </div>
+            
+            <!-- Score Summary -->
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setData.score}/5 Correct</div>
+                <div style="color: #666;">Completed on ${new Date(setData.timestamp).toLocaleString()}</div>
+            </div>
+            
+            <!-- Questions Review -->
+            ${setData.attempts.map((attempt, idx) => {
+        const q = attempt.question;
+        const isCorrect = attempt.isCorrect;
+        return `
+                    <div style="background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; border-left: 5px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: var(--lime-dark); margin: 0;">Question ${idx + 1}: ${q.word}</h3>
+                            <span style="font-size: 1.5rem;">${isCorrect ? '✅' : '❌'}</span>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px; color: #666;">
+                            <strong>Category:</strong> ${q.category}
+                        </div>
+                        
+                        ${q.options.map((opt, optIdx) => {
+            let optStyle = 'background: #f9fafb; border: 2px solid #e5e7eb;';
+            if (optIdx === q.correct) {
+                optStyle = 'background: #22c55e; border: 2px solid #22c55e; color: white;';
+            } else if (optIdx === attempt.userAnswer && !isCorrect) {
+                optStyle = 'background: #ef4444; border: 2px solid #ef4444; color: white;';
+            }
+            return `
+                            <div style="${optStyle} padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <span style="font-weight: 700; margin-right: 10px;">${String.fromCharCode(65 + optIdx)}.</span>
+                                ${opt}
+                                ${optIdx === q.correct ? ' <span style="margin-left: 10px;">✓ Correct Answer</span>' : ''}
+                                ${optIdx === attempt.userAnswer && !isCorrect ? ' <span style="margin-left: 10px;">✗ Your Answer</span>' : ''}
+                            </div>
+                        `;
+        }).join('')}
+                    </div>
+                `;
+    }).join('')}
+            
+            <!-- User Sentence -->
+            ${setData.userSentence ? `
+                <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 12px; padding: 25px; margin-top: 30px;">
+                    <h3 style="color: #b45309; margin: 0 0 15px 0;">✍️ Your Sentence</h3>
+                    <p style="font-size: 1.1rem; color: #78350f; font-style: italic; margin: 0;">
+                        "${setData.userSentence}"
+                    </p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+
+    container.innerHTML = html;
+}
+
+// ==========================================
 // EXPOSE FUNCTIONS TO WINDOW
 // ==========================================
 
 window.initVocabSets = initVocabSets;
 window.selectMonth = selectMonth;
 window.startSet = startSet;
+window.reviewSet = reviewSet;
 window.selectSetAnswer = selectSetAnswer;
 window.nextSetQuestion = nextSetQuestion;
 window.backToMonthView = backToMonthView;
