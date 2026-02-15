@@ -11,11 +11,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
 # Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
+MARKING_API_KEY_PRIMARY = "AIzaSyD3i_NyAvFzBy94LAQsR4gFzfa9O5Nf8cM" 
 
 # Secondary API Key for Fallback (when primary runs out of tokens)
 # TODO: PASTE YOUR SECOND API KEY HERE
-MARKING_API_KEY_SECONDARY = "AIzaSyD3i_NyAvFzBy94LAQsR4gFzfa9O5Nf8cM"
+MARKING_API_KEY_SECONDARY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U"
 
 # API Key for AI Tutor (Chat) - DO NOT MODIFY THIS
 TUTOR_API_KEY = "AIzaSyAu3sXQ_bEOxC_zNSeN6vwzkOZqEJtmHtg" 
