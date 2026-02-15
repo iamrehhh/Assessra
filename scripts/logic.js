@@ -254,20 +254,8 @@ function initApp(u) {
     if (window.loadDynamicPapers) window.loadDynamicPapers();
     // setView('home'); // Removed to allow restore logic below
 
-    // Admin Button Injection
-    if (u === 'Abdul.Rehan') {
-        const nav = document.querySelector('.nav');
-        if (nav && !document.getElementById('admin-btn')) {
-            const btn = document.createElement('button');
-            btn.id = 'admin-btn';
-            btn.className = 'nav-btn';
-            btn.style.background = '#ff4757'; // Red to stand out
-            btn.style.color = 'white';
-            btn.innerText = 'Admin 🛡️';
-            btn.onclick = () => window.location.href = 'admin.html';
-            nav.appendChild(btn);
-        }
-    }
+    // Admin Button Removed per user request
+
 
     // Restore Last View
     const lastView = localStorage.getItem('lastView') || 'home';
