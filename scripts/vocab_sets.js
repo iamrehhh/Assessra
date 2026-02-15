@@ -367,12 +367,12 @@ const MONTHS_CONFIG = {
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 // Current state
-let currentMonth = 'January';
-let currentSetNumber = null;
-let currentSetQuestions = [];
-let currentQuestion = 0;
-let setScore = 0;
-let currentAttempts = []; // NEW: Track full attempt details
+let currentMonthVocab = 'January';
+let currentSetNumberVocab = null;
+let currentSetQuestionsVocab = [];
+let currentQuestionVocab = 0;
+let setScoreVocab = 0;
+let currentAttemptsVocab = []; // NEW: Track full attempt details
 
 // Global progress data structure - ENHANCED
 let vocabSetsProgress = {
@@ -402,8 +402,12 @@ async function initVocabSets() {
     // TODO: Populate vocabQuestionsPool with 1800+ questions
     // For now, will be done in phases
 
-    await loadVocabSetsProgress();
-    renderMonthSelection();
+    try {
+        await loadVocabSetsProgress();
+        renderMonthSelection();
+    } catch (e) {
+        console.error("Error in initVocabSets:", e);
+    }
 }
 
 async function loadVocabSetsProgress() {
@@ -486,7 +490,7 @@ function renderMonthSelection() {
                     color: var(--lime-dark);
                 ">
                     ${MONTH_NAMES.map(month => `
-                        <option value="${month}" ${month === currentMonth ? 'selected' : ''}>${month} 2026</option>
+                        <option value="${month}" ${month === currentMonthVocab ? 'selected' : ''}>${month} 2026</option>
                     `).join('')}
                 </select>
             </div>
@@ -497,7 +501,7 @@ function renderMonthSelection() {
     `;
 
     container.innerHTML = html;
-    renderSetsGrid(currentMonth);
+    renderSetsGrid(currentMonthVocab);
 }
 
 function renderSetsGrid(month) {
@@ -597,7 +601,7 @@ function renderSetsGrid(month) {
 }
 
 function selectMonth(month) {
-    currentMonth = month;
+    currentMonthVocab = month;
     renderSetsGrid(month);
 }
 
@@ -606,17 +610,17 @@ function selectMonth(month) {
 // ==========================================
 
 function startSet(month, setNumber) {
-    currentMonth = month;
-    currentSetNumber = setNumber;
-    currentQuestion = 0;
-    setScore = 0;
-    currentAttempts = []; // Reset attempts tracking
+    currentMonthVocab = month;
+    currentSetNumberVocab = setNumber;
+    currentQuestionVocab = 0;
+    setScoreVocab = 0;
+    currentAttemptsVocab = []; // Reset attempts tracking
 
     // Generate 5 unique questions for this set
-    currentSetQuestions = generateSetQuestions(month, setNumber);
+    currentSetQuestionsVocab = generateSetQuestions(month, setNumber);
 
     // Check if set has questions
-    if (!currentSetQuestions) {
+    if (!currentSetQuestionsVocab) {
         alert("This set doesn't have questions yet. Coming soon!");
         return;
     }
@@ -630,23 +634,23 @@ function renderSetQuestion() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    if (currentQuestion >= 5) {
+    if (currentQuestionVocab >= 5) {
         // All 5 questions answered, show sentence creation prompt
         renderSentenceCreation();
         return;
     }
 
-    const q = currentSetQuestions[currentQuestion];
-    const progress = Math.round(((currentQuestion) / 5) * 100);
+    const q = currentSetQuestionsVocab[currentQuestionVocab];
+    const progress = Math.round(((currentQuestionVocab) / 5) * 100);
 
     const html = `
         <div style="max-width: 900px; margin: 40px auto; padding: 30px;">
             <!-- Header with Back Button -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <button onclick="backToMonthView()" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
-                    ← Back to ${currentMonth}
+                    ← Back to ${currentMonthVocab}
                 </button>
-                <h1 style="color: var(--lime-dark); font-size: 2rem; margin: 0;">Set ${currentSetNumber} - Question ${currentQuestion + 1}/5</h1>
+                <h1 style="color: var(--lime-dark); font-size: 2rem; margin: 0;">Set ${currentSetNumberVocab} - Question ${currentQuestionVocab + 1}/5</h1>
                 <div style="width: 120px;"></div>
             </div>
 
@@ -706,11 +710,11 @@ function renderSetQuestion() {
 }
 
 function selectSetAnswer(selectedIdx) {
-    const q = currentSetQuestions[currentQuestion];
+    const q = currentSetQuestionsVocab[currentQuestionVocab];
     const isCorrect = selectedIdx === q.correct;
 
     // Save full attempt details for review later
-    currentAttempts.push({
+    currentAttemptsVocab.push({
         question: { ...q },
         userAnswer: selectedIdx,
         isCorrect: isCorrect
@@ -733,7 +737,7 @@ function selectSetAnswer(selectedIdx) {
         options[selectedIdx].style.borderColor = '#ef4444';
         options[selectedIdx].style.color = 'white';
     } else {
-        setScore++;
+        setScoreVocab++;
     }
 
     // Show feedback
@@ -753,7 +757,7 @@ function selectSetAnswer(selectedIdx) {
 }
 
 function nextSetQuestion() {
-    currentQuestion++;
+    currentQuestionVocab++;
     renderSetQuestion();
 }
 
@@ -769,8 +773,8 @@ function renderSentenceCreation() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    // Extract words from correct answers (from currentAttempts)
-    const correctWords = currentAttempts
+    // Extract words from correct answers (from currentAttemptsVocab)
+    const correctWords = currentAttemptsVocab
         .filter(attempt => attempt.isCorrect)
         .map(attempt => ({
             word: attempt.question.word,
@@ -782,8 +786,8 @@ function renderSentenceCreation() {
             <!-- Completion Message -->
             <div style="text-align: center; margin-bottom: 40px;">
                 <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
-                <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 15px;">Set ${currentSetNumber} Complete!</h1>
-                <div style="font-size: 2rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setScore}/5 Correct</div>
+                <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 15px;">Set ${currentSetNumberVocab} Complete!</h1>
+                <div style="font-size: 2rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setScoreVocab}/5 Correct</div>
                 <p style="color: #666; font-size: 1.1rem;">Great job! ${correctWords.length > 0 ? 'Now practice these words by creating sentences.' : ''}</p>
             </div>
 
@@ -817,7 +821,7 @@ function renderSentenceCreation() {
                 <!-- No Correct Answers -->
                 <div style="text-align: center; margin-bottom: 30px;">
                     <button onclick="completeSet(null)" style="padding: 15px 40px; background: var(--lime-primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#84cc16'" onmouseout="this.style.background='var(--lime-primary)'">
-                        Continue to ${currentMonth}
+                        Continue to ${currentMonthVocab}
                     </button>
                 </div>
             `}
@@ -840,8 +844,8 @@ async function saveSentenceAndComplete() {
 
     try {
         // Prepare words for saving
-        // Get correct words from currentAttempts
-        const correctWords = currentAttempts
+        // Get correct words from currentAttemptsVocab
+        const correctWords = currentAttemptsVocab
             .filter(attempt => attempt.isCorrect)
             .map(attempt => ({
                 word: attempt.question.word,
@@ -885,15 +889,15 @@ function skipSentenceAndComplete() {
 
 function completeSet(userSentence = null) {
     // Mark set as completed with ENHANCED data
-    if (!vocabSetsProgress[currentMonth]) {
-        vocabSetsProgress[currentMonth] = {};
+    if (!vocabSetsProgress[currentMonthVocab]) {
+        vocabSetsProgress[currentMonthVocab] = {};
     }
 
-    vocabSetsProgress[currentMonth][`set_${currentSetNumber}`] = {
+    vocabSetsProgress[currentMonthVocab][`set_${currentSetNumberVocab}`] = {
         completed: true,
-        score: setScore,
+        score: setScoreVocab,
         timestamp: new Date().toISOString(),
-        attempts: currentAttempts, // Save full attempts
+        attempts: currentAttemptsVocab, // Save full attempts
         userSentence: userSentence // Save user's sentence if provided
     };
 

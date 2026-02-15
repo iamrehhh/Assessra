@@ -346,6 +346,7 @@ function showVocabContainer() {
             initVocabSets();
         } else {
             console.error("initVocabSets function not found. Check vocab_sets.js");
+            vocabContainer.innerHTML = `<div style="color:red; padding:40px; text-align:center;"><h2>Error: Vocab Script Not Loaded</h2><p>Please refresh the page. If the issue persists, the script file may have a syntax error.</p></div>`;
         }
     }
 
