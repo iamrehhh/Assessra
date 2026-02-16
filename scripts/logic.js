@@ -536,6 +536,13 @@ async function openPaper(pid, preservedScrollTop = 0) {
                     <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
                     <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
                 </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.9rem; font-weight:600; color:#555;">AI Model:</span>
+                    <select id="model-selector" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-weight:bold; cursor:pointer;">
+                        <option value="gemini">Gemini 2.5 Flash (Default)</option>
+                        <option value="gpt">GPT-4o</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Split Screen Container -->
@@ -684,6 +691,9 @@ async function submitAnswer(pid, qn) {
     btn.innerText = "⏳ Strict Marking...";
     btn.disabled = true;
 
+    // Get selected model
+    const model = document.getElementById('model-selector') ? document.getElementById('model-selector').value : 'gemini';
+
     const qData = paperData[pid].questions.find(q => q.n === qn);
 
     try {
@@ -697,7 +707,8 @@ async function submitAnswer(pid, qn) {
                 pdf_path: paperData[pid].pdf,
                 case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
-                marks: qData.m
+                marks: qData.m,
+                model: model
             })
         });
 

@@ -3,6 +3,8 @@ from flask_cors import CORS
 import requests
 import os
 import pypdf
+import openai
+from openai import OpenAI
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -21,6 +23,9 @@ MARKING_API_KEY_SECONDARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
 # Tertiary API Key for Extra Fallback (when secondary runs out)
 # TODO: PASTE YOUR THIRD API KEY HERE
 MARKING_API_KEY_TERTIARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
+
+# OpenAI API Key
+OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE"  # TODO: Replace with actual key or env var
 
 # API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
@@ -104,6 +109,27 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
         except:
             pass
         return None, None
+
+def generate_with_gpt(system_instruction, user_prompt):
+    """
+    Helper function to call OpenAI GPT-4o.
+    """
+    try:
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_instruction},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7
+        )
+        
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"GPT API Error: {e}")
+        return None
 
 def generate_with_fallback(system_instruction, user_prompt):
     """
@@ -345,7 +371,22 @@ def mark():
     }}
     """
     
-    text = generate_with_fallback(system_prompt, user_prompt)
+    model_choice = data.get('model', 'gemini') # Default to Gemini
+
+    if model_choice == 'gpt':
+        print("Using GPT-4o for marking...")
+        text = generate_with_gpt(system_prompt, user_prompt)
+        if not text:
+             # Fallback to Gemini if GPT fails? Or just error? 
+             # For now, let's fallback to Gemini to be safe or just return error.
+             # User requested "add GPT also", implies choice. 
+             # If GPT fails, maybe we should let them know or fallback.
+             # Let's try Gemini as fallback.
+             print("GPT failed, falling back to Gemini...")
+             text = generate_with_fallback(system_prompt, user_prompt)
+    else:
+        # Default Gemini
+        text = generate_with_fallback(system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
