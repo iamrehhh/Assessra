@@ -337,8 +337,7 @@ def mark():
     {{
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
-        "strengths": "<A single concise paragraph (max 50 words) stating the verdict and specific strong points (citing figures/facts).>",
-        "weaknesses": "<A single concise paragraph (max 50 words) highlighting the exact errors, missing definitions, or logic gaps. Be blunt.>",
+        "detailed_critique": "<A comprehensive, fastidious, and strictly critical analysis of the answer. Break down every single mistake, missed opportunity, and lack of depth. Explain precisely WHY the marks were lost and HOW to fix it. Do not be vague. Be extremely specific to the case study context. Ensure there is NO repetition or looping of feedback.>",
         "model_answer": "{model_answer_instruction}"
     }}
     """

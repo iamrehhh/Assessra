@@ -522,7 +522,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
             <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
             <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
-            ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<p><strong>Strengths:</strong> ${att.strengths}</p><p><strong>Improvements:</strong> <span style="color:#d63031">${att.weaknesses}</span></p><div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div></div>` : ''}
+            ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;"><strong>Detailed Critique:</strong><br>${att.feedback || att.weaknesses || "No feedback available."}</div><div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div></div>` : ''}
         </div>`;
     });
 
@@ -693,7 +693,7 @@ async function submitAnswer(pid, qn) {
                 question: qData.t,
                 question: qData.t,
                 // Send the PDF path so the backend can extract text
-                pdf_path: paperData[pid].pdf, 
+                pdf_path: paperData[pid].pdf,
                 case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
                 marks: qData.m
@@ -707,8 +707,7 @@ async function submitAnswer(pid, qn) {
             answer: ans,
             score: json.score,
             ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
-            strengths: json.strengths,
-            weaknesses: json.weaknesses,
+            feedback: json.detailed_critique,
             modelAnswer: json.model_answer
         });
 
