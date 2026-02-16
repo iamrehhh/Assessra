@@ -149,6 +149,13 @@ def serve_static(path):
 
 @app.route('/mark', methods=['POST'])
 def mark():
+    # Check API key availability first
+    if not GEMINI_API_KEY and not OPENAI_API_KEY:
+        return jsonify({
+            "error": "API Configuration Error",
+            "message": "No API keys configured. Please contact the administrator to set up GEMINI_API_KEY or OPENAI_API_KEY in the environment variables."
+        }), 503
+    
     data = request.json
     marks = int(data.get('marks', 12))
     question_text = data.get('question', '')
@@ -346,26 +353,44 @@ def mark():
     
     model_choice = data.get('model', 'gemini') # Default to Gemini
 
+    # Validate that the requested model's API key is available
     if model_choice == 'gpt':
+        if not OPENAI_API_KEY:
+            return jsonify({
+                "error": "OpenAI API Key Missing",
+                "message": "GPT-4o model requested but OPENAI_API_KEY is not configured. Please use Gemini model or contact administrator to set up OpenAI API key."
+            }), 503
+        
         print("Using GPT-4o for marking...")
         text = generate_with_gpt(system_prompt, user_prompt)
         if not text:
-             # Fallback to Gemini if GPT fails? Or just error? 
-             # For now, let's fallback to Gemini to be safe or just return error.
-             # User requested "add GPT also", implies choice. 
-             # If GPT fails, maybe we should let them know or fallback.
-             # Let's try Gemini as fallback.
-             print("GPT failed, falling back to Gemini...")
-             text = generate_with_gemini_simple(system_prompt, user_prompt)
+             # Fallback to Gemini if GPT fails and Gemini key is available
+             if GEMINI_API_KEY:
+                 print("GPT failed, falling back to Gemini...")
+                 text = generate_with_gemini_simple(system_prompt, user_prompt)
+             else:
+                 return jsonify({
+                     "error": "API Error",
+                     "message": "GPT-4o API failed and no Gemini fallback available. Please try again or contact support."
+                 }), 500
     else:
         # Default Gemini
+        if not GEMINI_API_KEY:
+            return jsonify({
+                "error": "Gemini API Key Missing",
+                "message": "GEMINI_API_KEY is not configured. Please contact administrator to set up the API key."
+            }), 503
+        
         text = generate_with_gemini_simple(system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
         return cleaned_text, 200, {'Content-Type': 'application/json'}
     else:
-        return jsonify({"error": "Failed to generate marking"}), 500
+        return jsonify({
+            "error": "Failed to generate marking",
+            "message": "The AI model failed to generate a response. Please try again. If the problem persists, you may have exceeded your API quota."
+        }), 500
 
 
 
