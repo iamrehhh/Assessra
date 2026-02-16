@@ -32,10 +32,20 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # Startup Validation
 print("\n" + "="*50)
 if not MARKING_API_KEY_PRIMARY:
-    print("❌ CRITICAL ERROR: API Key missing!")
+    print("❌ CRITICAL ERROR: Primary Gemini API Key missing!")
     print("   Please set MARKING_API_KEY_PRIMARY or GEMINI_API_KEY in environment.")
 else:
-    print(f"✅ Gemini API Key: Loaded successfully.")
+    print(f"✅ Gemini API Key (Primary): Loaded successfully.")
+
+if MARKING_API_KEY_SECONDARY:
+    print(f"✅ Gemini API Key (Secondary): Loaded successfully.")
+else:
+    print(f"ℹ️  Gemini API Key (Secondary): Not configured.")
+
+if MARKING_API_KEY_TERTIARY:
+    print(f"✅ Gemini API Key (Tertiary): Loaded successfully.")
+else:
+    print(f"ℹ️  Gemini API Key (Tertiary): Not configured.")
 
 if not OPENAI_API_KEY:
     print("⚠️  OpenAI API Key: Not found (GPT-4o fallback disabled).")
@@ -73,15 +83,16 @@ def extract_text_from_pdf(pdf_path):
         print(f"Error extracting PDF text: {e}")
         return ""
 
-def generate_with_gemini(api_key, system_instruction, user_prompt):
+def generate_with_gemini(api_key, system_instruction, user_prompt, key_label="Primary"):
     """
     Helper function to call Gemini API via REST to support multiple keys safely.
     Returns (result_text, error_code) where error_code indicates the type of failure.
     """
     if not api_key:
-        print("❌ Error: Attempted to call Gemini API with missing/empty API Key.")
+        print(f"❌ Error: Attempted to call Gemini API with missing/empty {key_label} API Key.")
         return None, 401
 
+    print(f"Calling Gemini API with {key_label} Key...")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
     
     payload = {
@@ -153,32 +164,40 @@ def generate_with_gpt(system_instruction, user_prompt):
 def generate_with_fallback(system_instruction, user_prompt):
     """
     Tries primary API key first, falls back to secondary, then tertiary if needed.
+    Only attempts fallbacks if keys are configured (non-empty).
     """
     # 1. Try Primary API
-    result, error_code = generate_with_gemini(MARKING_API_KEY_PRIMARY, system_instruction, user_prompt)
+    result, error_code = generate_with_gemini(MARKING_API_KEY_PRIMARY, system_instruction, user_prompt, "Primary")
     
     if result:
         return result
 
-    # 2. Try Secondary API if Primary failed due to quota
+    # 2. Try Secondary API if Primary failed due to quota AND Secondary key exists
     if error_code in [429, 403]:
-        print("Primary API quota exhausted, switching to SECONDARY API...")
-        result, error_code = generate_with_gemini(MARKING_API_KEY_SECONDARY, system_instruction, user_prompt)
-        
-        if result:
-            print("Secondary API succeeded!")
-            return result
-    
-    # 3. Try Tertiary API if Secondary also failed due to quota
-    if error_code in [429, 403]:
-        print("Secondary API quota exhausted, switching to TERTIARY API...")
-        result, error_code = generate_with_gemini(MARKING_API_KEY_TERTIARY, system_instruction, user_prompt)
-        
-        if result:
-            print("Tertiary API succeeded!")
-            return result
+        if MARKING_API_KEY_SECONDARY:
+            print("Primary API quota exhausted, switching to SECONDARY API...")
+            result, error_code = generate_with_gemini(MARKING_API_KEY_SECONDARY, system_instruction, user_prompt, "Secondary")
+            
+            if result:
+                print("Secondary API succeeded!")
+                return result
         else:
-            print("Tertiary API also failed (or other error).")
+            print("Primary API quota exhausted, but NO SECONDARY API Key is configured. Skipping fallback.")
+    
+    # 3. Try Tertiary API if Secondary also failed due to quota AND Tertiary key exists
+    if error_code in [429, 403]:
+        if MARKING_API_KEY_TERTIARY:
+            print("Secondary API quota exhausted, switching to TERTIARY API...")
+            result, error_code = generate_with_gemini(MARKING_API_KEY_TERTIARY, system_instruction, user_prompt, "Tertiary")
+            
+            if result:
+                print("Tertiary API succeeded!")
+                return result
+            else:
+                print("Tertiary API also failed (or other error).")
+        else:
+            if not result: # Only print if we actually hit the quota error and had no key
+                print("Previous API quota exhausted, but NO TERTIARY API Key is configured. Skipping fallback.")
     
     return None
 
