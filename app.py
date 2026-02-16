@@ -18,19 +18,30 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ==========================================
 # Primary API Key for Paper Checking (Strict Marking)
 # Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = os.getenv("MARKING_API_KEY_PRIMARY")
+MARKING_API_KEY_PRIMARY = os.getenv("MARKING_API_KEY_PRIMARY") or os.getenv("GEMINI_API_KEY")
 
-# Secondary API Key for Fallback (when primary runs out of tokens)
 # Secondary API Key for Fallback (when primary runs out of tokens)
 MARKING_API_KEY_SECONDARY = os.getenv("MARKING_API_KEY_SECONDARY")
 
 # Tertiary API Key for Extra Fallback (when secondary runs out)
-# Tertiary API Key for Extra Fallback (when secondary runs out)
 MARKING_API_KEY_TERTIARY = os.getenv("MARKING_API_KEY_TERTIARY")
 
 # OpenAI API Key
-# OpenAI API Key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Startup Validation
+print("\n" + "="*50)
+if not MARKING_API_KEY_PRIMARY:
+    print("❌ CRITICAL ERROR: API Key missing!")
+    print("   Please set MARKING_API_KEY_PRIMARY or GEMINI_API_KEY in environment.")
+else:
+    print(f"✅ Gemini API Key: Loaded successfully.")
+
+if not OPENAI_API_KEY:
+    print("⚠️  OpenAI API Key: Not found (GPT-4o fallback disabled).")
+else:
+    print(f"✅ OpenAI API Key: Loaded successfully.")
+print("="*50 + "\n")
 
 
 
@@ -67,6 +78,10 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
     Helper function to call Gemini API via REST to support multiple keys safely.
     Returns (result_text, error_code) where error_code indicates the type of failure.
     """
+    if not api_key:
+        print("❌ Error: Attempted to call Gemini API with missing/empty API Key.")
+        return None, 401
+
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
     
     payload = {
