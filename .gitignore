@@ -1,0 +1,11 @@
+.env
+.DS_Store
+__pycache__/
+*.pyc
+
+# Local Data Stores
+*_data.json
+
+# Clutter
+response_refined*.json
+test_count.js
