@@ -5,9 +5,6 @@ import os
 import pypdf
 import openai
 from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -16,36 +13,22 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ==========================================
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
-# Gemini API Key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+# Primary API Key for Paper Checking (Strict Marking)
+MARKING_API_KEY_PRIMARY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
+
+# Secondary API Key for Fallback (when primary runs out of tokens)
+# TODO: PASTE YOUR SECOND API KEY HERE
+MARKING_API_KEY_SECONDARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
+
+# Tertiary API Key for Extra Fallback (when secondary runs out)
+# TODO: PASTE YOUR THIRD API KEY HERE
+MARKING_API_KEY_TERTIARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
 
 # OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE"  # TODO: Replace with actual key or env var
 
-# Startup Validation
-print("\n" + "="*50)
-print("--- API KEY DEBUG ---")
-print(f"GEMINI_API_KEY: {'Found' if GEMINI_API_KEY else 'Missing'}")
-if GEMINI_API_KEY:
-    print(f"Key starts with: {GEMINI_API_KEY[:10]}...")
-print(f"OPENAI_API_KEY: {'Found' if OPENAI_API_KEY else 'Missing'}")
-print("---------------------")
-
-if not GEMINI_API_KEY:
-    print("❌ CRITICAL ERROR: GEMINI_API_KEY missing!")
-else:
-    print(f"✅ Gemini API Key: Loaded successfully.")
-
-if not OPENAI_API_KEY:
-    print("⚠️  OpenAI API Key: Not found (GPT-4o fallback disabled).")
-else:
-    print(f"✅ OpenAI API Key: Loaded successfully.")
-print("="*50 + "\n")
-
-
-
-
-
+# API Key for Vocab/Idioms Sentence Generation
+TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
 
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
@@ -75,16 +58,11 @@ def extract_text_from_pdf(pdf_path):
         print(f"Error extracting PDF text: {e}")
         return ""
 
-def generate_with_gemini(api_key, system_instruction, user_prompt, key_label="Primary"):
+def generate_with_gemini(api_key, system_instruction, user_prompt):
     """
     Helper function to call Gemini API via REST to support multiple keys safely.
     Returns (result_text, error_code) where error_code indicates the type of failure.
     """
-    if not api_key:
-        print(f"❌ Error: Attempted to call Gemini API with missing/empty {key_label} API Key.")
-        return None, 401
-
-    print(f"Calling Gemini API with {key_label} Key...")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
     
     payload = {
@@ -140,7 +118,7 @@ def generate_with_gpt(system_instruction, user_prompt):
         client = OpenAI(api_key=OPENAI_API_KEY)
         
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": user_prompt}
@@ -153,21 +131,38 @@ def generate_with_gpt(system_instruction, user_prompt):
         print(f"GPT API Error: {e}")
         return None
 
-def generate_with_gemini_simple(system_instruction, user_prompt):
+def generate_with_fallback(system_instruction, user_prompt):
     """
-    Simple wrapper to call Gemini API with the single configured key.
+    Tries primary API key first, falls back to secondary, then tertiary if needed.
     """
-    if not GEMINI_API_KEY:
-        print("Error: GEMINI_API_KEY is missing.")
-        return None
-        
-    result, error_code = generate_with_gemini(GEMINI_API_KEY, system_instruction, user_prompt, "Primary")
+    # 1. Try Primary API
+    result, error_code = generate_with_gemini(MARKING_API_KEY_PRIMARY, system_instruction, user_prompt)
     
     if result:
         return result
-    else:
-        print(f"Gemini API failed with error code: {error_code}")
-        return None
+
+    # 2. Try Secondary API if Primary failed due to quota
+    if error_code in [429, 403]:
+        print("Primary API quota exhausted, switching to SECONDARY API...")
+        result, error_code = generate_with_gemini(MARKING_API_KEY_SECONDARY, system_instruction, user_prompt)
+        
+        if result:
+            print("Secondary API succeeded!")
+            return result
+    
+    # 3. Try Tertiary API if Secondary also failed due to quota
+    if error_code in [429, 403]:
+        print("Secondary API quota exhausted, switching to TERTIARY API...")
+        result, error_code = generate_with_gemini(MARKING_API_KEY_TERTIARY, system_instruction, user_prompt)
+        
+        if result:
+            print("Tertiary API succeeded!")
+            return result
+        else:
+            print("Tertiary API also failed (or other error).")
+    
+    return None
+
 # ==========================================
 # STATIC FILE SERVING (Frontend)
 # ==========================================
@@ -388,10 +383,10 @@ def mark():
              # If GPT fails, maybe we should let them know or fallback.
              # Let's try Gemini as fallback.
              print("GPT failed, falling back to Gemini...")
-             text = generate_with_gemini_simple(system_prompt, user_prompt)
+             text = generate_with_fallback(system_prompt, user_prompt)
     else:
         # Default Gemini
-        text = generate_with_gemini_simple(system_prompt, user_prompt)
+        text = generate_with_fallback(system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()

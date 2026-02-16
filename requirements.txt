@@ -6,4 +6,3 @@ gunicorn
 requests
 pypdf
 openai
-python-dotenv
