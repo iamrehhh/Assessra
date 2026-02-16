@@ -20,7 +20,7 @@ MARKING_API_KEY_SECONDARY = "AIzaSyBD6Uu3G5EGs-kSOeUG0ZUpbLmyUNvNrtk"
 
 # Tertiary API Key for Extra Fallback (when secondary runs out)
 # TODO: PASTE YOUR THIRD API KEY HERE
-MARKING_API_KEY_TERTIARY = "AIzaSyAZICuZj-jMdbY98Xm5uwso8NPJkTZah_4"
+MARKING_API_KEY_TERTIARY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
 
 # API Key for Vocab/Idioms Sentence Generation
 TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
@@ -310,6 +310,7 @@ def mark():
         f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
     ) if marks <= 4 else (
         f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
+        f"IMPORTANT: If the question involves data (e.g., investment, loans, profit), YOU MUST CALCULATE the relevant ratios/figures IN THE BACKGROUND first to ensure accuracy. DO NOT show the calculation steps in the final essay. ONLY use the accurate final figure in your analysis (e.g., 'Gearing will rise to 62.5%...').\n"
         f"Structure your answer as follows:\n"
         f"1. DEFINITION (AO1): Define the key term precisely.\n"
         f"2. APPLICATION (AO2): Use specific case study facts/figures (quote them) to support every point. Do not be generic.\n"
@@ -339,7 +340,7 @@ def mark():
     {{
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
-        "detailed_critique": "<A comprehensive, fastidious, and strictly critical analysis of the answer. Break down every single mistake, missed opportunity, and lack of depth. Explain precisely WHY the marks were lost and HOW to fix it. Do not be vague. Be extremely specific to the case study context. Ensure there is NO repetition or looping of feedback.>",
+        "detailed_critique": "<A ONE-PARAGRAPH (max 100 words), fastidious critique. Focus purely on the weakness and errors. Be direct and punchy. No waffle. No repetition.>",
         "model_answer": "{model_answer_instruction}"
     }}
     """
