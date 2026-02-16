@@ -12,7 +12,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
 # Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = "AIzaSyDCoTpQKbVeOeQGCQN23R6uDPry-upv54Y" 
+MARKING_API_KEY_PRIMARY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
 
 # Secondary API Key for Fallback (when primary runs out of tokens)
 # TODO: PASTE YOUR SECOND API KEY HERE
