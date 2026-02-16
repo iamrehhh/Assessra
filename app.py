@@ -60,6 +60,16 @@ print("="*50 + "\n")
 
 
 
+
+# Debug: Print loaded keys (masked)
+print("--- API KEY DEBUG ---")
+print(f"MARKING_API_KEY_PRIMARY: {'Found' if MARKING_API_KEY_PRIMARY else 'Missing'}")
+if MARKING_API_KEY_PRIMARY:
+    print(f"Key starts with: {MARKING_API_KEY_PRIMARY[:10]}...")
+print(f"MARKING_API_KEY_SECONDARY: {'Found' if MARKING_API_KEY_SECONDARY else 'Missing'}")
+print(f"MARKING_API_KEY_TERTIARY: {'Found' if MARKING_API_KEY_TERTIARY else 'Missing'}")
+print("---------------------")
+
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
 
