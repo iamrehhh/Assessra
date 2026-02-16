@@ -299,21 +299,23 @@ def mark():
 
     # Updated user prompt with calculation-aware model answer instruction
     # Updated user prompt with calculation-aware model answer instruction
+    # Updated user prompt with strict calculation and A* essay instructions
     model_answer_instruction = (
-        f"<For calculation questions: Show complete step-by-step working including: "
-        f"1) Formula/method stated, 2) Values substituted clearly, 3) Calculation steps shown, "
-        f"4) Final answer with units if required. "
-        f"For essay questions: Write a perfect A* model answer ({word_guide}) using paragraphs. "
-        f"Ensure it references the case study explicitly. "
-        f"CRITICAL: The model answer must be a standalone answer to the question. "
-        f"DO NOT mention the student's answer or their performance in this section. "
-        f"Focus ONLY on writing the ideal response a student should have written.>"
+        f"<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:\n"
+        f"1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').\n"
+        f"2. STATE FORMULA: Write the standard formula clearly.\n"
+        f"3. SUBSTITUTE: Show the formula with the extracted numbers inserted.\n"
+        f"4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.\n"
+        f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
+        f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
     ) if marks <= 4 else (
-        f"<Write a perfect A* model answer ({word_guide}) using paragraphs. "
-        f"Ensure it references the case study explicitly. "
-        f"CRITICAL: The model answer must be a standalone answer to the question. "
-        f"DO NOT mention the student's answer or their performance in this section. "
-        f"Focus ONLY on writing the ideal response a student should have written.>"
+        f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
+        f"Structure your answer as follows:\n"
+        f"1. DEFINITION (AO1): Define the key term precisely.\n"
+        f"2. APPLICATION (AO2): Use specific case study facts/figures (quote them) to support every point. Do not be generic.\n"
+        f"3. ANALYSIS (AO3): Build 'Chain of Argument' (Point -> Evidence -> Explanation -> Impact). Use connectors like 'This leads to...', 'Consequently...', 'Therefore...'.\n"
+        f"4. EVALUATION (AO4 - for 12 mark Qs): Provide a balanced conclusion. Weigh the args. Discuss Short Term vs Long Term. Make a final judgment.\n"
+        f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
     )
 
     user_prompt = f"""
