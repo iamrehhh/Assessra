@@ -16,14 +16,19 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ==========================================
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
-# Primary API Key for Paper Checking (Strict Marking)
-# Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = os.getenv("MARKING_API_KEY_PRIMARY") or os.getenv("GEMINI_API_KEY")
+primary_key = os.getenv("MARKING_API_KEY_PRIMARY")
+gemini_alias = os.getenv("GEMINI_API_KEY")
 
-# Secondary API Key for Fallback (when primary runs out of tokens)
+# Primary Key assignment (Prefer MARKING_API_KEY_PRIMARY)
+MARKING_API_KEY_PRIMARY = primary_key or gemini_alias
+
+# Secondary Key assignment logic
 MARKING_API_KEY_SECONDARY = os.getenv("MARKING_API_KEY_SECONDARY")
+# Auto-fallback: If we have both aliases and they are different, use the unused one as secondary
+if primary_key and gemini_alias and primary_key != gemini_alias and not MARKING_API_KEY_SECONDARY:
+    MARKING_API_KEY_SECONDARY = gemini_alias
 
-# Tertiary API Key for Extra Fallback (when secondary runs out)
+# Tertiary Key assignment
 MARKING_API_KEY_TERTIARY = os.getenv("MARKING_API_KEY_TERTIARY")
 
 # OpenAI API Key
