@@ -5,6 +5,9 @@ import os
 import pypdf
 import openai
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -14,21 +17,23 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ⚠ API KEYS CONFIGURATION
 # ==========================================
 # Primary API Key for Paper Checking (Strict Marking)
-MARKING_API_KEY_PRIMARY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
+# Primary API Key for Paper Checking (Strict Marking)
+MARKING_API_KEY_PRIMARY = os.getenv("MARKING_API_KEY_PRIMARY")
 
 # Secondary API Key for Fallback (when primary runs out of tokens)
-# TODO: PASTE YOUR SECOND API KEY HERE
-MARKING_API_KEY_SECONDARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
+# Secondary API Key for Fallback (when primary runs out of tokens)
+MARKING_API_KEY_SECONDARY = os.getenv("MARKING_API_KEY_SECONDARY")
 
 # Tertiary API Key for Extra Fallback (when secondary runs out)
-# TODO: PASTE YOUR THIRD API KEY HERE
-MARKING_API_KEY_TERTIARY = "AIzaSyBf5hdRq2o70-zl7PDmqkzP4LK_DJWoJoo"
+# Tertiary API Key for Extra Fallback (when secondary runs out)
+MARKING_API_KEY_TERTIARY = os.getenv("MARKING_API_KEY_TERTIARY")
 
 # OpenAI API Key
-OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE"  # TODO: Replace with actual key or env var
+# OpenAI API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # API Key for Vocab/Idioms Sentence Generation
-TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U" 
+TUTOR_API_KEY = os.getenv("TUTOR_API_KEY") 
 
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
