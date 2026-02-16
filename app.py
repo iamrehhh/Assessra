@@ -32,8 +32,7 @@ MARKING_API_KEY_TERTIARY = os.getenv("MARKING_API_KEY_TERTIARY")
 # OpenAI API Key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# API Key for Vocab/Idioms Sentence Generation
-TUTOR_API_KEY = os.getenv("TUTOR_API_KEY") 
+
 
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
