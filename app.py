@@ -140,7 +140,7 @@ def generate_with_gpt(system_instruction, user_prompt):
         client = OpenAI(api_key=OPENAI_API_KEY)
         
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": user_prompt}
