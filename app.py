@@ -28,15 +28,26 @@ TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U"
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
 
+# In-memory cache for PDF text to avoid re-processing
+pdf_text_cache = {}
+
 def extract_text_from_pdf(pdf_path):
     """
-    Extracts text from a PDF file.
+    Extracts text from a PDF file with caching.
     """
+    if pdf_path in pdf_text_cache:
+        print(f"Cache HIT for: {pdf_path}")
+        return pdf_text_cache[pdf_path]
+
+    print(f"Cache MISS - Extracting: {pdf_path}")
     try:
         reader = pypdf.PdfReader(pdf_path)
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\n"
+        
+        # Store in cache
+        pdf_text_cache[pdf_path] = text
         return text
     except Exception as e:
         print(f"Error extracting PDF text: {e}")
@@ -61,7 +72,8 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
     headers = {'Content-Type': 'application/json'}
     
     try:
-        response = requests.post(url, json=payload, headers=headers)
+        # Added timeout to prevent hanging indefinitely
+        response = requests.post(url, json=payload, headers=headers, timeout=30)
         
         # Check for quota/token errors before raising
         if response.status_code == 429:
