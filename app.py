@@ -325,8 +325,8 @@ def mark():
     {{
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
-        "strengths": "<Format this field to include the 'Overall Verdict' followed by a list of 'Strengths'. Be specific.>",
-        "weaknesses": "<Format this field to include the 'Weaknesses & Marks Withheld' followed by detailed 'Address AO2/AO3/AO4' critiques. Use phrasing like 'You failed to...' or 'Your chain of reasoning broke down...'>",
+        "strengths": "<A single concise paragraph (max 50 words) stating the verdict and specific strong points (citing figures/facts).>",
+        "weaknesses": "<A single concise paragraph (max 50 words) highlighting the exact errors, missing definitions, or logic gaps. Be blunt.>",
         "model_answer": "{model_answer_instruction}"
     }}
     """
