@@ -233,7 +233,8 @@ const ALLOWED_USERS = {
     "Shreyas.Bhattacharya": "A....",
     "Ayush.Paul": "ayush",
     "Abdul.Rehan": "jipmat",
-    "Shefa.Hassan": "maths"
+    "Shefa.Hassan": "maths",
+    "Swapneel.Tiwari": "2026"
 };
 
 function getUser() { return localStorage.getItem('user'); }
