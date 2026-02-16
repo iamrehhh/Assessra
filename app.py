@@ -10,17 +10,6 @@ app = Flask(__name__)
 # Allow CORS for all domains
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# ==========================================
-# ⚠ API KEYS CONFIGURATION
-# ==========================================
-# Primary API Key for Paper Checking (Strict Marking)
-GEMINI_API_KEY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
-
-# OpenAI API Key
-OPENAI_API_KEY = "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"  # TODO: Replace with actual key or env var 
-
-# Model Configuration
-MODEL_NAME = "gemini-2.5-flash"
 
 # In-memory cache for PDF text to avoid re-processing
 pdf_text_cache = {}
@@ -149,11 +138,11 @@ def serve_static(path):
 
 @app.route('/mark', methods=['POST'])
 def mark():
-    # Check API key availability first
-    if not GEMINI_API_KEY and not OPENAI_API_KEY:
+    # Check OpenAI API key availability
+    if not OPENAI_API_KEY:
         return jsonify({
             "error": "API Configuration Error",
-            "message": "No API keys configured. Please contact the administrator to set up GEMINI_API_KEY or OPENAI_API_KEY in the environment variables."
+            "message": "OPENAI_API_KEY is not configured. Please contact the administrator."
         }), 503
     
     data = request.json
@@ -351,37 +340,9 @@ def mark():
     }}
     """
     
-    model_choice = data.get('model', 'gemini') # Default to Gemini
-
-    # Validate that the requested model's API key is available
-    if model_choice == 'gpt':
-        if not OPENAI_API_KEY:
-            return jsonify({
-                "error": "OpenAI API Key Missing",
-                "message": "GPT-4o model requested but OPENAI_API_KEY is not configured. Please use Gemini model or contact administrator to set up OpenAI API key."
-            }), 503
-        
-        print("Using GPT-4o for marking...")
-        text = generate_with_gpt(system_prompt, user_prompt)
-        if not text:
-             # Fallback to Gemini if GPT fails and Gemini key is available
-             if GEMINI_API_KEY:
-                 print("GPT failed, falling back to Gemini...")
-                 text = generate_with_gemini_simple(system_prompt, user_prompt)
-             else:
-                 return jsonify({
-                     "error": "API Error",
-                     "message": "GPT-4o API failed and no Gemini fallback available. Please try again or contact support."
-                 }), 500
-    else:
-        # Default Gemini
-        if not GEMINI_API_KEY:
-            return jsonify({
-                "error": "Gemini API Key Missing",
-                "message": "GEMINI_API_KEY is not configured. Please contact administrator to set up the API key."
-            }), 503
-        
-        text = generate_with_gemini_simple(system_prompt, user_prompt)
+    # Use GPT-4o Mini for all marking
+    print("📝 Processing with GPT-4o Mini...")
+    text = generate_with_gpt(system_prompt, user_prompt)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
@@ -389,7 +350,7 @@ def mark():
     else:
         return jsonify({
             "error": "Failed to generate marking",
-            "message": "The AI model failed to generate a response. Please try again. If the problem persists, you may have exceeded your API quota."
+            "message": "GPT-4o Mini failed to generate a response. Please try again. If the problem persists, you may have exceeded your API quota."
         }), 500
 
 
