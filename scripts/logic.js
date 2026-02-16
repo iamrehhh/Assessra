@@ -691,7 +691,10 @@ async function submitAnswer(pid, qn) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 question: qData.t,
-                case_study: `Refer to attached PDF for ${paperData[pid].title}.`,
+                question: qData.t,
+                // Send the PDF path so the backend can extract text
+                pdf_path: paperData[pid].pdf, 
+                case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
                 marks: qData.m
             })

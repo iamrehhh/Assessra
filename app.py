@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import os
+import pypdf
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -26,6 +27,20 @@ TUTOR_API_KEY = "AIzaSyCrWhTElkLQt2OrljhPGzaKBlpx0yrqN9U"
 
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
+
+def extract_text_from_pdf(pdf_path):
+    """
+    Extracts text from a PDF file.
+    """
+    try:
+        reader = pypdf.PdfReader(pdf_path)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        return text
+    except Exception as e:
+        print(f"Error extracting PDF text: {e}")
+        return ""
 
 def generate_with_gemini(api_key, system_instruction, user_prompt):
     """
@@ -126,7 +141,19 @@ def mark():
     data = request.json
     marks = int(data.get('marks', 12))
     question_text = data.get('question', '')
-    case_study = data.get('case_study', '')
+    # 'case_study' might now be a path if provided by frontend, or text. 
+    # Logic.js sends "Refer to attached PDF..." string usually.
+    # We will look for a new field 'pdf_path' to be explicit.
+    pdf_path = data.get('pdf_path', '')
+    case_study_text = ""
+    
+    if pdf_path and os.path.exists(pdf_path):
+        print(f"Extracting text from: {pdf_path}")
+        case_study_text = extract_text_from_pdf(pdf_path)
+    else:
+        # Fallback to whatever string was sent (legacy support)
+        case_study_text = data.get('case_study', '')
+
     student_answer = data.get('answer', '')
 
     # STRICT RUBRIC LOGIC
@@ -210,17 +237,27 @@ def mark():
     """
 
     # Updated user prompt with calculation-aware model answer instruction
+    # Updated user prompt with calculation-aware model answer instruction
     model_answer_instruction = (
         f"<For calculation questions: Show complete step-by-step working including: "
         f"1) Formula/method stated, 2) Values substituted clearly, 3) Calculation steps shown, "
         f"4) Final answer with units if required. "
         f"For essay questions: Write a perfect A* model answer ({word_guide}) using paragraphs. "
-        f"Ensure it references the case study explicitly.>"
-    ) if marks <= 4 else f"<Write a perfect A* model answer ({word_guide}) using paragraphs. Ensure it references the case study explicitly.>"
+        f"Ensure it references the case study explicitly. "
+        f"CRITICAL: The model answer must be a standalone answer to the question. "
+        f"DO NOT mention the student's answer or their performance in this section. "
+        f"Focus ONLY on writing the ideal response a student should have written.>"
+    ) if marks <= 4 else (
+        f"<Write a perfect A* model answer ({word_guide}) using paragraphs. "
+        f"Ensure it references the case study explicitly. "
+        f"CRITICAL: The model answer must be a standalone answer to the question. "
+        f"DO NOT mention the student's answer or their performance in this section. "
+        f"Focus ONLY on writing the ideal response a student should have written.>"
+    )
 
     user_prompt = f"""
     CASE STUDY CONTEXT:
-    {case_study}
+    {case_study_text}
 
     QUESTION:
     {question_text}
