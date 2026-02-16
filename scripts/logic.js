@@ -540,7 +540,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
                     <span style="font-size:0.9rem; font-weight:600; color:#555;">AI Model:</span>
                     <select id="model-selector" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-weight:bold; cursor:pointer;">
                         <option value="gemini">Gemini 2.5 Flash (Default)</option>
-                        <option value="gpt">GPT-4o</option>
+                        <option value="gpt">GPT-4o Mini</option>
                     </select>
                 </div>
             </div>
