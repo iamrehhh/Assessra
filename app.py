@@ -17,7 +17,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 GEMINI_API_KEY = "AIzaSyAXb9pTi7KiarqRma02d6FOqhKgIFacsAM"
 
 # OpenAI API Key
-OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE"  # TODO: Replace with actual key or env var 
+OPENAI_API_KEY = "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"  # TODO: Replace with actual key or env var 
 
 # Model Configuration
 MODEL_NAME = "gemini-2.5-flash"
