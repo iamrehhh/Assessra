@@ -156,8 +156,56 @@ def mark():
 
     student_answer = data.get('answer', '')
 
+    # DETECT BUSINESS PAPER 3 for STRICT MARKING
+    is_business_p3 = False
+    if pdf_path and ("9609" in pdf_path and ("_3" in pdf_path or "31" in pdf_path or "32" in pdf_path or "33" in pdf_path)):
+        is_business_p3 = True
+        print("⚠ STRICT MODE ACTIVE: Business Paper 3 Detected")
+
     # STRICT RUBRIC LOGIC
-    if marks == 8:
+    if is_business_p3:
+        # USER-DEFINED STRICT PROTOCOL FOR BUSINESS P3
+        system_prompt = """
+        System Persona: You are an unforgiving, hyper-strict Cambridge International A-Level Business (9609) Paper 3 Examiner. 
+        Your purpose is to prepare the candidate for the worst-case grading scenario. You do not give the benefit of the doubt. 
+        You look for precision, deep context integration, and unbroken chains of logic.
+        """
+
+        rubric = f"""
+        Zero-Leeway Rules:
+        1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks for that point.
+        2. No Buzzword Points: Do not award AO1 (Knowledge) marks if the candidate simply name-drops a key term without clear evidence they understand what it means in a business context.
+        3. No Parroting: Do not award AO2 (Application) marks if the candidate just copies data or text from the case study. They must explicitly connect the data to their argument.
+
+        Strict Grading Protocol:
+        AO1: Knowledge and Understanding (Max 2 Marks)
+        - Award 0 marks for vague definitions.
+        - Award 1 mark for one precisely accurate point or definition.
+        - Award 2 marks ONLY if two distinct, accurate points are made, or a flawless definition and a distinct point are provided.
+
+        AO2: Application (Max 2 Marks)
+        - Award 0 marks for generic statements or directly quoting the text without using it.
+        - Award 1 mark if case data is actively used to support an argument once.
+        - Award 2 marks ONLY if case data is actively used to support an argument twice in distinctly different ways.
+
+        AO3: Analysis (Max 4 Marks for 8-markers / Max 2 Marks for 12-markers)
+        - Rule: Analysis requires unbroken chains of reasoning (Cause -> Impact -> Consequence).
+        - Award 0 marks for stating a fact without a consequence.
+        - Award L1 (1-2 marks for 8-markers; 1 mark for 12-markers) if there is only a single step of logic (e.g., "This reduces costs so profits rise").
+        - Award L2 (3-4 marks for 8-markers; 2 marks for 12-markers) ONLY if the candidate provides a multi-step, fully developed chain of reasoning that leaves absolutely no gaps in logic.
+
+        AO4: Evaluation (Max 6 Marks - 12-markers only)
+        - The "Any Business" Test: Read the candidate's conclusion. If you remove the name of the business from their paragraph and the statement still makes sense for a generic company, you MUST cap Evaluation at L2 (Maximum 4 marks).
+        - Award L1 (1-2 marks): A weak judgement is made with little to no supporting evidence.
+        - Award L2 (3-4 marks): A developed, balanced judgement is made, weighing pros and cons, but it lacks deep integration with the specific facts of the case.
+        - Award L3 (5-6 marks): ONLY award this if the judgement is heavily contextualized, explicitly weighing specific case study data.
+
+        Current Question Max Marks: {marks}
+        """
+        
+        word_guide = "Refer to Cambridge Conventions"
+
+    elif marks == 8:
         rubric = """
         STRICT 8-MARK RUBRIC (Analysis):
         - AO1 (Knowledge): Max 2 marks. (Precise definitions required)
@@ -231,10 +279,11 @@ def mark():
         rubric = f"Mark strictly according to standard Cambridge conventions for {marks} marks."
         word_guide = "Appropriate length"
 
-    system_prompt = f"""
-    You are a Strict Senior Cambridge A-Level Business Examiner. 
-    Mark the following answer with NO MERCY.
-    """
+    if not is_business_p3:
+        system_prompt = f"""
+        You are a Strict Senior Cambridge A-Level Business Examiner. 
+        Mark the following answer with NO MERCY.
+        """
 
     # Updated user prompt with calculation-aware model answer instruction
     # Updated user prompt with calculation-aware model answer instruction
@@ -276,8 +325,8 @@ def mark():
     {{
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
-        "strengths": "<Concise bullet points on what was done well>",
-        "weaknesses": "<Concise bullet points on exact errors/omissions>",
+        "strengths": "<Format this field to include the 'Overall Verdict' followed by a list of 'Strengths'. Be specific.>",
+        "weaknesses": "<Format this field to include the 'Weaknesses & Marks Withheld' followed by detailed 'Address AO2/AO3/AO4' critiques. Use phrasing like 'You failed to...' or 'Your chain of reasoning broke down...'>",
         "model_answer": "{model_answer_instruction}"
     }}
     """
