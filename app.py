@@ -5,6 +5,13 @@ import os
 import pypdf
 import openai
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+MODEL_NAME = "gemini-1.5-flash"
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -96,7 +103,7 @@ def generate_with_gpt(system_instruction, user_prompt):
         client = OpenAI(api_key=OPENAI_API_KEY)
         
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": user_prompt}
