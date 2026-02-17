@@ -186,18 +186,12 @@ def mark():
     if custom_system_prompt:
         system_prompt = custom_system_prompt
     elif is_business_p3:
-        # ENHANCED STRICT PERSONA
+        # USER-SPECIFIED PERSONA
         system_prompt = """
-        You are a Chief Examiner for Cambridge International A-Level Business (9609). 
-        Your grading style is "Zero-Leeway". You are examining Paper 3 (Case Study).
-        
-        CORE PHILOSOPHY (POSITIVE MARKING):
-        - Your job is to differentiate between average and top-tier candidates.
-        - AWARD marks ONLY for precise, correct answers.
-        - DO NOT use negative marking (i.e., do not subtract marks for wrong answers, just do not award them).
-        - "Benefit of the doubt" is strictly FORBIDDEN.
-        - Vague assertions score ZERO.
-        - Generic "textbook" answers without specific case context score ZERO for Application.
+        System Persona: You are an unforgiving, hyper-strict Cambridge International A-Level Business (9609) Paper 3 Examiner. 
+        Your purpose is to prepare the candidate for the worst-case grading scenario. 
+        You do not give the benefit of the doubt. 
+        You look for precision, deep context integration, and unbroken chains of logic.
         """
     else:
         system_prompt = f"""
@@ -209,65 +203,61 @@ def mark():
     if custom_rubric:
         rubric = custom_rubric
     elif is_business_p3:
-        # USER-DEFINED STRICT PROTOCOL FOR BUSINESS P3
+        # USER-SPECIFIED RUBRIC FOR BUSINESS P3
         rubric = f"""
-        STRICT GRADING PROTOCOL (ZERO LEEWAY - POSITIVE MARKING):
-        
-        1. AO1 (Knowledge) - Max 2 Marks:
-           - 0 marks: Vague/imprecise definition.
-           - 1 mark: Accurate definition OR one valid point.
-           - 2 marks: Two distinct, accurate points OR flawless definition + one point.
-           
-        2. AO2 (Application) - Max 2 Marks:
-           - 0 marks: No reference to case study or simply copying text.
-           - 1 mark: Applies one specific fact/figure from the case to support the argument.
-           - 2 marks: Integrates case evidence seamlessly into two distinct points.
-           - RULE: "Generic" answers that could apply to any business get 0 AO2 marks.
+        Zero-Leeway Rules:
+        1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks for that point.
+        2. No Buzzword Points: Do not award AO1 (Knowledge) marks if the candidate simply name-drops a key term without clear evidence they understand what it means in a business context.
+        3. No Parroting: Do not award AO2 (Application) marks if the candidate just copies data or text from the case study. They must explicitly connect the data to their argument.
 
-        3. AO3 (Analysis) - Max {4 if marks >= 8 else 2} Marks:
-           - 0 marks: Statement of fact without consequences.
-           - L1 (1-2 marks): Single-step logic (e.g., "X leads to Y").
-           - L2 (3-{4 if marks >= 8 else 2} marks): CHAIN OF REASONING (Cause -> Effect -> Impact on Business Objectives).
-           - RULE: Gap in logic = Cap at L1.
-
-        4. AO4 (Evaluation) - Max {6 if marks == 12 else 0} Marks:
-           - ONLY for 12-mark questions.
-           - 0 marks: No final judgement.
-           - L1 (1-2 marks): Unsupported or weak judgement.
-           - L2 (3-4 marks): Balanced judgement but lacks depth or context.
-           - L3 (5-6 marks): Comprehensive, nuanced judgement heavily weighted on case context (Short vs Long term, Stakeholders, etc.).
+        Strict Grading Protocol:
         
+        AO1: Knowledge and Understanding (Max 2 Marks)
+        - Award 0 marks for vague definitions.
+        - Award 1 mark for one precisely accurate point or definition.
+        - Award 2 marks ONLY if two distinct, accurate points are made, or a flawless definition and a distinct point are provided.
+
+        AO2: Application (Max 2 Marks)
+        - Award 0 marks for generic statements or directly quoting the text without using it.
+        - Award 1 mark if case data is actively used to support an argument once.
+        - Award 2 marks ONLY if case data is actively used to support an argument twice in distinctly different ways.
+
+        AO3: Analysis (Max {4 if marks >= 8 else 0} Marks for 8-markers / Max {2 if marks == 12 else 0} Marks for 12-markers)
+        - Rule: Analysis requires unbroken chains of reasoning (Cause -> Impact -> Consequence).
+        - Award 0 marks for stating a fact without a consequence.
+        - Award L1 (1-2 marks for 8-markers; 1 mark for 12-markers) if there is only a single step of logic (e.g., "This reduces costs so profits rise").
+        - Award L2 (3-4 marks for 8-markers; 2 marks for 12-markers) ONLY if the candidate provides a multi-step, fully developed chain of reasoning that leaves absolutely no gaps in logic.
+
+        AO4: Evaluation (Max {6 if marks == 12 else 0} Marks - 12-markers only)
+        - The "Any Business" Test: Read the candidate's conclusion. If you remove the name of the business from their paragraph and the statement still makes sense for a generic company, you MUST cap Evaluation at L2 (Maximum 4 marks).
+        - Award L1 (1-2 marks): A weak judgement is made with little to no supporting evidence.
+        - Award L2 (3-4 marks): A developed, balanced judgement is made, weighing pros and cons, but it lacks deep integration with the specific facts of the case.
+        - Award L3 (5-6 marks): ONLY award this if the judgement is heavily contextualized, explicitly weighing specific case study data (e.g., short-term costs vs. long-term strategic goals specific to the company's situation) to reach a definitive final verdict.
+
         Current Question Max Marks: {marks}
         """
         word_guide = "Refer to Cambridge Conventions"
     elif marks == 8:
+        # Fallback for non-P3 8 markers (though rubric above covers it mostly)
         rubric = """
         STRICT 8-MARK RUBRIC (Analysis):
-        - AO1 (Knowledge): Max 2 marks. (Precise definitions required)
-        - AO2 (Application): Max 2 marks. (MUST quote/reference Case Study facts)
-        - AO3 (Analysis): Max 4 marks. (Detailed chains of reasoning: Cause -> Effect -> Impact)
-        - AO4 (Evaluation): 0 marks. (Do NOT award marks for judgment).
-        
-        POSITIVE MARKING RULES:
-        - If Application (AO2) is missing, Total Score cannot exceed 4.
-        - If answer is too short (<100 words), Total Score cannot exceed 3.
+        - AO1 (Knowledge): Max 2 marks.
+        - AO2 (Application): Max 2 marks.
+        - AO3 (Analysis): Max 4 marks.
+        - AO4 (Evaluation): 0 marks.
         """
         word_guide = "150-225 words"
     elif marks == 12:
         rubric = """
         STRICT 12-MARK RUBRIC (Evaluation):
         - AO1 (Knowledge): Max 2 marks.
-        - AO2 (Application): Max 2 marks. (MUST quote/reference Case Study facts)
-        - AO3 (Analysis): Max 2 marks. (Max 2 even if analysis is extensive).
-        - AO4 (Evaluation): Max 6 marks. (Requires: Judgement, Weighting of arguments, Short/Long term view).
-
-        POSITIVE MARKING RULES:
-        - If no final justified conclusion, AO4 marks cannot exceed 3.
-        - If Application (AO2) is missing, Total Score cannot exceed 6.
+        - AO2 (Application): Max 2 marks.
+        - AO3 (Analysis): Max 2 marks.
+        - AO4 (Evaluation): Max 6 marks.
         """
         word_guide = "250-350 words"
     elif marks <= 4:
-        # CALCULATION QUESTIONS (2-4 marks)
+        # CALCULATION QUESTIONS (2-4 marks) - KEEPING EXISTING RUBRIC AS REQUESTED
         if marks == 2:
             rubric = """
             STRICT 2-MARK CALCULATION RUBRIC:
@@ -328,12 +318,13 @@ def mark():
             f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
         ) if marks <= 4 else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
-            f"IMPORTANT: If the question involves data (e.g., investment, loans, profit), YOU MUST CALCULATE the relevant ratios/figures IN THE BACKGROUND first to ensure accuracy. DO NOT show the calculation steps in the final essay. ONLY use the accurate final figure in your analysis (e.g., 'Gearing will rise to 62.5%...').\n"
-            f"Structure your answer as follows:\n"
-            f"1. DEFINITION (AO1): Define the key term precisely.\n"
-            f"2. APPLICATION (AO2): Use specific case study facts/figures (quote them) to support every point. Do not be generic.\n"
-            f"3. ANALYSIS (AO3): Build 'Chain of Argument' (Point -> Evidence -> Explanation -> Impact). Use connectors like 'This leads to...', 'Consequently...', 'Therefore...'.\n"
-            f"4. EVALUATION (AO4 - for 12 mark Qs): Provide a balanced conclusion. Weigh the args. Discuss Short Term vs Long Term. Make a final judgment.\n"
+            f"The answer MUST follow standard A-Level Essay structure with proper paragraph breaks.\n"
+            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\n"
+            f"Structure:\n"
+            f"1. DEFINITION (AO1): Define terms precisely.\n"
+            f"2. APPLICATION (AO2): Use specific facts/figures from the case.\n"
+            f"3. ANALYSIS (AO3): Develop chains of argument (Point -> Evidence -> Explanation + Connectors).\n"
+            f"4. EVALUATION (AO4 - for 12 mark Qs): Balanced conclusion, weighting, short/long term view.\n"
             f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
         )
 
@@ -352,14 +343,34 @@ def mark():
     {rubric}
     
     2. BE CRITICAL. Do not give "benefit of the doubt". 
-    3. If the student uses generic points not linked to the case, do not award marks for Application (Source of Truth: CASE STUDY CONTEXT).
+    3. If the student uses generic points not linked to the case, do not award marks for Application.
+
+    OUTPUT FORMAT REQUIREMENT:
+    You must output your final grading strictly using the following structure for the 'detailed_critique' field. 
+    Do not output a single, blocky paragraph. Break down the feedback comprehensively.
+
+    Comprehensive Examiner Report Structure:
+    1. Final Score: [X]/{marks}
+    2. Assessment Objective Breakdown:
+       - AO1 (Knowledge): [X]/2
+       - AO2 (Application): [X]/2
+       - AO3 (Analysis): [X]/{4 if marks >= 8 else 2}
+       - AO4 (Evaluation): [X]/{6 if marks == 12 else 0}
+    3. Comprehensive Examiner Report:
+       - Overall Verdict: Provide a single, blunt sentence summarizing the overall quality and rigor of the response.
+       - Strengths (Marks Awarded): Explicitly detail what the candidate did correctly. Identify the exact definitions, data applications, or logical links that successfully earned marks. State why they were correct according to the Cambridge mark scheme.
+       - Weaknesses & Marks Withheld: Be ruthless and precise here. Explain exactly where the candidate's logic failed or where they lost focus.
+         * Address AO2: Did they just copy data without using it?
+         * Address AO3: Where did their chain of reasoning break down? Point out exactly where they stated a cause but failed to connect it to an ultimate consequence for the business.
+         * Address AO4 (if applicable): Did they fail the "Any Business" test? Explain why their conclusion was too generic.
+       
+    Required phrasing: Start your critiques with phrases like: "You failed to...", "Your chain of reasoning broke down when...", "Your evaluation was capped at Level 2 because...".
 
     OUTPUT FORMAT (JSON ONLY):
     {{
-        "reasoning": "<Short text explaining the marking logic. POSITIVE MARKING ONLY: Explain why marks were awarded or NOT awarded, do not use terms like 'deducted'.>",
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
-        "detailed_critique": "<A ONE-PARAGRAPH (max 100 words), fastidious critique. Focus purely on the weakness and errors. Be direct and punchy. No waffle. No repetition.>",
+        "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' and '2. Assessment Objective Breakdown:...' followed by the report.>",
         "model_answer": "{model_answer_instruction}"
     }}
     """
