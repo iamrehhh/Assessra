@@ -1,17 +1,27 @@
+import os
+import json
+import logging
+from typing import Dict, Any
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
-import os
 import pypdf
 import openai
 from openai import OpenAI
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = "gemini-1.5-flash"
+
+print("🚀 App starting...")
+logger.info("Environment variables loaded.")
 
 app = Flask(__name__)
 # Allow CORS for all domains
@@ -390,12 +400,6 @@ def mark():
 
 
 
-# ==========================================
-import json
-import os
-from typing import Dict, Any
-
-# ==========================================
 # VOCAB PROGRESS CLOUD STORAGE
 # ==========================================
 VOCAB_DB_FILE = 'vocab_data.json'
