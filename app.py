@@ -149,6 +149,10 @@ def generate_with_gemini_simple(system_instruction, user_prompt):
 def index():
     return send_from_directory('.', 'index.html')
 
+@app.route('/health')
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory('.', path)
