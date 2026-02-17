@@ -699,13 +699,16 @@ async function submitAnswer(pid, qn) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 question: qData.t,
-                question: qData.t,
                 // Send the PDF path so the backend can extract text
                 pdf_path: paperData[pid].pdf,
                 case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
                 marks: qData.m,
-                model: model
+                model: model,
+                // Dynamic Protocols (if present in DB/JS)
+                rubric: qData.rubric || paperData[pid].rubric || null,
+                system_prompt: qData.system_prompt || paperData[pid].system_prompt || null,
+                model_instruction: qData.model_instruction || paperData[pid].model_instruction || null
             })
         });
 

@@ -170,55 +170,75 @@ def mark():
 
     student_answer = data.get('answer', '')
 
+    # DYNAMIC PROTOCOLS (Database/Frontend Overrides)
+    # Check if custom marking data is provided in the request
+    custom_rubric = data.get('rubric')
+    custom_system_prompt = data.get('system_prompt')
+    custom_model_instruction = data.get('model_instruction')
+
     # DETECT BUSINESS PAPER 3 for STRICT MARKING
     is_business_p3 = False
     if pdf_path and ("9609" in pdf_path and ("_3" in pdf_path or "31" in pdf_path or "32" in pdf_path or "33" in pdf_path)):
         is_business_p3 = True
         print("⚠ STRICT MODE ACTIVE: Business Paper 3 Detected")
 
-    # STRICT RUBRIC LOGIC
-    if is_business_p3:
-        # USER-DEFINED STRICT PROTOCOL FOR BUSINESS P3
+    # 1. DETERMINE SYSTEM PROMPT
+    if custom_system_prompt:
+        system_prompt = custom_system_prompt
+    elif is_business_p3:
+        # ENHANCED STRICT PERSONA
         system_prompt = """
-        System Persona: You are an unforgiving, hyper-strict Cambridge International A-Level Business (9609) Paper 3 Examiner. 
-        Your purpose is to prepare the candidate for the worst-case grading scenario. You do not give the benefit of the doubt. 
-        You look for precision, deep context integration, and unbroken chains of logic.
+        You are a Chief Examiner for Cambridge International A-Level Business (9609). 
+        Your grading style is "Zero-Leeway". You are examining Paper 3 (Case Study).
+        
+        CORE PHILOSOPHY:
+        - Your job is to differentiate between average and top-tier candidates.
+        - You look for reasons to DEDUCT marks, not to give them.
+        - "Benefit of the doubt" is strictly FORBIDDEN.
+        - Vague assertions score ZERO.
+        - Generic "textbook" answers without specific case context score ZERO for Application.
+        """
+    else:
+        system_prompt = f"""
+        You are a Strict Senior Cambridge A-Level Business Examiner. 
+        Mark the following answer with NO MERCY.
         """
 
+    # 2. DETERMINE RUBRIC
+    if custom_rubric:
+        rubric = custom_rubric
+    elif is_business_p3:
+        # USER-DEFINED STRICT PROTOCOL FOR BUSINESS P3
         rubric = f"""
-        Zero-Leeway Rules:
-        1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks for that point.
-        2. No Buzzword Points: Do not award AO1 (Knowledge) marks if the candidate simply name-drops a key term without clear evidence they understand what it means in a business context.
-        3. No Parroting: Do not award AO2 (Application) marks if the candidate just copies data or text from the case study. They must explicitly connect the data to their argument.
+        STRICT GRADING PROTOCOL (ZERO LEEWAY):
+        
+        1. AO1 (Knowledge) - Max 2 Marks:
+           - 0 marks: Vague/imprecise definition.
+           - 1 mark: Accurate definition OR one valid point.
+           - 2 marks: Two distinct, accurate points OR flawless definition + one point.
+           
+        2. AO2 (Application) - Max 2 Marks:
+           - 0 marks: No reference to case study or simply copying text.
+           - 1 mark: Applies one specific fact/figure from the case to support the argument.
+           - 2 marks: Integrates case evidence seamlessly into two distinct points.
+           - RULE: "Generic" answers that could apply to any business get 0 AO2 marks.
 
-        Strict Grading Protocol:
-        AO1: Knowledge and Understanding (Max 2 Marks)
-        - Award 0 marks for vague definitions.
-        - Award 1 mark for one precisely accurate point or definition.
-        - Award 2 marks ONLY if two distinct, accurate points are made, or a flawless definition and a distinct point are provided.
+        3. AO3 (Analysis) - Max {4 if marks >= 8 else 2} Marks:
+           - 0 marks: Statement of fact without consequences.
+           - L1 (1-2 marks): Single-step logic (e.g., "X leads to Y").
+           - L2 (3-{4 if marks >= 8 else 2} marks): CHAIN OF REASONING (Cause -> Effect -> Impact on Business Objectives).
+           - RULE: Gap in logic = Cap at L1.
 
-        AO2: Application (Max 2 Marks)
-        - Award 0 marks for generic statements or directly quoting the text without using it.
-        - Award 1 mark if case data is actively used to support an argument once.
-        - Award 2 marks ONLY if case data is actively used to support an argument twice in distinctly different ways.
-
-        AO3: Analysis (Max 4 Marks for 8-markers / Max 2 Marks for 12-markers)
-        - Rule: Analysis requires unbroken chains of reasoning (Cause -> Impact -> Consequence).
-        - Award 0 marks for stating a fact without a consequence.
-        - Award L1 (1-2 marks for 8-markers; 1 mark for 12-markers) if there is only a single step of logic (e.g., "This reduces costs so profits rise").
-        - Award L2 (3-4 marks for 8-markers; 2 marks for 12-markers) ONLY if the candidate provides a multi-step, fully developed chain of reasoning that leaves absolutely no gaps in logic.
-
-        AO4: Evaluation (Max 6 Marks - 12-markers only)
-        - The "Any Business" Test: Read the candidate's conclusion. If you remove the name of the business from their paragraph and the statement still makes sense for a generic company, you MUST cap Evaluation at L2 (Maximum 4 marks).
-        - Award L1 (1-2 marks): A weak judgement is made with little to no supporting evidence.
-        - Award L2 (3-4 marks): A developed, balanced judgement is made, weighing pros and cons, but it lacks deep integration with the specific facts of the case.
-        - Award L3 (5-6 marks): ONLY award this if the judgement is heavily contextualized, explicitly weighing specific case study data.
-
+        4. AO4 (Evaluation) - Max {6 if marks == 12 else 0} Marks:
+           - ONLY for 12-mark questions.
+           - 0 marks: No final judgement.
+           - L1 (1-2 marks): Unsupported or weak judgement.
+           - L2 (3-4 marks): Balanced judgement but lacks depth or context.
+           - L3 (5-6 marks): Comprehensive, nuanced judgement heavily weighted on case context (Short vs Long term, Stakeholders, etc.).
+        
         Current Question Max Marks: {marks}
         """
-        
         word_guide = "Refer to Cambridge Conventions"
-
     elif marks == 8:
         rubric = """
         STRICT 8-MARK RUBRIC (Analysis):
@@ -293,33 +313,29 @@ def mark():
         rubric = f"Mark strictly according to standard Cambridge conventions for {marks} marks."
         word_guide = "Appropriate length"
 
-    if not is_business_p3:
-        system_prompt = f"""
-        You are a Strict Senior Cambridge A-Level Business Examiner. 
-        Mark the following answer with NO MERCY.
-        """
-
-    # Updated user prompt with calculation-aware model answer instruction
-    # Updated user prompt with calculation-aware model answer instruction
-    # Updated user prompt with strict calculation and A* essay instructions
-    model_answer_instruction = (
-        f"<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:\n"
-        f"1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').\n"
-        f"2. STATE FORMULA: Write the standard formula clearly.\n"
-        f"3. SUBSTITUTE: Show the formula with the extracted numbers inserted.\n"
-        f"4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.\n"
-        f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
-        f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
-    ) if marks <= 4 else (
-        f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
-        f"IMPORTANT: If the question involves data (e.g., investment, loans, profit), YOU MUST CALCULATE the relevant ratios/figures IN THE BACKGROUND first to ensure accuracy. DO NOT show the calculation steps in the final essay. ONLY use the accurate final figure in your analysis (e.g., 'Gearing will rise to 62.5%...').\n"
-        f"Structure your answer as follows:\n"
-        f"1. DEFINITION (AO1): Define the key term precisely.\n"
-        f"2. APPLICATION (AO2): Use specific case study facts/figures (quote them) to support every point. Do not be generic.\n"
-        f"3. ANALYSIS (AO3): Build 'Chain of Argument' (Point -> Evidence -> Explanation -> Impact). Use connectors like 'This leads to...', 'Consequently...', 'Therefore...'.\n"
-        f"4. EVALUATION (AO4 - for 12 mark Qs): Provide a balanced conclusion. Weigh the args. Discuss Short Term vs Long Term. Make a final judgment.\n"
-        f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
-    )
+    # 3. DETERMINE MODEL ANSWER INSTRUCTION
+    if custom_model_instruction:
+        model_answer_instruction = custom_model_instruction
+    else:
+        # Updated user prompt with strict calculation and A* essay instructions
+        model_answer_instruction = (
+            f"<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:\n"
+            f"1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').\n"
+            f"2. STATE FORMULA: Write the standard formula clearly.\n"
+            f"3. SUBSTITUTE: Show the formula with the extracted numbers inserted.\n"
+            f"4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.\n"
+            f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
+            f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
+        ) if marks <= 4 else (
+            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
+            f"IMPORTANT: If the question involves data (e.g., investment, loans, profit), YOU MUST CALCULATE the relevant ratios/figures IN THE BACKGROUND first to ensure accuracy. DO NOT show the calculation steps in the final essay. ONLY use the accurate final figure in your analysis (e.g., 'Gearing will rise to 62.5%...').\n"
+            f"Structure your answer as follows:\n"
+            f"1. DEFINITION (AO1): Define the key term precisely.\n"
+            f"2. APPLICATION (AO2): Use specific case study facts/figures (quote them) to support every point. Do not be generic.\n"
+            f"3. ANALYSIS (AO3): Build 'Chain of Argument' (Point -> Evidence -> Explanation -> Impact). Use connectors like 'This leads to...', 'Consequently...', 'Therefore...'.\n"
+            f"4. EVALUATION (AO4 - for 12 mark Qs): Provide a balanced conclusion. Weigh the args. Discuss Short Term vs Long Term. Make a final judgment.\n"
+            f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
+        )
 
     user_prompt = f"""
     CASE STUDY CONTEXT:
@@ -336,10 +352,11 @@ def mark():
     {rubric}
     
     2. BE CRITICAL. Do not give "benefit of the doubt". 
-    3. If the student uses generic points not linked to the case, mark them down.
+    3. If the student uses generic points not linked to the case, mark them down (Source of Truth: CASE STUDY CONTEXT).
 
     OUTPUT FORMAT (JSON ONLY):
     {{
+        "reasoning": "<Short text explaining the mark deduction logic before final scoring.>",
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
         "detailed_critique": "<A ONE-PARAGRAPH (max 100 words), fastidious critique. Focus purely on the weakness and errors. Be direct and punchy. No waffle. No repetition.>",
