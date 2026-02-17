@@ -395,12 +395,15 @@ def mark():
        
     Required phrasing: Start your critiques with phrases like: "You failed to...", "Your chain of reasoning broke down when...", "Your evaluation was capped at Level 2 because...".
 
+    4. MODEL ANSWER INSTRUCTION:
+    {model_answer_instruction}
+
     OUTPUT FORMAT (JSON ONLY):
     {{
         "score": <total_score_int>,
         "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
         "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' and '2. Assessment Objective Breakdown:...' followed by the report.>",
-        "model_answer": "{model_answer_instruction}"
+        "model_answer": "<The generated A* model answer string based on the instruction above>"
     }}
     """
     
