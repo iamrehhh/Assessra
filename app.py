@@ -118,7 +118,7 @@ def generate_with_gpt(system_instruction, user_prompt):
                 {"role": "system", "content": system_instruction},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.7
+            temperature=1.0
         )
         
         return response.choices[0].message.content
@@ -220,118 +220,41 @@ def mark():
         # USER-SPECIFIED RUBRIC FOR BUSINESS P3
         if marks == 8:
             rubric = """
-            Zero-Leeway Rules:
-            1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks.
-            2. No Buzzword Points: No AO1 marks for name-dropping terms without understanding.
-            3. No Parroting: No AO2 marks for copying case data without active use.
+            STRICT 8-MARK RUBRIC:
+            Max Scores: AO1=2, AO2=2, AO3=4, AO4=0.
 
-            Strict Grading Protocol (8 Marks - Analysis Focus):
-            
-            AO1: Knowledge (Max 2 Marks)
-            - 0: Vague/incorrect.
-            - 1: One precise point/def.
-            - 2: Two distinct points or one point + flawless def.
-
-            AO2: Application (Max 2 Marks)
-            - 0: Generic/Copying.
-            - 1: Applied once to support argument.
-            - 2: Applied twice in distinct ways.
-
-            AO3: Analysis (Max 4 Marks)
-            - Rule: Unbroken chains (Cause -> Impact -> Consequence).
-            - 0: Fact without consequence.
-            - L1 (1-2 marks): Single step logic (e.g., "This reduces costs").
-            - L2 (3-4 marks): Multi-step, fully developed chain with NO gaps.
-
-            AO4: Evaluation (0 Marks)
-            - DO NOT AWARD EVALUATION MARKS.
-
-            Current Question Max Marks: 8
+            Instruction: 
+            - Reward a maximum of 2 points. Give 1 mark per point for Knowledge (AO1).
+            - Give 1 mark per point for Application (AO2) ONLY if tied directly to the case study data.
+            - Give up to 4 marks for Analysis (AO3) by looking for 'developed analysis' (clear chains of reasoning showing cause and effect).
+            - NO marks for evaluation.
             """
         elif marks == 12:
             rubric = """
-            Zero-Leeway Rules:
-            1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks.
-            2. No Buzzword Points: No AO1 marks for name-dropping terms without understanding.
-            3. No Parroting: No AO2 marks for copying case data without active use.
+            STRICT 12-MARK RUBRIC:
+            Max Scores: AO1=2, AO2=2, AO3=2, AO4=6.
 
-            Strict Grading Protocol (12 Marks - Evaluation Focus):
-            
-            AO1: Knowledge (Max 2 Marks)
-            - 0: Vague/incorrect.
-            - 1: One precise point/def.
-            - 2: Two distinct points or one point + flawless def.
-
-            AO2: Application (Max 2 Marks)
-            - 0: Generic/Copying.
-            - 1: Applied once to support argument.
-            - 2: Applied twice in distinct ways.
-
-            AO3: Analysis (Max 2 Marks)
-            - Rule: Unbroken chains (Cause -> Impact -> Consequence).
-            - 0: Fact without consequence.
-            - 1: Single step logic.
-            - 2: Multi-step, fully developed chain.
-
-            AO4: Evaluation (Max 6 Marks)
-            - The "Any Business" Test: If conclusion fits any business, Cap at L2 (Max 4).
-            - L1 (1-2 marks): Weak judgement, little support.
-            - L2 (3-4 marks): Developed, balanced judgement, but lacks deep context.
-            - L3 (5-6 marks): Heavily contextualized, weighing specific case data (short/long term, pros/cons) for definitive verdict.
-
-            Current Question Max Marks: 12
+            Instruction: 
+            - Give up to 2 marks for Knowledge (AO1).
+            - Give 2 marks for Application to the case (AO2).
+            - Give 2 marks for Analysis (AO3).
+            - The bulk of the marks (6) are for Evaluation (AO4).
+            - To get Level 3 Evaluation (5-6 marks), the student MUST provide a developed, supported judgment or conclusion that balances arguments specifically in the context of the business.
             """
         else:
-            # Fallback for other P3 questions (e.g. 10 markers if they exist, or odd ones)
-            rubric = f"""
-            Strict Grading Protocol for {marks} marks:
-            mark strictly according to Cambridge Business P3 conventions.
-            """
+             # Fallback for other P3 questions
+            rubric = f"Strict Grading Protocol for {marks} marks: mark strictly according to Cambridge Business P3 conventions."
         
         word_guide = "Refer to Cambridge Conventions"
     elif marks <= 4:
-        # CALCULATION QUESTIONS (2-4 marks) - KEEPING EXISTING RUBRIC AS REQUESTED
-        if marks == 2:
-            rubric = """
-            STRICT 2-MARK CALCULATION RUBRIC:
-            1. VERIFY mathematical accuracy step-by-step.
-            2. Mark allocation:
-               - 1 mark for correct METHOD/WORKING shown.
-               - 1 mark for correct FINAL ANSWER (with appropriate units).
-            3. Award method mark even if final answer is incorrect (if working is shown).
-            4. Constraints:
-               - Do not award marks if units are missing or incorrect.
-               - Do not award answer mark if significant arithmetic errors exist.
-               - No working shown: Award max 1 mark (only if answer is correct).
-            5. Set AO1=1, AO2=0, AO3=1, AO4=0 for breakdown (method=AO1, answer=AO3).
-            """
-        elif marks == 4:
-            rubric = """
-            STRICT 4-MARK CALCULATION RUBRIC:
-            1. VERIFY mathematical accuracy step-by-step.
-            2. Mark allocation:
-               - 2 marks for correct METHOD/WORKING shown.
-               - 2 marks for correct FINAL ANSWER (with appropriate units).
-            3. Award method marks even if final answer is incorrect (if working is shown).
-            4. Partial credit breakdown:
-               - Full working, wrong answer: 2/4
-               - Partial working, wrong answer: 1/4
-               - No working, correct answer: 2/4 maximum
-            5. Constraints:
-               - Do not award final mark if units are missing.
-               - Do not award full marks if arithmetic errors exist.
-            6. Set AO1=2, AO2=0, AO3=2, AO4=0 for breakdown (method=AO1, answer=AO3).
-            """
-        else:
-            # 1 mark or 3 mark questions (rare)
-            rubric = f"""
-            STRICT {marks}-MARK CALCULATION RUBRIC:
-            1. VERIFY mathematical accuracy.
-            2. Award marks for correct method and correct answer proportionally.
-            3. For {marks} marks, split between method and answer.
-            4. Do not award marks for missing units or lack of working.
-            """
-        word_guide = "Brief calculation with complete working shown"
+        # CALCULATION / SHORT ANSWER
+        rubric = """
+        STRICT CALCULATION/SHORT ANSWER RUBRIC:
+        Instruction: 
+        - If the final numerical answer is correct, award full marks.
+        - If the final answer is incorrect, award 1 mark if the correct formula or method is shown in the working.
+        """
+        word_guide = "Show working"
     else:
         rubric = f"Mark strictly according to standard Cambridge conventions for {marks} marks."
         word_guide = "Appropriate length"
