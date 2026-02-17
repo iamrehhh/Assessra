@@ -9,6 +9,9 @@ import pypdf
 import openai
 from openai import OpenAI
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials, db
+import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -20,12 +23,92 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = "gemini-1.5-flash"
 
+if not OPENAI_API_KEY:
+    logger.warning("OPENAI_API_KEY not found. Marking functionality will be disabled.")
+if not GEMINI_API_KEY:
+    logger.info("GEMINI_API_KEY not found. Using GPT as primary model.")
+
 print("🚀 App starting...")
 logger.info("Environment variables loaded.")
 
 app = Flask(__name__)
 # Allow CORS for all domains
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+# ==========================================
+# FIREBASE CONFIGURATION
+# ==========================================
+# Initialize Firebase Admin SDK
+firebase_service_account = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+database_url = "https://habibi-studies-chat-default-rtdb.firebaseio.com"
+
+if firebase_service_account:
+    try:
+        cred_dict = json.loads(firebase_service_account)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': database_url
+        })
+        logger.info("Firebase Admin initialized with service account.")
+    except Exception as e:
+        logger.error(f"Failed to initialize Firebase with service account: {e}")
+else:
+    logger.warning("FIREBASE_SERVICE_ACCOUNT not found. Data persistence will be disabled.")
+    # Initialize with default credentials or just skip
+    try:
+        firebase_admin.initialize_app(options={'databaseURL': database_url})
+        logger.info("Firebase Admin initialized with default options.")
+    except Exception as e:
+        logger.error(f"Firebase initialization failed: {e}")
+
+# ==========================================
+# FIREBASE STORAGE PATHS & HELPERS
+# ==========================================
+VOCAB_DB_PATH = 'backend/vocab_progress'
+IDIOMS_DB_PATH = 'backend/idioms_progress'
+VOCAB_SETS_DB_PATH = 'backend/vocab_sets'
+IDIOMS_SETS_DB_PATH = 'backend/idioms_sets'
+SENTENCES_DB_PATH = 'backend/sentences'
+NOTES_DB_PATH = 'backend/notes'
+
+def load_db_from_firebase(path) -> Dict[str, Any]:
+    try:
+        ref = db.reference(path)
+        data = ref.get()
+        return data if isinstance(data, dict) else {}
+    except Exception as e:
+        logger.error(f"Error loading from Firebase ({path}): {e}")
+        return {}
+
+def save_db_to_firebase(path, data):
+    try:
+        ref = db.reference(path)
+        ref.set(data)
+    except Exception as e:
+        logger.error(f"Error saving to Firebase ({path}): {e}")
+
+# Legacy support/mapping
+def load_db(filename):
+    mapping = {
+        'vocab_data.json': VOCAB_DB_PATH,
+        'idioms_data.json': IDIOMS_DB_PATH,
+        'vocab_sets_data.json': VOCAB_SETS_DB_PATH,
+        'idioms_sets_data.json': IDIOMS_SETS_DB_PATH,
+        'sentences_data.json': SENTENCES_DB_PATH
+    }
+    path = mapping.get(filename, f"backend/{filename.replace('.json', '')}")
+    return load_db_from_firebase(path)
+
+def save_db(filename, data):
+    mapping = {
+        'vocab_data.json': VOCAB_DB_PATH,
+        'idioms_data.json': IDIOMS_DB_PATH,
+        'vocab_sets_data.json': VOCAB_SETS_DB_PATH,
+        'idioms_sets_data.json': IDIOMS_SETS_DB_PATH,
+        'sentences_data.json': SENTENCES_DB_PATH
+    }
+    path = mapping.get(filename, f"backend/{filename.replace('.json', '')}")
+    save_db_to_firebase(path, data)
 
 
 # In-memory cache for PDF text to avoid re-processing
@@ -645,23 +728,7 @@ def mark():
 
 
 
-# VOCAB PROGRESS CLOUD STORAGE
-# ==========================================
-VOCAB_DB_FILE = 'vocab_data.json'
-IDIOMS_DB_FILE = 'idioms_data.json'
-
-def load_db(filename) -> Dict[str, Any]:
-    if os.path.exists(filename):
-        try:
-            with open(filename, 'r') as f:
-                return json.load(f)
-        except:
-            return {}
-    return {}
-
-def save_db(filename, data):
-    with open(filename, 'w') as f:
-        json.dump(data, f)
+# Syncing databases with Firebase
 
 # Load data on startup
 logger.info("Syncing databases with Firebase...")
