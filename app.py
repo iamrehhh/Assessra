@@ -316,270 +316,169 @@ def mark():
     if custom_rubric:
         rubric = custom_rubric
     elif is_business_p3:
-        # USER-SPECIFIED RUBRIC FOR BUSINESS P3
-        # USER-SPECIFIED GLOBAL MARKING COMMANDS FOR BUSINESS P3
-        rubric = """
-        GLOBAL MARKING COMMANDS
-        AWARD marks using positive marking only.
-        DO NOT deduct marks for wrong statements.
-        AWARD marks only for correct, relevant, syllabus-based content.
-        IGNORE spelling and grammar if meaning is clear.
-        DO NOT award marks for:
-        - vague statements
-        - unclear ideas
-        - repetition of the same point
-        - contradictory points
-        - “list dumping” without explanation
-
-        USE whole marks only.
-        ACCEPT valid alternative answers not written in the mark scheme.
-
-        POINT-BASED QUESTION COMMANDS
-        FOR each mark point:
-        AWARD 1 mark if the point is:
-        - correct
-        - explained (not just named)
-        - relevant to the question.
-        DO NOT award marks for keywords without explanation.
-        IF multiple similar points appear:
-        MARK only the best instance.
-
-        CALCULATION QUESTION COMMANDS
-        AWARD marks step-by-step as per method shown.
-        IF final answer is correct:
-        AWARD full marks even if no working is shown (unless the question explicitly requires working).
-        APPLY own-figure rule:
-        IF a candidate uses an earlier wrong figure correctly in a valid method:
-        AWARD full method marks.
-        ACCEPT alternative correct methods and award equivalent marks.
-
-        EXTENDED / EVALUATION QUESTION – MASTER COMMAND
-        SPLIT the answer into assessment objectives:
-        AO1 – Knowledge
-        AO2 – Application
-        AO3 – Analysis
-        AO4 – Evaluation
-
-        AO1 – KNOWLEDGE COMMANDS
-        AWARD 2 marks if:
-        - business terms are correct AND
-        - concepts are explained accurately.
-        AWARD 1 mark if:
-        - knowledge is present but weak or partial.
-        AWARD 0 marks if:
-        - no relevant business knowledge.
-
-        AO2 – APPLICATION COMMANDS
-        AWARD 2 marks if:
-        - the answer clearly links to the given case AND
-        - uses specific case information more than once.
-        AWARD 1 mark if:
-        - only one basic or superficial case reference is made.
-        AWARD 0 marks if:
-        - the answer is generic with no case reference.
-
-        AO3 – ANALYSIS COMMANDS
-        DEFINE analysis as: cause -> effect -> business consequence.
-        AWARD 2 marks if:
-        - two or more logical links are developed.
-        AWARD 1 mark if:
-        - only one logical link is shown.
-        AWARD 0 marks if:
-        - the answer is descriptive only.
-
-        AO4 – EVALUATION COMMANDS
-        5–6 marks
-        AWARD ONLY if ALL conditions are met:
-        - a clear judgement is stated,
-        - the judgement is justified,
-        - advantages and limitations are considered,
-        - the judgement is contextualised to the case.
-        3–4 marks
-        AWARD if:
-        - judgement is present and supported,
-        - some balance is shown,
-        - but context is weak or generic.
-        1–2 marks
-        AWARD if:
-        - judgement is present,
-        - justification is weak or undeveloped.
-        0 marks
-        AWARD if:
-        - no judgement or evaluative comment is present.
-
-        LEVEL-BASED DECISION COMMAND
-        SELECT the level using best-fit.
-        THEN choose mark position:
-        bottom of band -> just meets the level
-        middle of band -> adequately meets the level
-        top of band -> convincingly meets the level
-
-        CONTENT SELECTION COMMAND
-        IF the question asks for a limited number of points (e.g. one advantage and one disadvantage):
-        MARK only the required number of best points.
-
-        INTERNAL TAGGING COMMAND (FOR YOUR AI)
-        TAG each meaningful clause as:
-        K -> AO1 (knowledge)
-        APP -> AO2 (application)
-        AN -> AO3 (analysis)
-        E -> AO4 (evaluation)
-
-        FINAL SCORING WORKFLOW COMMAND
-        REMOVE vague, repeated and contradictory statements.
-        TAG remaining content into AO1, AO2, AO3, AO4.
-        SCORE AO1, AO2, AO3 using 0–2 rules.
-        SCORE AO4 using level rules.
-        APPLY best-fit across the whole answer.
-        OUTPUT whole marks only.
-        """
+        # COMPREHENSIVE BUSINESS P3 RUBRIC (Cambridge 9609)
+        if marks <= 4:
+            # CALCULATION QUESTIONS (2 marks standard)
+            rubric = """
+            CALCULATION QUESTION RUBRIC (2 MARKS)
+            
+            2 MARKS:
+            - Correct answer with accurate units (e.g., %, weeks, $)
+            - Award even without working shown (unless question explicitly requires it)
+            
+            1 MARK:
+            - Correct formula stated
+            - Correct method with arithmetic error
+            - Valid Own Figure Rule (OFR): using earlier wrong figure correctly in valid method
+            
+            0 MARKS:
+            - No creditable response
+            
+            APPLY positive marking only. ACCEPT alternative correct methods.
+            """
+        elif marks == 8:
+            # ANALYSIS QUESTIONS (8 marks)
+            rubric = """
+            ANALYSIS QUESTION RUBRIC (8 MARKS)
+            Total: AO1 (2) + AO2 (2) + AO3 (4) = 8 marks
+            
+            AO1 – KNOWLEDGE (max 2 marks):
+            - 1 mark per relevant business term/concept identified and explained
+            - Must be accurate and relevant to question
+            
+            AO2 – APPLICATION (max 2 marks):
+            - 1 mark per point specifically applied to business context
+            - Must use case information, not generic statements
+            
+            AO3 – ANALYSIS (max 4 marks):
+            Level 2 (3-4 marks):
+            - Developed analysis identifying connections between causes and impacts
+            - Multiple logical links in chain of reasoning
+            - Shows business consequences clearly
+            
+            Level 1 (1-2 marks):
+            - Limited analysis with basic connections
+            - Simple cause-effect links only
+            - Minimal development
+            
+            MARK using best-fit. Award whole marks only.
+            """
+        elif marks == 12:
+            # EVALUATION QUESTIONS (12 marks)
+            rubric = """
+            EVALUATION QUESTION RUBRIC (12 MARKS)
+            Total: AO1 (2) + AO2 (2) + AO3 (2) + AO4 (6) = 12 marks
+            
+            AO1 – KNOWLEDGE (max 2 marks):
+            2 marks: Developed knowledge of key terms, accurately explained
+            1 mark: Limited knowledge, partially explained
+            0 marks: No relevant business knowledge
+            
+            AO2 – APPLICATION (max 2 marks):
+            2 marks: Developed application to context with specific case references
+            1 mark: Limited application, superficial case reference
+            0 marks: Generic answer with no case reference
+            
+            AO3 – ANALYSIS (max 2 marks):
+            2 marks: Developed analysis showing causes, impacts, and consequences
+            1 mark: Limited analysis with basic connections
+            0 marks: Descriptive only, no analytical reasoning
+            
+            AO4 – EVALUATION (max 6 marks):
+            Level 3 (5-6 marks):
+            - Developed evaluation with clear judgement
+            - Balanced consideration of arguments
+            - Judgement justified and contextualized to the case
+            
+            Level 2 (3-4 marks):
+            - Developed evaluation with judgement
+            - Some balance shown
+            - Context weak or generic
+            
+            Level 1 (1-2 marks):
+            - Limited evaluation
+            - Judgement present but weak justification
+            
+            0 marks: No judgement or evaluative comment
+            
+            MARK using best-fit within levels. Award whole marks only.
+            """
+        else:
+            # FALLBACK FOR OTHER MARK ALLOCATIONS
+            rubric = f"Mark strictly according to Cambridge Business 9609 Paper 3 conventions for {marks} marks."
         
-        word_guide = "Refer to Global Marking Commands"
+        word_guide = "Appropriate to mark allocation"
     elif is_business_p4:
-        # USER-SPECIFIED GLOBAL MARKING COMMANDS FOR BUSINESS P4
+        # COMPREHENSIVE BUSINESS P4 RUBRIC (Cambridge 9609) - 20 MARK STRATEGY QUESTIONS
         rubric = """
-        GLOBAL MARKING COMMANDS (APPLY TO ALL QUESTIONS)
-        MARK using positive marking only.
-        DO NOT deduct marks for:
-        - spelling
-        - grammar
-        - weak structure.
-
-        AWARD marks only for:
-        - correct
-        - relevant
-        - syllabus-based business content.
-        IGNORE irrelevant material.
-
-        DO NOT reward:
-        - vague statements,
-        - narrative copying from the case,
-        - repetition of the same idea.
-
-        ACCEPT valid alternative business arguments.
-        USE whole marks only.
-        IF a statement is unclear -> DO NOT award marks.
-
-        STRUCTURE OF PAPER 4 MARKING
-        For every 20-mark question:
-        You MUST mark using four assessment objectives:
-        AO1 – Knowledge and understanding
-        AO2 – Application to the case
-        AO3 – Analysis
-        AO4 – Evaluation
-
-        Standard weighting used in Paper 4:
-        AO1 -> max 3 marks
-        AO2 -> max 2 marks
-        AO3 -> max 8 marks
-        AO4 -> max 7 marks
-
-        AO1 – KNOWLEDGE & UNDERSTANDING (max 3)
-        COMMANDS
-        AWARD 1 mark
-        -> limited but correct business knowledge.
-        AWARD 2–3 marks
-        -> clear and developed understanding of relevant business concepts.
-        AWARD 0 marks
-        -> no valid business knowledge.
-
-        AO1 must be:
-        - accurate,
-        - correctly used,
-        - clearly explained.
-
-        Do NOT reward:
-        - copying of the case,
-        - naming terms without explanation.
-
-        AO2 – APPLICATION TO THE CASE (max 2)
-        COMMANDS
-        AWARD marks ONLY if the answer:
-        - is clearly rooted in the given business,
-        - uses case facts correctly.
-
-        AWARD 2 marks
-        -> developed and consistent application to the case.
-        AWARD 1 mark
-        -> limited or one-off application.
-        AWARD 0 marks
-        -> generic answer.
-
-        Valid application includes:
-        - referring to the specific firm,
-        - using its strategy, size, market, employees, competitors, finances, time period, or constraints.
-
-        AO3 – ANALYSIS (max 8)
-        COMMAND – definition of analysis
-        Analysis means: cause -> effect -> business consequence
-
-        AO3 LEVEL COMMANDS
-        Level 1 – 1 to 3 marks
-        - limited causal explanation,
-        - simple links only.
-        Level 2 – 4 to 6 marks
-        - developed chains of reasoning,
-        - several linked effects,
-        - good depth on some issues.
-        Level 3 – 7 to 8 marks
-        - integrated and strategic analysis,
-        - links several issues together,
-        - shows impact on overall business performance or strategy.
-
-        AO3 must show:
-        - how a decision works,
-        - why it leads to outcomes,
-        - how it affects objectives such as: revenue, profit, competitiveness, brand, productivity, growth, long-term survival.
-
-        AO4 – EVALUATION (max 7)
-        COMMAND – evaluation is only valid if it contains:
-        - a judgement,
-        - justification,
-        - balance,
-        - business context.
-
-        AO4 LEVEL COMMANDS
-        Level 1 – 1 to 2 marks
-        - simple judgement,
-        - weak or unsupported evaluation.
-        Level 2 – 3 to 5 marks
-        - developed judgement,
-        - some balance,
-        - some contextual support.
-        Level 3 – 6 to 7 marks
-        - well-reasoned and balanced evaluation,
-        - clear conclusion,
-        - judgement clearly rooted in the case business.
-
-        AO4 must normally include:
-        - “depends on” arguments,
-        - limitations of the strategy,
-        - alternative options,
-        - realistic constraints such as: finance, staff, competition, market conditions, implementation issues.
-
-        FINAL MARK DECISION COMMAND
-        For each answer:
-        IDENTIFY AO1, AO2, AO3, AO4 content.
-        SCORE AO1 out of 3.
-        SCORE AO2 out of 2.
-        SCORE AO3 using its three levels (max 8).
-        SCORE AO4 using its three levels (max 7).
-
-        USE best-fit within each level:
-        just meets -> bottom of band
-        adequately meets -> middle
-        convincingly meets -> top
-
-        FINAL MARK = AO1 + AO2 + AO3 + AO4.
-
-        INTERNAL TAGGING COMMAND (FOR YOUR AI ENGINE)
-        Tag each meaningful clause as:
-        K -> AO1
-        APP -> AO2
-        AN -> AO3
-        E -> AO4
+        STRATEGY QUESTION RUBRIC (20 MARKS)
+        Total: AO1 (3) + AO2 (2) + AO3 (8) + AO4 (7) = 20 marks
+        
+        AO1 – KNOWLEDGE & UNDERSTANDING (max 3 marks):
+        Level 2 (2-3 marks):
+        - Developed knowledge of strategic terms and factors
+        - Clear understanding of business concepts
+        - Accurately explained
+        
+        Level 1 (1 mark):
+        - Limited knowledge
+        - Partial understanding
+        
+        0 marks: No valid business knowledge
+        
+        AO2 – APPLICATION TO CONTEXT (max 2 marks):
+        Level 2 (2 marks):
+        - Developed application to context
+        - Consistent use of case facts
+        - Clearly rooted in the specific business
+        
+        Level 1 (1 mark):
+        - Limited application
+        - One-off or superficial case reference
+        
+        0 marks: Generic answer with no context
+        
+        AO3 – ANALYSIS (max 8 marks):
+        Level 3 (7-8 marks):
+        - Developed analysis of overall strategy
+        - Integrated connections between strategic elements
+        - Shows impact on business performance/survival
+        - Multiple sustained chains of reasoning
+        
+        Level 2 (4-6 marks):
+        - Developed analysis of individual strategic elements
+        - Several linked effects shown
+        - Good depth on some issues
+        
+        Level 1 (1-3 marks):
+        - Limited analysis
+        - Simple causal links only
+        - Minimal development
+        
+        0 marks: Descriptive only, no analysis
+        
+        AO4 – EVALUATION (max 7 marks):
+        Level 3 (6-7 marks):
+        - Effective evaluation with developed judgement
+        - Highly contextualized to the case business
+        - Balances key arguments effectively
+        - Clear, justified conclusion
+        
+        Level 2 (3-5 marks):
+        - Developed evaluation with balanced arguments
+        - Some contextual support
+        - Judgement present
+        
+        Level 1 (1-2 marks):
+        - Limited evaluation
+        - Weak or unsupported judgement
+        
+        0 marks: No evaluative comment
+        
+        MARK using best-fit within levels. Award whole marks only.
+        APPLY positive marking. IGNORE spelling/grammar if meaning is clear.
         """
-        word_guide = "Refer to Global Marking Commands (P4)"
+        word_guide = "400-500 words for A* response"
     elif is_general_paper:
         rubric = """
         CAMBRIDGE AS LEVEL ENGLISH GENERAL PAPER 8021/12 MARKING RUBRIC
@@ -641,8 +540,89 @@ def mark():
     # 3. DETERMINE MODEL ANSWER INSTRUCTION
     if custom_model_instruction:
         model_answer_instruction = custom_model_instruction
+    elif is_business_p3 or is_business_p4:
+        # BUSINESS PAPERS MODEL ANSWER WITH WORD LIMITS
+        if marks <= 4:
+            # CALCULATION QUESTIONS
+            model_answer_instruction = """<CALCULATION MODEL ANSWER:
+            YOU MUST FOLLOW THIS EXACT FORMAT:
+            1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').
+            2. STATE FORMULA: Write the standard formula clearly.
+            3. SUBSTITUTE: Show the formula with the extracted numbers inserted.
+            4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.
+            5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).
+            
+            DO NOT SKIP STEPS. PRECISION IS MANDATORY.>"""
+        elif marks == 8:
+            # 8-MARK ANALYSIS QUESTIONS (150-200 words)
+            model_answer_instruction = """<8-MARK MODEL ANSWER (A* STANDARD):
+            WORD LIMIT: 150-200 words STRICTLY
+            
+            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
+            - Brief introduction addressing the question (1-2 sentences)
+            - First analytical point: Knowledge term + case application + 2-step chain of reasoning
+            - Second analytical point: Different knowledge term + case application + 2-step chain of reasoning
+            - Brief concluding sentence
+            
+            REQUIREMENTS:
+            - 2 distinct business knowledge points (AO1)
+            - Explicit case application for each point (AO2)
+            - 2-step analytical chains showing cause → impact → business consequence (AO3)
+            - Proper paragraph breaks (NOT bullet points)
+            - Formal academic business style
+            - No headings, no AO labels, no examiner language
+            
+            OUTPUT: Only the model answer text in continuous prose.>"""
+        elif marks == 12:
+            # 12-MARK EVALUATION QUESTIONS (250-300 words)
+            model_answer_instruction = """<12-MARK MODEL ANSWER (A* STANDARD):
+            WORD LIMIT: 250-300 words STRICTLY
+            
+            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
+            - Introduction: Define key terms and address the question (30-40 words)
+            - Paragraph 1: First argument with case application and analytical chain (60-80 words)
+            - Paragraph 2: Counter-argument with case application and analytical chain (60-80 words)
+            - Paragraph 3: Evaluation weighing both sides with justified judgement in context (60-80 words)
+            - Conclusion: Clear final decision rooted in case context (30-40 words)
+            
+            REQUIREMENTS:
+            - Defined business terms integrated naturally (AO1)
+            - Specific case data used throughout, not just mentioned (AO2)
+            - Analytical chains showing causes → impacts → consequences (AO3)
+            - Balanced evaluation with justified, contextualized judgement (AO4)
+            - Proper paragraph breaks (NOT bullet points)
+            - Formal academic business style
+            - No headings, no AO labels, no examiner language
+            
+            OUTPUT: Only the model answer text in continuous prose.>"""
+        elif marks == 20:
+            # 20-MARK STRATEGY QUESTIONS (400-500 words)
+            model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STANDARD):
+            WORD LIMIT: 400-500 words STRICTLY
+            
+            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
+            - Introduction: Strategic focus, identify decision, state key tension (50-60 words)
+            - Paragraph 1: Major strategic argument supporting proposal with sustained chain (80-100 words)
+            - Paragraph 2: Second strategic dimension supporting proposal with sustained chain (80-100 words)
+            - Paragraph 3: Strategic risk/limitation with analytical chain (80-100 words)
+            - Paragraph 4: Integrated evaluation weighing arguments, conditional reasoning (80-100 words)
+            - Conclusion: Clear decisive recommendation with critical justification (50-60 words)
+            
+            REQUIREMENTS:
+            - Strategic terminology used naturally (AO1)
+            - Every paragraph references specific organization, industry, resources (AO2)
+            - Multiple sustained chains showing strategic impacts on performance/survival (AO3)
+            - Effective evaluation balancing key arguments, highly contextualized (AO4)
+            - Cross-functional, forward-looking analysis
+            - Proper paragraph breaks (NOT bullet points)
+            - Professional academic tone
+            - No headings, no AO labels, no examiner language
+            
+            OUTPUT: Only the model answer text in continuous prose.>"""
+        else:
+            model_answer_instruction = f"<Write a perfect A* model answer appropriate for {marks} marks. Use proper paragraph breaks, formal business style, and demonstrate all assessment objectives.>"
     else:
-        # Updated user prompt with strict calculation and A* essay instructions
+        # FALLBACK FOR OTHER PAPERS
         model_answer_instruction = (
             f"<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:\n"
             f"1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').\n"
@@ -652,123 +632,6 @@ def mark():
             f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
             f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
         ) if marks <= 4 else (
-            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
-            f"🔴 GLOBAL GENERATION COMMANDS\n"
-            f"GENERATE a response that would clearly reach the top level band of the mark scheme.\n"
-            f"WRITE in formal academic business style, clear simple sentences, no unnecessary jargon.\n"
-            f"NEVER write as bullet points. NEVER write headings inside the answer. ALWAYS write in full paragraphs.\n"
-            f"ALWAYS use the case business name where relevant. DO NOT copy or restate large parts of the case.\n"
-            f"DO NOT write definitions as isolated sentences. DO NOT include examiner language.\n\n"
-            
-            f"🧠 STRUCTURAL COMMANDS (MANDATORY)\n"
-            f"Your model answer MUST follow this structure:\n\n"
-            
-            f"PARAGRAPH 1 – Focused introduction\n"
-            f"DIRECTLY address the command word. SHOW immediate understanding of the decision/issue. BRIEFLY state typical business aim.\n"
-            f"DO NOT define basic terms unless essential.\n\n"
-            
-            f"PARAGRAPH 2 & 3 – Main analytical arguments (supporting side)\n"
-            f"For each main paragraph:\n"
-            f"START with a clear business point. IMMEDIATELY link to the case business.\n"
-            f"DEVELOP a full analytical chain: decision -> operational impact -> financial/competitive impact -> business objective.\n"
-            f"INCLUDE: one clear, accurate case reference AND realistic business outcomes.\n\n"
-            
-            f"PARAGRAPH 4 – Counter-argument / limitation paragraph\n"
-            f"INTRODUCE a clear limitation, risk or opposing argument. LINK directly to the same case context.\n"
-            f"ANALYSE the downside using: cause -> effect -> impact on performance/strategy.\n"
-            f"DO NOT merely state 'however'.\n\n"
-            
-            f"PARAGRAPH 5 – Integrated evaluation paragraph\n"
-            f"BALANCE both sides together. EXPLAIN why one side may matter more than the other in THIS business.\n"
-            f"USE conditional language: depends on, will only be effective if, may be limited by.\n"
-            f"MUST remain firmly rooted in the case.\n\n"
-            
-            f"FINAL PARAGRAPH – Judgement / conclusion\n"
-            f"GIVE a clear, final decision. JUSTIFY the decision using the most important case factor.\n"
-            f"DO NOT summarise every point. DO NOT introduce new arguments.\n"
-            f"END with a business-realistic outlook (short/long term).\n\n"
-
-            f"🟦 CONTENT COMMANDS (AO TARGETING)\n"
-            f"AO1: Use correct terminology naturally. Theory only when helpful.\n"
-            f"AO2: EVERY main paragraph MUST contain at least one explicit case reference. No generic examples.\n"
-            f"AO3: For every main point, include min 2 logical links and 1 final business outcome.\n"
-            f"AO4: Include balanced viewpoint, limitation, conditional statement, and justified final judgement.\n\n"
-            
-            f"🟧 DEPTH & QUALITY COMMANDS (A* STANDARD)\n"
-            f"EACH analytical paragraph must develop the point, not repeat it. NO obvious statements, descriptive narration, or copying data.\n\n"
-            
-            f"🟨 LANGUAGE & STYLE COMMANDS\n"
-            f"WRITE in short and controlled sentences. AVOID emotional tone. MAINTAIN academic neutrality.\n\n"
-            
-            f"🟥 CONTEXT PRIORITY COMMAND\n"
-            f"When two arguments are equally valid: PRIORITISE the argument that is more important to this specific business or more realistic.\n\n"
-            
-            f"🟪 FINAL QUALITY CHECK COMMAND\n"
-            f"Check: every paragraph has application, analysis in min 3 paragraphs, evaluation before conclusion, conclusion has justified judgement.\n"
-            f"✅ OUTPUT FORMAT COMMAND\n"
-            f"OUTPUT only the answer text. DO NOT output rubrics. DO NOT output AO labels. DO NOT output marks.>"
-        ) if is_business_p3 else (
-            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
-            f"✅ MODEL ANSWER GENERATION RUBRIC\n"
-            f"Paper: Business – Paper 4\n"
-            f"Feature: A* / perfect candidate response generator\n\n"
-            
-            f"🔴 GLOBAL GENERATION COMMANDS\n"
-            f"GENERATE a response that would clearly reach the top level band for Paper 4.\n"
-            f"WRITE in formal academic business style, concise, controlled sentences.\n"
-            f"DO NOT use bullet points. DO NOT use headings inside the answer. DO NOT mention assessment objectives.\n"
-            f"DO NOT copy large parts of the case. DO NOT narrate the case. ALWAYS embed theory into analysis.\n"
-            f"ALWAYS use the name of the case business where appropriate. NEVER include examiner commentary.\n\n"
-            
-            f"🧠 MANDATORY STRATEGIC STRUCTURE\n"
-            f"The model answer MUST follow the structure below.\n\n"
-            
-            f"PARAGRAPH 1 – Strategic focus introduction\n"
-            f"DIRECTLY address the command word. IDENTIFY the strategic decision. STATE briefly key objective and main tension.\n"
-            f"DO NOT define basic terms.\n\n"
-            
-            f"PARAGRAPH 2 – Major strategic argument (supporting the proposal)\n"
-            f"START with one clear strategic reason. LINK immediately to the case organisation.\n"
-            f"DEVELOP a full strategic chain: strategic choice -> operational change -> market/competitive effect -> financial/long-term impact.\n"
-            f"USE at least one concrete case detail. FOCUS on strategic, not operational, consequences.\n\n"
-            
-            f"PARAGRAPH 3 – Second strategic argument (supporting the proposal)\n"
-            f"INTRODUCE a different strategic dimension. LINK to the same case business.\n"
-            f"ANALYSE using: decision -> internal capability impact -> external competitiveness -> strategic position.\n"
-            f"CONNECT explicitly to long-term performance or survival.\n\n"
-            
-            f"PARAGRAPH 4 – Strategic risk / counter-argument\n"
-            f"PRESENT a clear strategic limitation. ANALYSE: risk/constraint -> implementation problem -> strategic failure.\n"
-            f"MUST be rooted in case constraints (finance, people, culture, brand, market, competition, capacity, regulation, timing).\n\n"
-            
-            f"PARAGRAPH 5 – Integrated strategic evaluation\n"
-            f"WEIGH supporting and limiting arguments. PRIORITISE most important strategic factor.\n"
-            f"USE conditional language: depends on, only if, will be limited unless. EXPLAIN how uncertainty affects decision.\n\n"
-            
-            f"FINAL PARAGRAPH – Strategic judgement\n"
-            f"MAKE a clear decisive recommendation. JUSTIFY using single most critical strategic issue.\n"
-            f"STATE whether proposal is suitable in short/long term. DO NOT repeat analysis. DO NOT introduce new arguments.\n\n"
-            
-            f"🟦 CONTENT COMMANDS (PAPER 4 FOCUS)\n"
-            f"Strategic AO1: Use strategic terminology. Frameworks only if strengthening analysis.\n"
-            f"Strategic AO2: EVERY analytical paragraph MUST reference specific organisation, industry, size, resources.\n"
-            f"Strategic AO3: EACH analytical paragraph MUST contain min 2 linked causes and reach a strategic consequence.\n"
-            f"Strategic AO4: Include at least one strategic risk, trade-off, conditional judgement, and integrated conclusion.\n\n"
-            
-            f"🟧 DEPTH & QUALITY (A* STANDARD – PAPER 4)\n"
-            f"ANALYSIS must be cross-functional and forward-looking. SHOW interaction between decisions.\n\n"
-            
-            f"🟨 LANGUAGE & PRESENTATION COMMANDS\n"
-            f"WRITE in continuous prose. USE professional academic tone. KEEP paragraphs balanced.\n\n"
-            
-            f"🟥 CONTEXT PRIORITY COMMAND\n"
-            f"When choosing between two valid arguments: PRIORITISE the argument that most strongly affects long-term competitiveness/survival.\n\n"
-            
-            f"🟪 FINAL QUALITY CHECK COMMAND\n"
-            f"Check: application in every paragraph, deep strategic analysis in min 3 paragraphs, evaluation present, justified strategic judgement.\n"
-            f"✅ OUTPUT FORMAT COMMAND\n"
-            f"OUTPUT only the final model answer text. DO NOT show structure labels. DO NOT include rubrics/AO references/marks.>"
-        ) if is_business_p4 else (
             f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
             f"General Paper 8021 Model Answer Specifications:\n"
             f"- Word Count: 500-650 words\n"
@@ -807,6 +670,45 @@ def mark():
        - Strengths: [Brief bullet points]
        - Areas for Development: [Brief bullet points]
        - Next Steps: [1-2 priority actions]
+    """
+    elif is_business_p3 or is_business_p4:
+        # PRAISE-POLISH-PONDER FEEDBACK STRUCTURE FOR BUSINESS PAPERS
+        if marks <= 4:
+            # Calculation feedback
+            ao_breakdown = f"AO1: [X]/{marks}"
+        elif marks == 8:
+            ao_breakdown = "AO1 (Knowledge): [X]/2, AO2 (Application): [X]/2, AO3 (Analysis): [X]/4"
+        elif marks == 12:
+            ao_breakdown = "AO1 (Knowledge): [X]/2, AO2 (Application): [X]/2, AO3 (Analysis): [X]/2, AO4 (Evaluation): [X]/6"
+        elif marks == 20:
+            ao_breakdown = "AO1 (Knowledge): [X]/3, AO2 (Application): [X]/2, AO3 (Analysis): [X]/8, AO4 (Evaluation): [X]/7"
+        else:
+            ao_breakdown = f"AO1: [X]/2, AO2: [X]/2, AO3: [X]/{marks-4}, AO4: [X]/0"
+        
+        feedback_structure = f"""
+    CRITICAL: The feedback response MUST be 100-200 WORDS TOTAL.
+    
+    Structure for 'detailed_critique' field:
+    1. Final Score: [X]/{marks}
+    2. Assessment Objective Breakdown: {ao_breakdown}
+    3. Examiner Feedback (Praise-Polish-Ponder):
+       
+       **PRAISE** (What earned marks):
+       - Cite specific AO1 (Knowledge) strengths with exact terminology used
+       - Cite specific AO2 (Application) strengths with exact case data referenced
+       - Quote or reference the student's exact text where they succeeded
+       
+       **POLISH** (What lost marks - AO3 Analysis):
+       - Identify missing links in the chain of reasoning
+       - Point out where causes were stated but impacts/consequences were not developed
+       - Explain exactly where the analytical chain broke down
+       
+       **PONDER** (Challenge for AO4 Evaluation):
+       - Pose ONE direct question that challenges their judgement
+       - Ask them to balance key arguments or weigh the most critical factor in context
+       - Make them think about what they overlooked or didn't consider
+    
+    WORD COUNT: Keep total feedback to 100-200 words. Be concise and impactful.
     """
     else:
         feedback_structure = f"""
