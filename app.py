@@ -368,11 +368,15 @@ def save_db(filename, data):
         json.dump(data, f)
 
 # Load data on startup
+logger.info("Loading Vocab DB...")
 vocab_progress_db: Dict[str, Any] = load_db(VOCAB_DB_FILE)
+logger.info("Vocab DB Loaded.")
 if not isinstance(vocab_progress_db, dict):
     vocab_progress_db = {}
 
+logger.info("Loading Idioms DB...")
 idioms_progress_db: Dict[str, Any] = load_db(IDIOMS_DB_FILE)
+logger.info("Idioms DB Loaded.")
 if not isinstance(idioms_progress_db, dict):
     idioms_progress_db = {}
 
