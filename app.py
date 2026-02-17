@@ -285,6 +285,12 @@ def mark():
             is_business_p4 = True
             print("⚠ MODE ACTIVE: Business Paper 4 Detected")
 
+    # DETECT GENERAL PAPER 8021
+    is_general_paper = False
+    if pdf_path and ("8021" in pdf_path or "General" in pdf_path):
+        is_general_paper = True
+        print("⚠ MODE ACTIVE: General Paper 8021 Detected")
+
     # 1. DETERMINE SYSTEM PROMPT
     if custom_system_prompt:
         system_prompt = custom_system_prompt
@@ -294,6 +300,11 @@ def mark():
         You are a Cambridge International A-Level Business (9609) Examiner. 
         Mark the following answer strictly according to the provided Global Marking Commands.
         Do not be artificially strict or lenient. Follow the rubric instructions precisely.
+        """
+    elif is_general_paper:
+        system_prompt = """
+        You are a Cambridge International AS Level English General Paper (8021) Examiner.
+        Mark the following answer strictly according to the provided marking rubric.
         """
     else:
         system_prompt = f"""
@@ -569,6 +580,51 @@ def mark():
         E -> AO4
         """
         word_guide = "Refer to Global Marking Commands (P4)"
+    elif is_general_paper:
+        rubric = """
+        CAMBRIDGE AS LEVEL ENGLISH GENERAL PAPER 8021/12 MARKING RUBRIC
+        Maximum Marks: 30
+
+        LEVEL 5 (25-30 marks) - EXCELLENT
+        AO1 (Selection/Application): 
+        - Selects a range of fully relevant information
+        - Information effectively exemplifies main aspects
+        - Examples support main ideas/opinions consistently
+        AO2 (Analysis/Evaluation):
+        - Analyses possible meanings of question
+        - Defines scope of response
+        - Evaluates a range of arguments
+        - Reaches supported conclusion
+        - Strong argument with clear evidence
+        AO3 (Communication):
+        - Consistently appropriate register
+        - Wide range of vocabulary and variety of features
+        - Controlled and accurate language
+        - Cohesive, well-organised response
+
+        LEVEL 4 (19-24 marks) - GOOD
+        AO1: Selects relevant information, exemplifies main aspects, applies examples appropriately.
+        AO2: Analyses meaning, begins to evaluate different arguments, well-reasoned argument.
+        AO3: Appropriate register, range of vocabulary, some accuracy, generally well organised.
+
+        LEVEL 3 (13-18 marks) - SATISFACTORY
+        AO1: Selects information exemplifying some aspects, examples support ideas.
+        AO2: Understands question, brings together some arguments, logical argument usually supported.
+        AO3: Communicates clearly overall, inconsistent register, everyday vocabulary, some organisation.
+
+        LEVEL 2 (7-12 marks) - BASIC
+        AO1: Limited information, examples linked to some ideas.
+        AO2: Partial understanding, refers to arguments, argument partially supported.
+        AO3: Communicates clearly in places, inconsistent register, basic vocabulary, frequent errors, fragmented.
+
+        LEVEL 1 (1-6 marks) - POOR
+        AO1: Limited information, examples may not link.
+        AO2: Limited response, basic conclusion, weak argument.
+        AO3: Lack of clarity, inappropriate register, basic vocabulary, frequent errors.
+
+        If score is 0: No creditable content.
+        """
+        word_guide = "Subject to 100-200 word feedback limit"
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER
         rubric = """
@@ -652,6 +708,75 @@ def mark():
             f"✅ OUTPUT FORMAT COMMAND\n"
             f"OUTPUT only the answer text. DO NOT output rubrics. DO NOT output AO labels. DO NOT output marks.>"
         ) if is_business_p3 else (
+            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
+            f"✅ MODEL ANSWER GENERATION RUBRIC\n"
+            f"Paper: Business – Paper 4\n"
+            f"Feature: A* / perfect candidate response generator\n\n"
+            
+            f"🔴 GLOBAL GENERATION COMMANDS\n"
+            f"GENERATE a response that would clearly reach the top level band for Paper 4.\n"
+            f"WRITE in formal academic business style, concise, controlled sentences.\n"
+            f"DO NOT use bullet points. DO NOT use headings inside the answer. DO NOT mention assessment objectives.\n"
+            f"DO NOT copy large parts of the case. DO NOT narrate the case. ALWAYS embed theory into analysis.\n"
+            f"ALWAYS use the name of the case business where appropriate. NEVER include examiner commentary.\n\n"
+            
+            f"🧠 MANDATORY STRATEGIC STRUCTURE\n"
+            f"The model answer MUST follow the structure below.\n\n"
+            
+            f"PARAGRAPH 1 – Strategic focus introduction\n"
+            f"DIRECTLY address the command word. IDENTIFY the strategic decision. STATE briefly key objective and main tension.\n"
+            f"DO NOT define basic terms.\n\n"
+            
+            f"PARAGRAPH 2 – Major strategic argument (supporting the proposal)\n"
+            f"START with one clear strategic reason. LINK immediately to the case organisation.\n"
+            f"DEVELOP a full strategic chain: strategic choice -> operational change -> market/competitive effect -> financial/long-term impact.\n"
+            f"USE at least one concrete case detail. FOCUS on strategic, not operational, consequences.\n\n"
+            
+            f"PARAGRAPH 3 – Second strategic argument (supporting the proposal)\n"
+            f"INTRODUCE a different strategic dimension. LINK to the same case business.\n"
+            f"ANALYSE using: decision -> internal capability impact -> external competitiveness -> strategic position.\n"
+            f"CONNECT explicitly to long-term performance or survival.\n\n"
+            
+            f"PARAGRAPH 4 – Strategic risk / counter-argument\n"
+            f"PRESENT a clear strategic limitation. ANALYSE: risk/constraint -> implementation problem -> strategic failure.\n"
+            f"MUST be rooted in case constraints (finance, people, culture, brand, market, competition, capacity, regulation, timing).\n\n"
+            
+            f"PARAGRAPH 5 – Integrated strategic evaluation\n"
+            f"WEIGH supporting and limiting arguments. PRIORITISE most important strategic factor.\n"
+            f"USE conditional language: depends on, only if, will be limited unless. EXPLAIN how uncertainty affects decision.\n\n"
+            
+            f"FINAL PARAGRAPH – Strategic judgement\n"
+            f"MAKE a clear decisive recommendation. JUSTIFY using single most critical strategic issue.\n"
+            f"STATE whether proposal is suitable in short/long term. DO NOT repeat analysis. DO NOT introduce new arguments.\n\n"
+            
+            f"🟦 CONTENT COMMANDS (PAPER 4 FOCUS)\n"
+            f"Strategic AO1: Use strategic terminology. Frameworks only if strengthening analysis.\n"
+            f"Strategic AO2: EVERY analytical paragraph MUST reference specific organisation, industry, size, resources.\n"
+            f"Strategic AO3: EACH analytical paragraph MUST contain min 2 linked causes and reach a strategic consequence.\n"
+            f"Strategic AO4: Include at least one strategic risk, trade-off, conditional judgement, and integrated conclusion.\n\n"
+            
+            f"🟧 DEPTH & QUALITY (A* STANDARD – PAPER 4)\n"
+            f"ANALYSIS must be cross-functional and forward-looking. SHOW interaction between decisions.\n\n"
+            
+            f"🟨 LANGUAGE & PRESENTATION COMMANDS\n"
+            f"WRITE in continuous prose. USE professional academic tone. KEEP paragraphs balanced.\n\n"
+            
+            f"🟥 CONTEXT PRIORITY COMMAND\n"
+            f"When choosing between two valid arguments: PRIORITISE the argument that most strongly affects long-term competitiveness/survival.\n\n"
+            
+            f"🟪 FINAL QUALITY CHECK COMMAND\n"
+            f"Check: application in every paragraph, deep strategic analysis in min 3 paragraphs, evaluation present, justified strategic judgement.\n"
+            f"✅ OUTPUT FORMAT COMMAND\n"
+            f"OUTPUT only the final model answer text. DO NOT show structure labels. DO NOT include rubrics/AO references/marks.>"
+        ) if is_business_p4 else (
+            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
+            f"General Paper 8021 Model Answer Specifications:\n"
+            f"- Word Count: 500-650 words\n"
+            f"- Structure: Intro (80-100w), Body (3-4 paragraphs, 80-100w each), Conclusion (80-100w)\n"
+            f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
+            f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate for the question.\n"
+            f"Ensure the answer would score Level 5 (25-30 marks) across all AOs.>"
+        ) if is_general_paper else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
             f"The answer MUST follow standard A-Level Essay structure with proper paragraph breaks.\n"
             f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\n"
@@ -663,24 +788,28 @@ def mark():
             f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
         )
 
-    user_prompt = f"""
-    CASE STUDY CONTEXT:
-    {case_study_text}
-
-    QUESTION:
-    {question_text}
-
-    STUDENT ANSWER:
-    {student_answer}
-
-    MARKING INSTRUCTIONS:
-    1. Follow this rubric RIGIDLY:
-    {rubric}
+    # 4. DETERMINE FEEDBACK STRUCTURE
+    if is_general_paper:
+        feedback_structure = """
+    You must output your final grading using the following structure for the 'detailed_critique' field.
+    IMPORTANT: The feedback response MUST be concise. MAXIMUM 100-200 WORDS TOTAL for the entire feedback section.
     
-    2. BE CRITICAL. Do not give "benefit of the doubt". 
-    3. If the student uses generic points not linked to the case, do not award marks for Application.
-
-    OUTPUT FORMAT REQUIREMENT:
+    Structure:
+    1. Final Score: [X]/30
+    2. Assessment Objective Breakdown:
+       - AO1 (Selection & Application): [X]/10
+       - AO2 (Analysis & Evaluation): [X]/10
+       - AO3 (Communication): [X]/10
+       - AO4: 0/0
+    3. Comprehensive Examiner Report:
+       - Grade Equivalence: [Distinction/Credit/Pass/Fail]
+       - Overall Assessment: [One sentence verdict]
+       - Strengths: [Brief bullet points]
+       - Areas for Development: [Brief bullet points]
+       - Next Steps: [1-2 priority actions]
+    """
+    else:
+        feedback_structure = f"""
     You must output your final grading strictly using the following structure for the 'detailed_critique' field. 
     Do not output a single, blocky paragraph. Break down the feedback comprehensively.
 
@@ -700,6 +829,27 @@ def mark():
          * Address AO4 (if applicable): Did they fail the "Any Business" test? Explain why their conclusion was too generic.
        
     Required phrasing: Start your critiques with phrases like: "You failed to...", "Your chain of reasoning broke down when...", "Your evaluation was capped at Level 2 because...".
+    """
+
+    user_prompt = f"""
+    CASE STUDY CONTEXT:
+    {case_study_text}
+
+    QUESTION:
+    {question_text}
+
+    STUDENT ANSWER:
+    {student_answer}
+
+    MARKING INSTRUCTIONS:
+    1. Follow this rubric RIGIDLY:
+    {rubric}
+    
+    2. BE CRITICAL. Do not give "benefit of the doubt". 
+    3. If the student uses generic points not linked to the case, do not award marks for Application.
+
+    OUTPUT FORMAT REQUIREMENT:
+    {feedback_structure}
 
     4. MODEL ANSWER INSTRUCTION:
     {model_answer_instruction}
@@ -718,22 +868,27 @@ def mark():
     text = generate_with_gpt(system_prompt, user_prompt)
     
     # Check if text is an error message (starts with an exception from generate_with_gpt)
-    # A successful response from GPT will likely be JSON-like, not a short error string.
-    # We can check if it looks like a typical OpenAI error or just check if it's "None" equivalent
-    
-    if text and not text.startswith("Error"): # Simple heuristic or just check Type if we changed return
+    if text and not text.startswith("Error"):
+        cleaned_text = text.replace('```json', '').replace('```', '').strip()
         try:
-            cleaned_text = text.replace('```json', '').replace('```', '').strip()
-            # Try to parse it to make sure it's valid JSON
-            json.loads(cleaned_text)
-            return cleaned_text, 200, {'Content-Type': 'application/json'}
-        except Exception as e:
-            # If it's not JSON, it might be the error string or a malformed response
+            data = json.loads(cleaned_text)
+            
+            # Ensure model_answer and detailed_critique exist (Critical for General Paper)
+            if 'model_answer' not in data:
+                data['model_answer'] = "Model answer not generated."
+            if 'detailed_critique' not in data:
+                data['detailed_critique'] = "Feedback not generated."
+                
+            return jsonify(data), 200
+        except json.JSONDecodeError:
+            logger.error(f"❌ JSON Decode Error: {cleaned_text[:500]}")
             return jsonify({
-                "error": "Failed to parse AI response",
-                "message": f"The AI generated a response but it wasn't valid JSON. Error: {str(e)}",
-                "raw_response": text[:500]
-            }), 500
+                "score": 0,
+                "ao1": 0, "ao2": 0, "ao3": 0, "ao4": 0,
+                "detailed_critique": "Error: AI response was not valid JSON. Please try again.",
+                "model_answer": "Error generating model answer.",
+                "raw_response": cleaned_text[:500]
+            }), 200
     else:
         return jsonify({
             "error": "Failed to generate marking",
@@ -768,7 +923,7 @@ def save_vocab_progress():
     progress = data.get('progress', {})
     
     vocab_progress_db[user_id] = progress
-    save_db(VOCAB_DB_FILE, vocab_progress_db)
+    save_db("vocab_data.json", vocab_progress_db)
     return jsonify({"status": "success", "message": "Progress saved"})
 
 @app.route('/load_vocab_progress', methods=['POST'])
@@ -790,7 +945,7 @@ def save_idioms_progress():
     progress = data.get('progress', {})
     
     idioms_progress_db[user_id] = progress
-    save_db(IDIOMS_DB_FILE, idioms_progress_db)
+    save_db("idioms_data.json", idioms_progress_db)
     return jsonify({"status": "success", "message": "idioms progress saved"})
 
 @app.route('/load_idioms_progress', methods=['POST'])
