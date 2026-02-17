@@ -190,27 +190,32 @@ def mark():
     custom_system_prompt = data.get('system_prompt')
     custom_model_instruction = data.get('model_instruction')
 
-    # DETECT BUSINESS PAPER 3 for STRICT MARKING
+    # DETECT BUSINESS PAPER 3 or 4
     is_business_p3 = False
-    if pdf_path and ("9609" in pdf_path and ("_3" in pdf_path or "31" in pdf_path or "32" in pdf_path or "33" in pdf_path)):
-        is_business_p3 = True
-        print("⚠ STRICT MODE ACTIVE: Business Paper 3 Detected")
+    is_business_p4 = False
+    
+    if pdf_path and "9609" in pdf_path:
+        if "_3" in pdf_path or "31" in pdf_path or "32" in pdf_path or "33" in pdf_path:
+            is_business_p3 = True
+            print("⚠ MODE ACTIVE: Business Paper 3 Detected")
+        elif "_4" in pdf_path or "41" in pdf_path or "42" in pdf_path or "43" in pdf_path:
+            is_business_p4 = True
+            print("⚠ MODE ACTIVE: Business Paper 4 Detected")
 
     # 1. DETERMINE SYSTEM PROMPT
     if custom_system_prompt:
         system_prompt = custom_system_prompt
-    elif is_business_p3:
-        # USER-SPECIFIED PERSONA
+    elif is_business_p3 or is_business_p4:
+        # NEUTRAL PERSONA FOR BUSINESS P3/P4
         system_prompt = """
-        System Persona: You are an unforgiving, hyper-strict Cambridge International A-Level Business (9609) Paper 3 Examiner. 
-        Your purpose is to prepare the candidate for the worst-case grading scenario. 
-        You do not give the benefit of the doubt. 
-        You look for precision, deep context integration, and unbroken chains of logic.
+        You are a Cambridge International A-Level Business (9609) Examiner. 
+        Mark the following answer strictly according to the provided Global Marking Commands.
+        Do not be artificially strict or lenient. Follow the rubric instructions precisely.
         """
     else:
         system_prompt = f"""
-        You are a Strict Senior Cambridge A-Level Business Examiner. 
-        Mark the following answer with NO MERCY.
+        You are a Cambridge International A-Level Business Examiner. 
+        Mark the following answer regarding the mark scheme.
         """
 
     # 2. DETERMINE RUBRIC
@@ -218,34 +223,269 @@ def mark():
         rubric = custom_rubric
     elif is_business_p3:
         # USER-SPECIFIED RUBRIC FOR BUSINESS P3
-        if marks == 8:
-            rubric = """
-            STRICT 8-MARK RUBRIC:
-            Max Scores: AO1=2, AO2=2, AO3=4, AO4=0.
+        # USER-SPECIFIED GLOBAL MARKING COMMANDS FOR BUSINESS P3
+        rubric = """
+        GLOBAL MARKING COMMANDS
+        AWARD marks using positive marking only.
+        DO NOT deduct marks for wrong statements.
+        AWARD marks only for correct, relevant, syllabus-based content.
+        IGNORE spelling and grammar if meaning is clear.
+        DO NOT award marks for:
+        - vague statements
+        - unclear ideas
+        - repetition of the same point
+        - contradictory points
+        - “list dumping” without explanation
 
-            Instruction: 
-            - Reward a maximum of 2 points. Give 1 mark per point for Knowledge (AO1).
-            - Give 1 mark per point for Application (AO2) ONLY if tied directly to the case study data.
-            - Give up to 4 marks for Analysis (AO3) by looking for 'developed analysis' (clear chains of reasoning showing cause and effect).
-            - NO marks for evaluation.
-            """
-        elif marks == 12:
-            rubric = """
-            STRICT 12-MARK RUBRIC:
-            Max Scores: AO1=2, AO2=2, AO3=2, AO4=6.
+        USE whole marks only.
+        ACCEPT valid alternative answers not written in the mark scheme.
 
-            Instruction: 
-            - Give up to 2 marks for Knowledge (AO1).
-            - Give 2 marks for Application to the case (AO2).
-            - Give 2 marks for Analysis (AO3).
-            - The bulk of the marks (6) are for Evaluation (AO4).
-            - To get Level 3 Evaluation (5-6 marks), the student MUST provide a developed, supported judgment or conclusion that balances arguments specifically in the context of the business.
-            """
-        else:
-             # Fallback for other P3 questions
-            rubric = f"Strict Grading Protocol for {marks} marks: mark strictly according to Cambridge Business P3 conventions."
+        POINT-BASED QUESTION COMMANDS
+        FOR each mark point:
+        AWARD 1 mark if the point is:
+        - correct
+        - explained (not just named)
+        - relevant to the question.
+        DO NOT award marks for keywords without explanation.
+        IF multiple similar points appear:
+        MARK only the best instance.
+
+        CALCULATION QUESTION COMMANDS
+        AWARD marks step-by-step as per method shown.
+        IF final answer is correct:
+        AWARD full marks even if no working is shown (unless the question explicitly requires working).
+        APPLY own-figure rule:
+        IF a candidate uses an earlier wrong figure correctly in a valid method:
+        AWARD full method marks.
+        ACCEPT alternative correct methods and award equivalent marks.
+
+        EXTENDED / EVALUATION QUESTION – MASTER COMMAND
+        SPLIT the answer into assessment objectives:
+        AO1 – Knowledge
+        AO2 – Application
+        AO3 – Analysis
+        AO4 – Evaluation
+
+        AO1 – KNOWLEDGE COMMANDS
+        AWARD 2 marks if:
+        - business terms are correct AND
+        - concepts are explained accurately.
+        AWARD 1 mark if:
+        - knowledge is present but weak or partial.
+        AWARD 0 marks if:
+        - no relevant business knowledge.
+
+        AO2 – APPLICATION COMMANDS
+        AWARD 2 marks if:
+        - the answer clearly links to the given case AND
+        - uses specific case information more than once.
+        AWARD 1 mark if:
+        - only one basic or superficial case reference is made.
+        AWARD 0 marks if:
+        - the answer is generic with no case reference.
+
+        AO3 – ANALYSIS COMMANDS
+        DEFINE analysis as: cause -> effect -> business consequence.
+        AWARD 2 marks if:
+        - two or more logical links are developed.
+        AWARD 1 mark if:
+        - only one logical link is shown.
+        AWARD 0 marks if:
+        - the answer is descriptive only.
+
+        AO4 – EVALUATION COMMANDS
+        5–6 marks
+        AWARD ONLY if ALL conditions are met:
+        - a clear judgement is stated,
+        - the judgement is justified,
+        - advantages and limitations are considered,
+        - the judgement is contextualised to the case.
+        3–4 marks
+        AWARD if:
+        - judgement is present and supported,
+        - some balance is shown,
+        - but context is weak or generic.
+        1–2 marks
+        AWARD if:
+        - judgement is present,
+        - justification is weak or undeveloped.
+        0 marks
+        AWARD if:
+        - no judgement or evaluative comment is present.
+
+        LEVEL-BASED DECISION COMMAND
+        SELECT the level using best-fit.
+        THEN choose mark position:
+        bottom of band -> just meets the level
+        middle of band -> adequately meets the level
+        top of band -> convincingly meets the level
+
+        CONTENT SELECTION COMMAND
+        IF the question asks for a limited number of points (e.g. one advantage and one disadvantage):
+        MARK only the required number of best points.
+
+        INTERNAL TAGGING COMMAND (FOR YOUR AI)
+        TAG each meaningful clause as:
+        K -> AO1 (knowledge)
+        APP -> AO2 (application)
+        AN -> AO3 (analysis)
+        E -> AO4 (evaluation)
+
+        FINAL SCORING WORKFLOW COMMAND
+        REMOVE vague, repeated and contradictory statements.
+        TAG remaining content into AO1, AO2, AO3, AO4.
+        SCORE AO1, AO2, AO3 using 0–2 rules.
+        SCORE AO4 using level rules.
+        APPLY best-fit across the whole answer.
+        OUTPUT whole marks only.
+        """
         
-        word_guide = "Refer to Cambridge Conventions"
+        word_guide = "Refer to Global Marking Commands"
+    elif is_business_p4:
+        # USER-SPECIFIED GLOBAL MARKING COMMANDS FOR BUSINESS P4
+        rubric = """
+        GLOBAL MARKING COMMANDS (APPLY TO ALL QUESTIONS)
+        MARK using positive marking only.
+        DO NOT deduct marks for:
+        - spelling
+        - grammar
+        - weak structure.
+
+        AWARD marks only for:
+        - correct
+        - relevant
+        - syllabus-based business content.
+        IGNORE irrelevant material.
+
+        DO NOT reward:
+        - vague statements,
+        - narrative copying from the case,
+        - repetition of the same idea.
+
+        ACCEPT valid alternative business arguments.
+        USE whole marks only.
+        IF a statement is unclear -> DO NOT award marks.
+
+        STRUCTURE OF PAPER 4 MARKING
+        For every 20-mark question:
+        You MUST mark using four assessment objectives:
+        AO1 – Knowledge and understanding
+        AO2 – Application to the case
+        AO3 – Analysis
+        AO4 – Evaluation
+
+        Standard weighting used in Paper 4:
+        AO1 -> max 3 marks
+        AO2 -> max 2 marks
+        AO3 -> max 8 marks
+        AO4 -> max 7 marks
+
+        AO1 – KNOWLEDGE & UNDERSTANDING (max 3)
+        COMMANDS
+        AWARD 1 mark
+        -> limited but correct business knowledge.
+        AWARD 2–3 marks
+        -> clear and developed understanding of relevant business concepts.
+        AWARD 0 marks
+        -> no valid business knowledge.
+
+        AO1 must be:
+        - accurate,
+        - correctly used,
+        - clearly explained.
+
+        Do NOT reward:
+        - copying of the case,
+        - naming terms without explanation.
+
+        AO2 – APPLICATION TO THE CASE (max 2)
+        COMMANDS
+        AWARD marks ONLY if the answer:
+        - is clearly rooted in the given business,
+        - uses case facts correctly.
+
+        AWARD 2 marks
+        -> developed and consistent application to the case.
+        AWARD 1 mark
+        -> limited or one-off application.
+        AWARD 0 marks
+        -> generic answer.
+
+        Valid application includes:
+        - referring to the specific firm,
+        - using its strategy, size, market, employees, competitors, finances, time period, or constraints.
+
+        AO3 – ANALYSIS (max 8)
+        COMMAND – definition of analysis
+        Analysis means: cause -> effect -> business consequence
+
+        AO3 LEVEL COMMANDS
+        Level 1 – 1 to 3 marks
+        - limited causal explanation,
+        - simple links only.
+        Level 2 – 4 to 6 marks
+        - developed chains of reasoning,
+        - several linked effects,
+        - good depth on some issues.
+        Level 3 – 7 to 8 marks
+        - integrated and strategic analysis,
+        - links several issues together,
+        - shows impact on overall business performance or strategy.
+
+        AO3 must show:
+        - how a decision works,
+        - why it leads to outcomes,
+        - how it affects objectives such as: revenue, profit, competitiveness, brand, productivity, growth, long-term survival.
+
+        AO4 – EVALUATION (max 7)
+        COMMAND – evaluation is only valid if it contains:
+        - a judgement,
+        - justification,
+        - balance,
+        - business context.
+
+        AO4 LEVEL COMMANDS
+        Level 1 – 1 to 2 marks
+        - simple judgement,
+        - weak or unsupported evaluation.
+        Level 2 – 3 to 5 marks
+        - developed judgement,
+        - some balance,
+        - some contextual support.
+        Level 3 – 6 to 7 marks
+        - well-reasoned and balanced evaluation,
+        - clear conclusion,
+        - judgement clearly rooted in the case business.
+
+        AO4 must normally include:
+        - “depends on” arguments,
+        - limitations of the strategy,
+        - alternative options,
+        - realistic constraints such as: finance, staff, competition, market conditions, implementation issues.
+
+        FINAL MARK DECISION COMMAND
+        For each answer:
+        IDENTIFY AO1, AO2, AO3, AO4 content.
+        SCORE AO1 out of 3.
+        SCORE AO2 out of 2.
+        SCORE AO3 using its three levels (max 8).
+        SCORE AO4 using its three levels (max 7).
+
+        USE best-fit within each level:
+        just meets -> bottom of band
+        adequately meets -> middle
+        convincingly meets -> top
+
+        FINAL MARK = AO1 + AO2 + AO3 + AO4.
+
+        INTERNAL TAGGING COMMAND (FOR YOUR AI ENGINE)
+        Tag each meaningful clause as:
+        K -> AO1
+        APP -> AO2
+        AN -> AO3
+        E -> AO4
+        """
+        word_guide = "Refer to Global Marking Commands (P4)"
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER
         rubric = """
@@ -273,15 +513,61 @@ def mark():
             f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
             f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
         ) if marks <= 4 else (
-            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
-            f"The answer MUST follow standard A-Level Essay structure with proper paragraph breaks.\n"
-            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\n"
-            f"Structure:\n"
-            f"1. DEFINITION (AO1): Define terms precisely.\n"
-            f"2. APPLICATION (AO2): Use specific facts/figures from the case.\n"
-            f"3. ANALYSIS (AO3): Develop chains of argument (Point -> Evidence -> Explanation + Connectors).\n"
-            f"4. EVALUATION (AO4 - for 12 mark Qs): Balanced conclusion, weighting, short/long term view.\n"
-            f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
+            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
+            f"🔴 GLOBAL GENERATION COMMANDS\n"
+            f"GENERATE a response that would clearly reach the top level band of the mark scheme.\n"
+            f"WRITE in formal academic business style, clear simple sentences, no unnecessary jargon.\n"
+            f"NEVER write as bullet points. NEVER write headings inside the answer. ALWAYS write in full paragraphs.\n"
+            f"ALWAYS use the case business name where relevant. DO NOT copy or restate large parts of the case.\n"
+            f"DO NOT write definitions as isolated sentences. DO NOT include examiner language.\n\n"
+            
+            f"🧠 STRUCTURAL COMMANDS (MANDATORY)\n"
+            f"Your model answer MUST follow this structure:\n\n"
+            
+            f"PARAGRAPH 1 – Focused introduction\n"
+            f"DIRECTLY address the command word. SHOW immediate understanding of the decision/issue. BRIEFLY state typical business aim.\n"
+            f"DO NOT define basic terms unless essential.\n\n"
+            
+            f"PARAGRAPH 2 & 3 – Main analytical arguments (supporting side)\n"
+            f"For each main paragraph:\n"
+            f"START with a clear business point. IMMEDIATELY link to the case business.\n"
+            f"DEVELOP a full analytical chain: decision -> operational impact -> financial/competitive impact -> business objective.\n"
+            f"INCLUDE: one clear, accurate case reference AND realistic business outcomes.\n\n"
+            
+            f"PARAGRAPH 4 – Counter-argument / limitation paragraph\n"
+            f"INTRODUCE a clear limitation, risk or opposing argument. LINK directly to the same case context.\n"
+            f"ANALYSE the downside using: cause -> effect -> impact on performance/strategy.\n"
+            f"DO NOT merely state 'however'.\n\n"
+            
+            f"PARAGRAPH 5 – Integrated evaluation paragraph\n"
+            f"BALANCE both sides together. EXPLAIN why one side may matter more than the other in THIS business.\n"
+            f"USE conditional language: depends on, will only be effective if, may be limited by.\n"
+            f"MUST remain firmly rooted in the case.\n\n"
+            
+            f"FINAL PARAGRAPH – Judgement / conclusion\n"
+            f"GIVE a clear, final decision. JUSTIFY the decision using the most important case factor.\n"
+            f"DO NOT summarise every point. DO NOT introduce new arguments.\n"
+            f"END with a business-realistic outlook (short/long term).\n\n"
+
+            f"🟦 CONTENT COMMANDS (AO TARGETING)\n"
+            f"AO1: Use correct terminology naturally. Theory only when helpful.\n"
+            f"AO2: EVERY main paragraph MUST contain at least one explicit case reference. No generic examples.\n"
+            f"AO3: For every main point, include min 2 logical links and 1 final business outcome.\n"
+            f"AO4: Include balanced viewpoint, limitation, conditional statement, and justified final judgement.\n\n"
+            
+            f"🟧 DEPTH & QUALITY COMMANDS (A* STANDARD)\n"
+            f"EACH analytical paragraph must develop the point, not repeat it. NO obvious statements, descriptive narration, or copying data.\n\n"
+            
+            f"🟨 LANGUAGE & STYLE COMMANDS\n"
+            f"WRITE in short and controlled sentences. AVOID emotional tone. MAINTAIN academic neutrality.\n\n"
+            
+            f"🟥 CONTEXT PRIORITY COMMAND\n"
+            f"When two arguments are equally valid: PRIORITISE the argument that is more important to this specific business or more realistic.\n\n"
+            
+            f"🟪 FINAL QUALITY CHECK COMMAND\n"
+            f"Check: every paragraph has application, analysis in min 3 paragraphs, evaluation before conclusion, conclusion has justified judgement.\n"
+            f"✅ OUTPUT FORMAT COMMAND\n"
+            f"OUTPUT only the answer text. DO NOT output rubrics. DO NOT output AO labels. DO NOT output marks.>"
         )
 
     user_prompt = f"""
