@@ -206,8 +206,8 @@ def generate_with_gpt(system_instruction, user_prompt):
         
         return response.choices[0].message.content
     except Exception as e:
-        print(f"GPT API Error: {e}")
-        return None
+        logger.error(f"GPT API Error: {e}")
+        return str(e)
 
 def generate_with_gemini_simple(system_instruction, user_prompt):
     """
@@ -714,16 +714,30 @@ def mark():
     """
     
     # Use GPT-4o Mini for all marking
-    print("📝 Processing with GPT-4o Mini...")
+    logger.info(f"📝 Processing with GPT-4o Mini... (Prompt length: {len(user_prompt)})")
     text = generate_with_gpt(system_prompt, user_prompt)
     
-    if text:
-        cleaned_text = text.replace('```json', '').replace('```', '').strip()
-        return cleaned_text, 200, {'Content-Type': 'application/json'}
+    # Check if text is an error message (starts with an exception from generate_with_gpt)
+    # A successful response from GPT will likely be JSON-like, not a short error string.
+    # We can check if it looks like a typical OpenAI error or just check if it's "None" equivalent
+    
+    if text and not text.startswith("Error"): # Simple heuristic or just check Type if we changed return
+        try:
+            cleaned_text = text.replace('```json', '').replace('```', '').strip()
+            # Try to parse it to make sure it's valid JSON
+            json.loads(cleaned_text)
+            return cleaned_text, 200, {'Content-Type': 'application/json'}
+        except Exception as e:
+            # If it's not JSON, it might be the error string or a malformed response
+            return jsonify({
+                "error": "Failed to parse AI response",
+                "message": f"The AI generated a response but it wasn't valid JSON. Error: {str(e)}",
+                "raw_response": text[:500]
+            }), 500
     else:
         return jsonify({
             "error": "Failed to generate marking",
-            "message": "GPT-4o Mini failed to generate a response. Please try again. If the problem persists, you may have exceeded your API quota."
+            "message": f"GPT-4o Mini failed to generate a response. API Error: {text or 'Unknown Error'}. Please check your OpenAI quota and API key."
         }), 500
 
 
