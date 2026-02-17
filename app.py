@@ -664,17 +664,21 @@ def save_db(filename, data):
         json.dump(data, f)
 
 # Load data on startup
-logger.info("Loading Vocab DB...")
-vocab_progress_db: Dict[str, Any] = load_db(VOCAB_DB_FILE)
-logger.info("Vocab DB Loaded.")
-if not isinstance(vocab_progress_db, dict):
-    vocab_progress_db = {}
+logger.info("Syncing databases with Firebase...")
+vocab_progress_db = load_db_from_firebase(VOCAB_DB_PATH)
+idioms_progress_db = load_db_from_firebase(IDIOMS_DB_PATH)
+vocab_sets_db = load_db_from_firebase(VOCAB_SETS_DB_PATH)
+idioms_sets_db = load_db_from_firebase(IDIOMS_SETS_DB_PATH)
+sentences_db = load_db_from_firebase(SENTENCES_DB_PATH)
+notes_db = load_db_from_firebase(NOTES_DB_PATH)
+logger.info("Firebase Sync Complete.")
 
-logger.info("Loading Idioms DB...")
-idioms_progress_db: Dict[str, Any] = load_db(IDIOMS_DB_FILE)
-logger.info("Idioms DB Loaded.")
-if not isinstance(idioms_progress_db, dict):
-    idioms_progress_db = {}
+if not isinstance(vocab_progress_db, dict): vocab_progress_db = {}
+if not isinstance(idioms_progress_db, dict): idioms_progress_db = {}
+if not isinstance(vocab_sets_db, dict): vocab_sets_db = {}
+if not isinstance(idioms_sets_db, dict): idioms_sets_db = {}
+if not isinstance(sentences_db, dict): sentences_db = {}
+if not isinstance(notes_db, dict): notes_db = {}
 
 @app.route('/save_vocab_progress', methods=['POST'])
 def save_vocab_progress():
@@ -859,6 +863,7 @@ def save_note():
     existing = next((item for item in notes_db[user_id][note_section] if item['word'] == word_data.get('word')), None)
     if not existing:
         notes_db[user_id][note_section].append(word_data)
+        save_db_to_firebase(NOTES_DB_PATH, notes_db)
     
     return jsonify({"status": "success", "message": f"Saved to {note_section}"})
 
@@ -886,6 +891,7 @@ def update_notes():
         notes['Correct Vocab'] = []
     
     notes_db[user_id] = notes
+    save_db_to_firebase(NOTES_DB_PATH, notes_db)
     return jsonify({"status": "success", "message": "Notes updated"})
 
 @app.route('/delete_note_item', methods=['POST'])
@@ -897,6 +903,7 @@ def delete_note_item():
     
     if user_id in notes_db and section in notes_db[user_id]:
         notes_db[user_id][section] = [item for item in notes_db[user_id][section] if item['word'] != word]
+        save_db_to_firebase(NOTES_DB_PATH, notes_db)
     
     return jsonify({"status": "success", "message": "Note deleted"})
 
