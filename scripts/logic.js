@@ -694,7 +694,7 @@ async function submitAnswer(pid, qn) {
     const qData = paperData[pid].questions.find(q => q.n === qn);
 
     try {
-        const res = await fetch('/mark', {
+        const res = await fetch('https://habibi-studies.onrender.com/mark', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
