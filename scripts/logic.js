@@ -712,6 +712,11 @@ async function submitAnswer(pid, qn) {
             })
         });
 
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Server Error (${res.status}): ${errText || res.statusText}`);
+        }
+
         const json = await res.json();
 
         // SAVE TO CLOUD AND WAIT
@@ -741,8 +746,8 @@ async function submitAnswer(pid, qn) {
         await openPaper(pid, currentScroll); // Refresh view with scroll preserved
 
     } catch (e) {
-        console.error(e);
-        alert("Error: Server not responding or Save failed.");
+        console.error("Submission Error:", e);
+        alert(`Error: ${e.message || "Server not responding or Save failed."}`);
         btn.innerText = "Retry";
         btn.disabled = false;
     }
