@@ -568,6 +568,16 @@ def mark():
             f"Check: every paragraph has application, analysis in min 3 paragraphs, evaluation before conclusion, conclusion has justified judgement.\n"
             f"✅ OUTPUT FORMAT COMMAND\n"
             f"OUTPUT only the answer text. DO NOT output rubrics. DO NOT output AO labels. DO NOT output marks.>"
+        ) if is_business_p3 else (
+            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
+            f"The answer MUST follow standard A-Level Essay structure with proper paragraph breaks.\n"
+            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\n"
+            f"Structure:\n"
+            f"1. DEFINITION (AO1): Define terms precisely.\n"
+            f"2. APPLICATION (AO2): Use specific facts/figures from the case.\n"
+            f"3. ANALYSIS (AO3): Develop chains of argument (Point -> Evidence -> Explanation + Connectors).\n"
+            f"4. EVALUATION (AO4): Balanced conclusion, weighting, short/long term view.\n"
+            f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
         )
 
     user_prompt = f"""
