@@ -207,13 +207,37 @@ function toggleSubject(subId) {
     content.classList.toggle('expanded');
 }
 
+function selectPaper(subject, paper) {
+    // 1. Hide all containers first
+    document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
+
+    // 2. Determine target container ID
+    let targetId = '';
+    if (subject === 'business') targetId = `container-bus-${paper}`; // bus-p3, bus-p4
+    else if (subject === 'economics') targetId = `container-econ-${paper}`; // econ-p3, econ-p4
+    else if (subject === 'general') targetId = `container-general-${paper}`; // general-p1, general-p2
+
+    // 3. Show target container
+    const target = document.getElementById(targetId);
+    if (target) {
+        target.classList.remove('hidden');
+    } else {
+        console.warn(`Container not found for ${subject} ${paper} (ID: ${targetId})`);
+    }
+
+    // 4. Close the menu
+    closeAllPanels();
+    setView('papers');
+}
+
 function switchPaperView(targetViewId) {
+    // Deprecated but kept for backward compatibility if used elsewhere
     document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
     const target = document.getElementById(`container-${targetViewId}`);
     if (target) target.classList.remove('hidden');
 
     document.querySelectorAll('.paper-link').forEach(el => el.classList.remove('active'));
-    document.getElementById(`link-${targetViewId}`).classList.add('active');
+    // document.getElementById(`link-${targetViewId}`).classList.add('active'); // Element might not exist
 
     closeAllPanels(); // Close menu
     setView('papers');
@@ -725,7 +749,8 @@ async function submitAnswer(pid, qn) {
             score: json.score,
             ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
             feedback: json.detailed_critique,
-            modelAnswer: json.model_answer
+            feedback: json.detailed_critique || "No feedback available.",
+            modelAnswer: json.model_answer || "Model answer not generated."
         });
 
         // SAVE TO LOCAL STORAGE (For Daily Target)
