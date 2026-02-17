@@ -214,58 +214,77 @@ def mark():
         rubric = custom_rubric
     elif is_business_p3:
         # USER-SPECIFIED RUBRIC FOR BUSINESS P3
-        rubric = f"""
-        Zero-Leeway Rules:
-        1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks for that point.
-        2. No Buzzword Points: Do not award AO1 (Knowledge) marks if the candidate simply name-drops a key term without clear evidence they understand what it means in a business context.
-        3. No Parroting: Do not award AO2 (Application) marks if the candidate just copies data or text from the case study. They must explicitly connect the data to their argument.
+        if marks == 8:
+            rubric = """
+            Zero-Leeway Rules:
+            1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks.
+            2. No Buzzword Points: No AO1 marks for name-dropping terms without understanding.
+            3. No Parroting: No AO2 marks for copying case data without active use.
 
-        Strict Grading Protocol:
+            Strict Grading Protocol (8 Marks - Analysis Focus):
+            
+            AO1: Knowledge (Max 2 Marks)
+            - 0: Vague/incorrect.
+            - 1: One precise point/def.
+            - 2: Two distinct points or one point + flawless def.
+
+            AO2: Application (Max 2 Marks)
+            - 0: Generic/Copying.
+            - 1: Applied once to support argument.
+            - 2: Applied twice in distinct ways.
+
+            AO3: Analysis (Max 4 Marks)
+            - Rule: Unbroken chains (Cause -> Impact -> Consequence).
+            - 0: Fact without consequence.
+            - L1 (1-2 marks): Single step logic (e.g., "This reduces costs").
+            - L2 (3-4 marks): Multi-step, fully developed chain with NO gaps.
+
+            AO4: Evaluation (0 Marks)
+            - DO NOT AWARD EVALUATION MARKS.
+
+            Current Question Max Marks: 8
+            """
+        elif marks == 12:
+            rubric = """
+            Zero-Leeway Rules:
+            1. No Credit for Confusion: If a sentence contradicts itself or shows fundamental misunderstanding, award zero marks.
+            2. No Buzzword Points: No AO1 marks for name-dropping terms without understanding.
+            3. No Parroting: No AO2 marks for copying case data without active use.
+
+            Strict Grading Protocol (12 Marks - Evaluation Focus):
+            
+            AO1: Knowledge (Max 2 Marks)
+            - 0: Vague/incorrect.
+            - 1: One precise point/def.
+            - 2: Two distinct points or one point + flawless def.
+
+            AO2: Application (Max 2 Marks)
+            - 0: Generic/Copying.
+            - 1: Applied once to support argument.
+            - 2: Applied twice in distinct ways.
+
+            AO3: Analysis (Max 2 Marks)
+            - Rule: Unbroken chains (Cause -> Impact -> Consequence).
+            - 0: Fact without consequence.
+            - 1: Single step logic.
+            - 2: Multi-step, fully developed chain.
+
+            AO4: Evaluation (Max 6 Marks)
+            - The "Any Business" Test: If conclusion fits any business, Cap at L2 (Max 4).
+            - L1 (1-2 marks): Weak judgement, little support.
+            - L2 (3-4 marks): Developed, balanced judgement, but lacks deep context.
+            - L3 (5-6 marks): Heavily contextualized, weighing specific case data (short/long term, pros/cons) for definitive verdict.
+
+            Current Question Max Marks: 12
+            """
+        else:
+            # Fallback for other P3 questions (e.g. 10 markers if they exist, or odd ones)
+            rubric = f"""
+            Strict Grading Protocol for {marks} marks:
+            mark strictly according to Cambridge Business P3 conventions.
+            """
         
-        AO1: Knowledge and Understanding (Max 2 Marks)
-        - Award 0 marks for vague definitions.
-        - Award 1 mark for one precisely accurate point or definition.
-        - Award 2 marks ONLY if two distinct, accurate points are made, or a flawless definition and a distinct point are provided.
-
-        AO2: Application (Max 2 Marks)
-        - Award 0 marks for generic statements or directly quoting the text without using it.
-        - Award 1 mark if case data is actively used to support an argument once.
-        - Award 2 marks ONLY if case data is actively used to support an argument twice in distinctly different ways.
-
-        AO3: Analysis (Max {4 if marks >= 8 else 0} Marks for 8-markers / Max {2 if marks == 12 else 0} Marks for 12-markers)
-        - Rule: Analysis requires unbroken chains of reasoning (Cause -> Impact -> Consequence).
-        - Award 0 marks for stating a fact without a consequence.
-        - Award L1 (1-2 marks for 8-markers; 1 mark for 12-markers) if there is only a single step of logic (e.g., "This reduces costs so profits rise").
-        - Award L2 (3-4 marks for 8-markers; 2 marks for 12-markers) ONLY if the candidate provides a multi-step, fully developed chain of reasoning that leaves absolutely no gaps in logic.
-
-        AO4: Evaluation (Max {6 if marks == 12 else 0} Marks - 12-markers only)
-        - The "Any Business" Test: Read the candidate's conclusion. If you remove the name of the business from their paragraph and the statement still makes sense for a generic company, you MUST cap Evaluation at L2 (Maximum 4 marks).
-        - Award L1 (1-2 marks): A weak judgement is made with little to no supporting evidence.
-        - Award L2 (3-4 marks): A developed, balanced judgement is made, weighing pros and cons, but it lacks deep integration with the specific facts of the case.
-        - Award L3 (5-6 marks): ONLY award this if the judgement is heavily contextualized, explicitly weighing specific case study data (e.g., short-term costs vs. long-term strategic goals specific to the company's situation) to reach a definitive final verdict.
-
-        Current Question Max Marks: {marks}
-        """
         word_guide = "Refer to Cambridge Conventions"
-    elif marks == 8:
-        # Fallback for non-P3 8 markers (though rubric above covers it mostly)
-        rubric = """
-        STRICT 8-MARK RUBRIC (Analysis):
-        - AO1 (Knowledge): Max 2 marks.
-        - AO2 (Application): Max 2 marks.
-        - AO3 (Analysis): Max 4 marks.
-        - AO4 (Evaluation): 0 marks.
-        """
-        word_guide = "150-225 words"
-    elif marks == 12:
-        rubric = """
-        STRICT 12-MARK RUBRIC (Evaluation):
-        - AO1 (Knowledge): Max 2 marks.
-        - AO2 (Application): Max 2 marks.
-        - AO3 (Analysis): Max 2 marks.
-        - AO4 (Evaluation): Max 6 marks.
-        """
-        word_guide = "250-350 words"
     elif marks <= 4:
         # CALCULATION QUESTIONS (2-4 marks) - KEEPING EXISTING RUBRIC AS REQUESTED
         if marks == 2:
