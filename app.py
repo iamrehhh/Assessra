@@ -545,82 +545,83 @@ def mark():
         if marks <= 4:
             # CALCULATION QUESTIONS
             model_answer_instruction = """<CALCULATION MODEL ANSWER:
-            YOU MUST FOLLOW THIS EXACT FORMAT:
-            1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').
-            2. STATE FORMULA: Write the standard formula clearly.
-            3. SUBSTITUTE: Show the formula with the extracted numbers inserted.
-            4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.
-            5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).
+            Act as a top-scoring student.
+            1. EXTRACT DATA: List relevant numbers from the case.
+            2. FORMULA: State the formula.
+            3. WORKING: Show the calculation steps clearly.
+            4. ANSWER: State the final answer with units.
             
-            DO NOT SKIP STEPS. PRECISION IS MANDATORY.>"""
+            OUTPUT FORMAT:
+            Calculations should be clear and step-by-step.
+            No essay writing needed for calculations.>"""
         elif marks == 8:
-            # 8-MARK ANALYSIS QUESTIONS (150-200 words)
-            model_answer_instruction = """<8-MARK MODEL ANSWER (A* STANDARD):
-            WORD LIMIT: 150-200 words STRICTLY
+            # 8-MARK ANALYSIS (150-200 words)
+            model_answer_instruction = """<8-MARK MODEL ANSWER (A* STUDENT RESPONSE):
+            Role: Act as an A* A-Level Business student.
+            Task: Write a perfect 8-mark answer.
+            Word Count Limit: 150-200 words.
             
-            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
-            - Brief introduction addressing the question (1-2 sentences)
-            - First analytical point: Knowledge term + case application + 2-step chain of reasoning
-            - Second analytical point: Different knowledge term + case application + 2-step chain of reasoning
-            - Brief concluding sentence
+            CRITERIA:
+            - 2 distinct analytical points (K+App+An).
+            - K: Accurate business terminology.
+            - App: Explicit reference to case data/context.
+            - An: Chain of reasoning (Cause -> Impact -> Consequence).
             
-            REQUIREMENTS:
-            - 2 distinct business knowledge points (AO1)
-            - Explicit case application for each point (AO2)
-            - 2-step analytical chains showing cause → impact → business consequence (AO3)
-            - Proper paragraph breaks (NOT bullet points)
-            - Formal academic business style
-            - No headings, no AO labels, no examiner language
+            FORMATTING RULES (STRICT):
+            - Write in CONTINUOUS PROSE.
+            - Use 2-3 standard paragraphs.
+            - DO NOT use bullet points.
+            - DO NOT use headings like "Introduction" or "Point 1".
+            - DO NOT label Assessment Objectives (e.g. DO NOT write [AO1]).
+            - Just write the clear, high-quality answer text.
             
-            OUTPUT: Only the model answer text in continuous prose.>"""
+            Output ONLY the candidate response.>"""
         elif marks == 12:
-            # 12-MARK EVALUATION QUESTIONS (250-300 words)
-            model_answer_instruction = """<12-MARK MODEL ANSWER (A* STANDARD):
-            WORD LIMIT: 250-300 words STRICTLY
+            # 12-MARK EVALUATION (250-300 words)
+            model_answer_instruction = """<12-MARK MODEL ANSWER (A* STUDENT RESPONSE):
+            Role: Act as an A* A-Level Business student.
+            Task: Write a perfect 12-mark evaluation answer.
+            Word Count Limit: 250-300 words.
             
-            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
-            - Introduction: Define key terms and address the question (30-40 words)
-            - Paragraph 1: First argument with case application and analytical chain (60-80 words)
-            - Paragraph 2: Counter-argument with case application and analytical chain (60-80 words)
-            - Paragraph 3: Evaluation weighing both sides with justified judgement in context (60-80 words)
-            - Conclusion: Clear final decision rooted in case context (30-40 words)
+            CRITERIA:
+            - Balanced argument (Pros vs Cons / Argument vs Counter-argument).
+            - Integrated application to the specific case business.
+            - Developed analysis (chains of reasoning).
+            - Supported judgement/recommendation.
             
-            REQUIREMENTS:
-            - Defined business terms integrated naturally (AO1)
-            - Specific case data used throughout, not just mentioned (AO2)
-            - Analytical chains showing causes → impacts → consequences (AO3)
-            - Balanced evaluation with justified, contextualized judgement (AO4)
-            - Proper paragraph breaks (NOT bullet points)
-            - Formal academic business style
-            - No headings, no AO labels, no examiner language
+            FORMATTING RULES (STRICT):
+            - Write in CONTINUOUS PROSE.
+            - Use 4-5 standard paragraphs (Intro, Arg 1, Arg 2, Eval, Concl).
+            - DO NOT use bullet points.
+            - DO NOT use headings.
+            - DO NOT label Assessment Objectives.
+            - Just write the clear, high-quality answer text.
             
-            OUTPUT: Only the model answer text in continuous prose.>"""
+            Output ONLY the candidate response.>"""
         elif marks == 20:
-            # 20-MARK STRATEGY QUESTIONS (400-500 words)
-            model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STANDARD):
-            WORD LIMIT: 400-500 words STRICTLY
+            # 20-MARK STRATEGY (400-500 words)
+            model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STUDENT RESPONSE):
+            Role: Act as an A* A-Level Business student.
+            Task: Write a perfect 20-mark strategic essay.
+            Word Count Limit: 400-500 words.
             
-            STRUCTURE (in continuous prose paragraphs, NO bullet points or headings):
-            - Introduction: Strategic focus, identify decision, state key tension (50-60 words)
-            - Paragraph 1: Major strategic argument supporting proposal with sustained chain (80-100 words)
-            - Paragraph 2: Second strategic dimension supporting proposal with sustained chain (80-100 words)
-            - Paragraph 3: Strategic risk/limitation with analytical chain (80-100 words)
-            - Paragraph 4: Integrated evaluation weighing arguments, conditional reasoning (80-100 words)
-            - Conclusion: Clear decisive recommendation with critical justification (50-60 words)
+            CRITERIA:
+            - Strategic focus: Long-term, cross-functional analysis.
+            - Deep Application: Answer must be rooted in the case context constraints.
+            - High-level Analysis: Complex chains of reasoning linking strategy to objectives.
+            - Strong Evaluation: Critical questioning of data/assumptions and a justified final recommendation.
             
-            REQUIREMENTS:
-            - Strategic terminology used naturally (AO1)
-            - Every paragraph references specific organization, industry, resources (AO2)
-            - Multiple sustained chains showing strategic impacts on performance/survival (AO3)
-            - Effective evaluation balancing key arguments, highly contextualized (AO4)
-            - Cross-functional, forward-looking analysis
-            - Proper paragraph breaks (NOT bullet points)
-            - Professional academic tone
-            - No headings, no AO labels, no examiner language
+            FORMATTING RULES (STRICT):
+            - Write in CONTINUOUS PROSE.
+            - Use 5-6 well-structured paragraphs.
+            - DO NOT use bullet points.
+            - DO NOT use headings.
+            - DO NOT label Assessment Objectives.
+            - Just write the clear, high-quality essay text.
             
-            OUTPUT: Only the model answer text in continuous prose.>"""
+            Output ONLY the candidate response.>"""
         else:
-            model_answer_instruction = f"<Write a perfect A* model answer appropriate for {marks} marks. Use proper paragraph breaks, formal business style, and demonstrate all assessment objectives.>"
+            model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
     else:
         # FALLBACK FOR OTHER PAPERS
         model_answer_instruction = (
