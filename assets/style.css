@@ -1041,12 +1041,14 @@ textarea.expanded {
 .model-ans-box {
     background: #1a1a1a;
     color: #f0f0f0;
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     margin-top: 15px;
     font-size: 0.95rem;
-    line-height: 1.6;
+    line-height: 1.7;
     white-space: pre-wrap;
+    font-style: italic;
+    border-left: 4px solid var(--lime-primary);
 }
 
 .hidden {

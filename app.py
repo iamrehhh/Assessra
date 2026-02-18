@@ -555,82 +555,86 @@ def mark():
             Calculations should be clear and step-by-step.
             No essay writing needed for calculations.>"""
         elif marks == 8:
-            # 8-MARK ANALYSIS (NO WORD LIMIT)
+            # 8-MARK ANALYSIS (PEEL STRUCTURE)
             model_answer_instruction = """<8-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
+You are an expert Cambridge A Level Business (9609) examiner. Write a model answer for the question below, targeting full marks. Follow these rules strictly:
 
-Marking breakdown: AO1 (2) + AO2 (2) + AO3 (4) = 8 marks.
+STRUCTURE RULES:
+- Exactly 2 PEEL paragraphs.
+- No introduction, no conclusion, no evaluation.
 
-The answer MUST consist of EXACTLY 2 paragraphs. No introduction. No conclusion. No evaluation.
+AO REQUIREMENTS (in this order — do NOT skip steps):
+[AO1 – Knowledge] Define the key concept(s) relevant to the question in 1–2 sentences.
+[AO2 – Application] Link every point explicitly to the case study. Use specific data, names, dates, or events. Do NOT copy the case — interpret and apply it.
+[AO3 – Analysis] Build a full chain of reasoning for each point: cause → impact → consequence. Aim for at least 2 links in the chain per paragraph.
 
-Paragraph 1 (Point 1):
-Open by stating your first analytical point. Within the same paragraph, define the relevant business concept in one sentence (AO1 - 1 mark). Then apply this point to the specific business in the case study using real data, names, or figures from the case — do not just repeat the data, use it to support your argument (AO2 - 1 mark). Then build a developed chain of reasoning: Cause leads to Impact leads to Consequence on the business (AO3 - 2 marks).
+PEEL PARAGRAPH FORMAT:
+P – State the concept/strategy
+E – Define/develop it (AO1)
+E – Apply to the case with specific evidence (AO2)
+L – Analyse the chain of cause → impact → consequence (AO3)
 
-Paragraph 2 (Point 2):
-State your second, distinct analytical point. Define a second relevant business term or concept (AO1 - 1 mark). Apply it to a different piece of evidence from the case study (AO2 - 1 mark). Build another developed chain of reasoning showing cause, impact, and consequence (AO3 - 2 marks).
-
-CRITICAL FORMATTING RULES:
-- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
-- Separate the two paragraphs with a blank line.
-- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
-- Do NOT label paragraphs (no "Paragraph 1:" or "Point 1:").
-- Do NOT mention AO1, AO2, AO3 or any assessment objective labels.
+CRITICAL RULES:
+- No AO2/AO3 marks without AO1 first.
+- Do NOT copy case study text verbatim.
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, or asterisks.
+- Separate paragraphs with a blank line.
 - Output ONLY the candidate response, nothing else.>"""
         elif marks == 12:
-            # 12-MARK EVALUATION (NO WORD LIMIT)
+            # 12-MARK EVALUATION (PEEL STRUCTURE)
             model_answer_instruction = """<12-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
+You are an expert Cambridge A Level Business (9609) examiner. Write a model answer for the question below, targeting full marks. Follow these rules strictly:
 
-Marking breakdown: AO1 (2) + AO2 (2) + AO3 (2) + AO4 (6) = 12 marks.
+STRUCTURE RULES:
+- 2–3 PEEL paragraphs + 1 evaluation paragraph.
 
-The answer MUST consist of EXACTLY 3 paragraphs.
+AO REQUIREMENTS (in this order — do NOT skip steps):
+[AO1 – Knowledge] Define the key concept(s) relevant to the question in 1–2 sentences.
+[AO2 – Application] Link every point explicitly to the case study. Use specific data, names, dates, or events. Do NOT copy the case — interpret and apply it.
+[AO3 – Analysis] Build a full chain of reasoning for each point: cause → impact → consequence. Aim for at least 2 links in the chain per paragraph.
+[AO4 – Evaluation] Argue one side, then the other. Use qualifiers: "this depends on…", "the extent to which…". Conclude with a specific, supported verdict tied to the business in the case. Must reference context to reach Level 3.
 
-Paragraph 1 (Argument FOR / First Side):
-Open by clearly stating your first argument. Within this paragraph, define the key business concept or strategy relevant to the question (AO1). Then apply this argument directly to the specific business context using data, names, or figures from the case study (AO2). Develop a short chain of analysis showing the likely impact of this factor on the business (AO3).
+PEEL PARAGRAPH FORMAT:
+P – State the concept/strategy
+E – Define/develop it (AO1)
+E – Apply to the case with specific evidence (AO2)
+L – Analyse the chain of cause → impact → consequence (AO3)
+[Evaluation Paragraph at the end for AO4]
 
-Paragraph 2 (Counter-argument / Alternative Perspective):
-Present the opposing side of the argument or a distinctly different factor. Contextualize it heavily with different evidence from the case study (AO2). Build a chain of analysis showing the alternative or contrasting impact on the business (AO3).
-
-Paragraph 3 (Evaluation and Conclusion — this paragraph carries the most weight):
-Make a definitive, supported judgement that directly answers the question (AO4). Do NOT just summarize paragraphs 1 and 2. Instead, introduce evaluative criteria — what does the success of this decision depend upon? Consider factors such as: the timeframe, competitor reactions, price elasticity, budget constraints, or market conditions. Weigh the arguments from paragraphs 1 and 2 against each other in the specific context of this business. Reach a clear, justified final conclusion (AO4).
-
-CRITICAL FORMATTING RULES:
-- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
-- Separate each paragraph with a blank line.
-- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
-- Do NOT label paragraphs (no "Paragraph 1:" or "Argument 1:").
-- Do NOT mention AO1, AO2, AO3, AO4 or any assessment objective labels.
+CRITICAL RULES:
+- No AO2/AO3/AO4 marks without AO1 first.
+- Do NOT copy case study text verbatim.
+- Evaluation must name the business and reference case data.
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, or asterisks.
+- Separate paragraphs with a blank line.
 - Output ONLY the candidate response, nothing else.>"""
         elif marks == 20:
-            # 20-MARK STRATEGY (NO WORD LIMIT)
+            # 20-MARK STRATEGY (PEEL STRUCTURE)
             model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STUDENT RESPONSE):
-Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 4 (Business Strategy) 20-mark essay question based on the provided case study context.
+You are an expert Cambridge A Level Business (9609) examiner. Write a model answer for the question below, targeting full marks. Follow these rules strictly:
 
-Marking breakdown: AO1 (3) + AO2 (2) + AO3 (8) + AO4 (7) = 20 marks.
+STRUCTURE RULES:
+- 4–5 PEEL paragraphs + 1 conclusion paragraph.
 
-The answer MUST consist of 4 to 5 paragraphs as described below.
+AO REQUIREMENTS (in this order — do NOT skip steps):
+[AO1 – Knowledge] Define AND develop the meaning of key concepts in 2-3 sentences (up to 3 marks).
+[AO2 – Application] Link every point explicitly to the case study. Use specific data, names, dates, or events. Do NOT copy the case — interpret and apply it.
+[AO3 – Analysis] Build integrated chains of reasoning: cause → impact → consequence. Aim for developed analysis with multiple links.
+[AO4 – Evaluation] Balanced argument (one side vs other). Use qualifiers: "this depends on…", "the extent to which…". Conclude with a specific, supported verdict tied to the business. Must reference context to reach Level 3.
 
-Paragraph 1 (Introduction):
-Provide clear, precise definitions of the core strategic terms in the question (e.g., transformational leadership, marketing strategy, competitive advantage). Then briefly outline the current strategic position or problem the business faces, using specific data from the case study such as timeline events, appendix figures, or financial data. This paragraph earns AO1 and AO2 marks.
+PEEL PARAGRAPH FORMAT:
+P – State the concept/strategy
+E – Define/develop it (AO1)
+E – Apply to the case with specific evidence (AO2)
+L – Analyse the chain of cause → impact → consequence (AO3) [Include brief evaluative links where appropriate]
+[Conclusion Paragraph at the end for AO4]
 
-Paragraph 2 (Strategic Argument 1):
-Present the first major argument or factor. Apply it heavily to the case study by synthesizing data from different appendices, timeline points, or financial figures. Build a deep chain of analysis: Cause leads to Impact leads to Strategic Consequence for the business. End the paragraph with a brief evaluative comment, for example: "However, the long-term success of this depends on whether the business can sustain its cash flow position."
-
-Paragraph 3 (Strategic Argument 2 / Counter-argument):
-Present a distinct second argument, counter-argument, or alternative strategic perspective. Ground it in different evidence from the case study. Build another deep chain of analysis. End with a brief evaluative comment weighing its significance against the first argument.
-
-Paragraph 4 (Optional but recommended — Further Analysis):
-Introduce a third perspective or long-term implication, such as financial constraints, competitor reactions, macroeconomic factors, or impact on corporate culture. Analyze its strategic significance to the business.
-
-Paragraph 5 (Conclusion and Strategic Evaluation — this carries the most weight):
-Make a definitive, supported judgement that directly answers the question. Do NOT just summarize the previous paragraphs. Weigh the arguments against each other and state which factor is the most important and why. Introduce strong evaluative criteria: What does the success of this strategy depend upon? Consider the timeframe, the budget, the leadership style, elasticity of demand, or macroeconomic factors. Provide a final, justified strategic recommendation or conclusion tailored specifically to the exact constraints and objectives of the business in the case study.
-
-CRITICAL FORMATTING RULES:
-- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
-- Separate each paragraph with a blank line.
-- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
-- Do NOT label paragraphs (no "Paragraph 1:" or "Introduction:").
-- Do NOT mention AO1, AO2, AO3, AO4 or any assessment objective labels.
+CRITICAL RULES:
+- No AO marks without AO1 first.
+- Do NOT copy case study text verbatim.
+- Final evaluation must name the business and reference case data.
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, or asterisks.
+- Separate paragraphs with a blank line.
 - Output ONLY the candidate response, nothing else.>"""
         else:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
