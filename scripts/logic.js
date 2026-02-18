@@ -496,13 +496,13 @@ let paperTimerActive = false;
 let paperTimerPaused = false;
 
 function getTimerMinutes(pid) {
-    if (pid.startsWith('gp_')) return 90;           // General Paper: 1h 30m
+    if (pid.startsWith('gp_')) return 75;            // General Paper: 1h 15m
     if (pid.startsWith('econ_')) {
-        if (pid.includes('_4')) return 135;           // Economics P4: 2h 15m
+        if (pid.includes('_4')) return 120;           // Economics P4: 2h 00m
         return 0; // Economics P3 MCQ uses its own timer
     }
     // Business papers (no prefix)
-    if (pid.includes('_4')) return 180;               // Business P4: 3h 00m
+    if (pid.includes('_4')) return 75;                // Business P4: 1h 15m
     return 105;                                       // Business P3: 1h 45m
 }
 
@@ -539,7 +539,7 @@ function buildTimerHTML(pid) {
     `;
 }
 
-window.togglePaperTimer = function(pid) {
+window.togglePaperTimer = function (pid) {
     const track = document.getElementById('timer-toggle-track');
     const display = document.getElementById('paper-timer-display');
     if (!track || !display) return;
@@ -607,7 +607,7 @@ function updateTimerDisplay() {
     }
 }
 
-window.pausePaperTimer = function() {
+window.pausePaperTimer = function () {
     if (!paperTimerActive || paperTimeRemaining <= 0) return;
     paperTimerPaused = !paperTimerPaused;
     const btn = document.getElementById('timer-pause-btn');
