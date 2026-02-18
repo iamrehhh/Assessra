@@ -208,7 +208,7 @@ def generate_with_gpt(system_instruction, user_prompt):
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=1.0,
-                max_tokens=4096,
+                max_tokens=8192,
                 response_format={"type": "json_object"}
             )
             
@@ -762,10 +762,11 @@ CRITICAL RULES:
         ) if marks <= 4 else (
             f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
             f"General Paper 8021 Model Answer Specifications:\n"
-            f"- Word Count: 600-700 words\n"
-            f"- Structure: Intro (80-100w), Body (4-5 paragraphs, 100-120w each), Conclusion (80-100w)\n"
+            f"- Word Count: 350-450 words (STRICT LIMIT - do NOT exceed 450 words)\n"
+            f"- Structure: Intro (40-50w), Body (3-4 concise paragraphs, 80-100w each), Conclusion (40-50w)\n"
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
-            f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate for the question.\n"
+            f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
+            f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
             f"Ensure the answer would score Level 5 (25-30 marks) across all AOs.>"
         ) if is_general_paper else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
