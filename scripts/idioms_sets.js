@@ -419,8 +419,9 @@ async function selectSetAnswerIdioms(selectedIdx) {
         options[selectedIdx].style.background = '#ef4444';
         options[selectedIdx].style.borderColor = '#ef4444';
         options[selectedIdx].style.color = 'white';
-    } else {
+        // Collect wrong idioms for sentence practice
         idiomsForSentence.push({ idiom: q.idiom, meaning: q.options[q.correct] });
+    } else {
         setScoreIdioms++;
         // Add to Daily Target
         if (window.StorageManager) {
@@ -502,15 +503,16 @@ function renderSentenceCreationIdioms() {
                 <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
                 <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 15px;">Set ${currentSetNumberIdioms} Complete!</h1>
                 <div style="font-size: 2rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setScoreIdioms}/5 Correct</div>
+                <p style="color: #666; font-size: 1.1rem;">${idiomsForSentence.length > 0 ? 'Practice the idioms you missed by writing sentences.' : 'Perfect score! 🎯'}</p>
             </div>
 
             ${idiomsForSentence.length > 0 ? `
                 <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 16px; padding: 30px; margin-bottom: 30px; border-left: 5px solid #f59e0b;">
-                    <h2 style="color: #b45309; margin: 0 0 20px 0; font-size: 1.6rem;">✍️ Create Sentences (Optional)</h2>
-                    <p style="color: #78350f; margin-bottom: 20px;">Write sentences using the idioms you got correct:</p>
+                    <h2 style="color: #b45309; margin: 0 0 20px 0; font-size: 1.6rem;">✍️ Practice Missed Idioms (Optional)</h2>
+                    <p style="color: #78350f; margin-bottom: 20px;">Write sentences using the idioms you got wrong to reinforce your learning:</p>
                     
                     <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 10px;">
-                        <strong style="color: #b45309;">Your Idioms:</strong>
+                        <strong style="color: #b45309;">Idioms to Practice:</strong>
                         ${idiomsForSentence.map(item => `<span style="display: inline-block; margin: 5px 10px 5px 0; padding: 5px 12px; background: #fef3c7; border-radius: 6px; font-weight: 600;">${item.idiom}</span>`).join('')}
                     </div>
 

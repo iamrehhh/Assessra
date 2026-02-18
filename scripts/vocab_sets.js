@@ -6326,9 +6326,9 @@ function renderSentenceCreation() {
     const container = document.getElementById('container-vocab');
     if (!container) return;
 
-    // Extract words from correct answers (from currentAttemptsVocab)
-    const correctWords = currentAttemptsVocab
-        .filter(attempt => attempt.isCorrect)
+    // Extract words from INCORRECT answers for practice
+    const incorrectWords = currentAttemptsVocab
+        .filter(attempt => !attempt.isCorrect)
         .map(attempt => ({
             word: attempt.question.word,
             definition: attempt.question.options[attempt.question.correct]
@@ -6341,19 +6341,19 @@ function renderSentenceCreation() {
                 <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
                 <h1 style="color: var(--lime-dark); font-size: 2.5rem; margin-bottom: 15px;">Set ${currentSetNumberVocab} Complete!</h1>
                 <div style="font-size: 2rem; font-weight: 800; color: #16a34a; margin-bottom: 10px;">${setScoreVocab}/5 Correct</div>
-                <p style="color: #666; font-size: 1.1rem;">Great job! ${correctWords.length > 0 ? 'Now practice these words by creating sentences.' : ''}</p>
+                <p style="color: #666; font-size: 1.1rem;">${incorrectWords.length > 0 ? 'Practice the words you missed by writing sentences.' : 'Perfect score! 🎯'}</p>
             </div>
 
-            ${correctWords.length > 0 ? `
+            ${incorrectWords.length > 0 ? `
                 <!-- Sentence Creation (Optional) -->
                 <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 16px; padding: 30px; margin-bottom: 30px; border-left: 5px solid #f59e0b;">
-                    <h2 style="color: #b45309; margin: 0 0 20px 0; font-size: 1.6rem;">✍️ Create Sentences (Optional)</h2>
-                    <p style="color: #78350f; margin-bottom: 20px;">Write sentences using the words you got correct to reinforce your learning:</p>
+                    <h2 style="color: #b45309; margin: 0 0 20px 0; font-size: 1.6rem;">✍️ Practice Missed Words (Optional)</h2>
+                    <p style="color: #78350f; margin-bottom: 20px;">Write sentences using the words you got wrong to reinforce your learning:</p>
                     
                     <!-- Words List -->
                     <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 10px;">
-                        <strong style="color: #b45309;">Your Words:</strong>
-                        ${correctWords.map(item => `<span style="display: inline-block; margin: 5px 10px 5px 0; padding: 5px 12px; background: #fef3c7; border-radius: 6px; font-weight: 600;">${item.word}</span>`).join('')}
+                        <strong style="color: #b45309;">Words to Practice:</strong>
+                        ${incorrectWords.map(item => `<span style="display: inline-block; margin: 5px 10px 5px 0; padding: 5px 12px; background: #fef3c7; border-radius: 6px; font-weight: 600;">${item.word}</span>`).join('')}
                     </div>
 
                     <!-- Sentence Input -->
@@ -6371,7 +6371,7 @@ function renderSentenceCreation() {
                     <div id="sentence-save-feedback" style="margin-top: 15px; display: none;"></div>
                 </div>
             ` : `
-                <!-- No Correct Answers -->
+                <!-- All Correct -->
                 <div style="text-align: center; margin-bottom: 30px;">
                     <button onclick="completeSet(null)" style="padding: 15px 40px; background: var(--lime-primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#84cc16'" onmouseout="this.style.background='var(--lime-primary)'">
                         Continue to ${currentMonthVocab}
@@ -6397,9 +6397,9 @@ async function saveSentenceAndComplete() {
 
     try {
         // Prepare words for saving
-        // Get correct words from currentAttemptsVocab
-        const correctWords = currentAttemptsVocab
-            .filter(attempt => attempt.isCorrect)
+        // Get incorrect words from currentAttemptsVocab
+        const incorrectWords = currentAttemptsVocab
+            .filter(attempt => !attempt.isCorrect)
             .map(attempt => ({
                 word: attempt.question.word,
                 definition: attempt.question.options[attempt.question.correct]
@@ -6416,8 +6416,8 @@ async function saveSentenceAndComplete() {
                 user_id: window.StorageManager ? window.StorageManager.getUser() : 'default_user',
                 sentence_data: {
                     type: 'vocab',
-                    word: correctWords.map(w => w.word).join(', '),
-                    definition: correctWords.map(w => w.definition).join(' | '),
+                    word: incorrectWords.map(w => w.word).join(', '),
+                    definition: incorrectWords.map(w => w.definition).join(' | '),
                     userSentence: sentence
                 }
             })
