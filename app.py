@@ -762,8 +762,8 @@ CRITICAL RULES:
         ) if marks <= 4 else (
             f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
             f"General Paper 8021 Model Answer Specifications:\n"
-            f"- Word Count: 350-450 words (STRICT LIMIT - do NOT exceed 450 words)\n"
-            f"- Structure: Intro (40-50w), Body (3-4 concise paragraphs, 80-100w each), Conclusion (40-50w)\n"
+            f"- Word Count: 450-500 words (STRICT LIMIT - do NOT exceed 500 words)\n"
+            f"- Structure: Intro (50-60w), Body (3-4 paragraphs, 100-110w each), Conclusion (50-60w)\n"
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
             f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
