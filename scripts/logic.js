@@ -1192,11 +1192,11 @@ async function initHome() {
 
                 <!-- RIGHT COLUMN: Stats & Progress -->
                 <div class="home-right-col">
-                    <div class="stat-card-glass">
-                        <div class="stat-icon">📄</div>
+                    <div class="stat-card-glass" onclick="SWOTManager.openModal()" style="cursor: pointer;">
+                        <div class="stat-icon">🧠</div>
                         <div class="stat-info">
-                             <div class="stat-value" id="home-stat-papers">-</div>
-                             <div class="stat-label">Papers Done</div>
+                             <div class="stat-value">OPEN</div>
+                             <div class="stat-label">SWOT Analysis</div>
                         </div>
                     </div>
                     
