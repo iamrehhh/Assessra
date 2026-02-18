@@ -1457,11 +1457,16 @@ function openNote(index) {
 
 function deleteNote(index) {
     if (!confirm("Delete this note?")) return;
-    const notes = JSON.parse(localStorage.getItem('habibi_notes') || '[]');
-    notes.splice(index, 1);
-    localStorage.setItem('habibi_notes', JSON.stringify(notes));
-    loadNotes();
-    createNewNote();
+
+    if (window.StorageManager) {
+        const notes = window.StorageManager.getNotes();
+        notes.splice(index, 1);
+        window.StorageManager.saveNotes(notes);
+        loadNotes();
+        // If we deleted the currently viewed note, reset logic might be needed, 
+        // but createNewNote() clears the editor which is safe.
+        createNewNote();
+    }
 }
 
 // === NEW SUB-CATEGORY LOGIC ===
