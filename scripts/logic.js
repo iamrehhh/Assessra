@@ -489,6 +489,145 @@ function backToDash() {
 
 // === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
 
+// --- OPTIONAL TIMER STATE ---
+let paperTimerInterval = null;
+let paperTimeRemaining = 0;
+let paperTimerActive = false;
+let paperTimerPaused = false;
+
+function getTimerMinutes(pid) {
+    if (pid.startsWith('gp_')) return 90;           // General Paper: 1h 30m
+    if (pid.startsWith('econ_')) {
+        if (pid.includes('_4')) return 135;           // Economics P4: 2h 15m
+        return 0; // Economics P3 MCQ uses its own timer
+    }
+    // Business papers (no prefix)
+    if (pid.includes('_4')) return 180;               // Business P4: 3h 00m
+    return 105;                                       // Business P3: 1h 45m
+}
+
+function formatTimerLabel(minutes) {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    if (h > 0 && m > 0) return h + 'h ' + String(m).padStart(2, '0') + 'm';
+    if (h > 0) return h + 'h 00m';
+    return m + 'm';
+}
+
+function buildTimerHTML(pid) {
+    const mins = getTimerMinutes(pid);
+    if (mins <= 0) return ''; // No timer for this paper type
+    const label = formatTimerLabel(mins);
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    const initialDisplay = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':00';
+    return `
+        <div class="paper-timer-area">
+            <span class="paper-timer-label">⏱ ${label}</span>
+            <div class="timer-toggle-wrap" onclick="togglePaperTimer('${pid}')">
+                <div id="timer-toggle-track" class="timer-toggle-track">
+                    <div class="timer-toggle-thumb"></div>
+                </div>
+                <span class="timer-toggle-text">Timer</span>
+            </div>
+            <div id="paper-timer-display" class="paper-timer-display">
+                <span class="timer-icon">⏱</span>
+                <span id="timer-countdown" class="timer-countdown">${initialDisplay}</span>
+                <button id="timer-pause-btn" class="timer-pause-btn" onclick="event.stopPropagation(); pausePaperTimer()" title="Pause/Resume">⏸</button>
+            </div>
+        </div>
+    `;
+}
+
+window.togglePaperTimer = function(pid) {
+    const track = document.getElementById('timer-toggle-track');
+    const display = document.getElementById('paper-timer-display');
+    if (!track || !display) return;
+
+    if (paperTimerActive) {
+        // Turn OFF
+        stopPaperTimer();
+        track.classList.remove('active');
+        display.classList.remove('visible', 'warning', 'danger', 'finished', 'paused');
+    } else {
+        // Turn ON
+        const mins = getTimerMinutes(pid);
+        if (mins <= 0) return;
+        track.classList.add('active');
+        display.classList.add('visible');
+        display.classList.remove('warning', 'danger', 'finished', 'paused');
+        startPaperTimer(mins);
+    }
+};
+
+function startPaperTimer(minutes) {
+    stopPaperTimer();
+    paperTimeRemaining = minutes * 60;
+    paperTimerActive = true;
+    paperTimerPaused = false;
+    updateTimerDisplay();
+
+    paperTimerInterval = setInterval(() => {
+        if (paperTimerPaused) return;
+        paperTimeRemaining--;
+        updateTimerDisplay();
+
+        if (paperTimeRemaining <= 0) {
+            clearInterval(paperTimerInterval);
+            paperTimerInterval = null;
+            paperTimerActive = false;
+            const display = document.getElementById('paper-timer-display');
+            if (display) {
+                display.classList.remove('warning', 'danger', 'paused');
+                display.classList.add('finished');
+            }
+            const countdown = document.getElementById('timer-countdown');
+            if (countdown) countdown.textContent = "TIME'S UP!";
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const h = Math.floor(paperTimeRemaining / 3600);
+    const m = Math.floor((paperTimeRemaining % 3600) / 60);
+    const s = paperTimeRemaining % 60;
+    const countdown = document.getElementById('timer-countdown');
+    if (countdown) {
+        countdown.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    // Warning states
+    const display = document.getElementById('paper-timer-display');
+    if (!display) return;
+    display.classList.remove('warning', 'danger');
+    if (paperTimeRemaining <= 120 && paperTimeRemaining > 0) {
+        display.classList.add('danger');
+    } else if (paperTimeRemaining <= 600 && paperTimeRemaining > 0) {
+        display.classList.add('warning');
+    }
+}
+
+window.pausePaperTimer = function() {
+    if (!paperTimerActive || paperTimeRemaining <= 0) return;
+    paperTimerPaused = !paperTimerPaused;
+    const btn = document.getElementById('timer-pause-btn');
+    const display = document.getElementById('paper-timer-display');
+    if (btn) btn.textContent = paperTimerPaused ? '▶' : '⏸';
+    if (btn) btn.title = paperTimerPaused ? 'Resume' : 'Pause';
+    if (display) display.classList.toggle('paused', paperTimerPaused);
+};
+
+function stopPaperTimer() {
+    if (paperTimerInterval) {
+        clearInterval(paperTimerInterval);
+        paperTimerInterval = null;
+    }
+    paperTimerActive = false;
+    paperTimerPaused = false;
+    paperTimeRemaining = 0;
+}
+
+
 async function openPaper(pid, preservedScrollTop = 0) {
     let data = paperData[pid];
     const u = getUser();
@@ -563,6 +702,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
 
     if (isGeneralPaper1) {
         // FULL SCREEN LAYOUT FOR GENERAL PAPER 1
+        const gpTimerHTML = buildTimerHTML(pid);
         viewHTML = `
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
             <!-- Header -->
@@ -571,9 +711,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
                     <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
                     <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="font-size:0.9rem; font-weight:600; color:#555;">AI Model: GPT-4o Mini</span>
-                </div>
+                ${gpTimerHTML}
             </div>
 
             <!-- Full Width Questions Container -->
@@ -590,6 +728,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
         `;
     } else {
         // SPLIT SCREEN LAYOUT FOR OTHER PAPERS (Business, Economics)
+        const splitTimerHTML = buildTimerHTML(pid);
         viewHTML = `
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
             <!-- Header -->
@@ -598,9 +737,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
                     <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
                     <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="font-size:0.9rem; font-weight:600; color:#555;">AI Model: GPT-4o Mini</span>
-                </div>
+                ${splitTimerHTML}
             </div>
 
             <!-- Split Screen Container -->
@@ -666,6 +803,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
 }
 
 function closePaperView() {
+    stopPaperTimer();
     document.body.style.overflow = 'auto';
     setView('papers');
 }

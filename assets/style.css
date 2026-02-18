@@ -2092,3 +2092,199 @@ textarea.expanded {
     left: 0;
     color: #999;
 }
+
+/* ====================================== */
+/* OPTIONAL PAPER TIMER — PREMIUM UI      */
+/* ====================================== */
+
+/* Timer Container */
+.paper-timer-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Time allocation label */
+.paper-timer-label {
+    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #888;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+/* Toggle Switch */
+.timer-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.timer-toggle-track {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #ddd;
+    border-radius: 14px;
+    transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
+    flex-shrink: 0;
+}
+
+.timer-toggle-track.active {
+    background: var(--lime-primary);
+    box-shadow: 0 0 12px rgba(22, 163, 74, 0.35);
+}
+
+.timer-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timer-toggle-track.active .timer-toggle-thumb {
+    transform: translateX(20px);
+}
+
+.timer-toggle-text {
+    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.timer-toggle-track.active ~ .timer-toggle-text {
+    color: var(--lime-dark);
+}
+
+/* Countdown Display */
+.paper-timer-display {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 6px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    animation: timerFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paper-timer-display.visible {
+    display: flex;
+}
+
+@keyframes timerFadeIn {
+    from { opacity: 0; transform: translateY(-4px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.timer-countdown {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--lime-dark);
+    letter-spacing: 1.5px;
+    min-width: 95px;
+    text-align: center;
+    transition: color 0.5s ease;
+}
+
+/* Warning state — last 10 minutes */
+.paper-timer-display.warning .timer-countdown {
+    color: #d97706;
+}
+
+.paper-timer-display.warning {
+    border-color: rgba(217, 119, 6, 0.2);
+    background: rgba(255, 251, 235, 0.85);
+    animation: timerPulseWarn 2s ease-in-out infinite;
+}
+
+@keyframes timerPulseWarn {
+    0%, 100% { box-shadow: 0 2px 10px rgba(217, 119, 6, 0.08); }
+    50%      { box-shadow: 0 2px 20px rgba(217, 119, 6, 0.2); }
+}
+
+/* Danger state — last 2 minutes */
+.paper-timer-display.danger .timer-countdown {
+    color: #dc2626;
+}
+
+.paper-timer-display.danger {
+    border-color: rgba(220, 38, 38, 0.25);
+    background: rgba(254, 242, 242, 0.9);
+    animation: timerPulseDanger 1s ease-in-out infinite;
+}
+
+@keyframes timerPulseDanger {
+    0%, 100% { box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1); }
+    50%      { box-shadow: 0 2px 24px rgba(220, 38, 38, 0.3); }
+}
+
+/* Finished state */
+.paper-timer-display.finished {
+    border-color: rgba(220, 38, 38, 0.3);
+    background: rgba(254, 226, 226, 0.9);
+    animation: none;
+}
+
+.paper-timer-display.finished .timer-countdown {
+    color: #dc2626;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* Paused state */
+.paper-timer-display.paused .timer-countdown {
+    animation: timerBlink 1.2s step-end infinite;
+}
+
+@keyframes timerBlink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+}
+
+/* Pause Button */
+.timer-pause-btn {
+    background: none;
+    border: 1.5px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #777;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.timer-pause-btn:hover {
+    border-color: var(--lime-primary);
+    color: var(--lime-dark);
+    background: var(--lime-light);
+}
+
+/* Timer icon accent */
+.timer-icon {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
