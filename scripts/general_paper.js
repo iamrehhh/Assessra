@@ -918,62 +918,104 @@ Object.assign(paperData, {
     'gp_2024_mj_11': {
         title: "Essay Paper 11 (May/June '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "Not enough is being done to ensure safety at sporting events. To what extent do you agree with this view?", i: ["importance of safety at sporting events", "sports being inherently dangerous", "high-profile sporting disasters", "older sports stadia risks", "modernisation of stadia", "mental and physical health of participants", "cost of safety measures"] },
+            { n: '2', m: 30, l: '600-700', t: "Wealthy celebrities have a duty to give time and money to charitable causes. To what extent do you agree with this statement?", i: ["wealthy being in position to give", "celebrities wanting to help favourite causes", "setting a good example", "raising awareness", "moral obligation vs personal choice", "paying taxes vs voluntary donation", "resentment of choices"] },
+            { n: '3', m: 30, l: '600-700', t: "To what extent can a nation's written constitution safeguard people's rights?", i: ["autocratic rule prohibiting free expression", "rights of minorities respected", "recognition of gender parity", "fixed terminology stifling change", "contested wording interpretations", "colonial legacies", "constitution as no barrier to power seekers"] },
+            { n: '4', m: 30, l: '600-700', t: "To what extent should war always be the last option when countries attempt to resolve conflicts?", i: ["suffering and loss of human lives", "high economic cost", "devastating impacts of modern weaponry", "diplomacy and sanctions as alternatives", "unjustified motives for war", "defending territory and sovereignty", "resisting aggressive policies"] },
+            { n: '5', m: 30, l: '600-700', t: "The problems caused by tourism are always greater than the benefits. Examine this statement.", i: ["economic benefits", "raising profile of area", "infrastructure investment", "sustainable employment", "negative environmental impacts", "impact on traditional ways of life", "inflation and cost of living", "seasonal employment"] },
+            { n: '6', m: 30, l: '600-700', t: "Artificial intelligence should be welcomed not feared. To what extent do you agree with this statement?", i: ["improving health services", "freedom from mundane tasks", "accurate prediction of threats", "targeted support to learners", "neglect of human care", "manipulation of data", "loss of confidence in human creativity", "fear of creations turning on us"] },
+            { n: '7', m: 30, l: '600-700', t: "Assess the importance of mathematics in education.", i: ["need for mathematics in jobs", "logical reasoning", "basic arithmetic in daily life", "basis for scientific inquiry", "role in computer programming", "students turned off by imposed study", "arts studied without maths", "proportionate to individual needs"] },
+            { n: '8', m: 30, l: '600-700', t: "Reading more books would have a positive impact on society. Discuss.", i: ["improving quality of thinking", "teaching attitudes and behaviours", "fiction giving developed perspectives", "nonfiction developing knowledge", "solitary activity for relaxation", "books considered outdated", "decreasing influence on society", "influencing people negatively"] },
+            { n: '9', m: 30, l: '600-700', t: "Evaluate the view that the arts should not be about making money.", i: ["art not primarily for financial gain", "market feedback impacting integrity", "avoiding being a brand", "commercialisation reducing creativity", "freedom of expression inhibited", "expensive art restricting audience", "making art accessible", "earning money supporting artistic endeavours"] },
+            { n: '10', m: 30, l: '600-700', t: "To what extent has technology had a negative impact on the music industry?", i: ["impact on production and sound quality", "improvements to distribution", "synthesising instruments", "accessibility via apps", "video technology", "stifling innovation", "recovery of vinyl", "digital piracy and small returns"] }
+        ]
     },
     // --- MAY / JUNE 2024 (Variant 12) ---
     'gp_2024_mj_12': {
         title: "Essay Paper 12 (May/June '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "To what extent do schools in your country encourage creativity?", i: ["curriculum flexibility", "arts and music programs", "emphasis on exams over creativity", "extracurricular opportunities", "teacher encouragement", "resource limitations", "cultural attitudes to creativity"] },
+            { n: '2', m: 30, l: '600-700', t: "To what extent has science made the lives of people easier?", i: ["medical advances", "technology in daily life", "agricultural improvements", "environmental concerns", "weapons of mass destruction", "digital divide", "dependency on technology"] },
+            { n: '3', m: 30, l: '600-700', t: "People do not need a lot of money to be happy. Evaluate this statement.", i: ["basic needs must be met", "happiness from relationships", "materialism vs contentment", "poverty and stress", "wealth and mental health", "cultural perspectives on happiness", "experiences vs possessions"] },
+            { n: '4', m: 30, l: '600-700', t: "To what extent should more be done to prepare for possible natural disasters in your country?", i: ["frequency of natural disasters", "current preparedness levels", "infrastructure improvements", "early warning systems", "education and awareness", "government responsibility", "cost of preparation vs recovery"] },
+            { n: '5', m: 30, l: '600-700', t: "Political leaders create fear rather than hope. Discuss.", i: ["use of fear in politics", "populism and division", "leaders who inspire hope", "media amplification", "historical examples", "accountability and trust", "impact on citizens"] },
+            { n: '6', m: 30, l: '600-700', t: "To what extent is it important to be tolerant of the beliefs of others?", i: ["diversity and coexistence", "freedom of belief", "limits of tolerance", "extremism and hate speech", "education promoting tolerance", "cultural clashes", "tolerance vs acceptance"] },
+            { n: '7', m: 30, l: '600-700', t: "To what extent has satellite technology improved the lives of people in your country?", i: ["communication improvements", "GPS and navigation", "weather forecasting", "agricultural monitoring", "military surveillance", "digital divide", "privacy concerns"] },
+            { n: '8', m: 30, l: '600-700', t: "Stories written in the past still have relevance today. To what extent do you agree with this statement?", i: ["timeless themes", "historical context and lessons", "cultural heritage", "changing social norms", "literary canon debates", "adaptation and reinterpretation", "accessibility of older texts"] },
+            { n: '9', m: 30, l: '600-700', t: "Television has no educational benefits. To what extent do you agree with this statement?", i: ["documentaries and news", "children's educational programming", "passive consumption", "misinformation risks", "cultural awareness", "screen time concerns", "alternative learning platforms"] },
+            { n: '10', m: 30, l: '600-700', t: "Musicians not only make music, but also make a significant contribution to society and culture. Discuss.", i: ["cultural identity", "social commentary through music", "charitable work by musicians", "music as therapy", "influence on youth", "political activism", "economic contributions"] }
+        ]
     },
     // --- MAY / JUNE 2024 (Variant 13) ---
     'gp_2024_mj_13': {
         title: "Essay Paper 13 (May/June '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "History is always written from the point of view of the powerful. Discuss.", i: ["victors writing history", "marginalised voices", "revisionist history", "access to records", "oral traditions", "power and narrative", "modern efforts at inclusion"] },
+            { n: '2', m: 30, l: '600-700', t: "To what extent is financial management the responsibility of the individual?", i: ["personal budgeting", "financial literacy education", "government welfare systems", "predatory lending", "economic inequality", "savings and investment", "systemic barriers"] },
+            { n: '3', m: 30, l: '600-700', t: "Assess the importance of everyone in a community being a good neighbour.", i: ["community cohesion", "mutual support", "safety and security", "loneliness and isolation", "cultural differences", "urbanisation challenges", "reciprocity and trust"] },
+            { n: '4', m: 30, l: '600-700', t: "To what extent should humans be responsible for the welfare of animals?", i: ["animal rights", "factory farming", "endangered species", "pet ownership", "medical testing", "cultural practices", "environmental stewardship"] },
+            { n: '5', m: 30, l: '600-700', t: "Food is a work of art not just a necessity. Discuss.", i: ["culinary arts", "food presentation", "cultural significance", "Michelin star culture", "food as sustenance first", "food inequality", "social media and food aesthetics"] },
+            { n: '6', m: 30, l: '600-700', t: "To what extent has online shopping improved people's lives?", i: ["convenience and accessibility", "price comparison", "impact on high street", "delivery and returns", "environmental impact", "data privacy", "digital divide"] },
+            { n: '7', m: 30, l: '600-700', t: "Surveillance is only justified in the pursuit of criminals. Discuss.", i: ["crime prevention", "public safety", "privacy rights", "government overreach", "facial recognition technology", "data misuse", "chilling effect on freedom"] },
+            { n: '8', m: 30, l: '600-700', t: "Evaluate the importance of traditional stories to the people of your country.", i: ["cultural identity", "moral lessons", "oral tradition preservation", "relevance to modern life", "educational value", "generational bonding", "risk of outdated values"] },
+            { n: '9', m: 30, l: '600-700', t: "Learning is more effective when students travel to places outside the classroom. Discuss.", i: ["experiential learning", "field trips and excursions", "engagement and motivation", "cost and access barriers", "curriculum connections", "safety concerns", "virtual alternatives"] },
+            { n: '10', m: 30, l: '600-700', t: "Free speech should mean that news media is never censored. To what extent do you agree with this statement?", i: ["press freedom", "accountability and fact-checking", "hate speech and harm", "state censorship", "media bias", "public interest", "self-regulation vs government control"] }
+        ]
     },
 
     // --- OCT / NOV 2024 (Variant 11) ---
     'gp_2024_on_11': {
         title: "Essay Paper 11 (Oct/Nov '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "Evaluate the view that horror movies no longer have the impact they once did.", i: ["desensitisation to violence", "evolution of horror genre", "psychological vs graphic horror", "cultural context", "audience expectations", "streaming and accessibility", "nostalgia factor"] },
+            { n: '2', m: 30, l: '600-700', t: "Assess whether travelling by aeroplane is the best form of travel.", i: ["speed and efficiency", "environmental impact", "cost considerations", "comfort and convenience", "alternative transport modes", "accessibility", "safety record"] },
+            { n: '3', m: 30, l: '600-700', t: "People should reduce the amount of meat they eat to protect the environment. Discuss.", i: ["carbon emissions from livestock", "deforestation for grazing", "water usage", "plant-based alternatives", "cultural dietary traditions", "nutritional considerations", "economic impact on farmers"] },
+            { n: '4', m: 30, l: '600-700', t: "Improvements in society are more likely to be achieved by groups rather than individuals. To what extent do you agree with this statement?", i: ["collective action and movements", "individual leadership and innovation", "grassroots organisations", "political parties", "historical examples", "social media mobilisation", "individual vs systemic change"] },
+            { n: '5', m: 30, l: '600-700', t: "Assess the view that comedy can never successfully deal with serious topics.", i: ["satire and social commentary", "humour as coping mechanism", "trivialising serious issues", "comedic traditions", "audience reception", "political comedy", "boundaries of taste"] },
+            { n: '6', m: 30, l: '600-700', t: "People who obey the law have nothing to fear from surveillance. To what extent do you agree with this statement?", i: ["privacy as fundamental right", "data collection and misuse", "chilling effect on behaviour", "false positives", "government accountability", "crime prevention benefits", "totalitarian surveillance"] },
+            { n: '7', m: 30, l: '600-700', t: "Creative arts have no value other than as a leisure activity. Discuss.", i: ["economic contributions of arts", "therapeutic value", "cultural identity", "education and skill development", "social commentary", "community building", "arts funding debates"] },
+            { n: '8', m: 30, l: '600-700', t: "Schools should encourage students to be competitive to prepare them for adulthood. Discuss.", i: ["workplace competition", "motivation and achievement", "mental health impact", "collaboration vs competition", "sports and academics", "cultural attitudes", "building resilience"] },
+            { n: '9', m: 30, l: '600-700', t: "Essential workers are not appreciated enough in your country. To what extent do you agree with this statement?", i: ["pandemic recognition", "wage disparities", "working conditions", "public perception", "government support", "essential worker categories", "long-term appreciation vs temporary applause"] },
+            { n: '10', m: 30, l: '600-700', t: "Evaluate the effectiveness of the treatment of criminals in your country.", i: ["rehabilitation vs punishment", "prison conditions", "recidivism rates", "restorative justice", "community sentencing", "capital punishment debates", "support after release"] }
+        ]
     },
     // --- OCT / NOV 2024 (Variant 12) ---
     'gp_2024_on_12': {
         title: "Essay Paper 12 (Oct/Nov '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "To what extent should people be proud of the nation they belong to?", i: ["national identity", "patriotism vs nationalism", "cultural heritage", "historical atrocities", "diversity within nations", "globalisation", "civic pride"] },
+            { n: '2', m: 30, l: '600-700', t: "Mathematics has more importance in the classroom than in the outside world. Discuss.", i: ["practical applications of maths", "financial literacy", "STEM careers", "abstract vs applied maths", "everyday problem-solving", "technology doing calculations", "mathematical thinking skills"] },
+            { n: '3', m: 30, l: '600-700', t: "To what extent is animal welfare everyone's responsibility?", i: ["pet ownership duties", "factory farming practices", "wildlife conservation", "government legislation", "consumer choices", "cultural attitudes to animals", "animal testing"] },
+            { n: '4', m: 30, l: '600-700', t: "Evaluate how important it is for young people to spend more time with their families.", i: ["family bonds and support", "mental health benefits", "cultural values", "busy modern lifestyles", "generational differences", "peer influence vs family", "technology and family time"] },
+            { n: '5', m: 30, l: '600-700', t: "Assess whether the novel or poetry is more effective in expressing how we experience life.", i: ["narrative depth of novels", "emotional intensity of poetry", "accessibility", "cultural traditions", "personal expression", "length and commitment", "literary impact"] },
+            { n: '6', m: 30, l: '600-700', t: "Passengers should not have to pay for public transport in your country. Discuss.", i: ["reducing pollution and traffic", "social equity", "funding challenges", "quality of service", "economic impact", "examples of free transport", "taxpayer burden"] },
+            { n: '7', m: 30, l: '600-700', t: "Evaluate the importance of the arts such as painting, drama and music in education.", i: ["creative development", "emotional expression", "cultural awareness", "career opportunities", "academic balance", "funding priorities", "STEAM vs STEM"] },
+            { n: '8', m: 30, l: '600-700', t: "Assess the view that sport should be about enjoyment rather than winning.", i: ["participation vs elite sport", "mental health benefits", "commercial pressures", "sportsmanship values", "youth development", "professional athlete demands", "Olympic spirit"] },
+            { n: '9', m: 30, l: '600-700', t: "To what extent is surveillance in public places essential in your country?", i: ["crime deterrence", "public safety", "privacy rights", "CCTV effectiveness", "government oversight concerns", "technology advances", "balance of security and freedom"] },
+            { n: '10', m: 30, l: '600-700', t: "Examine the view that live theatre is not an accessible art form in your country.", i: ["ticket prices", "geographical access", "cultural relevance", "community theatre initiatives", "language barriers", "digital alternatives", "government support for arts"] }
+        ]
     },
     // --- OCT / NOV 2024 (Variant 13) ---
     'gp_2024_on_13': {
         title: "Essay Paper 13 (Oct/Nov '24)",
         pdf: "",
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "To what extent are disadvantaged people prevented from participating in sport?", i: ["cost of equipment and facilities", "geographical barriers", "discrimination", "disability access", "grassroots programmes", "government funding", "social inclusion through sport"] },
+            { n: '2', m: 30, l: '600-700', t: "Evaluate the usefulness of science fiction in solving current problems.", i: ["inspiring innovation", "exploring ethical dilemmas", "predicting technology", "escapism vs reality", "public engagement with science", "creative problem-solving", "cautionary tales"] },
+            { n: '3', m: 30, l: '600-700', t: "No nation can be truly happy unless all its citizens are equal. Discuss.", i: ["economic equality", "social equality", "gender and racial equality", "utopian ideals", "meritocracy vs equality", "measuring happiness", "Scandinavian model"] },
+            { n: '4', m: 30, l: '600-700', t: "Telling the truth is always the right thing to do. To what extent do you agree with this advice?", i: ["honesty and trust", "white lies", "consequences of truth-telling", "cultural attitudes to honesty", "professional contexts", "protective deception", "moral philosophy"] },
+            { n: '5', m: 30, l: '600-700', t: "To what extent do individuals have the power to influence how your country is governed?", i: ["voting and elections", "activism and protest", "social media influence", "lobbying", "civic engagement", "political apathy", "democratic structures"] },
+            { n: '6', m: 30, l: '600-700', t: "It is increasingly important that people have access to frozen fruit and vegetables. Discuss.", i: ["food preservation", "nutrition and waste reduction", "affordability", "accessibility in remote areas", "fresh vs frozen debate", "environmental impact", "food security"] },
+            { n: '7', m: 30, l: '600-700', t: "To what extent do online appointments with patients improve the way doctors provide care?", i: ["accessibility improvements", "convenience for patients", "limitations of virtual diagnosis", "digital divide", "patient-doctor relationship", "data security", "pandemic legacy"] },
+            { n: '8', m: 30, l: '600-700', t: "To what extent do you agree that individuals should be free to choose their work or school hours?", i: ["work-life balance", "productivity research", "flexible working benefits", "operational requirements", "inequality of access", "education structure", "cultural attitudes to working hours"] },
+            { n: '9', m: 30, l: '600-700', t: "The impact of music on people's lives is always positive. Discuss.", i: ["emotional wellbeing", "cultural connection", "music therapy", "negative lyrics and influence", "noise pollution", "addiction to headphones", "community through music"] },
+            { n: '10', m: 30, l: '600-700', t: "To what extent is advertising a form of art?", i: ["creative design and storytelling", "commercial intent vs artistic expression", "iconic advertisements", "manipulation and persuasion", "artistic merit debate", "advertising awards", "cultural impact"] }
+        ]
     }
 });
 
@@ -1029,9 +1071,8 @@ const gpCardsP1 = `
     </div>
 
     <!-- 2024 PAPERS -->
-    <div class="series-header"><div class="year-big">2024</div><div class="series-name">All Series</div></div>
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
     <div class="papers-grid">
-        <!-- Oct/Nov Series -->
         <div class="paper-card" onclick="openPaper('gp_2024_on_11')">
             <span class="paper-tag">8021/11</span>
             <h3>Oct/Nov '24</h3>
@@ -1047,8 +1088,10 @@ const gpCardsP1 = `
             <h3>Oct/Nov '24</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
+    </div>
 
-        <!-- May/June Series -->
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">May / June Series</div></div>
+    <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2024_mj_11')">
             <span class="paper-tag">8021/11</span>
             <h3>May/June '24</h3>
@@ -1064,8 +1107,10 @@ const gpCardsP1 = `
             <h3>May/June '24</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
+    </div>
 
-        <!-- Feb/March Series -->
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2024_fm_12')">
             <span class="paper-tag">8021/12</span>
             <h3>Feb/March '24</h3>
