@@ -231,6 +231,18 @@ function selectMonthIdioms(month) {
 // ==========================================
 
 function startSetIdioms(month, setNumber) {
+    // ---- 7-SET DAILY LIMIT ----
+    const today = new Date().toISOString().split('T')[0];
+    const limitKey = 'idioms_sets_daily_' + today;
+    const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
+    if (dailyCount >= 7) {
+        alert('⚠️ You\'ve reached your daily limit of 7 idiom sets. Come back tomorrow!');
+        return;
+    }
+    // Increment daily counter
+    localStorage.setItem(limitKey, String(dailyCount + 1));
+    // ----------------------------
+
     currentMonthIdioms = month;
     currentSetNumberIdioms = setNumber;
     currentQuestionIdioms = 0;
@@ -382,7 +394,7 @@ function renderSetQuestionIdioms() {
     container.innerHTML = html;
 }
 
-function selectSetAnswerIdioms(selectedIdx) {
+async function selectSetAnswerIdioms(selectedIdx) {
     const q = currentSetQuestionsIdioms[currentQuestionIdioms];
     const isCorrect = selectedIdx === q.correct;
 
@@ -416,6 +428,7 @@ function selectSetAnswerIdioms(selectedIdx) {
         }
     }
 
+    // Show loading feedback
     const feedback = document.getElementById('idioms-set-feedback');
     feedback.style.display = 'block';
     feedback.style.background = isCorrect ? '#f0fdf4' : '#fef2f2';
@@ -426,7 +439,42 @@ function selectSetAnswerIdioms(selectedIdx) {
         <p style="font-size: 1.15rem; color: #333;">
             <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
         </p>
+        <div style="text-align: center; color: #666; margin-top: 10px;">⏳ Loading AI insights...</div>
     `;
+
+    // Fetch AI example + similar idioms
+    try {
+        const response = await fetch('/vocab-ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ word: q.idiom, type: 'idiom' })
+        });
+        const aiData = await response.json();
+
+        const synonymsHtml = aiData.synonyms && aiData.synonyms.length > 0
+            ? `<div style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); padding: 16px 20px; border-radius: 10px; border-left: 5px solid #8b5cf6; margin-top: 12px;">
+                    <strong style="color: #7c3aed; font-size: 1rem;">🔗 Similar Idioms:</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                        ${aiData.synonyms.map(s => `<span style="background: white; color: #7c3aed; padding: 6px 14px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; border: 1.5px solid #c4b5fd;">${s}</span>`).join('')}
+                    </div>
+               </div>` : '';
+
+        feedback.innerHTML = `
+            <h3 style="color: ${isCorrect ? '#22c55e' : '#ef4444'}; margin-bottom: 15px; font-size: 1.4rem;">
+                ${isCorrect ? '✅ Correct!' : '❌ Incorrect'}
+            </h3>
+            <p style="font-size: 1.15rem; color: #333;">
+                <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
+            </p>
+            <div style="background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%); padding: 20px; border-radius: 10px; border-left: 5px solid var(--lime-primary); margin-top: 12px;">
+                <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example Sentence:</strong><br>
+                <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${aiData.example || 'Example unavailable.'}</span>
+            </div>
+            ${synonymsHtml}
+        `;
+    } catch (e) {
+        console.error('Failed to fetch AI data for idiom set:', e);
+    }
 
     document.getElementById('next-set-question-btn-idioms').style.display = 'block';
 }

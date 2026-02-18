@@ -859,6 +859,56 @@ CRITICAL RULES:
         }), 500
 
 
+# ==========================================
+# VOCAB/IDIOM AI EXAMPLE + SYNONYMS ENDPOINT
+# ==========================================
+@app.route('/vocab-ai', methods=['POST'])
+def vocab_ai():
+    if not OPENAI_API_KEY:
+        return jsonify({"example": "Example unavailable (API not configured).", "synonyms": []}), 200
+
+    data = request.json
+    word = data.get('word', '')
+    word_type = data.get('type', 'vocabulary')  # 'vocabulary' or 'idiom'
+
+    if not word:
+        return jsonify({"example": "No word provided.", "synonyms": []}), 200
+
+    try:
+        if word_type == 'idiom':
+            prompt = (
+                f'For the idiom "{word}":\n'
+                f'1. Write ONE clear example sentence showing its correct usage in standard English.\n'
+                f'2. List 2-3 similar common idioms or phrases with the same meaning.\n'
+                f'Reply in JSON: {{"example": "...", "synonyms": ["...", "..."]}}'
+            )
+        else:
+            prompt = (
+                f'For the word "{word}":\n'
+                f'1. Write ONE clear example sentence showing its correct usage in standard English.\n'
+                f'2. List 2-3 common synonyms that a student could use to remember this word.\n'
+                f'Reply in JSON: {{"example": "...", "synonyms": ["...", "..."]}}'
+            )
+
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful English language assistant. Reply ONLY with valid JSON, nothing else."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=150,
+            temperature=0.7
+        )
+
+        text = response.choices[0].message.content.strip()
+        cleaned = text.replace('```json', '').replace('```', '').strip()
+        result = json.loads(cleaned)
+        return jsonify(result), 200
+
+    except Exception as e:
+        logger.error(f"Vocab AI error: {e}")
+        return jsonify({"example": "Example unavailable.", "synonyms": []}), 200
 
 # Syncing databases with Firebase
 

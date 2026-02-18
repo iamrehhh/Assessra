@@ -569,7 +569,7 @@ async function selectIdiomAnswer(selectedIdx) {
         window.StorageManager.addDailyPoints('idioms', 1);
     }
 
-    // Show feedback
+    // Show loading feedback
     const feedback = document.getElementById('idiom-feedback');
     feedback.style.display = 'block';
     feedback.innerHTML = `
@@ -580,20 +580,57 @@ async function selectIdiomAnswer(selectedIdx) {
             <p style="font-size: 1.15rem; color: #333;">
                 <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
             </p>
-            ${isCorrect ? `
-                <div id="sentence-prompt-idiom" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b; text-align: left;">
-                    <h4 style="color: #b45309; margin: 0 0 15px 0; font-size: 1.2rem;">✍️ Create Your Own Sentence!</h4>
-                    <p style="color: #78350f; margin-bottom: 15px; font-size: 0.95rem;">Write a sentence using the idiom "<strong>${q.idiom}</strong>" to help you remember it.</p>
-                    <textarea id="user-sentence-idiom" placeholder="Type your sentence here..." style="width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button onclick="saveIdiomSentence('${q.idiom.replace(/'/g, "\\'")}', '${q.options[q.correct].replace(/'/g, "\\'")}', 'idiom')" style="flex: 1; padding: 12px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">💾 Save Sentence</button>
-                        <button onclick="skipIdiomSentence()" style="flex: 1; padding: 12px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">⏭️ Skip</button>
-                    </div>
-                    <div id="sentence-feedback-idiom" style="margin-top: 10px; display: none;"></div>
-                </div>
-            ` : ''}
+            <div style="text-align: center; color: #666; margin-top: 10px;">⏳ Loading AI insights...</div>
         </div>
     `;
+
+    // Fetch AI example + similar idioms
+    try {
+        const response = await fetch('/vocab-ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ word: q.idiom, type: 'idiom' })
+        });
+        const aiData = await response.json();
+
+        const synonymsHtml = aiData.synonyms && aiData.synonyms.length > 0
+            ? `<div style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); padding: 16px 20px; border-radius: 10px; border-left: 5px solid #8b5cf6; margin-top: 12px; text-align: left;">
+                    <strong style="color: #7c3aed; font-size: 1rem;">🔗 Similar Idioms:</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                        ${aiData.synonyms.map(s => `<span style="background: white; color: #7c3aed; padding: 6px 14px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; border: 1.5px solid #c4b5fd; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">${s}</span>`).join('')}
+                    </div>
+               </div>` : '';
+
+        feedback.innerHTML = `
+            <div style="text-align: center;">
+                <h3 style="color: ${isCorrect ? '#22c55e' : '#ef4444'}; margin-bottom: 15px; font-size: 1.4rem; font-weight: 700;">
+                    ${isCorrect ? '✅ Correct!' : '❌ Incorrect'}
+                </h3>
+                <p style="font-size: 1.15rem; color: #333;">
+                    <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
+                </p>
+                <div style="background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%); padding: 20px; border-radius: 10px; border-left: 5px solid var(--lime-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-top: 12px; text-align: left;">
+                    <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example Sentence:</strong><br>
+                    <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${aiData.example || 'Example unavailable.'}</span>
+                </div>
+                ${synonymsHtml}
+                ${isCorrect ? `
+                    <div id="sentence-prompt-idiom" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b; text-align: left;">
+                        <h4 style="color: #b45309; margin: 0 0 15px 0; font-size: 1.2rem;">✍️ Create Your Own Sentence!</h4>
+                        <p style="color: #78350f; margin-bottom: 15px; font-size: 0.95rem;">Write a sentence using the idiom "<strong>${q.idiom}</strong>" to help you remember it.</p>
+                        <textarea id="user-sentence-idiom" placeholder="Type your sentence here..." style="width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button onclick="saveIdiomSentence('${q.idiom.replace(/'/g, "\\'")}', '${q.options[q.correct].replace(/'/g, "\\'")}', 'idiom')" style="flex: 1; padding: 12px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">💾 Save Sentence</button>
+                            <button onclick="skipIdiomSentence()" style="flex: 1; padding: 12px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">⏭️ Skip</button>
+                        </div>
+                        <div id="sentence-feedback-idiom" style="margin-top: 10px; display: none;"></div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    } catch (e) {
+        console.error('Failed to fetch AI data for idiom:', e);
+    }
 
     if (!isCorrect) {
         document.getElementById('next-idiom-btn').style.display = 'block';

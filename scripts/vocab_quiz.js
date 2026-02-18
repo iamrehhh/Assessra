@@ -429,7 +429,7 @@ async function selectVocabAnswer(selectedIdx) {
         window.StorageManager.addDailyPoints('vocab', 1);
     }
 
-    // Fetch AI example
+    // Fetch AI example + synonyms
     const feedback = document.getElementById('vocab-feedback');
     feedback.style.display = 'block';
     feedback.innerHTML = `
@@ -440,13 +440,21 @@ async function selectVocabAnswer(selectedIdx) {
             <p style="font-size: 1.15rem; margin-bottom: 15px;">
                 <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
             </p>
-            <div style="text-align: center; color: #666;">⏳ Loading example...</div>
+            <div style="text-align: center; color: #666;">⏳ Loading AI insights...</div>
         </div>
     `;
 
-    // Fetch AI example
+    // Fetch AI example + synonyms
     try {
-        const example = await getAIExample(q.word);
+        const aiData = await getAIExample(q.word, 'vocabulary');
+        const synonymsHtml = aiData.synonyms && aiData.synonyms.length > 0
+            ? `<div style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); padding: 16px 20px; border-radius: 10px; border-left: 5px solid #8b5cf6; margin-top: 12px; text-align: left;">
+                    <strong style="color: #7c3aed; font-size: 1rem;">🔗 Synonyms:</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                        ${aiData.synonyms.map(s => `<span style="background: white; color: #7c3aed; padding: 6px 14px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; border: 1.5px solid #c4b5fd; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">${s}</span>`).join('')}
+                    </div>
+               </div>` : '';
+
         feedback.innerHTML = `
             <div style="text-align: center;">
                 <h3 style="color: ${isCorrect ? '#22c55e' : '#ef4444'}; margin-bottom: 15px; font-size: 1.4rem; font-weight: 700;">
@@ -455,12 +463,13 @@ async function selectVocabAnswer(selectedIdx) {
                 <p style="font-size: 1.15rem; margin-bottom: 15px;">
                     <strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}
                 </p>
-                <div style="background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%); padding: 20px; border-radius: 10px; border-left: 5px solid var(--lime-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-                    <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example:</strong><br>
-                    <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${example}</span>
+                <div style="background: linear-gradient(135deg, #f9fafb 0%, #f0fdf4 100%); padding: 20px; border-radius: 10px; border-left: 5px solid var(--lime-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: left;">
+                    <strong style="color: var(--lime-dark); font-size: 1.1rem;">📝 Example Sentence:</strong><br>
+                    <span style="font-style: italic; color: #333; font-size: 1.05rem; line-height: 1.6;">${aiData.example}</span>
                 </div>
+                ${synonymsHtml}
                 ${isCorrect ? `
-                    <div id="sentence-prompt" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b;">
+                    <div id="sentence-prompt" style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; border-left: 5px solid #f59e0b; text-align: left;">
                         <h4 style="color: #b45309; margin: 0 0 15px 0; font-size: 1.2rem;">✍️ Create Your Own Sentence!</h4>
                         <p style="color: #78350f; margin-bottom: 15px; font-size: 0.95rem;">Write a sentence using the word "<strong>${q.word}</strong>" to help you remember it.</p>
                         <textarea id="user-sentence" placeholder="Type your sentence here..." style="width: 100%; padding: 12px; border: 2px solid #fbbf24; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
@@ -474,7 +483,7 @@ async function selectVocabAnswer(selectedIdx) {
             </div>
         `;
     } catch (e) {
-        console.error('Failed to fetch example:', e);
+        console.error('Failed to fetch AI data:', e);
     }
 
     if (!isCorrect) {
@@ -536,20 +545,21 @@ function skipSentence() {
     document.getElementById('sentence-prompt').style.opacity = '0.6';
 }
 
-async function getAIExample(word) {
+async function getAIExample(word, type = 'vocabulary') {
     try {
-        const response = await fetch('/chat', {
+        const response = await fetch('/vocab-ai', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: `Create one example sentence using the word "${word}" that clearly demonstrates its meaning. Make it contextual and academic.`
-            })
+            body: JSON.stringify({ word: word, type: type })
         });
 
         const data = await response.json();
-        return data.reply || "Example unavailable.";  // Fixed: was data.message, should be data.reply
+        return {
+            example: data.example || 'Example unavailable.',
+            synonyms: data.synonyms || []
+        };
     } catch (e) {
-        return "Example unavailable.";
+        return { example: 'Example unavailable.', synonyms: [] };
     }
 }
 
