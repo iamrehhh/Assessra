@@ -291,12 +291,38 @@ def mark():
         is_general_paper = True
         print("⚠ MODE ACTIVE: General Paper 8021 Detected")
 
+    # ---------------------------------------------------------
+    # ATTEMPT TO FIND & EXTRACT MARKING SCHEME
+    # ---------------------------------------------------------
+    marking_scheme_text = ""
+    if pdf_path:
+        base_dir = os.path.dirname(pdf_path)
+        filename = os.path.basename(pdf_path)
+        ms_filename = None
+
+        # Standard naming convention replacements
+        if "_in_" in filename:
+            ms_filename = filename.replace("_in_", "_ms_")
+        elif "_qp_" in filename:
+            ms_filename = filename.replace("_qp_", "_ms_")
+        
+        if ms_filename:
+            ms_path = os.path.join(base_dir, ms_filename)
+            if os.path.exists(ms_path):
+                print(f"✅ FOUND Marking Scheme: {ms_path}")
+                try:
+                    marking_scheme_text = extract_text_from_pdf(ms_path)
+                    # Limit MS text length to avoid token limits, prioritizing the relevant sections if possible
+                    # For now we take the whole thing as they aren't huge
+                except Exception as e:
+                    print(f"❌ Failed to extract Marking Scheme: {e}")
+
     # 1. DETERMINE SYSTEM PROMPT
     if custom_system_prompt:
         system_prompt = custom_system_prompt
     elif is_business_p3 or is_business_p4:
         # NEUTRAL PERSONA FOR BUSINESS P3/P4
-        system_prompt = """
+        system_prompt = f"""
         You are a Cambridge International A-Level Business (9609) Examiner. 
         Mark the following answer strictly according to the provided Global Marking Commands.
         Do not be artificially strict or lenient. Follow the rubric instructions precisely.
@@ -304,11 +330,14 @@ def mark():
         CRITICAL FOR CALCULATION QUESTIONS:
         If the question involves any numerical calculation (e.g., ARR, payback period, NPV, PED, 
         profit margins, ratios, moving averages, seasonal variations, labour productivity, etc.):
-        1. You MUST first extract the relevant data from the case study/insert text provided.
-        2. You MUST solve the calculation yourself, showing your working.
-        3. You MUST then compare the student's answer to YOUR calculated answer.
-        4. Do NOT guess or approximate — use the exact figures from the case study.
+        1. REFERENCE THE MARKING SCHEME: If a Marking Scheme Text is provided below, you MUST use the exact figures and method shown in it.
+        2. If no Marking Scheme is provided, you MUST extract the relevant data from the case study/insert text provided and calculate it yourself first.
+        3. You MUST compare the student's answer to the CORRECT calculated answer (from MS or your own calculation).
+        4. Do NOT guess or approximate — use the exact figures.
         5. Award marks based on whether the student's calculation matches the correct answer.
+
+        {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
+        {marking_scheme_text if marking_scheme_text else ''}
         """
     elif is_general_paper:
         system_prompt = """
@@ -317,8 +346,11 @@ def mark():
         """
     else:
         system_prompt = f"""
-        You are a Cambridge International A-Level Business Examiner. 
+        You are a Cambridge International A-Level Examiner. 
         Mark the following answer regarding the mark scheme.
+
+        {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
+        {marking_scheme_text if marking_scheme_text else ''}
         """
 
     # 2. DETERMINE RUBRIC
@@ -332,11 +364,13 @@ def mark():
             CALCULATION QUESTION RUBRIC ({marks} MARKS)
             
             CRITICAL INSTRUCTION — BEFORE grading the student's answer:
-            1. YOU must first solve the calculation yourself using ONLY the data from the case study/insert.
-            2. Extract the exact numbers from the tables/text provided.
-            3. Apply the correct formula.
-            4. Compute the answer step-by-step.
-            5. ONLY THEN compare the student's answer to YOUR calculated answer.
+            1. LOOK for the specific question in the provided MARKING SCHEME text (if available).
+            2. If available, the MS answer is the GROUND TRUTH. Compare student answer directly to it.
+            3. If MS is not available, solve the calculation yourself using ONLY the data from the case study/insert.
+            4. Extract the exact numbers from the tables/text provided.
+            5. Apply the correct formula.
+            6. Compute the answer step-by-step.
+            7. ONLY THEN compare the student's answer to YOUR calculated answer.
             
             MARKING SCHEME ({marks} marks):
             - Full marks ({marks}/{marks}): Correct final answer (with or without working shown).
