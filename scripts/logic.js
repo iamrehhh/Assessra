@@ -547,6 +547,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
             <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
             <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
+            <div style="text-align: center; margin-top: 6px; font-size: 0.85rem; color: #888;">${(() => { const today = new Date().toISOString().split('T')[0]; const used = parseInt(localStorage.getItem('submissions_daily_' + today) || '0', 10); const left = Math.max(0, 12 - used); return left > 0 ? '📊 ' + left + '/12 submissions remaining today' : '⚠️ Daily limit reached (12/12)'; })()}</div>
             ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;"><strong>Detailed Critique:</strong><br>${att.feedback || att.weaknesses || "No feedback available."}</div><div class="model-ans-box"><strong>Model Answer:</strong><br>${(att.modelAnswer || 'Model answer not generated.').replace(/\n/g, '<br>')}</div></div>` : ''}
         </div>`;
     });
@@ -737,6 +738,16 @@ function setupResizableDivider() {
 }
 
 async function submitAnswer(pid, qn) {
+    // ---- 12-QUESTION DAILY LIMIT ----
+    const today = new Date().toISOString().split('T')[0];
+    const limitKey = 'submissions_daily_' + today;
+    const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
+    if (dailyCount >= 12) {
+        alert('⚠️ You\'ve reached your daily limit of 12 question submissions. Come back tomorrow!');
+        return;
+    }
+    // -----------------------------------
+
     const el = document.getElementById(`ans_${pid}_${qn}`);
     const btn = event.target;
     const ans = el.value.trim();
@@ -776,6 +787,9 @@ async function submitAnswer(pid, qn) {
         }
 
         const json = await res.json();
+
+        // Increment daily submission counter AFTER successful response
+        localStorage.setItem(limitKey, String(dailyCount + 1));
 
         // SAVE TO CLOUD AND WAIT
         await window.CloudManager.saveAttempt(getUser(), pid, qn, {
