@@ -1749,3 +1749,68 @@ textarea.expanded {
     color: var(--lime-dark);
     background: #f9f9f9;
 }
+
+/* ==========================================
+   EXAM TIMELINE ANIMATIONS
+   ========================================== */
+
+@keyframes shimmer {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translate(10px, 5px) rotate(2deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Responsive: stack welcome header on mobile */
+@media (max-width: 600px) {
+    .welcome-header {
+        flex-direction: column !important;
+    }
+
+    #exam-countdown-widget {
+        min-width: unset !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}

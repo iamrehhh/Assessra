@@ -1114,9 +1114,37 @@ async function initHome() {
         view.innerHTML = `
             <div class="decoration-orb"></div>
             
-            <div class="welcome-header">
-                <h1>Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}</h1>
-                <p class="motivation-quote">"${quote}"</p>
+            <div class="welcome-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 30px;">
+                <div>
+                    <h1>Welcome, ${name.charAt(0).toUpperCase() + name.slice(1)}</h1>
+                    <p class="motivation-quote">"${quote}"</p>
+                </div>
+                <div id="exam-countdown-widget" onclick="openExamTimeline()" style="
+                    min-width: 280px;
+                    max-width: 340px;
+                    padding: 24px 28px;
+                    background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 100%);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255,255,255,0.5);
+                    border-radius: 20px;
+                    box-shadow: 0 8px 32px rgba(22, 163, 74, 0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+                    cursor: pointer;
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
+                    overflow: hidden;
+                " onmouseover="this.style.transform='translateY(-4px) scale(1.02)'; this.style.boxShadow='0 16px 48px rgba(22, 163, 74, 0.2), inset 0 1px 0 rgba(255,255,255,0.7)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 32px rgba(22, 163, 74, 0.12), inset 0 1px 0 rgba(255,255,255,0.6)';">
+                    <!-- Water shimmer effect -->
+                    <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 30% 20%, rgba(22, 163, 74, 0.06) 0%, transparent 60%); pointer-events: none; animation: shimmer 4s ease-in-out infinite;"></div>
+                    <div id="exam-widget-content" style="position: relative; z-index: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+                            <span style="font-size: 1.1rem;">📅</span>
+                            <span style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: rgba(22, 163, 74, 0.8);">Next Exam</span>
+                        </div>
+                        <div id="exam-widget-body" style="font-family: 'Inter', sans-serif;">Loading...</div>
+                    </div>
+                    <div style="position: absolute; bottom: 10px; right: 16px; font-size: 0.7rem; color: rgba(100,116,139,0.5); font-family: 'Inter', sans-serif; letter-spacing: 1px;">TAP FOR FULL TIMELINE →</div>
+                </div>
             </div>
             
             <div class="home-grid">
@@ -1193,6 +1221,8 @@ async function initHome() {
 
         // Fetch Stats
         updateHomeStats(u);
+        // Populate exam countdown widget
+        updateExamWidget();
     }
 }
 
@@ -1702,4 +1732,260 @@ async function loadDynamicExtras(type) {
     } catch (e) { console.error(`Error loading ${type}`, e); }
 }
 
+
+// ==========================================
+// EXAM TIMELINE SYSTEM
+// ==========================================
+
+const EXAM_SCHEDULE = [
+    { code: '9709/52', subject: 'Mathematics', paper: 'Probability & Statistics 1', date: '2026-02-17', time: 'AM', icon: '📐' },
+    { code: '9609/32', subject: 'Business', paper: 'Decision-Making Paper 3', date: '2026-02-17', time: 'PM', icon: '💼' },
+    { code: '9709/32', subject: 'Mathematics', paper: 'Pure Mathematics 3', date: '2026-02-20', time: 'AM', icon: '📐' },
+    { code: '8021/12', subject: 'General Paper', paper: 'Essay (Paper 1)', date: '2026-02-23', time: 'AM', icon: '✍️' },
+    { code: '9609/42', subject: 'Business', paper: 'Business Strategy Paper 4', date: '2026-02-24', time: 'AM', icon: '💼' },
+    { code: '8021/22', subject: 'General Paper', paper: 'Comprehension (Paper 2)', date: '2026-02-27', time: 'AM', icon: '📖' },
+    { code: '9708/42', subject: 'Economics', paper: 'Data Response & Essays', date: '2026-03-02', time: 'PM', icon: '📊' },
+    { code: '9708/32', subject: 'Economics', paper: 'Multiple Choice', date: '2026-03-09', time: 'AM', icon: '📊' }
+];
+
+let examCountdownInterval = null;
+
+function getExamDateTime(exam) {
+    // AM = 08:00, PM = 13:00 (local time approximation)
+    const hour = exam.time === 'AM' ? 8 : 13;
+    return new Date(exam.date + 'T' + (hour < 10 ? '0' : '') + hour + ':00:00');
+}
+
+function getNextExam() {
+    const now = new Date();
+    for (const exam of EXAM_SCHEDULE) {
+        const examEnd = getExamDateTime(exam);
+        examEnd.setHours(examEnd.getHours() + 3); // Assume 3-hour exam duration
+        if (examEnd > now) return exam;
+    }
+    return null;
+}
+
+function formatCountdown(diffMs) {
+    if (diffMs <= 0) return { days: 0, hours: 0, mins: 0, secs: 0, isLive: true };
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
+    return { days, hours, mins, secs, isLive: false };
+}
+
+function updateExamWidget() {
+    const body = document.getElementById('exam-widget-body');
+    if (!body) return;
+
+    const nextExam = getNextExam();
+    if (!nextExam) {
+        body.innerHTML = `
+            <div style="font-size: 1.1rem; font-weight: 700; color: #16a34a; margin-bottom: 4px;">🎉 All exams complete!</div>
+            <div style="font-size: 0.85rem; color: #64748b;">You've finished all scheduled exams.</div>
+        `;
+        return;
+    }
+
+    const examDT = getExamDateTime(nextExam);
+    const now = new Date();
+    const diff = examDT - now;
+    const cd = formatCountdown(diff);
+
+    // Subject color mapping
+    const subjectColors = {
+        'Mathematics': '#6366f1',
+        'Business': '#ea580c',
+        'General Paper': '#0891b2',
+        'Economics': '#7c3aed'
+    };
+    const accent = subjectColors[nextExam.subject] || '#16a34a';
+
+    if (cd.isLive) {
+        body.innerHTML = `
+            <div style="font-size: 1.15rem; font-weight: 800; color: #dc2626; margin-bottom: 6px; animation: pulse 1.5s infinite;">🔴 EXAM IN PROGRESS</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: #1e293b;">${nextExam.icon} ${nextExam.paper}</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 4px;">${nextExam.subject} · ${nextExam.code}</div>
+        `;
+    } else {
+        body.innerHTML = `
+            <div style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; line-height: 1.3;">${nextExam.icon} ${nextExam.paper}</div>
+            <div style="font-size: 0.8rem; color: ${accent}; font-weight: 600; margin-bottom: 12px;">${nextExam.subject} · ${nextExam.code} · ${nextExam.time}</div>
+            <div style="display: flex; gap: 10px;">
+                ${[
+                { val: cd.days, label: 'D' },
+                { val: cd.hours, label: 'H' },
+                { val: cd.mins, label: 'M' },
+                { val: cd.secs, label: 'S' }
+            ].map(u => `
+                    <div style="text-align: center; flex: 1;">
+                        <div style="
+                            font-size: 1.5rem;
+                            font-weight: 800;
+                            color: #1e293b;
+                            background: rgba(255,255,255,0.6);
+                            border-radius: 10px;
+                            padding: 6px 0;
+                            font-variant-numeric: tabular-nums;
+                            border: 1px solid rgba(255,255,255,0.8);
+                        ">${String(u.val).padStart(2, '0')}</div>
+                        <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 600; margin-top: 4px; letter-spacing: 1px;">${u.label}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Refresh every second
+    if (examCountdownInterval) clearInterval(examCountdownInterval);
+    examCountdownInterval = setInterval(() => {
+        const el = document.getElementById('exam-widget-body');
+        if (!el) { clearInterval(examCountdownInterval); return; }
+        updateExamWidget();
+    }, 1000);
+}
+
+function openExamTimeline() {
+    // Remove existing modal if any
+    const existing = document.getElementById('exam-timeline-modal');
+    if (existing) existing.remove();
+
+    const now = new Date();
+
+    const subjectColors = {
+        'Mathematics': { bg: 'rgba(99, 102, 241, 0.08)', border: 'rgba(99, 102, 241, 0.3)', text: '#6366f1' },
+        'Business': { bg: 'rgba(234, 88, 12, 0.08)', border: 'rgba(234, 88, 12, 0.3)', text: '#ea580c' },
+        'General Paper': { bg: 'rgba(8, 145, 178, 0.08)', border: 'rgba(8, 145, 178, 0.3)', text: '#0891b2' },
+        'Economics': { bg: 'rgba(124, 58, 237, 0.08)', border: 'rgba(124, 58, 237, 0.3)', text: '#7c3aed' }
+    };
+
+    const examCards = EXAM_SCHEDULE.map(exam => {
+        const examDT = getExamDateTime(exam);
+        const examEnd = new Date(examDT); examEnd.setHours(examEnd.getHours() + 3);
+        const isPast = examEnd < now;
+        const isNext = !isPast && getNextExam() && getNextExam().code === exam.code && getNextExam().date === exam.date;
+        const colors = subjectColors[exam.subject] || { bg: 'rgba(22,163,74,0.08)', border: 'rgba(22,163,74,0.3)', text: '#16a34a' };
+
+        const dateObj = new Date(exam.date + 'T12:00:00');
+        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+        const dayNum = dateObj.getDate();
+        const monthName = dateObj.toLocaleDateString('en-US', { month: 'short' });
+
+        let statusBadge = '';
+        if (isPast) {
+            statusBadge = '<span style="font-size: 0.7rem; font-weight: 700; color: #16a34a; background: rgba(22,163,74,0.1); padding: 3px 10px; border-radius: 20px;">✓ DONE</span>';
+        } else if (isNext) {
+            statusBadge = '<span style="font-size: 0.7rem; font-weight: 700; color: #dc2626; background: rgba(220,38,38,0.1); padding: 3px 10px; border-radius: 20px; animation: pulse 2s infinite;">● UP NEXT</span>';
+        } else {
+            statusBadge = '<span style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; background: rgba(148,163,184,0.1); padding: 3px 10px; border-radius: 20px;">UPCOMING</span>';
+        }
+
+        return `
+            <div style="
+                display: flex; align-items: center; gap: 20px;
+                padding: 18px 22px;
+                background: ${isPast ? 'rgba(148,163,184,0.04)' : isNext ? 'rgba(22,163,74,0.06)' : 'rgba(255,255,255,0.25)'};
+                backdrop-filter: blur(12px);
+                border: 1px solid ${isNext ? 'rgba(22,163,74,0.3)' : 'rgba(255,255,255,0.3)'};
+                border-radius: 16px;
+                transition: all 0.3s;
+                opacity: ${isPast ? '0.55' : '1'};
+                ${isNext ? 'box-shadow: 0 0 20px rgba(22, 163, 74, 0.1);' : ''}
+            " onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+                <!-- Date Badge -->
+                <div style="
+                    min-width: 60px; text-align: center;
+                    background: ${colors.bg};
+                    border: 1px solid ${colors.border};
+                    border-radius: 12px; padding: 10px 8px;
+                ">
+                    <div style="font-size: 0.65rem; font-weight: 700; color: ${colors.text}; text-transform: uppercase; letter-spacing: 1px;">${dayName}</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b; line-height: 1.2;">${dayNum}</div>
+                    <div style="font-size: 0.7rem; font-weight: 600; color: #64748b;">${monthName}</div>
+                </div>
+                <!-- Details -->
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <span style="font-size: 1.15rem;">${exam.icon}</span>
+                        <span style="font-size: 1rem; font-weight: 700; color: #1e293b; ${isPast ? 'text-decoration: line-through; color: #94a3b8;' : ''}">${exam.paper}</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: ${colors.text}; font-weight: 600;">${exam.subject} · ${exam.code}</div>
+                </div>
+                <!-- Time + Status -->
+                <div style="text-align: right; min-width: 80px;">
+                    ${statusBadge}
+                    <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px; font-weight: 600;">${exam.time === 'AM' ? '🌅 Morning' : '🌇 Afternoon'}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const modal = document.createElement('div');
+    modal.id = 'exam-timeline-modal';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10000;
+        display: flex; justify-content: center; align-items: center;
+        animation: fadeIn 0.3s ease;
+        padding: 20px;
+    `;
+
+    modal.innerHTML = `
+        <div style="
+            max-width: 640px; width: 100%; max-height: 85vh;
+            background: linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(240,253,244,0.5) 50%, rgba(255,255,255,0.6) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 28px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+            overflow: hidden;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        ">
+            <!-- Header -->
+            <div style="
+                padding: 28px 32px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.4);
+                background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(240,253,244,0.2) 100%);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 style="
+                            font-family: 'Playfair Display', serif;
+                            font-size: 1.8rem; font-weight: 700;
+                            color: #1e293b; margin: 0 0 6px 0;
+                            background: linear-gradient(135deg, #1e293b, #16a34a);
+                            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                        ">📋 Exam Timeline</h2>
+                        <p style="font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #64748b; margin: 0;">March 2026 Series · GCE AS & A Level</p>
+                    </div>
+                    <button onclick="document.getElementById('exam-timeline-modal').remove()" style="
+                        width: 36px; height: 36px;
+                        background: rgba(0,0,0,0.06);
+                        border: none; border-radius: 50%;
+                        font-size: 1.2rem; cursor: pointer;
+                        display: flex; align-items: center; justify-content: center;
+                        transition: all 0.2s;
+                        color: #64748b;
+                    " onmouseover="this.style.background='rgba(0,0,0,0.12)'" onmouseout="this.style.background='rgba(0,0,0,0.06)'">✕</button>
+                </div>
+            </div>
+            <!-- Body -->
+            <div style="padding: 20px 28px 28px; overflow-y: auto; max-height: calc(85vh - 100px); display: flex; flex-direction: column; gap: 12px;">
+                ${examCards}
+            </div>
+        </div>
+    `;
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+
+    document.body.appendChild(modal);
+}
 
