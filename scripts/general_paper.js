@@ -1026,9 +1026,8 @@ const gpCardsP1 = `
         <p style="color:#666;">Paper 1: Essay Questions (30 Marks)</p>
     </div>
     
-    <div class="series-header"><div class="year-big">2025</div><div class="series-name">All Series</div></div>
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
     <div class="papers-grid">
-        <!-- Oct/Nov 2025 -->
         <div class="paper-card" onclick="openPaper('gp_2025_on_11')">
             <span class="paper-tag">8021/11</span>
             <h3>Oct/Nov '25</h3>
@@ -1044,8 +1043,10 @@ const gpCardsP1 = `
             <h3>Oct/Nov '25</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
+    </div>
 
-        <!-- May/June 2025 -->
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">May / June Series</div></div>
+    <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2025_mj_11')">
             <span class="paper-tag">8021/11</span>
             <h3>May/June '25</h3>
@@ -1061,8 +1062,10 @@ const gpCardsP1 = `
             <h3>May/June '25</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
+    </div>
 
-        <!-- Feb/March 2025 -->
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2025_fm_12')">
             <span class="paper-tag">8021/12</span>
             <h3>Feb/March '25</h3>
