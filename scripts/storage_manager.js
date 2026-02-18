@@ -18,7 +18,7 @@ const StorageManager = {
             localStorage.setItem(`habibi_data_${user}`, JSON.stringify(data));
         } catch (e) {
             console.error("Storage full or error saving data:", e);
-            alert("Warning: Storage full. Some progress may not be saved.");
+            showToast("Warning: Storage full. Some progress may not be saved.");
         }
     },
 

@@ -3,6 +3,73 @@
 // Includes: Cloud Sync, Smart Sorting, UI Fixes
 // =============================================
 
+// === GLOBAL TOAST NOTIFICATION SYSTEM ===
+(function () {
+    function getOrCreateContainer() {
+        let c = document.getElementById('toast-container');
+        if (!c) {
+            c = document.createElement('div');
+            c.id = 'toast-container';
+            c.className = 'toast-container';
+            document.body.appendChild(c);
+        }
+        return c;
+    }
+
+    const ICONS = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+    };
+
+    /**
+     * Show a liquid-glass toast notification.
+     * @param {string} message — the text to display
+     * @param {string} [type] — 'success' | 'error' | 'warning' | 'info' (auto-detected if omitted)
+     */
+    window.showToast = function (message, type) {
+        if (!type) {
+            const lower = (message || '').toLowerCase();
+            if (lower.includes('error') || lower.includes('failed') || lower.includes('denied') || lower.includes('invalid'))
+                type = 'error';
+            else if (lower.includes('warning') || lower.includes('limit') || lower.includes('⚠'))
+                type = 'warning';
+            else if (lower.includes('saved') || lower.includes('success') || lower.includes('deleted') || lower.includes('added') || lower.includes('created') || lower.includes('complete') || lower.includes('uploaded') || lower.includes('✓'))
+                type = 'success';
+            else
+                type = 'info';
+        }
+
+        const container = getOrCreateContainer();
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon">${ICONS[type] || ICONS.info}</div>
+            <div class="toast-msg">${message}</div>
+            <button class="toast-close" onclick="this.parentElement.classList.add('toast-exit'); setTimeout(() => this.parentElement.remove(), 400)">✕</button>
+        `;
+
+        // Click anywhere on toast to dismiss
+        toast.addEventListener('click', function (e) {
+            if (e.target.closest('.toast-close')) return;
+            toast.classList.add('toast-exit');
+            setTimeout(() => toast.remove(), 400);
+        });
+
+        container.appendChild(toast);
+
+        // Auto-dismiss after 4.5s
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 400);
+            }
+        }, 4500);
+    };
+})();
+
+
 // === 1. GLOBAL UI & MENU MANAGEMENT ===
 // Updated: Force Refresh v1.1
 
@@ -274,7 +341,7 @@ function tryLogin() {
     if (ALLOWED_USERS[u] && ALLOWED_USERS[u] === p) {
         setUser(u);
         initApp(u);
-    } else { alert("Invalid Username or Password."); }
+    } else { showToast("Invalid Username or Password."); }
 }
 
 function initApp(u) {
@@ -652,7 +719,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
         subtitle: 'Resume Paper'
     }));
 
-    if (!data) return alert("Paper not found or loading...");
+    if (!data) return showToast("Paper not found or loading...");
 
     let attempts = {};
 
@@ -885,7 +952,7 @@ async function submitAnswer(pid, qn) {
     const limitKey = 'submissions_daily_' + today;
     const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
     if (dailyCount >= 12) {
-        alert('⚠️ You\'ve reached your daily limit of 12 question submissions. Come back tomorrow!');
+        showToast('⚠️ You\'ve reached your daily limit of 12 question submissions. Come back tomorrow!');
         return;
     }
     // -----------------------------------
@@ -893,7 +960,7 @@ async function submitAnswer(pid, qn) {
     const el = document.getElementById(`ans_${pid}_${qn}`);
     const btn = event.target;
     const ans = el.value.trim();
-    if (!ans) return alert("Please write an answer first.");
+    if (!ans) return showToast("Please write an answer first.");
 
     btn.innerText = "⏳ Strict Marking...";
     btn.disabled = true;
@@ -962,7 +1029,7 @@ async function submitAnswer(pid, qn) {
 
     } catch (e) {
         console.error("Submission Error:", e);
-        alert(`Error: ${e.message || "Server not responding or Save failed."}`);
+        showToast(`Error: ${e.message || "Server not responding or Save failed."}`);
         btn.innerText = "Retry";
         btn.disabled = false;
     }
@@ -1568,7 +1635,7 @@ function saveCurrentNote() {
     if (!window.StorageManager) return;
     const editor = document.getElementById('note-editor');
     const text = editor.value;
-    if (!text.trim()) return alert("Empty note!");
+    if (!text.trim()) return showToast("Empty note!");
 
     const notes = window.StorageManager.getNotes();
     const idx = editor.dataset.index;
@@ -1585,7 +1652,7 @@ function saveCurrentNote() {
 
     window.StorageManager.saveNotes(notes);
     loadNotes();
-    alert("Note saved!");
+    showToast("Note saved!");
 }
 
 function openNote(index) {

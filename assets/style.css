@@ -2147,7 +2147,7 @@ textarea.expanded {
     height: 18px;
     background: white;
     border-radius: 50%;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -2165,7 +2165,7 @@ textarea.expanded {
     transition: color 0.3s;
 }
 
-.timer-toggle-track.active ~ .timer-toggle-text {
+.timer-toggle-track.active~.timer-toggle-text {
     color: var(--lime-dark);
 }
 
@@ -2180,7 +2180,7 @@ textarea.expanded {
     border: 1px solid rgba(0, 0, 0, 0.06);
     padding: 6px 16px;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     animation: timerFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -2189,8 +2189,15 @@ textarea.expanded {
 }
 
 @keyframes timerFadeIn {
-    from { opacity: 0; transform: translateY(-4px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .timer-countdown {
@@ -2216,8 +2223,15 @@ textarea.expanded {
 }
 
 @keyframes timerPulseWarn {
-    0%, 100% { box-shadow: 0 2px 10px rgba(217, 119, 6, 0.08); }
-    50%      { box-shadow: 0 2px 20px rgba(217, 119, 6, 0.2); }
+
+    0%,
+    100% {
+        box-shadow: 0 2px 10px rgba(217, 119, 6, 0.08);
+    }
+
+    50% {
+        box-shadow: 0 2px 20px rgba(217, 119, 6, 0.2);
+    }
 }
 
 /* Danger state — last 2 minutes */
@@ -2232,8 +2246,15 @@ textarea.expanded {
 }
 
 @keyframes timerPulseDanger {
-    0%, 100% { box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1); }
-    50%      { box-shadow: 0 2px 24px rgba(220, 38, 38, 0.3); }
+
+    0%,
+    100% {
+        box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 2px 24px rgba(220, 38, 38, 0.3);
+    }
 }
 
 /* Finished state */
@@ -2255,8 +2276,15 @@ textarea.expanded {
 }
 
 @keyframes timerBlink {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.3; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
 }
 
 /* Pause Button */
@@ -2287,4 +2315,222 @@ textarea.expanded {
     font-size: 1.1rem;
     opacity: 0.7;
     flex-shrink: 0;
+}
+
+/* ====================================== */
+/* LIQUID GLASS TOAST NOTIFICATIONS       */
+/* ====================================== */
+
+.toast-container {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    width: 100%;
+    max-width: 480px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.toast {
+    pointer-events: auto;
+    width: 100%;
+    padding: 16px 22px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #1a1a1a;
+    /* Liquid glass effect */
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    /* Slide in */
+    animation: toastSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.toast:hover {
+    transform: scale(1.01);
+}
+
+.toast.toast-exit {
+    animation: toastSlideOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes toastSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.92);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes toastSlideOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+}
+
+/* Progress bar at bottom */
+.toast::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 0 0 16px 16px;
+    animation: toastProgress 4.5s linear forwards;
+}
+
+@keyframes toastProgress {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0%;
+    }
+}
+
+/* Toast icon */
+.toast-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* Toast message */
+.toast-msg {
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+/* Toast close */
+.toast-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    line-height: 1;
+}
+
+.toast-close:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: #555;
+}
+
+/* === TYPE VARIANTS === */
+
+/* Success */
+.toast.toast-success {
+    border-color: rgba(22, 163, 74, 0.25);
+    background: rgba(240, 253, 244, 0.72);
+}
+
+.toast.toast-success .toast-icon {
+    background: rgba(22, 163, 74, 0.12);
+    color: #16a34a;
+}
+
+.toast.toast-success::after {
+    background: linear-gradient(90deg, #16a34a, #4ade80);
+}
+
+/* Error */
+.toast.toast-error {
+    border-color: rgba(220, 38, 38, 0.2);
+    background: rgba(254, 242, 242, 0.75);
+}
+
+.toast.toast-error .toast-icon {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
+.toast.toast-error::after {
+    background: linear-gradient(90deg, #dc2626, #f87171);
+}
+
+/* Warning */
+.toast.toast-warning {
+    border-color: rgba(217, 119, 6, 0.2);
+    background: rgba(255, 251, 235, 0.75);
+}
+
+.toast.toast-warning .toast-icon {
+    background: rgba(217, 119, 6, 0.1);
+    color: #d97706;
+}
+
+.toast.toast-warning::after {
+    background: linear-gradient(90deg, #d97706, #fbbf24);
+}
+
+/* Info (default) */
+.toast.toast-info {
+    border-color: rgba(59, 130, 246, 0.2);
+    background: rgba(239, 246, 255, 0.72);
+}
+
+.toast.toast-info .toast-icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.toast.toast-info::after {
+    background: linear-gradient(90deg, #3b82f6, #93c5fd);
+}
+
+/* Mobile responsive */
+@media (max-width: 520px) {
+    .toast-container {
+        top: 12px;
+        max-width: 100%;
+        padding: 0 12px;
+    }
+
+    .toast {
+        padding: 13px 16px;
+        font-size: 0.87rem;
+        border-radius: 14px;
+    }
 }

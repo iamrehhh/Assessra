@@ -164,7 +164,7 @@ async function startMCQTest(paperID) {
     testSubmitted = false;
     const paperInfo = paperDatabase[paperID];
 
-    if (!paperInfo) { alert("Paper data not found!"); return; }
+    if (!paperInfo) { showToast("Paper data not found!"); return; }
 
     document.body.style.overflow = 'hidden';
 
@@ -265,7 +265,7 @@ function startTimer() {
 
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
-            alert("Time is up!");
+            showToast("Time is up!");
             gradeMCQ();
         }
     }, 1000);

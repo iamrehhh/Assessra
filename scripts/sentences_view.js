@@ -127,7 +127,7 @@ async function deleteSentence(timestamp) {
         loadMySentences();
     } catch (e) {
         console.error('Failed to delete sentence:', e);
-        alert('Failed to delete sentence. Please try again.');
+        showToast('Failed to delete sentence. Please try again.');
     }
 }
 

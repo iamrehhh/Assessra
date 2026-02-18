@@ -6117,7 +6117,7 @@ function startSet(month, setNumber) {
     const limitKey = 'vocab_sets_daily_' + today;
     const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
     if (dailyCount >= 7) {
-        alert('⚠️ You\'ve reached your daily limit of 7 vocabulary sets. Come back tomorrow!');
+        showToast('⚠️ You\'ve reached your daily limit of 7 vocabulary sets. Come back tomorrow!');
         return;
     }
     // Increment daily counter
@@ -6135,7 +6135,7 @@ function startSet(month, setNumber) {
 
     // Check if set has questions
     if (!currentSetQuestionsVocab) {
-        alert("This set doesn't have questions yet. Coming soon!");
+        showToast("This set doesn't have questions yet. Coming soon!");
         return;
     }
 
@@ -6469,7 +6469,7 @@ function reviewSet(month, setNumber) {
     const setData = vocabSetsProgress[month][setKey];
 
     if (!setData || !setData.attempts) {
-        alert("No attempt data found for this set!");
+        showToast("No attempt data found for this set!");
         return;
     }
 

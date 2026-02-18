@@ -236,7 +236,7 @@ function startSetIdioms(month, setNumber) {
     const limitKey = 'idioms_sets_daily_' + today;
     const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
     if (dailyCount >= 7) {
-        alert('⚠️ You\'ve reached your daily limit of 7 idiom sets. Come back tomorrow!');
+        showToast('⚠️ You\'ve reached your daily limit of 7 idiom sets. Come back tomorrow!');
         return;
     }
     // Increment daily counter
@@ -254,7 +254,7 @@ function startSetIdioms(month, setNumber) {
 
     // Safety check
     if (currentSetQuestionsIdioms.length === 0) {
-        alert("Could not load questions. Please try refreshing the page.");
+        showToast("Could not load questions. Please try refreshing the page.");
         return;
     }
 
@@ -609,7 +609,7 @@ function reviewSetIdioms(month, setNumber) {
     const setData = idiomsSetsProgress[month][setKey];
 
     if (!setData || !setData.attempts) {
-        alert("No attempt data found for this set!");
+        showToast("No attempt data found for this set!");
         return;
     }
 

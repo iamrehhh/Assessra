@@ -90,7 +90,7 @@ const SWOTManager = {
 
     selectPaper: async (paper) => {
         if (!SWOTManager.checkLimit()) {
-            alert("Daily SWOT limit reached! Come back tomorrow.");
+            showToast("Daily SWOT limit reached! Come back tomorrow.");
             return;
         }
 
@@ -124,7 +124,7 @@ const SWOTManager = {
             SWOTManager.incrementLimit();
 
         } catch (e) {
-            alert("Analysis failed: " + e.message);
+            showToast("Analysis failed: " + e.message);
             SWOTManager.closeModal();
         }
     },

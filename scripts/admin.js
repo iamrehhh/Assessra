@@ -19,7 +19,7 @@ const ref = (path) => db.ref(path);
 // === 2. AUTHENTICATION ===
 const CURRENT_USER = localStorage.getItem('user');
 if (CURRENT_USER !== 'Abdul.Rehan') {
-    alert("⛔ ACCESS DENIED: Admins only.");
+    showToast("⛔ ACCESS DENIED: Admins only.");
     window.location.href = 'index.html';
 } else {
     // Show new Admin UI
@@ -68,9 +68,9 @@ window.deleteUser = async (name) => {
     const safeName = name.replace('.', '_');
     try {
         await db.ref(`leaderboard/${safeName}`).remove();
-        alert("User deleted.");
+        showToast("User deleted.");
         loadUsers();
-    } catch (e) { alert("Error: " + e.message); }
+    } catch (e) { showToast("Error: " + e.message); }
 };
 
 window.adminLogout = () => {
@@ -84,7 +84,7 @@ window.savePaperMeta = async () => {
     const title = document.getElementById('p-title').value.trim();
     const pdf = document.getElementById('p-pdf').value.trim();
 
-    if (!pid || !title) return alert("Paper ID and Title are required.");
+    if (!pid || !title) return showToast("Paper ID and Title are required.");
 
     try {
         await db.ref(`content/papers/${pid}`).update({
@@ -93,8 +93,8 @@ window.savePaperMeta = async () => {
             pdf: pdf,
             addedAt: Date.now()
         });
-        alert("Metadata saved.");
-    } catch (e) { alert("Error: " + e.message); }
+        showToast("Metadata saved.");
+    } catch (e) { showToast("Error: " + e.message); }
 };
 
 window.addQuestion = async () => {
@@ -103,7 +103,7 @@ window.addQuestion = async () => {
     const marks = parseInt(document.getElementById('q-marks').value);
     const text = document.getElementById('q-text').value.trim();
 
-    if (!pid || !qNum || !text) return alert("All fields are required.");
+    if (!pid || !qNum || !text) return showToast("All fields are required.");
 
     const newQ = { n: qNum, m: marks, q: text };
 
@@ -121,9 +121,9 @@ window.addQuestion = async () => {
         }
 
         await db.ref(`content/papers/${pid}/questions`).set(questions);
-        alert(`Question ${qNum} added.`);
+        showToast(`Question ${qNum} added.`);
         document.getElementById('q-text').value = '';
-    } catch (e) { alert("Error: " + e.message); }
+    } catch (e) { showToast("Error: " + e.message); }
 };
 
 // === 5. DICTIONARY ===
@@ -133,22 +133,22 @@ window.addVocab = async () => {
     if (!w || !d) return;
     try {
         await db.ref(`content/vocab`).push({ word: w, def: d });
-        alert("Vocab added.");
+        showToast("Vocab added.");
         document.getElementById('v-word').value = '';
         document.getElementById('v-def').value = '';
-    } catch (e) { alert(e.message); }
+    } catch (e) { showToast(e.message); }
 };
 
 window.addSubject = async () => {
     const name = document.getElementById('sub-name').value.trim();
     const code = document.getElementById('sub-code').value.trim();
-    if (!name || !code) return alert("Required!");
+    if (!name || !code) return showToast("Required!");
     try {
         const sid = name.toLowerCase().replace(/\s+/g, '_');
         await db.ref(`content/subjects/${sid}`).set({ name: name, code: code, id: sid });
-        alert("Subject created.");
+        showToast("Subject created.");
         loadSubjects_Enhanced();
-    } catch (e) { alert("Error: " + e.message); }
+    } catch (e) { showToast("Error: " + e.message); }
 };
 
 // === 6. BULK UPLOAD ===
@@ -165,8 +165,8 @@ window.processBulkUpload = async () => {
     const raw = document.getElementById('bulk-data').value.trim();
     const targetSubject = document.getElementById('bulk-subject').value;
 
-    if (!raw) return alert("No data.");
-    if (['formulae', 'definitions'].includes(type) && !targetSubject) return alert("Select Subject!");
+    if (!raw) return showToast("No data.");
+    if (['formulae', 'definitions'].includes(type) && !targetSubject) return showToast("Select Subject!");
 
     if (!confirm(`Upload to ${targetSubject || 'General'}?`)) return;
 
@@ -190,7 +190,7 @@ window.processBulkUpload = async () => {
                 }
             });
             await db.ref().update(updates);
-            alert(`Uploaded ${count} items.`);
+            showToast(`Uploaded ${count} items.`);
         }
         else {
             // JSON
@@ -216,11 +216,11 @@ window.processBulkUpload = async () => {
                 });
                 await db.ref().update(updates);
             }
-            alert("Bulk upload complete.");
+            showToast("Bulk upload complete.");
         }
         document.getElementById('bulk-data').value = '';
         loadContentManager();
-    } catch (e) { alert("Bulk Error: " + e.message); }
+    } catch (e) { showToast("Bulk Error: " + e.message); }
 };
 
 // === 7. MANAGER & VIEW ===
@@ -256,10 +256,10 @@ window.deleteContent = async (path) => {
     if (!confirm("Delete?")) return;
     try {
         await db.ref(path).remove();
-        alert("Deleted.");
+        showToast("Deleted.");
         loadContentManager();
         if (path.includes('subjects')) loadSubjects_Enhanced();
-    } catch (e) { alert(e.message); }
+    } catch (e) { showToast(e.message); }
 };
 
 window.switchView = (viewId, navEl) => {
@@ -302,7 +302,7 @@ window.toggleCreateForm = () => {
     if (type === 'subject') {
         container.innerHTML = `<div class="form-group"><input id="sub-name" class="form-input" placeholder="Name"><input id="sub-code" class="form-input" placeholder="Code"></div><button class="btn-primary" onclick="addSubject()">Create</button>`;
     } else if (type === 'paper_meta') {
-        container.innerHTML = `<button class="btn-primary" onclick="alert('Use Bulk Upload for Papers for now or see old form!')">See Bulk Upload</button>`;
+        container.innerHTML = `<button class="btn-primary" onclick="showToast('Use Bulk Upload for Papers for now or see old form!')">See Bulk Upload</button>`;
         // Re-add full form if needed, but bulk is better
     }
 };

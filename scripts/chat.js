@@ -32,7 +32,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
           
           if (replyingToData) messageData.replyTo = replyingToData; // Attach quote if replying
 
-          push(chatRef, messageData).catch(error => alert("Firebase Error: " + error.message));
+          push(chatRef, messageData).catch(error => showToast("Firebase Error: " + error.message));
           
           input.value = ''; 
           window.cancelReply(); // Clear the reply box
