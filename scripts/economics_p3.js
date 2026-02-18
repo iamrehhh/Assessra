@@ -31,9 +31,31 @@ const paperDatabase = {
         pdf: "papers/9708_s25_qp_32.pdf",
         answers: ['C', 'A', 'B', 'C', 'C', 'D', 'D', 'D', 'C', 'C', 'D', 'C', 'C', 'C', 'D', 'A', 'A', 'B', 'A', 'C', 'D', 'A', 'A', 'D', 'B', 'A', 'B', 'A', 'A', 'D']
     },
+    "econ_2025_mj_33": {
+        pdf: "papers/9708_s25_qp_33.pdf",
+        answers: ['B', 'C', 'A', 'C', 'C', 'D', 'C', 'C', 'B', 'C', 'B', 'B', 'C', 'B', 'B', 'C', 'B', 'A', 'A', 'C', 'D', 'A', 'A', 'D', 'B', 'C', 'B', 'C', 'D', 'B']
+    },
     "econ_2025_mj_34": {
         pdf: "papers/9708_s25_qp_34.pdf",
         answers: ['C', 'B', 'B', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'B', 'B', 'D', 'A', 'D', 'B', 'B', 'D', 'A', 'B', 'A', 'B', 'B', 'D', 'B', 'B', 'A', 'A', 'B', 'B']
+    },
+
+    // --- FEB / MAR 2025 ---
+    "econ_2025_fm_32": {
+        pdf: "papers/9708_m25_qp_32.pdf",
+        answers: ['B', 'D', 'D', 'B', 'A', 'C', 'B', 'D', 'A', 'B', 'B', 'A', 'A', 'A', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'D', 'A', 'B', 'D', 'B', 'C', 'C', 'D', 'C']
+    },
+
+    // --- MAY / JUNE 2024 ---
+    "econ_2024_mj_31": {
+        pdf: "papers/9708_s24_qp_31.pdf",
+        answers: ['B', 'C', 'A', 'B', 'C', 'C', 'B', 'A', 'C', 'B', 'B', 'A', 'D', 'B', 'C', 'C', 'B', 'D', 'A', 'A', 'D', 'C', 'D', 'A', 'B', 'B', 'C', 'A', 'C', 'A']
+    },
+
+    // --- FEB / MAR 2024 ---
+    "econ_2024_fm_32": {
+        pdf: "papers/9708_m24_qp_32.pdf",
+        answers: ['B', 'B', 'B', 'C', 'B', 'C', 'D', 'B', 'A', 'D', 'C', 'D', 'A', 'C', 'C', 'B', 'C', 'A', 'A', 'D', 'C', 'C', 'C', 'C', 'B', 'A', 'D', 'C', 'D', 'B']
     }
 };
 
@@ -68,9 +90,24 @@ function loadMCQPapers() {
                 <h3>Economics MCQ (Variant 2)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
+            <div class="paper-card" onclick="startMCQTest('econ_2025_mj_33')">
+                <span class="paper-tag">9708/33</span>
+                <h3>Economics MCQ (Variant 3)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
             <div class="paper-card" onclick="startMCQTest('econ_2025_mj_34')">
                 <span class="paper-tag">9708/34</span>
                 <h3>Economics MCQ (Variant 4)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+        </div>
+
+        <!-- FEB / MAR 2025 -->
+        <div class="series-header" style="margin-top:40px;"><div class="year-big">2025</div><div class="series-name">Feb / Mar Series</div></div>
+        <div class="papers-grid">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_fm_32')">
+                <span class="paper-tag">9708/32</span>
+                <h3>Economics MCQ (Variant 2)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
         </div>
@@ -96,6 +133,26 @@ function loadMCQPapers() {
             <div class="paper-card" onclick="startMCQTest('econ_2025_on_34')">
                 <span class="paper-tag">9708/34</span>
                 <h3>Economics MCQ (Variant 4)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+        </div>
+
+        <!-- MAY / JUNE 2024 -->
+        <div class="series-header" style="margin-top:40px;"><div class="year-big">2024</div><div class="series-name">May / June Series</div></div>
+        <div class="papers-grid">
+            <div class="paper-card" onclick="startMCQTest('econ_2024_mj_31')">
+                <span class="paper-tag">9708/31</span>
+                <h3>Economics MCQ (Variant 1)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+        </div>
+
+        <!-- FEB / MAR 2024 -->
+        <div class="series-header" style="margin-top:40px;"><div class="year-big">2024</div><div class="series-name">Feb / Mar Series</div></div>
+        <div class="papers-grid">
+            <div class="paper-card" onclick="startMCQTest('econ_2024_fm_32')">
+                <span class="paper-tag">9708/32</span>
+                <h3>Economics MCQ (Variant 2)</h3>
                 <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
             </div>
         </div>
