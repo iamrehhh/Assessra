@@ -1378,20 +1378,36 @@ function loadNotes() {
     container.innerHTML = '';
 
     if (notes.length === 0) {
-        container.innerHTML = '<div style="color:#aaa; text-align:center; padding:20px;">No notes yet. Create one!</div>';
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px 20px; color:rgba(255,255,255,0.6);">
+                <div style="font-size:3rem; margin-bottom:10px; opacity:0.5;">📝</div>
+                <div style="font-family:'Plus Jakarta Sans', sans-serif; font-size:1rem;">No notes yet</div>
+                <div style="font-size:0.85rem; margin-top:5px;">Click "+ New Note" to start</div>
+            </div>`;
         return;
     }
 
     notes.forEach((note, index) => {
         const div = document.createElement('div');
-        div.className = 'saved-note-item';
-        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;";
+        div.className = 'saved-note-item glass-card';
+        div.onclick = (e) => {
+            if (e.target.closest('.delete-note-btn')) return;
+            openNote(index);
+        };
 
-        let displayTitle = note.title || (note.text ? note.text.substring(0, 20) + '...' : 'Untitled Note');
+        let displayTitle = note.title || 'Untitled Note';
+        let displayText = note.text ? note.text.substring(0, 60) + (note.text.length > 60 ? '...' : '') : 'No content';
+        let dateStr = note.date ? new Date(note.date).toLocaleDateString() : 'Just now';
 
         div.innerHTML = `
-            <span onclick="openNote(${index})" style="flex:1;">${displayTitle}</span>
-            <button onclick="deleteNote(${index})" style="background:none; border:none; cursor:pointer; color:red;">🗑</button>
+            <div class="note-content">
+                <div class="note-title">${displayTitle}</div>
+                <div class="note-preview">${displayText}</div>
+                <div class="note-date">${dateStr}</div>
+            </div>
+            <button class="delete-note-btn" onclick="deleteNote(${index})">
+                <span style="font-size:1.1rem; line-height:1;">×</span>
+            </button>
         `;
         container.appendChild(div);
     });
