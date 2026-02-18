@@ -904,8 +904,39 @@ CRITICAL RULES:
             data = json.loads(cleaned_text)
             
             # Ensure model_answer and detailed_critique exist (Critical for General Paper)
-            if 'model_answer' not in data or not data['model_answer']:
-                data['model_answer'] = "Model answer not generated."
+            if 'model_answer' not in data or not data['model_answer'] or data['model_answer'].strip() == '':
+                # ---- FALLBACK: Dedicated second API call for model answer ----
+                logger.warning("⚠️ Model answer missing from grading response. Making dedicated call...")
+                try:
+                    ma_prompt = f"""
+                    QUESTION: {question_text}
+                    
+                    CASE STUDY / CONTEXT:
+                    {case_study_text[:3000]}
+                    
+                    INSTRUCTION:
+                    {model_answer_instruction}
+                    
+                    OUTPUT FORMAT (JSON ONLY):
+                    {{"model_answer": "<Your complete model answer here>"}}
+                    """
+                    ma_response = generate_with_gpt(
+                        "You are a Cambridge International A-Level expert. Generate a perfect model answer. Output valid JSON only.",
+                        ma_prompt
+                    )
+                    if ma_response:
+                        ma_data = json.loads(ma_response.replace('```json', '').replace('```', '').strip())
+                        if ma_data.get('model_answer'):
+                            data['model_answer'] = ma_data['model_answer']
+                            logger.info("✅ Model answer generated via fallback call")
+                        else:
+                            data['model_answer'] = "Model answer not generated. Please retry."
+                    else:
+                        data['model_answer'] = "Model answer not generated. Please retry."
+                except Exception as ma_err:
+                    logger.error(f"❌ Fallback model answer call failed: {ma_err}")
+                    data['model_answer'] = "Model answer not generated. Please retry."
+                    
             if 'detailed_critique' not in data or not data['detailed_critique']:
                 data['detailed_critique'] = "Feedback not generated."
             
