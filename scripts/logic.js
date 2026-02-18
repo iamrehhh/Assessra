@@ -547,7 +547,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
             <textarea id="ans_${pid}_${q.n}" oninput="updateWordCount(this, '${q.l}')">${att.answer || ''}</textarea>
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
             <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
-            ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;"><strong>Detailed Critique:</strong><br>${att.feedback || att.weaknesses || "No feedback available."}</div><div class="model-ans-box"><strong>Model Answer:</strong><br>${att.modelAnswer}</div></div>` : ''}
+            ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;"><strong>Detailed Critique:</strong><br>${att.feedback || att.weaknesses || "No feedback available."}</div><div class="model-ans-box"><strong>Model Answer:</strong><br>${(att.modelAnswer || 'Model answer not generated.').replace(/\n/g, '<br>')}</div></div>` : ''}
         </div>`;
     });
 

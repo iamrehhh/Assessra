@@ -557,89 +557,81 @@ def mark():
         elif marks == 8:
             # 8-MARK ANALYSIS (NO WORD LIMIT)
             model_answer_instruction = """<8-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
-            
-            **Question:** Refer to the provided QUESTION above.
-            **Total Marks:** 8
-            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
-            
-            Adhere strictly to the following structural rules:
-            
-            1. **Paragraph 1 (Point 1):** - State the first point clearly. 
-               - Provide a brief, precise definition of the core business concept (AO1).
-               - Apply the point directly to the business using specific data/facts from the case study. Do not just repeat the data; use it to support the point (AO2).
-               - Build a developed chain of reasoning (Cause -> Impact -> Consequence on the business) (AO3).
-            2. **Paragraph 2 (Point 2):**
-               - State the second point clearly.
-               - Apply it directly to a different piece of data/context from the case study (AO2).
-               - Build another developed chain of reasoning (AO3).
-            *(Do NOT include a conclusion or any evaluation for 8-mark questions).*
-            
-            Ensure the tone is academic, concise, and heavily focused on business terminology.
-            Output ONLY the candidate response.>"""
+Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
+
+Marking breakdown: AO1 (2) + AO2 (2) + AO3 (4) = 8 marks.
+
+The answer MUST consist of EXACTLY 2 paragraphs. No introduction. No conclusion. No evaluation.
+
+Paragraph 1 (Point 1):
+Open by stating your first analytical point. Within the same paragraph, define the relevant business concept in one sentence (AO1 - 1 mark). Then apply this point to the specific business in the case study using real data, names, or figures from the case — do not just repeat the data, use it to support your argument (AO2 - 1 mark). Then build a developed chain of reasoning: Cause leads to Impact leads to Consequence on the business (AO3 - 2 marks).
+
+Paragraph 2 (Point 2):
+State your second, distinct analytical point. Define a second relevant business term or concept (AO1 - 1 mark). Apply it to a different piece of evidence from the case study (AO2 - 1 mark). Build another developed chain of reasoning showing cause, impact, and consequence (AO3 - 2 marks).
+
+CRITICAL FORMATTING RULES:
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
+- Separate the two paragraphs with a blank line.
+- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
+- Do NOT label paragraphs (no "Paragraph 1:" or "Point 1:").
+- Do NOT mention AO1, AO2, AO3 or any assessment objective labels.
+- Output ONLY the candidate response, nothing else.>"""
         elif marks == 12:
             # 12-MARK EVALUATION (NO WORD LIMIT)
             model_answer_instruction = """<12-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
-            
-            **Question:** Refer to the provided QUESTION above.
-            **Total Marks:** 12
-            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
-            
-            Adhere strictly to the following structural rules:
-            
-            1. **Paragraph 1 (Argument 1):**
-               - Define the key concept/strategy (AO1).
-               - Present the first side of the argument, applying it strictly to the specific business context (AO2).
-               - Provide a short chain of analysis showing the likely impact (AO3).
-            2. **Paragraph 2 (Argument 2 / Counter-argument):**
-               - Present the opposing side or a different factor, again heavily contextualized with case data (AO2).
-               - Provide a short chain of analysis showing the alternative impact (AO3).
-            3. **Paragraph 3 (Evaluation & Conclusion - heavily weighted):**
-               - Make a definitive, supported judgement that directly answers the question (AO4).
-               - Do not just summarize the previous paragraphs. Introduce evaluative criteria: What does the success of this decision depend upon? (e.g., timeline, competitor reaction, elasticity, budget constraints).
-               - Weigh the arguments clearly against each other in the specific context of the business to form a final, justified conclusion (AO4).
-            
-            Ensure the tone is academic, concise, and heavily focused on business terminology.
-            Output ONLY the candidate response.>"""
+Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
+
+Marking breakdown: AO1 (2) + AO2 (2) + AO3 (2) + AO4 (6) = 12 marks.
+
+The answer MUST consist of EXACTLY 3 paragraphs.
+
+Paragraph 1 (Argument FOR / First Side):
+Open by clearly stating your first argument. Within this paragraph, define the key business concept or strategy relevant to the question (AO1). Then apply this argument directly to the specific business context using data, names, or figures from the case study (AO2). Develop a short chain of analysis showing the likely impact of this factor on the business (AO3).
+
+Paragraph 2 (Counter-argument / Alternative Perspective):
+Present the opposing side of the argument or a distinctly different factor. Contextualize it heavily with different evidence from the case study (AO2). Build a chain of analysis showing the alternative or contrasting impact on the business (AO3).
+
+Paragraph 3 (Evaluation and Conclusion — this paragraph carries the most weight):
+Make a definitive, supported judgement that directly answers the question (AO4). Do NOT just summarize paragraphs 1 and 2. Instead, introduce evaluative criteria — what does the success of this decision depend upon? Consider factors such as: the timeframe, competitor reactions, price elasticity, budget constraints, or market conditions. Weigh the arguments from paragraphs 1 and 2 against each other in the specific context of this business. Reach a clear, justified final conclusion (AO4).
+
+CRITICAL FORMATTING RULES:
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
+- Separate each paragraph with a blank line.
+- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
+- Do NOT label paragraphs (no "Paragraph 1:" or "Argument 1:").
+- Do NOT mention AO1, AO2, AO3, AO4 or any assessment objective labels.
+- Output ONLY the candidate response, nothing else.>"""
         elif marks == 20:
             # 20-MARK STRATEGY (NO WORD LIMIT)
             model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STUDENT RESPONSE):
-            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 4 (Business Strategy) 20-mark essay question based on the provided case study context.
-            
-            **Question:** Refer to the provided QUESTION above.
-            **Total Marks:** 20
-            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
-            
-            Adhere strictly to the following structural rules for a 20-mark essay:
-            
-            1. **Introduction (AO1 & AO2):**
-               - Provide clear, precise definitions of the core strategic terms in the question (e.g., transformational leadership, marketing strategy). 
-               - Briefly outline the current strategic position or problem the business is facing using specific data from the case study (e.g., timeline events, appendices data).
-            
-            2. **Paragraph 1 (Strategic Argument 1 - AO2 & AO3 & mini-AO4):**
-               - Present the first major argument or factor.
-               - Apply it heavily to the case study, synthesizing data from different appendices or timeline points.
-               - Build a deep chain of analysis (Cause -> Impact -> Strategic Consequence).
-               - End the paragraph with a brief evaluative comment (e.g., "However, the success of this depends on...").
-            
-            3. **Paragraph 2 (Strategic Argument 2 - AO2 & AO3 & mini-AO4):**
-               - Present a distinct second argument, counter-argument, or alternative strategic perspective.
-               - Ground it in different evidence from the case study.
-               - Build another deep chain of analysis.
-               - End with a brief evaluative comment weighing its significance.
-            
-            4. **Paragraph 3 (Optional but recommended - Further Analysis):**
-               - Introduce a third perspective or long-term implication (e.g., financial constraints, competitor reactions, impact on corporate culture).
-            
-            5. **Conclusion & Strategic Evaluation (AO4 - heavily weighted):**
-               - Make a definitive, supported judgement that directly answers the question. Do not just summarize the previous paragraphs.
-               - Weigh the arguments against each other. Which factor is the *most* important and why?
-               - Introduce strong evaluative criteria: What does the success of this strategy depend upon? (e.g., the timeframe, the budget, the specific leadership style, macroeconomic factors).
-               - Provide a final, justified strategic recommendation or conclusion tailored specifically to the exact constraints and objectives of the business in the case study.
-            
-            Ensure the tone is academic, cohesive, and heavily focused on A Level Business strategic terminology.
-            Output ONLY the candidate response.>"""
+Act as a top-scoring A* Cambridge International A Level Business (9609) student. Generate a perfect model answer for this Paper 4 (Business Strategy) 20-mark essay question based on the provided case study context.
+
+Marking breakdown: AO1 (3) + AO2 (2) + AO3 (8) + AO4 (7) = 20 marks.
+
+The answer MUST consist of 4 to 5 paragraphs as described below.
+
+Paragraph 1 (Introduction):
+Provide clear, precise definitions of the core strategic terms in the question (e.g., transformational leadership, marketing strategy, competitive advantage). Then briefly outline the current strategic position or problem the business faces, using specific data from the case study such as timeline events, appendix figures, or financial data. This paragraph earns AO1 and AO2 marks.
+
+Paragraph 2 (Strategic Argument 1):
+Present the first major argument or factor. Apply it heavily to the case study by synthesizing data from different appendices, timeline points, or financial figures. Build a deep chain of analysis: Cause leads to Impact leads to Strategic Consequence for the business. End the paragraph with a brief evaluative comment, for example: "However, the long-term success of this depends on whether the business can sustain its cash flow position."
+
+Paragraph 3 (Strategic Argument 2 / Counter-argument):
+Present a distinct second argument, counter-argument, or alternative strategic perspective. Ground it in different evidence from the case study. Build another deep chain of analysis. End with a brief evaluative comment weighing its significance against the first argument.
+
+Paragraph 4 (Optional but recommended — Further Analysis):
+Introduce a third perspective or long-term implication, such as financial constraints, competitor reactions, macroeconomic factors, or impact on corporate culture. Analyze its strategic significance to the business.
+
+Paragraph 5 (Conclusion and Strategic Evaluation — this carries the most weight):
+Make a definitive, supported judgement that directly answers the question. Do NOT just summarize the previous paragraphs. Weigh the arguments against each other and state which factor is the most important and why. Introduce strong evaluative criteria: What does the success of this strategy depend upon? Consider the timeframe, the budget, the leadership style, elasticity of demand, or macroeconomic factors. Provide a final, justified strategic recommendation or conclusion tailored specifically to the exact constraints and objectives of the business in the case study.
+
+CRITICAL FORMATTING RULES:
+- Write in PLAIN TEXT only. Do NOT use any markdown, bold, italics, headings, bullet points, numbered lists, or asterisks.
+- Separate each paragraph with a blank line.
+- Write in continuous academic prose. The answer must read like a real student's handwritten exam script.
+- Do NOT label paragraphs (no "Paragraph 1:" or "Introduction:").
+- Do NOT mention AO1, AO2, AO3, AO4 or any assessment objective labels.
+- Output ONLY the candidate response, nothing else.>"""
         else:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
     else:
