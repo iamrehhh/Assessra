@@ -300,6 +300,15 @@ def mark():
         You are a Cambridge International A-Level Business (9609) Examiner. 
         Mark the following answer strictly according to the provided Global Marking Commands.
         Do not be artificially strict or lenient. Follow the rubric instructions precisely.
+        
+        CRITICAL FOR CALCULATION QUESTIONS:
+        If the question involves any numerical calculation (e.g., ARR, payback period, NPV, PED, 
+        profit margins, ratios, moving averages, seasonal variations, labour productivity, etc.):
+        1. You MUST first extract the relevant data from the case study/insert text provided.
+        2. You MUST solve the calculation yourself, showing your working.
+        3. You MUST then compare the student's answer to YOUR calculated answer.
+        4. Do NOT guess or approximate — use the exact figures from the case study.
+        5. Award marks based on whether the student's calculation matches the correct answer.
         """
     elif is_general_paper:
         system_prompt = """
@@ -318,23 +327,35 @@ def mark():
     elif is_business_p3:
         # COMPREHENSIVE BUSINESS P3 RUBRIC (Cambridge 9609)
         if marks <= 4:
-            # CALCULATION QUESTIONS (2 marks standard)
-            rubric = """
-            CALCULATION QUESTION RUBRIC (2 MARKS)
+            # CALCULATION QUESTIONS (1-4 marks)
+            rubric = f"""
+            CALCULATION QUESTION RUBRIC ({marks} MARKS)
             
-            2 MARKS:
-            - Correct answer with accurate units (e.g., %, weeks, $)
-            - Award even without working shown (unless question explicitly requires it)
+            CRITICAL INSTRUCTION — BEFORE grading the student's answer:
+            1. YOU must first solve the calculation yourself using ONLY the data from the case study/insert.
+            2. Extract the exact numbers from the tables/text provided.
+            3. Apply the correct formula.
+            4. Compute the answer step-by-step.
+            5. ONLY THEN compare the student's answer to YOUR calculated answer.
             
-            1 MARK:
-            - Correct formula stated
-            - Correct method with arithmetic error
-            - Valid Own Figure Rule (OFR): using earlier wrong figure correctly in valid method
+            MARKING SCHEME ({marks} marks):
+            - Full marks ({marks}/{marks}): Correct final answer (with or without working shown).
+              Accept answers to reasonable rounding (e.g., 2 decimal places).
+              Correct units must be stated where applicable (%, $, weeks, days, ratio).
+            - Partial marks: Award 1 mark if:
+              * Correct formula is stated but arithmetic is wrong
+              * Correct method/approach with a computational error
+              * Own Figure Rule (OFR): A wrong intermediate figure used correctly in valid subsequent steps
+            - 0 marks: No creditable response, wrong formula AND wrong answer.
             
-            0 MARKS:
-            - No creditable response
+            IMPORTANT:
+            - For multi-step calculations (e.g., ARR, payback, NPV), award marks for each correct step.
+            - ACCEPT alternative valid methods that reach the same answer.
+            - Do NOT penalise rounding differences if the method is correct.
+            - If the question is worth 1 mark, award 1 for correct answer, 0 otherwise.
+            - If the question is worth 3-4 marks, distribute marks across: formula (1), working (1-2), final answer (1).
             
-            APPLY positive marking only. ACCEPT alternative correct methods.
+            APPLY positive marking only.
             """
         elif marks == 8:
             # ANALYSIS QUESTIONS (8 marks)
@@ -525,14 +546,18 @@ def mark():
         """
         word_guide = "Subject to 100-200 word feedback limit"
     elif marks <= 4:
-        # CALCULATION / SHORT ANSWER
-        rubric = """
-        STRICT CALCULATION/SHORT ANSWER RUBRIC:
+        # CALCULATION / SHORT ANSWER (non-business)
+        rubric = f"""
+        STRICT CALCULATION/SHORT ANSWER RUBRIC ({marks} MARKS):
+        CRITICAL: Before grading, YOU must solve the calculation yourself using the case study data.
+        Extract the numbers, apply the formula, compute the answer, then compare to the student's response.
+        
         Instruction: 
-        - If the final numerical answer is correct, award full marks.
+        - If the final numerical answer is correct, award full marks ({marks}/{marks}).
         - If the final answer is incorrect, award 1 mark if the correct formula or method is shown in the working.
+        - Accept reasonable rounding differences.
         """
-        word_guide = "Show working"
+        word_guide = "Show full working"
     else:
         rubric = f"Mark strictly according to standard Cambridge conventions for {marks} marks."
         word_guide = "Appropriate length"
@@ -544,16 +569,35 @@ def mark():
         # BUSINESS PAPERS MODEL ANSWER WITH WORD LIMITS
         if marks <= 4:
             # CALCULATION QUESTIONS
-            model_answer_instruction = """<CALCULATION MODEL ANSWER:
-            Act as a top-scoring student.
-            1. EXTRACT DATA: List relevant numbers from the case.
-            2. FORMULA: State the formula.
-            3. WORKING: Show the calculation steps clearly.
-            4. ANSWER: State the final answer with units.
-            
-            OUTPUT FORMAT:
-            Calculations should be clear and step-by-step.
-            No essay writing needed for calculations.>"""
+            model_answer_instruction = f"""<CALCULATION MODEL ANSWER ({marks} marks):
+You are an expert Cambridge A Level Business (9609) examiner. Produce a perfect calculation answer.
+
+YOU MUST FOLLOW THESE STEPS EXACTLY:
+
+1. EXTRACT DATA: Identify and list every relevant number from the case study or table.
+   Write each value with a label, e.g. "Total revenue = $500,000", "Net cash flow Year 1 = $80,000".
+
+2. STATE FORMULA: Write the standard Cambridge-accepted formula clearly.
+   e.g. "ARR = (Average annual profit / Initial investment) × 100"
+   e.g. "Payback period = Years before full recovery + (Remaining amount / Cash flow in recovery year)"
+
+3. SUBSTITUTE: Show the formula with the extracted numbers plugged in.
+   e.g. "ARR = ($60,000 / $300,000) × 100"
+
+4. CALCULATE: Perform the arithmetic step by step. Show intermediate results.
+   DOUBLE-CHECK every calculation. If there are multiple steps, show each one.
+   e.g. "= 0.2 × 100 = 20%"
+
+5. FINAL ANSWER: State the result clearly with correct units.
+   e.g. "ARR = 20%" or "Payback period = 2 years and 6 months"
+
+CRITICAL RULES:
+- Extract data ONLY from the case study provided. Do NOT invent numbers.
+- If data is in a table, reference the table explicitly.
+- Show ALL working — marks are awarded for method even if the final answer has a rounding error.
+- Write in PLAIN TEXT only. No markdown, no bold, no bullet points.
+- Separate steps with blank lines.
+- Output ONLY the calculation answer, nothing else.>"""
         elif marks == 8:
             # 8-MARK ANALYSIS (PEEL STRUCTURE)
             model_answer_instruction = """<8-MARK MODEL ANSWER (A* STUDENT RESPONSE):
