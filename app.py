@@ -190,24 +190,57 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
 
 def generate_with_gpt(system_instruction, user_prompt):
     """
-    Helper function to call OpenAI GPT-4o.
+    Helper function to call OpenAI GPT-4o-mini with retry logic, timeout, and JSON mode.
     """
-    try:
-        client = OpenAI(api_key=OPENAI_API_KEY)
-        
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": system_instruction},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=1.0
-        )
-        
-        return response.choices[0].message.content
-    except Exception as e:
-        logger.error(f"GPT API Error: {e}")
-        return str(e)
+    import time as _time
+
+    max_retries = 3
+    base_delay = 2  # seconds
+
+    for attempt in range(max_retries):
+        try:
+            client = OpenAI(api_key=OPENAI_API_KEY, timeout=120.0)
+            
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": system_instruction},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=1.0,
+                max_tokens=4096,
+                response_format={"type": "json_object"}
+            )
+            
+            content = response.choices[0].message.content
+            if content and content.strip():
+                return content
+            else:
+                logger.warning(f"GPT returned empty response on attempt {attempt + 1}")
+                if attempt < max_retries - 1:
+                    _time.sleep(base_delay * (attempt + 1))
+                    continue
+                return None
+
+        except Exception as e:
+            error_str = str(e).lower()
+            logger.error(f"GPT API Error (attempt {attempt + 1}/{max_retries}): {e}")
+            
+            # Retry on transient errors (rate limit, timeout, connection)
+            is_transient = any(keyword in error_str for keyword in [
+                'rate_limit', 'rate limit', 'timeout', 'connection', 
+                'server_error', '503', '502', '429', 'overloaded'
+            ])
+            
+            if is_transient and attempt < max_retries - 1:
+                delay = base_delay * (2 ** attempt)  # Exponential backoff
+                logger.info(f"⏳ Retrying in {delay}s...")
+                _time.sleep(delay)
+                continue
+            
+            return None
+    
+    return None
 
 def generate_with_gemini_simple(system_instruction, user_prompt):
     """
@@ -864,33 +897,48 @@ CRITICAL RULES:
     logger.info(f"📝 Processing with GPT-4o Mini... (Prompt length: {len(user_prompt)})")
     text = generate_with_gpt(system_prompt, user_prompt)
     
-    # Check if text is an error message (starts with an exception from generate_with_gpt)
-    if text and not text.startswith("Error"):
+    if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
         try:
             data = json.loads(cleaned_text)
             
             # Ensure model_answer and detailed_critique exist (Critical for General Paper)
-            if 'model_answer' not in data:
+            if 'model_answer' not in data or not data['model_answer']:
                 data['model_answer'] = "Model answer not generated."
-            if 'detailed_critique' not in data:
+            if 'detailed_critique' not in data or not data['detailed_critique']:
                 data['detailed_critique'] = "Feedback not generated."
+            
+            # Ensure score fields exist with safe defaults
+            data.setdefault('score', 0)
+            data.setdefault('ao1', 0)
+            data.setdefault('ao2', 0)
+            data.setdefault('ao3', 0)
+            data.setdefault('ao4', 0)
                 
             return jsonify(data), 200
         except json.JSONDecodeError:
             logger.error(f"❌ JSON Decode Error: {cleaned_text[:500]}")
+            
+            # Attempt to extract model_answer from raw text using regex fallback
+            import re
+            model_answer_match = re.search(r'"model_answer"\s*:\s*"((?:[^"\\]|\\.)*)"', cleaned_text, re.DOTALL)
+            extracted_model = model_answer_match.group(1) if model_answer_match else "Error generating model answer."
+            
             return jsonify({
                 "score": 0,
                 "ao1": 0, "ao2": 0, "ao3": 0, "ao4": 0,
                 "detailed_critique": "Error: AI response was not valid JSON. Please try again.",
-                "model_answer": "Error generating model answer.",
+                "model_answer": extracted_model,
                 "raw_response": cleaned_text[:500]
             }), 200
     else:
+        logger.error("❌ GPT-4o Mini returned no response after all retries")
         return jsonify({
-            "error": "Failed to generate marking",
-            "message": f"GPT-4o Mini failed to generate a response. API Error: {text or 'Unknown Error'}. Please check your OpenAI quota and API key."
-        }), 500
+            "score": 0,
+            "ao1": 0, "ao2": 0, "ao3": 0, "ao4": 0,
+            "detailed_critique": "Server error: AI failed to respond after multiple attempts. Please try again.",
+            "model_answer": "Model answer could not be generated. Please retry."
+        }), 200
 
 
 # ==========================================
