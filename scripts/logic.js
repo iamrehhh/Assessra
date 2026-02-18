@@ -551,8 +551,41 @@ async function openPaper(pid, preservedScrollTop = 0) {
         </div>`;
     });
 
-    // Generate fullscreen split-screen layout
-    const splitScreenHTML = `
+    // Generate layout HTML
+    let viewHTML = '';
+    // Ensure it's General Paper AND Paper 1 (suffix _11, _12, or _13)
+    const isGeneralPaper1 = pid.startsWith('gp_') && (pid.endsWith('_11') || pid.endsWith('_12') || pid.endsWith('_13'));
+
+    if (isGeneralPaper1) {
+        // FULL SCREEN LAYOUT FOR GENERAL PAPER 1
+        viewHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
+            <!-- Header -->
+            <div style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
+                    <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.9rem; font-weight:600; color:#555;">AI Model: GPT-4o Mini</span>
+                </div>
+            </div>
+
+            <!-- Full Width Questions Container -->
+            <div id="questions-panel" style="flex-grow: 1; overflow-y: auto; padding: 40px; background: #f9f9f9; display: flex; justify-content: center;">
+                <div style="width: 100%; max-width: 900px; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="text-align: center; margin-bottom: 30px; color: #666;">
+                        <p><em>For General Paper 1, the questions are self-contained. No external text is required.</em></p>
+                    </div>
+                    ${qHtml}
+                    <div style="height: 100px;"></div>
+                </div>
+            </div>
+        </div>
+        `;
+    } else {
+        // SPLIT SCREEN LAYOUT FOR OTHER PAPERS (Business, Economics)
+        viewHTML = `
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: white; display: flex; flex-direction: column;">
             <!-- Header -->
             <div style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
@@ -592,12 +625,13 @@ async function openPaper(pid, preservedScrollTop = 0) {
                 </div>
             </div>
         </div>
-    `;
+        `;
+    }
 
     // Inject into workspace view
     const workspaceView = document.getElementById('view-workspace');
     if (workspaceView) {
-        workspaceView.innerHTML = splitScreenHTML;
+        workspaceView.innerHTML = viewHTML;
         workspaceView.classList.remove('hidden');
     }
 

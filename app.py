@@ -555,70 +555,90 @@ def mark():
             Calculations should be clear and step-by-step.
             No essay writing needed for calculations.>"""
         elif marks == 8:
-            # 8-MARK ANALYSIS (150-200 words)
+            # 8-MARK ANALYSIS (NO WORD LIMIT)
             model_answer_instruction = """<8-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-            Role: Act as an A* A-Level Business student.
-            Task: Write a perfect 8-mark answer.
-            Word Count Limit: 150-200 words.
+            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
             
-            CRITERIA:
-            - 2 distinct analytical points (K+App+An).
-            - K: Accurate business terminology.
-            - App: Explicit reference to case data/context.
-            - An: Chain of reasoning (Cause -> Impact -> Consequence).
+            **Question:** Refer to the provided QUESTION above.
+            **Total Marks:** 8
+            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
             
-            FORMATTING RULES (STRICT):
-            - Write in CONTINUOUS PROSE.
-            - Use 2-3 standard paragraphs.
-            - DO NOT use bullet points.
-            - DO NOT use headings like "Introduction" or "Point 1".
-            - DO NOT label Assessment Objectives (e.g. DO NOT write [AO1]).
-            - Just write the clear, high-quality answer text.
+            Adhere strictly to the following structural rules:
             
+            1. **Paragraph 1 (Point 1):** - State the first point clearly. 
+               - Provide a brief, precise definition of the core business concept (AO1).
+               - Apply the point directly to the business using specific data/facts from the case study. Do not just repeat the data; use it to support the point (AO2).
+               - Build a developed chain of reasoning (Cause -> Impact -> Consequence on the business) (AO3).
+            2. **Paragraph 2 (Point 2):**
+               - State the second point clearly.
+               - Apply it directly to a different piece of data/context from the case study (AO2).
+               - Build another developed chain of reasoning (AO3).
+            *(Do NOT include a conclusion or any evaluation for 8-mark questions).*
+            
+            Ensure the tone is academic, concise, and heavily focused on business terminology.
             Output ONLY the candidate response.>"""
         elif marks == 12:
-            # 12-MARK EVALUATION (250-300 words)
+            # 12-MARK EVALUATION (NO WORD LIMIT)
             model_answer_instruction = """<12-MARK MODEL ANSWER (A* STUDENT RESPONSE):
-            Role: Act as an A* A-Level Business student.
-            Task: Write a perfect 12-mark evaluation answer.
-            Word Count Limit: 250-300 words.
+            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 3 question based on the provided case study context.
             
-            CRITERIA:
-            - Balanced argument (Pros vs Cons / Argument vs Counter-argument).
-            - Integrated application to the specific case business.
-            - Developed analysis (chains of reasoning).
-            - Supported judgement/recommendation.
+            **Question:** Refer to the provided QUESTION above.
+            **Total Marks:** 12
+            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
             
-            FORMATTING RULES (STRICT):
-            - Write in CONTINUOUS PROSE.
-            - Use 4-5 standard paragraphs (Intro, Arg 1, Arg 2, Eval, Concl).
-            - DO NOT use bullet points.
-            - DO NOT use headings.
-            - DO NOT label Assessment Objectives.
-            - Just write the clear, high-quality answer text.
+            Adhere strictly to the following structural rules:
             
+            1. **Paragraph 1 (Argument 1):**
+               - Define the key concept/strategy (AO1).
+               - Present the first side of the argument, applying it strictly to the specific business context (AO2).
+               - Provide a short chain of analysis showing the likely impact (AO3).
+            2. **Paragraph 2 (Argument 2 / Counter-argument):**
+               - Present the opposing side or a different factor, again heavily contextualized with case data (AO2).
+               - Provide a short chain of analysis showing the alternative impact (AO3).
+            3. **Paragraph 3 (Evaluation & Conclusion - heavily weighted):**
+               - Make a definitive, supported judgement that directly answers the question (AO4).
+               - Do not just summarize the previous paragraphs. Introduce evaluative criteria: What does the success of this decision depend upon? (e.g., timeline, competitor reaction, elasticity, budget constraints).
+               - Weigh the arguments clearly against each other in the specific context of the business to form a final, justified conclusion (AO4).
+            
+            Ensure the tone is academic, concise, and heavily focused on business terminology.
             Output ONLY the candidate response.>"""
         elif marks == 20:
-            # 20-MARK STRATEGY (400-500 words)
+            # 20-MARK STRATEGY (NO WORD LIMIT)
             model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STUDENT RESPONSE):
-            Role: Act as an A* A-Level Business student.
-            Task: Write a perfect 20-mark strategic essay.
-            Word Count Limit: 400-500 words.
+            Act as an expert Cambridge International A Level Business (9609) examiner and top-tier student. Generate a perfect model answer for this Paper 4 (Business Strategy) 20-mark essay question based on the provided case study context.
             
-            CRITERIA:
-            - Strategic focus: Long-term, cross-functional analysis.
-            - Deep Application: Answer must be rooted in the case context constraints.
-            - High-level Analysis: Complex chains of reasoning linking strategy to objectives.
-            - Strong Evaluation: Critical questioning of data/assumptions and a justified final recommendation.
+            **Question:** Refer to the provided QUESTION above.
+            **Total Marks:** 20
+            **Case Study Context:** Refer to the provided CASE STUDY CONTEXT above.
             
-            FORMATTING RULES (STRICT):
-            - Write in CONTINUOUS PROSE.
-            - Use 5-6 well-structured paragraphs.
-            - DO NOT use bullet points.
-            - DO NOT use headings.
-            - DO NOT label Assessment Objectives.
-            - Just write the clear, high-quality essay text.
+            Adhere strictly to the following structural rules for a 20-mark essay:
             
+            1. **Introduction (AO1 & AO2):**
+               - Provide clear, precise definitions of the core strategic terms in the question (e.g., transformational leadership, marketing strategy). 
+               - Briefly outline the current strategic position or problem the business is facing using specific data from the case study (e.g., timeline events, appendices data).
+            
+            2. **Paragraph 1 (Strategic Argument 1 - AO2 & AO3 & mini-AO4):**
+               - Present the first major argument or factor.
+               - Apply it heavily to the case study, synthesizing data from different appendices or timeline points.
+               - Build a deep chain of analysis (Cause -> Impact -> Strategic Consequence).
+               - End the paragraph with a brief evaluative comment (e.g., "However, the success of this depends on...").
+            
+            3. **Paragraph 2 (Strategic Argument 2 - AO2 & AO3 & mini-AO4):**
+               - Present a distinct second argument, counter-argument, or alternative strategic perspective.
+               - Ground it in different evidence from the case study.
+               - Build another deep chain of analysis.
+               - End with a brief evaluative comment weighing its significance.
+            
+            4. **Paragraph 3 (Optional but recommended - Further Analysis):**
+               - Introduce a third perspective or long-term implication (e.g., financial constraints, competitor reactions, impact on corporate culture).
+            
+            5. **Conclusion & Strategic Evaluation (AO4 - heavily weighted):**
+               - Make a definitive, supported judgement that directly answers the question. Do not just summarize the previous paragraphs.
+               - Weigh the arguments against each other. Which factor is the *most* important and why?
+               - Introduce strong evaluative criteria: What does the success of this strategy depend upon? (e.g., the timeframe, the budget, the specific leadership style, macroeconomic factors).
+               - Provide a final, justified strategic recommendation or conclusion tailored specifically to the exact constraints and objectives of the business in the case study.
+            
+            Ensure the tone is academic, cohesive, and heavily focused on A Level Business strategic terminology.
             Output ONLY the candidate response.>"""
         else:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
@@ -635,8 +655,8 @@ def mark():
         ) if marks <= 4 else (
             f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
             f"General Paper 8021 Model Answer Specifications:\n"
-            f"- Word Count: 500-650 words\n"
-            f"- Structure: Intro (80-100w), Body (3-4 paragraphs, 80-100w each), Conclusion (80-100w)\n"
+            f"- Word Count: 600-700 words\n"
+            f"- Structure: Intro (80-100w), Body (4-5 paragraphs, 100-120w each), Conclusion (80-100w)\n"
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate for the question.\n"
             f"Ensure the answer would score Level 5 (25-30 marks) across all AOs.>"

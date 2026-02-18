@@ -600,7 +600,80 @@ Object.assign(paperData, {
                 ]
             }
         ]
+    },
+    // --- FEBRUARY / MARCH 2024 (Variant 12) ---
+    'gp_2024_fm_12': {
+        title: "Essay Paper 12 (Feb/March '24)",
+        pdf: "", // No PDF yet
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+
+    // --- MAY / JUNE 2024 (Variant 11) ---
+    'gp_2024_mj_11': {
+        title: "Essay Paper 11 (May/June '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+    // --- MAY / JUNE 2024 (Variant 12) ---
+    'gp_2024_mj_12': {
+        title: "Essay Paper 12 (May/June '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+    // --- MAY / JUNE 2024 (Variant 13) ---
+    'gp_2024_mj_13': {
+        title: "Essay Paper 13 (May/June '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+
+    // --- OCT / NOV 2024 (Variant 11) ---
+    'gp_2024_on_11': {
+        title: "Essay Paper 11 (Oct/Nov '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+    // --- OCT / NOV 2024 (Variant 12) ---
+    'gp_2024_on_12': {
+        title: "Essay Paper 12 (Oct/Nov '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
+    },
+    // --- OCT / NOV 2024 (Variant 13) ---
+    'gp_2024_on_13': {
+        title: "Essay Paper 13 (Oct/Nov '24)",
+        pdf: "",
+        questions: Array.from({ length: 10 }, (_, i) => ({
+            n: (i + 1).toString(), m: 30, l: '600-700',
+            t: `Question ${i + 1} text pending...`,
+            i: ["Point 1", "Point 2"]
+        }))
     }
+}
 });
 
 // === 2. THE VISUAL CARDS ===
@@ -610,31 +683,72 @@ const gpCardsP1 = `
         <p style="color:#666;">Paper 1: Essay Questions (30 Marks)</p>
     </div>
     
-    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Key Series</div></div>
     <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2025_fm_12')">
             <span class="paper-tag">8021/12</span>
-            <h3>Essay Paper 12</h3>
-            <p style="color:#888; margin-top:5px;">10 Questions • PDF Available</p>
+            <h3>Feb/March '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
-    </div>
-
-    <div class="series-header"><div class="year-big">2025</div><div class="series-name">May / June Series</div></div>
-    <div class="papers-grid">
         <div class="paper-card" onclick="openPaper('gp_2025_mj_11')">
             <span class="paper-tag">8021/11</span>
-            <h3>Essay Paper 11</h3>
-            <p style="color:#888; margin-top:5px;">10 Questions • PDF Available</p>
+            <h3>May/June '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
         <div class="paper-card" onclick="openPaper('gp_2025_mj_12')">
             <span class="paper-tag">8021/12</span>
-            <h3>Essay Paper 12</h3>
-            <p style="color:#888; margin-top:5px;">10 Questions • PDF Available</p>
+            <h3>May/June '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
         <div class="paper-card" onclick="openPaper('gp_2025_mj_13')">
             <span class="paper-tag">8021/13</span>
-            <h3>Essay Paper 13</h3>
-            <p style="color:#888; margin-top:5px;">10 Questions • PDF Available</p>
+            <h3>May/June '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+    </div>
+
+    <!-- 2024 PAPERS -->
+    <div class="series-header"><div class="year-big">2024</div><div class="series-name">All Series</div></div>
+    <div class="papers-grid">
+        <!-- Oct/Nov Series -->
+        <div class="paper-card" onclick="openPaper('gp_2024_on_11')">
+            <span class="paper-tag">8021/11</span>
+            <h3>Oct/Nov '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2024_on_12')">
+            <span class="paper-tag">8021/12</span>
+            <h3>Oct/Nov '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2024_on_13')">
+            <span class="paper-tag">8021/13</span>
+            <h3>Oct/Nov '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+
+        <!-- May/June Series -->
+        <div class="paper-card" onclick="openPaper('gp_2024_mj_11')">
+            <span class="paper-tag">8021/11</span>
+            <h3>May/June '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2024_mj_12')">
+            <span class="paper-tag">8021/12</span>
+            <h3>May/June '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2024_mj_13')">
+            <span class="paper-tag">8021/13</span>
+            <h3>May/June '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+
+        <!-- Feb/March Series -->
+        <div class="paper-card" onclick="openPaper('gp_2024_fm_12')">
+            <span class="paper-tag">8021/12</span>
+            <h3>Feb/March '24</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
     </div>
 `;
