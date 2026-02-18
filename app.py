@@ -1190,6 +1190,65 @@ def delete_note_item():
     
     return jsonify({"status": "success", "message": "Note deleted"})
 
+
+# ---------------------------------------------------------
+# SWOT ANALYSIS ENDPOINT
+# ---------------------------------------------------------
+@app.route('/swot-analysis', methods=['POST'])
+def swot_analysis():
+    if not OPENAI_API_KEY:
+        return jsonify({"error": "API Key Missing"}), 503
+
+    try:
+        data = request.json
+        subject = data.get('subject', 'General')
+        paper = data.get('paper', 'General') # e.g. "Paper 3"
+        performance_data = data.get('performance_data', {})
+        
+        # Construct prompt for the AI
+        system_prompt = f"""
+        You are an expert Cambridge International A-Level Academic Counselor.
+        Your task is to perform a detailed SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats) for a student based on their compiled performance data for {subject} {paper}.
+
+        DATA PROVIDED:
+        - Average Scores per Question Type/Topic.
+        - Recent detailed examiner critiques.
+        - Trend of improvement/decline.
+
+        OUTPUT FORMAT (JSON ONLY):
+        {{
+            "strengths": ["point 1", "point 2", ...],
+            "weaknesses": ["point 1", "point 2", ...],
+            "opportunities": ["Actionable advice 1", "advice 2", ...],
+            "threats": ["Risk factor 1", "risk 2", ...]
+        }}
+
+        Keep points concise, actionable, and encouraging but realistic. Focus on academic skills (Analysis, Evaluation, Knowledge) and exam technique.
+        """
+
+        user_prompt = f"""
+        Student Performance Data:
+        {json.dumps(performance_data, indent=2)}
+        """
+
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7,
+            response_format={"type": "json_object"}
+        )
+
+        content = response.choices[0].message.content
+        return jsonify(json.loads(content))
+
+    except Exception as e:
+        logger.error(f"SWOT Analysis Error: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
