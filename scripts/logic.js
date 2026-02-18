@@ -214,7 +214,10 @@ function selectPaper(subject, paper) {
     // 2. Determine target container ID
     let targetId = '';
     if (subject === 'business') targetId = `container-bus-${paper}`; // bus-p3, bus-p4
-    else if (subject === 'economics') targetId = `container-econ-${paper}`; // econ-p3, econ-p4
+    else if (subject === 'economics') {
+        targetId = `container-econ-${paper}`; // econ-p3, econ-p4
+        if (paper === 'p3' && window.loadMCQPapers) window.loadMCQPapers();
+    }
     else if (subject === 'general') targetId = `container-general-${paper}`; // general-p1, general-p2
 
     // 3. Show target container

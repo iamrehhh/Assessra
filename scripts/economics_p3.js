@@ -4,6 +4,7 @@
 
 // ⚠️ FIXED: Added 'econ_' prefix to prevent clashing with Business Papers
 const paperDatabase = {
+    // --- OCT / NOV 2025 ---
     "econ_2025_on_31": {
         pdf: "papers/9708_w25_qp_31.pdf",
         answers: ['A', 'A', 'C', 'A', 'D', 'A', 'D', 'D', 'B', 'B', 'C', 'A', 'D', 'B', 'A', 'D', 'D', 'B', 'C', 'C', 'C', 'A', 'D', 'B', 'A', 'B', 'A', 'D', 'A', 'C']
@@ -19,6 +20,20 @@ const paperDatabase = {
     "econ_2025_on_34": {
         pdf: "papers/9708_w25_qp_34.pdf",
         answers: ['D', 'C', 'C', 'B', 'C', 'D', 'D', 'A', 'B', 'D', 'D', 'A', 'C', 'D', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'C', 'A', 'D', 'B', 'A', 'C', 'B', 'B', 'C']
+    },
+
+    // --- MAY / JUNE 2025 ---
+    "econ_2025_mj_31": {
+        pdf: "papers/9708_s25_qp_31.pdf",
+        answers: ['B', 'C', 'A', 'C', 'C', 'D', 'C', 'C', 'B', 'C', 'B', 'B', 'C', 'B', 'B', 'C', 'B', 'A', 'A', 'C', 'D', 'A', 'A', 'D', 'B', 'C', 'B', 'C', 'D', 'B']
+    },
+    "econ_2025_mj_32": {
+        pdf: "papers/9708_s25_qp_32.pdf",
+        answers: ['C', 'A', 'B', 'C', 'C', 'D', 'D', 'D', 'C', 'C', 'D', 'C', 'C', 'C', 'D', 'A', 'A', 'B', 'A', 'C', 'D', 'A', 'A', 'D', 'B', 'A', 'B', 'A', 'A', 'D']
+    },
+    "econ_2025_mj_34": {
+        pdf: "papers/9708_s25_qp_34.pdf",
+        answers: ['C', 'B', 'B', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'B', 'B', 'D', 'A', 'D', 'B', 'B', 'D', 'A', 'B', 'A', 'B', 'B', 'D', 'B', 'B', 'A', 'A', 'B', 'B']
     }
 };
 
@@ -40,7 +55,28 @@ function loadMCQPapers() {
             <p style="color:#666;">Interactive Split-Screen Test (75 Minutes)</p>
         </div>
         
-        <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
+        <!-- MAY / JUNE 2025 -->
+        <div class="series-header"><div class="year-big">2025</div><div class="series-name">May / June Series</div></div>
+        <div class="papers-grid">
+            <div class="paper-card" onclick="startMCQTest('econ_2025_mj_31')">
+                <span class="paper-tag">9708/31</span>
+                <h3>Economics MCQ (Variant 1)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+            <div class="paper-card" onclick="startMCQTest('econ_2025_mj_32')">
+                <span class="paper-tag">9708/32</span>
+                <h3>Economics MCQ (Variant 2)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+            <div class="paper-card" onclick="startMCQTest('econ_2025_mj_34')">
+                <span class="paper-tag">9708/34</span>
+                <h3>Economics MCQ (Variant 4)</h3>
+                <p style="color:#888; margin-top:5px;">30 Questions • 1h 15m</p>
+            </div>
+        </div>
+
+        <!-- OCT / NOV 2025 -->
+        <div class="series-header" style="margin-top:40px;"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
         <div class="papers-grid">
             <div class="paper-card" onclick="startMCQTest('econ_2025_on_31')">
                 <span class="paper-tag">9708/31</span>
