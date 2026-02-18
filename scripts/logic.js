@@ -840,17 +840,21 @@ function toggleExpand(textAreaId, btnId) {
 // === 5. SCORECARD & LEADERBOARD LOGIC ===
 
 function classifyPaper(pid) {
-    // 1. Explicit Economics ID
+    // 1. General Paper
+    if (pid.startsWith('gp_')) {
+        return { subject: 'gp', paper: 'p1' };
+    }
+    // 2. Explicit Economics ID
     if (pid.startsWith('econ_')) {
         if (pid.includes('31') || pid.includes('32') || pid.includes('33') || pid.includes('34')) return { subject: 'economics', paper: 'p3' };
         return { subject: 'economics', paper: 'p4' };
     }
-    // 2. Business Paper Check (fallback)
+    // 3. Business Paper Check (fallback)
     if (window.paperData && window.paperData[pid]) {
         if (pid.includes('41') || pid.includes('42') || pid.includes('43')) return { subject: 'business', paper: 'p4' };
         return { subject: 'business', paper: 'p3' };
     }
-    // 3. Default (Assume Econ MCQ if unknown and not in Business data)
+    // 4. Default (Assume Econ MCQ if unknown and not in Business data)
     return { subject: 'economics', paper: 'p3' };
 }
 
@@ -859,7 +863,7 @@ async function loadCloudScorecard() {
     if (!u) return;
 
     // Reset Containers
-    ['sc-bus-p3', 'sc-bus-p4', 'sc-econ-p3', 'sc-econ-p4'].forEach(id => {
+    ['sc-bus-p3', 'sc-bus-p4', 'sc-econ-p3', 'sc-econ-p4', 'sc-gp-p1'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.innerHTML = '';
     });
@@ -868,6 +872,7 @@ async function loadCloudScorecard() {
     const papers = data.papers || {};
 
     Object.keys(papers).forEach(pid => {
+        // Get title from paperData (Business/GP) or just use the pid
         const pTitle = (window.paperData && window.paperData[pid]) ? window.paperData[pid].title : pid;
         const category = classifyPaper(pid);
 
@@ -882,6 +887,10 @@ async function loadCloudScorecard() {
         else if (category.subject === 'economics') {
             if (category.paper === 'p3') document.getElementById('sc-econ-p3').innerHTML += html;
             else document.getElementById('sc-econ-p4').innerHTML += html;
+        }
+        else if (category.subject === 'gp') {
+            const gpEl = document.getElementById('sc-gp-p1');
+            if (gpEl) gpEl.innerHTML += html;
         }
     });
 }
@@ -944,7 +953,10 @@ async function renderSubjectTotal(subject, user) {
     let total = 0, count = 0;
 
     Object.keys(papers).forEach(pid => {
-        const isTarget = subject === 'Business' ? (!pid.startsWith('econ_')) : (pid.startsWith('econ_'));
+        let isTarget = false;
+        if (subject === 'Business') isTarget = !pid.startsWith('econ_') && !pid.startsWith('gp_');
+        else if (subject === 'Economics') isTarget = pid.startsWith('econ_');
+        else if (subject === 'General Paper') isTarget = pid.startsWith('gp_');
         if (isTarget) {
             Object.values(papers[pid]).forEach(q => total += (q.score || 0));
             count++;

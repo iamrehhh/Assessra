@@ -46,23 +46,24 @@ window.CloudManager = {
         const snapshot = await get(child(ref(db), `students/${safeUser}/papers`));
         if (snapshot.exists()) {
             const papers = snapshot.val();
-            let biz = 0, econ = 0;
+            let biz = 0, econ = 0, gp = 0;
 
             Object.keys(papers).forEach(pid => {
-                let isEcon = false;
+                let subject = 'business'; // default
 
                 // 1. Check ID Prefix
-                if (pid.startsWith('econ_')) isEcon = true;
-
+                if (pid.startsWith('econ_')) subject = 'economics';
+                else if (pid.startsWith('gp_')) subject = 'gp';
                 // 2. Double check 9708 vs 9609 patterns if prefix is missing
-                else if (pid.includes('9708')) isEcon = true;
+                else if (pid.includes('9708')) subject = 'economics';
 
                 // 3. Everything else defaults to Business (9609)
 
                 // Sum scores
                 Object.values(papers[pid]).forEach(q => {
                     if (q.score) {
-                        if (isEcon) econ += q.score;
+                        if (subject === 'economics') econ += q.score;
+                        else if (subject === 'gp') gp += q.score;
                         else biz += q.score;
                     }
                 });
@@ -73,7 +74,8 @@ window.CloudManager = {
                 name: safeUser.replace('_', '.'),
                 business: biz,
                 economics: econ,
-                total: biz + econ
+                gp: gp,
+                total: biz + econ + gp
             });
         }
     },
