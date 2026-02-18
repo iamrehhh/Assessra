@@ -975,7 +975,6 @@ Object.assign(paperData, {
             i: ["Point 1", "Point 2"]
         }))
     }
-}
 });
 
 // === 2. THE VISUAL CARDS ===
