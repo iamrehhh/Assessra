@@ -601,15 +601,317 @@ Object.assign(paperData, {
             }
         ]
     },
+
+    // --- OCTOBER / NOVEMBER 2025 (Variant 11) ---
+    'gp_2025_on_11': {
+        title: "Essay Paper 11 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_11.pdf",
+        questions: [
+            {
+                n: '1', m: 30, l: '600-700',
+                t: "International organisations are of essential importance in today's world. To what extent do you agree with this statement?",
+                i: [
+                    "exploring what international organisations are and what they do",
+                    "evaluating the extent to which international organisations are of essential importance",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '2', m: 30, l: '600-700',
+                t: "Technological advances will make learning to speak other languages unnecessary. Evaluate to what extent this statement is true.",
+                i: [
+                    "exploring how technology can be used when learning to speak other languages",
+                    "assessing whether technology might end the need for learning to speak other languages",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '3', m: 30, l: '600-700',
+                t: "To what extent is health education effective in your country?",
+                i: [
+                    "assessing the importance of education in understanding and maintaining one's health",
+                    "evaluating the effectiveness and limitations of current health education provision",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '4', m: 30, l: '600-700',
+                t: "Evaluate the extent to which literature can change how people think.",
+                i: [
+                    "examining a variety of examples of literature",
+                    "assessing the extent to which literature can change people's attitudes",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '5', m: 30, l: '600-700',
+                t: "Traditional arts and crafts are not appreciated enough in your country. To what extent do you agree with this statement?",
+                i: [
+                    "examining the traditional arts and crafts of a country",
+                    "assessing the extent to which these traditional arts and crafts are appreciated",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '6', m: 30, l: '600-700',
+                t: "The desire to make a lot of money is having a positive effect on today's world. Discuss.",
+                i: [
+                    "exploring the concept of the desire to make a lot of money",
+                    "evaluating the extent to which making a lot of money can be seen as positive or negative",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '7', m: 30, l: '600-700',
+                t: "Evaluate the view that space exploration should be publicly funded.",
+                i: [
+                    "examining a range of benefits and drawbacks of space exploration",
+                    "evaluating reasons why the exploration of space may not be the best use of public funds",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '8', m: 30, l: '600-700',
+                t: "To what extent has digital media negatively impacted attendance at live performances?",
+                i: [
+                    "exploring differences between live performances and digital media",
+                    "evaluating how attendance at live performances has been impacted by digital media",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '9', m: 30, l: '600-700',
+                t: "Human rights are still not given enough importance in today's world. Discuss.",
+                i: [
+                    "assessing what human rights are",
+                    "evaluating how valued human rights are in a range of different contexts",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '10', m: 30, l: '600-700',
+                t: "To what extent are the problems of water pollution being successfully addressed in your country?",
+                i: [
+                    "discussing the current state of water pollution in the chosen country",
+                    "exploring developments which aim to improve water quality",
+                    "making a judgement based on the evidence and argument"
+                ]
+            }
+        ]
+    },
+
+    // --- OCTOBER / NOVEMBER 2025 (Variant 12) ---
+    'gp_2025_on_12': {
+        title: "Essay Paper 12 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_12.pdf",
+        questions: [
+            {
+                n: '1', m: 30, l: '600-700',
+                t: "Tourism ensures the survival of remote communities. To what extent is this true in your country?",
+                i: [
+                    "considering the extent to which tourism can ensure survival of communities",
+                    "discussing positive and negative effects of tourism on local communities and traditions",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '2', m: 30, l: '600-700',
+                t: "Successful leaders have to make unpopular decisions. Discuss.",
+                i: [
+                    "examining the requirements for successful leadership",
+                    "considering whether successful leaders are willing to make unpopular decisions",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '3', m: 30, l: '600-700',
+                t: "Human migration from one place to another brings many benefits. To what extent do you agree with this statement?",
+                i: [
+                    "examining the places impacted by human migration",
+                    "evaluating the extent to which migration can be beneficial or problematic",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '4', m: 30, l: '600-700',
+                t: "To what extent does social media enable young people to communicate more positively?",
+                i: [
+                    "discussing how social media platforms can allow young people to communicate positively",
+                    "considering ways in which it could be less beneficial",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '5', m: 30, l: '600-700',
+                t: "The study of history focuses too much on what people have done wrong. Discuss.",
+                i: [
+                    "exploring why historical study focuses on people's wrongdoings",
+                    "discussing the extent of this focus",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '6', m: 30, l: '600-700',
+                t: "Financial security is the responsibility of the individual. To what extent do you agree with this statement?",
+                i: [
+                    "exploring what financial security is",
+                    "considering the extent to which financial security is an individual's responsibility",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '7', m: 30, l: '600-700',
+                t: "What an individual chooses to eat and drink is of no concern to anyone else. Evaluate this statement.",
+                i: [
+                    "exploring health, personal and social issues related to dietary choices",
+                    "discussing to what extent others should be concerned with individual choices",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '8', m: 30, l: '600-700',
+                t: "Visual forms of art express emotions in ways that written words cannot achieve. Discuss.",
+                i: [
+                    "exploring differences between visual arts and the written word",
+                    "assessing strengths and weaknesses of visual arts in expressing emotion compared to written word",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '9', m: 30, l: '600-700',
+                t: "The biggest concern about climate change is the threat that it creates for the people of the world. To what extent do you agree with this view?",
+                i: [
+                    "exploring the concept of climate change",
+                    "examining the extent to which climate change poses a threat to humanity",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '10', m: 30, l: '600-700',
+                t: "Songs have the power to divide as well as unite people. Discuss.",
+                i: [
+                    "examining a range of songs",
+                    "evaluating what can cause division or unity among people",
+                    "making a judgement based on the evidence and argument"
+                ]
+            }
+        ]
+    },
+
+    // --- OCTOBER / NOVEMBER 2025 (Variant 13) ---
+    'gp_2025_on_13': {
+        title: "Essay Paper 13 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_13.pdf",
+        questions: [
+            {
+                n: '1', m: 30, l: '600-700',
+                t: "The government should protect the health of all citizens in your country. To what extent do you agree with this view?",
+                i: [
+                    "exploring different ways governments can protect citizens' health",
+                    "evaluating the extent to which governments should intervene in protecting health",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '2', m: 30, l: '600-700',
+                t: "Space travel and exploration should be managed by private companies rather than governments. Discuss this view.",
+                i: [
+                    "exploring the importance of space travel and exploration",
+                    "assessing the capacity of private companies vs national governments for managing space exploration",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '3', m: 30, l: '600-700',
+                t: "Books inspire the minds of children. To what extent do you agree with this claim?",
+                i: [
+                    "discussing a range of books children are likely to have read",
+                    "assessing the extent to which books can inspire children",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '4', m: 30, l: '600-700',
+                t: "Designers should always ensure that what they create is visually attractive. To what extent do you agree with this statement?",
+                i: [
+                    "exploring different areas and types of design",
+                    "assessing the extent to which designers should create visually appealing products",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '5', m: 30, l: '600-700',
+                t: "Spending on foreign aid should be a priority for wealthy countries. Discuss.",
+                i: [
+                    "evaluating the importance of spending on foreign aid by wealthy countries",
+                    "assessing the extent to which spending on foreign aid should be a higher priority",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '6', m: 30, l: '600-700',
+                t: "To what extent is it desirable for all people in your country to earn the same amount of money?",
+                i: [
+                    "discussing benefits and drawbacks of equitable distribution of wealth",
+                    "exploring the extent to which equality of wealth is desirable",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '7', m: 30, l: '600-700',
+                t: "Ageing populations bring many benefits to society. To what extent do you agree?",
+                i: [
+                    "exploring the roles of elderly people in society",
+                    "evaluating potential problems or benefits brought by increasing numbers of older people",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '8', m: 30, l: '600-700',
+                t: "To what extent should environmental impacts influence what people choose to wear?",
+                i: [
+                    "examining relevant environmental impacts",
+                    "exploring how choices of clothing are influenced by environmental impacts",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '9', m: 30, l: '600-700',
+                t: "It is unacceptable to monitor people using information obtained from their mobile devices. Discuss.",
+                i: [
+                    "assessing ways mobile devices can be used for surveillance",
+                    "evaluating how acceptable it is to use information obtained from mobile devices",
+                    "making a judgement based on the evidence and argument"
+                ]
+            },
+            {
+                n: '10', m: 30, l: '600-700',
+                t: "Any media with disturbing content should always begin with a clear warning for viewers. Discuss.",
+                i: [
+                    "examining contexts where content warnings might occur",
+                    "evaluating whether these warnings are intrusive or helpful",
+                    "making a judgement based on the evidence and argument"
+                ]
+            }
+        ]
+    },
+
     // --- FEBRUARY / MARCH 2024 (Variant 12) ---
     'gp_2024_fm_12': {
         title: "Essay Paper 12 (Feb/March '24)",
         pdf: "", // No PDF yet
-        questions: Array.from({ length: 10 }, (_, i) => ({
-            n: (i + 1).toString(), m: 30, l: '600-700',
-            t: `Question ${i + 1} text pending...`,
-            i: ["Point 1", "Point 2"]
-        }))
+        questions: [
+            { n: '1', m: 30, l: '600-700', t: "Not enough is being done to ensure safety at sporting events. To what extent do you agree with this view?", i: ["importance of safety at sporting events", "sports being inherently dangerous", "high-profile sporting disasters", "older sports stadia risks", "modernisation of stadia", "mental and physical health of participants", "cost of safety measures"] },
+            { n: '2', m: 30, l: '600-700', t: "Wealthy celebrities have a duty to give time and money to charitable causes. To what extent do you agree with this statement?", i: ["wealthy being in position to give", "celebrities wanting to help favourite causes", "setting a good example", "raising awareness", "moral obligation vs personal choice", "paying taxes vs voluntary donation", "resentment of choices"] },
+            { n: '3', m: 30, l: '600-700', t: "To what extent can a nation's written constitution safeguard people's rights?", i: ["autocratic rule prohibiting free expression", "rights of minorities respected", "recognition of gender parity", "fixed terminology stifling change", "contested wording interpretations", "colonial legacies", "constitution as no barrier to power seekers"] },
+            { n: '4', m: 30, l: '600-700', t: "To what extent should war always be the last option when countries attempt to resolve conflicts?", i: ["suffering and loss of human lives", "high economic cost", "devastating impacts of modern weaponry", "diplomacy and sanctions as alternatives", "unjustified motives for war", "defending territory and sovereignty", "resisting aggressive policies"] },
+            { n: '5', m: 30, l: '600-700', t: "The problems caused by tourism are always greater than the benefits. Examine this statement.", i: ["economic benefits", "raising profile of area", "infrastructure investment", "sustainable employment", "negative environmental impacts", "impact on traditional ways of life", "inflation and cost of living", "seasonal employment"] },
+            { n: '6', m: 30, l: '600-700', t: "Artificial intelligence should be welcomed not feared. To what extent do you agree with this statement?", i: ["improving health services", "freedom from mundane tasks", "accurate prediction of threats", "targeted support to learners", "neglect of human care", "manipulation of data", "loss of confidence in human creativity", "fear of creations turning on us"] },
+            { n: '7', m: 30, l: '600-700', t: "Assess the importance of mathematics in education.", i: ["need for mathematics in jobs", "logical reasoning", "basic arithmetic in daily life", "basis for scientific inquiry", "role in computer programming", "students turned off by imposed study", "arts studied without maths", "proportionate to individual needs"] },
+            { n: '8', m: 30, l: '600-700', t: "Reading more books would have a positive impact on society. Discuss.", i: ["improving quality of thinking", "teaching attitudes and behaviours", "fiction giving developed perspectives", "nonfiction developing knowledge", "solitary activity for relaxation", "books considered outdated", "decreasing influence on society", "influencing people negatively"] },
+            { n: '9', m: 30, l: '600-700', t: "Evaluate the view that the arts should not be about making money.", i: ["art not primarily for financial gain", "market feedback impacting integrity", "avoiding being a brand", "commercialisation reducing creativity", "freedom of expression inhibited", "expensive art restricting audience", "making art accessible", "earning money supporting artistic endeavours"] },
+            { n: '10', m: 30, l: '600-700', t: "To what extent has technology had a negative impact on the music industry?", i: ["impact on production and sound quality", "improvements to distribution", "synthesising instruments", "accessibility via apps", "video technology", "stifling innovation", "recovery of vinyl", "digital piracy and small returns"] }
+        ]
     },
 
     // --- MAY / JUNE 2024 (Variant 11) ---
@@ -683,13 +985,26 @@ const gpCardsP1 = `
         <p style="color:#666;">Paper 1: Essay Questions (30 Marks)</p>
     </div>
     
-    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Key Series</div></div>
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">All Series</div></div>
     <div class="papers-grid">
-        <div class="paper-card" onclick="openPaper('gp_2025_fm_12')">
-            <span class="paper-tag">8021/12</span>
-            <h3>Feb/March '25</h3>
+        <!-- Oct/Nov 2025 -->
+        <div class="paper-card" onclick="openPaper('gp_2025_on_11')">
+            <span class="paper-tag">8021/11</span>
+            <h3>Oct/Nov '25</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_12')">
+            <span class="paper-tag">8021/12</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_13')">
+            <span class="paper-tag">8021/13</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+
+        <!-- May/June 2025 -->
         <div class="paper-card" onclick="openPaper('gp_2025_mj_11')">
             <span class="paper-tag">8021/11</span>
             <h3>May/June '25</h3>
@@ -703,6 +1018,13 @@ const gpCardsP1 = `
         <div class="paper-card" onclick="openPaper('gp_2025_mj_13')">
             <span class="paper-tag">8021/13</span>
             <h3>May/June '25</h3>
+            <p style="color:#888; margin-top:5px;">10 Questions</p>
+        </div>
+
+        <!-- Feb/March 2025 -->
+        <div class="paper-card" onclick="openPaper('gp_2025_fm_12')">
+            <span class="paper-tag">8021/12</span>
+            <h3>Feb/March '25</h3>
             <p style="color:#888; margin-top:5px;">10 Questions</p>
         </div>
     </div>
