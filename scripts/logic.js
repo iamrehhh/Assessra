@@ -297,7 +297,11 @@ function selectPaper(subject, paper) {
         targetId = `container-econ-${paper}`; // econ-p3, econ-p4
         if (paper === 'p3' && window.loadMCQPapers) window.loadMCQPapers();
     }
-    else if (subject === 'general') targetId = `container-general-${paper}`; // general-p1, general-p2
+    else if (subject === 'math') {
+        targetId = `container-math-${paper}`; // math-p3
+        if (paper === 'p3' && window.loadMathPapers) window.loadMathPapers();
+    }
+    else if (subject === 'general') targetId = `container-general-p1`; // general-p1 only
 
     // 3. Show target container
     const target = document.getElementById(targetId);

@@ -309,6 +309,10 @@
         </div>
     </div>
 
+    <!-- Mathematics Paper 3 -->
+    <div id="container-math-p3" class="subject-container hidden">
+    </div>
+
 </div>
 
 <div id="view-formulae" class="hidden">
@@ -2574,6 +2578,15 @@
                     </div>
                 </div>
 
+                <!-- MATHEMATICS SECTION -->
+                <div class="subject-item has-children">
+                    <div class="sub-header" onclick="toggleSubCat('math')">Mathematics (9709) <span
+                            class="arrow">▸</span></div>
+                    <div id="sub-math" class="sub-body hidden">
+                        <div class="paper-item" onclick="selectPaper('math', 'p3')">Paper 3</div>
+                    </div>
+                </div>
+
                 <!-- GENERAL PAPER SECTION -->
                 <div class="subject-item has-children">
                     <div class="sub-header" onclick="toggleSubCat('general')">General Paper (8021) <span
@@ -2698,6 +2711,27 @@
             </div>
         </div>
 
+        <!-- Mathematics Card -->
+        <div id="sc-card-math" class="sc-cat-card">
+            <div class="sc-cat-header" onclick="toggleScorecardCard('sc-card-math')">
+                <div class="sc-cat-icon"
+                    style="background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color:#d97706;">📐</div>
+                <div class="sc-cat-info">
+                    <div class="sc-cat-name">Mathematics (9709)</div>
+                    <div class="sc-cat-desc">Paper 3 (Pure Math)</div>
+                </div>
+                <div class="sc-cat-arrow">▼</div>
+            </div>
+
+            <div class="sc-cat-content">
+                <div class="sc-total-link" onclick="renderSubjectTotal('Mathematics', getUser())">
+                    📊 View Math Total
+                </div>
+                <div class="sc-subsection-title">Paper 3 (Pure Math)</div>
+                <div id="sc-math-p3"></div>
+            </div>
+        </div>
+
         <!-- General Paper Card -->
         <div id="sc-card-gp" class="sc-cat-card">
             <div class="sc-cat-header" onclick="toggleScorecardCard('sc-card-gp')">
@@ -2797,6 +2831,8 @@
     <div id="score-display-content"></div>
 </div>
 
+
+
 <!-- External Scripts (Logic & Data) -->
 <script src="scripts/storage_manager.js"></script>
 <script src="scripts/cloud_storage.js" type="module"></script>
@@ -2807,6 +2843,7 @@
 <script src="scripts/economics_p3.js"></script>
 <script src="scripts/economics_p4.js"></script>
 <script src="scripts/general_paper.js"></script>
+<script src="scripts/math_p3.js"></script>
 <script src="scripts/vocab_quiz.js"></script>
 <script src="scripts/idioms_quiz.js"></script>
 <script src="scripts/vocab_sets.js"></script>
