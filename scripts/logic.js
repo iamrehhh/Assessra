@@ -281,6 +281,11 @@ function toggleSubject(subId) {
     content.classList.toggle('expanded');
 }
 
+function toggleScorecardCard(cardId) {
+    const card = document.getElementById(cardId);
+    card.classList.toggle('expanded');
+}
+
 function selectPaper(subject, paper) {
     // 1. Hide all containers first
     document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));

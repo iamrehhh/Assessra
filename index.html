@@ -2636,50 +2636,89 @@
 
 <!-- Scorecard Panel -->
 <div id="scorecard-overlay" class="side-menu-overlay" onclick="toggleScorecardPanel()"></div>
-<div id="scorecard-panel" class="side-menu left-side">
-    <div class="menu-header">
-        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">My Performance</h3>
-        <button class="menu-close" onclick="toggleScorecardPanel()">✖</button>
+<!-- PREMIUM SCORECARD PANEL -->
+<div id="scorecard-panel" class="sc-panel-redesign side-menu left-side">
+    <div class="sc-panel-header">
+        <div class="lb-header-content">
+            <div class="sc-header-icon">📈</div>
+            <div>
+                <h3 class="lb-header-title">My Performance</h3>
+                <p class="lb-header-sub">Track your exam progress</p>
+            </div>
+        </div>
+        <button class="lb-close-btn" onclick="toggleScorecardPanel()">✖</button>
     </div>
 
-    <div class="subject-group">
-        <button class="subject-btn" onclick="toggleSubject('score-sub-business')">Business (9609)
-            <span>▼</span></button>
-        <div id="score-sub-business" class="subject-content expanded">
-            <div class="paper-link total-link" onclick="renderSubjectTotal('Business', getUser())">
-                <strong>📊 View Business Total</strong>
-            </div>
-            <div class="paper-subsection-title">Paper 3 (Case Study)</div>
-            <div id="sc-bus-p3"></div>
-            <div class="paper-subsection-title">Paper 4 (Strategy)</div>
-            <div id="sc-bus-p4"></div>
-        </div>
-    </div>
+    <!-- Scrollable Categories Container -->
+    <div class="sc-categories">
 
-    <div class="subject-group">
-        <button class="subject-btn" onclick="toggleSubject('score-sub-econ')">Economics (9708)
-            <span>▼</span></button>
-        <div id="score-sub-econ" class="subject-content">
-            <div class="paper-link total-link" onclick="renderSubjectTotal('Economics', getUser())">
-                <strong>📊 View Economics Total</strong>
+        <!-- Business Card -->
+        <div id="sc-card-business" class="sc-cat-card">
+            <div class="sc-cat-header" onclick="toggleScorecardCard('sc-card-business')">
+                <div class="sc-cat-icon"
+                    style="background:linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color:#2563eb;">💼</div>
+                <div class="sc-cat-info">
+                    <div class="sc-cat-name">Business (9609)</div>
+                    <div class="sc-cat-desc">Paper 3 & Paper 4</div>
+                </div>
+                <div class="sc-cat-arrow">▼</div>
             </div>
-            <div class="paper-subsection-title">Paper 3 (MCQ)</div>
-            <div id="sc-econ-p3"></div>
-            <div class="paper-subsection-title">Paper 4 (Data/Essay)</div>
-            <div id="sc-econ-p4"></div>
-        </div>
-    </div>
 
-    <div class="subject-group">
-        <button class="subject-btn" onclick="toggleSubject('score-sub-gp')">General Paper (8021)
-            <span>▼</span></button>
-        <div id="score-sub-gp" class="subject-content">
-            <div class="paper-link total-link" onclick="renderSubjectTotal('General Paper', getUser())">
-                <strong>📊 View GP Total</strong>
+            <div class="sc-cat-content">
+                <div class="sc-total-link" onclick="renderSubjectTotal('Business', getUser())">
+                    📊 View Business Total
+                </div>
+                <div class="sc-subsection-title">Paper 3 (Case Study)</div>
+                <div id="sc-bus-p3"></div>
+                <div class="sc-subsection-title">Paper 4 (Strategy)</div>
+                <div id="sc-bus-p4"></div>
             </div>
-            <div class="paper-subsection-title">Paper 1 (Essay)</div>
-            <div id="sc-gp-p1"></div>
         </div>
+
+        <!-- Economics Card -->
+        <div id="sc-card-economics" class="sc-cat-card">
+            <div class="sc-cat-header" onclick="toggleScorecardCard('sc-card-economics')">
+                <div class="sc-cat-icon"
+                    style="background:linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color:#16a34a;">📈</div>
+                <div class="sc-cat-info">
+                    <div class="sc-cat-name">Economics (9708)</div>
+                    <div class="sc-cat-desc">Paper 3 & Paper 4</div>
+                </div>
+                <div class="sc-cat-arrow">▼</div>
+            </div>
+
+            <div class="sc-cat-content">
+                <div class="sc-total-link" onclick="renderSubjectTotal('Economics', getUser())">
+                    📊 View Economics Total
+                </div>
+                <div class="sc-subsection-title">Paper 3 (MCQ)</div>
+                <div id="sc-econ-p3"></div>
+                <div class="sc-subsection-title">Paper 4 (Data/Essay)</div>
+                <div id="sc-econ-p4"></div>
+            </div>
+        </div>
+
+        <!-- General Paper Card -->
+        <div id="sc-card-gp" class="sc-cat-card">
+            <div class="sc-cat-header" onclick="toggleScorecardCard('sc-card-gp')">
+                <div class="sc-cat-icon"
+                    style="background:linear-gradient(135deg, #fae8ff 0%, #f0abfc 100%); color:#c026d3;">🌍</div>
+                <div class="sc-cat-info">
+                    <div class="sc-cat-name">General Paper (8021)</div>
+                    <div class="sc-cat-desc">Paper 1 (Essay)</div>
+                </div>
+                <div class="sc-cat-arrow">▼</div>
+            </div>
+
+            <div class="sc-cat-content">
+                <div class="sc-total-link" onclick="renderSubjectTotal('General Paper', getUser())">
+                    📊 View GP Total
+                </div>
+                <div class="sc-subsection-title">Paper 1 (Essay)</div>
+                <div id="sc-gp-p1"></div>
+            </div>
+        </div>
+
     </div>
 </div>
 
