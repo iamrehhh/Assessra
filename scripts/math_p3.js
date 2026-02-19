@@ -47,6 +47,215 @@ let mathQuestionBank = [
         image: "",
         marks: 3,
         marking_scheme: "|z| = sqrt(1+3) = 2. arg z = arctan(sqrt(3)/1) = pi/3."
+    },
+    // VECTORS (Added via Script)
+    {
+        id: "vec_256",
+        topic: "vectors",
+        question: "The line l has equation $r=i+2j+3k+\\mu(2i-j-2k).$<br><br><b>(i)</b> The point P has position vector $4i+2j-3k$. Find the length of the perpendicular from P to l. <i>(5 marks)</i><br><br><b>(ii)</b> It is given that l lies in the plane with equation $ax+by+2z=13$, where a and b are constants. Find the values of a and b. <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_257",
+        topic: "vectors",
+        question: "Two lines l and m have equations $r=ai+2j+3k+\\lambda(i-2j+3k)$ and $r=2i+j+2k+\\mu(2i-j+k)$ respectively, where a is a constant. It is given that the lines intersect.<br><br><b>(i)</b> Find the value of a. <i>(4 marks)</i><br><br><b>(ii)</b> When a has this value, find the equation of the plane containing l and m. <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_258",
+        topic: "vectors",
+        question: "The plane m has equation $x+4y-8z=2$. The plane n is parallel to m and passes through the point P with coordinates (5, 2, -2).<br><br><b>(i)</b> Find the equation of n, giving your answer in the form $ax+by+cz=d$. <i>(2 marks)</i><br><br><b>(ii)</b> Calculate the perpendicular distance between m and n. <i>(3 marks)</i><br><br><b>(iii)</b> The line l lies in the plane n, passes through the point P and is perpendicular to OP, where O is the origin. Find a vector equation for l. <i>(4 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_259",
+        topic: "vectors",
+        question: "The line l has equation $r=4i+3j-k+\\mu(i+2j-2k).$ The plane p has equation $2x-3y-z=4$.<br><br><b>(i)</b> Find the position vector of the point of intersection of l and p. <i>(3 marks)</i><br><br><b>(ii)</b> Find the acute angle between l and p. <i>(3 marks)</i><br><br><b>(iii)</b> A second plane q is parallel to l, perpendicular to p and contains the point with position vector 4j-k. Find the equation of q, giving your answer in the form $ax+by+cz=d.$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_260",
+        topic: "vectors",
+        question: "The point P has position vector $3i-2j+k$. The line l has equation $r=4i+2j+5k+\\mu(i+2j+3k)$.<br><br><b>(i)</b> Find the length of the perpendicular from P to l, giving your answer correct to 3 significant figures. <i>(5 marks)</i><br><br><b>(ii)</b> Find the equation of the plane containing l and P, giving your answer in the form ax + by + cz = d. <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_261",
+        topic: "vectors",
+        question: "Two lines l and m have equations $r=2i-j+k+s(2i+3j-k)$ and $r=i+3j+4k+t(i+2j+k)$ respectively. A plane p is parallel to the lines l and m.<br><br><b>(i)</b> Show that the lines are skew. <i>(4 marks)</i><br><br><b>(ii)</b> Find a vector that is normal to p. <i>(3 marks)</i><br><br><b>(iii)</b> Given that p is equidistant from the lines l and m, find the equation of p. Give your answer in the form $ax+by+cz=d$. <i>(3 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_262",
+        topic: "vectors",
+        question: "The points A and B have position vectors $2i+j+3k$ and $4i+j+k$ respectively. The line l has equation $r=4i+6j+\\mu(i+2j-2k).$<br><br><b>(i)</b> Show that l does not intersect the line passing through A and B. <i>(5 marks)</i><br><br><b>(ii)</b> The point P, with parameter t, lies on l and is such that angle PAB is equal to 120°. Show that $3t^{2}+8t+4=0.$ Hence find the position vector of P. <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_263",
+        topic: "vectors",
+        question: "The planes m and n have equations $3x+y-2z=10$ and $x-2y+2z=5$ respectively. The line l has equation $r=4i+2j+k+\\lambda(i+j+2k).$<br><br><b>(i)</b> Show that l is parallel to m. <i>(3 marks)</i><br><br><b>(ii)</b> Calculate the acute angle between the planes m and n. <i>(3 marks)</i><br><br><b>(iii)</b> A point P lies on the line l. The perpendicular distance of P from the plane n is equal to 2. Find the position vectors of the two possible positions of P. <i>(4 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_264",
+        topic: "vectors",
+        question: "The line l has equation $r=5i-3j-k+\\lambda(i-2j+k).$ The plane p has equation $(r-i-2j).(3i+j+k)=0$. The line l intersects the plane p at the point A.<br><br><b>(i)</b> Find the position vector of A. <i>(3 marks)</i><br><br><b>(ii)</b> Calculate the acute angle between l and p. <i>(4 marks)</i><br><br><b>(iii)</b> Find the equation of the line which lies in p and intersects l at right angles. <i>(4 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_265",
+        topic: "vectors",
+        question: "The line l has equation $r=i+2j-3k+\\lambda(2i-j+k)$. The plane p has equation $3x+y-5z=20$<br><br><b>(i)</b> Show that the line l lies in the plane p. <i>(3 marks)</i><br><br><b>(ii)</b> A second plane is parallel to l, perpendicular to p and contains the point with position vector $3i-j+2k$. Find the equation of this plane, giving your answer in the form $ax+by+cz=d.$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 8,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_266",
+        topic: "vectors",
+        question: "The plane with equation $2x+2y-z=5$ is denoted by m. Relative to the origin O, the points A and B have coordinates (3, 4, 0) and (-1,0,2) respectively.<br><br><b>(i)</b> Show that the plane m bisects AB at right angles. <i>(5 marks)</i><br><br><b>(ii)</b> A second plane p is parallel to m and nearer to O. The perpendicular distance between the planes is 1. Find the equation of p, giving your answer in the form $ax+by+cz=d.$ <i>(3 marks)</i><br><br>",
+        image: "",
+        marks: 8,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_267",
+        topic: "vectors",
+        question: "Relative to the origin O, the point A has position vector given by $\\vec{OA}=i+2j+4k.$ The line l has equation $r=9i-j+8k+\\mu(3i-j+2k).$<br><br><b>(i)</b> Find the position vector of the foot of the perpendicular from A to l. Hence find the position vector of the reflection of A in l. <i>(5 marks)</i><br><br><b>(ii)</b> Find the equation of the plane through the origin which contains l. Give your answer in the form $ax+by+cz=d.$ <i>(3 marks)</i><br><br><b>(iii)</b> Find the exact value of the perpendicular distance of A from this plane. <i>(3 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_268",
+        topic: "vectors",
+        question: "The points A and B have position vectors given by $\\vec{OA}=i-2j+2k$ and $\\vec{OB}=3i+j+k$. The line l has equation $r=2i+j+mk+\\mu(i-2j-4k),$ where m is a constant.<br><br><b>(i)</b> Given that the line l intersects the line passing through A and B, find the value of m. <i>(5 marks)</i><br><br><b>(ii)</b> Find the equation of the plane which is parallel to i-2j-4k and contains the points A and B. Give your answer in the form $ax+by+cz=d.$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_269",
+        topic: "vectors",
+        question: "The equations of two lines l and m are $r=3i-j-2k+\\lambda(-i+j+4k)$ and $r=4i+4j-3k+\\mu(2i+j-2k)$ respectively.<br><br><b>(i)</b> Show that the lines do not intersect. <i>(3 marks)</i><br><br><b>(ii)</b> Calculate the acute angle between the directions of the lines. <i>(3 marks)</i><br><br><b>(iii)</b> Find the equation of the plane which passes through the point $(3,-2,-1)$ and which is parallel to both l and m. Give your answer in the form $ax+by+cz=d.$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_270",
+        topic: "vectors",
+        question: "Two planes p and q have equations $x+y+3z=8$ and $2x-2y+z=3$ respectively.<br><br><b>(i)</b> Calculate the acute angle between the planes p and q. <i>(4 marks)</i><br><br><b>(ii)</b> The point A on the line of intersection of p and q has y-coordinate equal to 2. Find the equation of the plane which contains the point A and is perpendicular to both the planes p and q. Give your answer in the form $ax+by+cz=d$. <i>(7 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_271",
+        topic: "vectors",
+        question: "The line l has equation $r=\\left(\\begin{matrix}1\\\\ 2\\\\ -1\\end{matrix}\\right)+\\lambda\\left(\\begin{matrix}2\\\\ 1\\\\ 3\\end{matrix}\\right).$ The plane p has equation $r\\cdot\\left(\\begin{matrix}2\\\\ -1\\\\ -1\\end{matrix}\\right)=6.$<br><br><b>(i)</b> Show that l is parallel to p. <i>(3 marks)</i><br><br><b>(ii)</b> A line m lies in the plane p and is perpendicular to l. The line m passes through the point with coordinates (5, 3, 1). Find a vector equation for m. <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_272",
+        topic: "vectors",
+        question: "With respect to the origin O, the points A, B, C, D have position vectors given by $\\vec{OA}=i+3j+2k$, $\\vec{OB}=2i+j-k,$ $\\vec{OC}=2i+4j+k,$ $\\vec{OD}=-3i+j+2k.$<br><br><b>(i)</b> Find the equation of the plane containing A, B and C, giving your answer in the form $ax+by+cz=d$ <i>(6 marks)</i><br><br><b>(ii)</b> The line through D parallel to OA meets the plane with equation $x+2y-z=7$ at the point P. Find the position vector of P and show that the length of DP is $2\\sqrt{14}$. <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_273",
+        topic: "vectors",
+        question: "The points A, B and C have position vectors, relative to the origin O, given by $\\vec{OA}=i+2j+3k,$ $\\vec{OB}=4j+k$ and $\\vec{OC}=2i+5j-k$ A fourth point D is such that the quadrilateral ABCD is a parallelogram.<br><br><b>(i)</b> Find the position vector of D and verify that the parallelogram is a rhombus. <i>(5 marks)</i><br><br><b>(ii)</b> The plane p is parallel to OA and the line BC lies in p. Find the equation of p, giving your answer in the form $ax+by+cz=d$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_274",
+        topic: "vectors",
+        question: "The points A and B have position vectors, relative to the origin $O,$ given by $\\vec{OA}=i+j+k$ and $\\vec{OB}=2i+3k.$ The line l has vector equation $r=2i-2j-k+\\mu(-i+2j+k)$.<br><br><b>(i)</b> Show that the line passing through A and B does not intersect l. <i>(4 marks)</i><br><br><b>(ii)</b> Show that the length of the perpendicular from A to l is $\\frac{1}{\\sqrt{2}}$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_275",
+        topic: "vectors",
+        question: "Two planes have equations $3x+y-z=2$ and $x-y+2z=3.$<br><br><b>(i)</b> Show that the planes are perpendicular. <i>(3 marks)</i><br><br><b>(ii)</b> Find a vector equation for the line of intersection of the two planes. <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_276",
+        topic: "vectors",
+        question: "The line l has vector equation $r=i+2j+k+\\lambda(2i-j+k).$<br><br><b>(i)</b> Find the position vectors of the two points on the line whose distance from the origin is $\\sqrt{10}.$ <i>(5 marks)</i><br><br><b>(ii)</b> The plane p has equation $ax+y+z=5$ where a is a constant. The acute angle between the line l and the plane p is equal to $\\sin^{-1}(\\frac{2}{3})$. Find the possible values of a. <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_277",
+        topic: "vectors",
+        question: "The straight line $l_{1}$ passes through the points (0, 1, 5) and (2, -2, 1). The straight line $l_{2}$ has equation $r=7i+j+k+\\mu(i+2j+5k)$.<br><br><b>(i)</b> Show that the lines $l_{1}$ and $l_{2}$ are skew. <i>(6 marks)</i><br><br><b>(ii)</b> Find the acute angle between the direction of the line $l_{2}$ and the direction of the x-axis. <i>(3 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_278",
+        topic: "vectors",
+        question: "The points A and B have position vectors given by $\\vec{OA}=2i-j+3k$ and $\\vec{OB}=i+j+5k$ The line l has equation $r=i+j+2k+\\mu(3i+j-k)$<br><br><b>(i)</b> Show that l does not intersect the line passing through A and B. <i>(5 marks)</i><br><br><b>(ii)</b> Find the equation of the plane containing the line l and the point A. Give your answer in the form $ax+by+cz=d$ <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 11,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_279",
+        topic: "vectors",
+        question: "Two planes have equations $x+3y-2z=4$ and $2x+y+3z=5$ The planes intersect in the straight line l.<br><br><b>(i)</b> Calculate the acute angle between the two planes. <i>(4 marks)</i><br><br><b>(ii)</b> Find a vector equation for the line l. <i>(6 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_280",
+        topic: "vectors",
+        question: "The points A, B and C have position vectors, relative to the origin O, given by $\\vec{OA}=\\left(\\begin{matrix}1\\\\ 2\\\\ 0\\end{matrix}\\right)$ , $\\vec{OB}=\\left(\\begin{matrix}3\\\\ 0\\\\ 1\\end{matrix}\\right)$ and $\\vec{OC}=\\left(\\begin{matrix}1\\\\ 1\\\\ 4\\end{matrix}\\right).$ The plane m is perpendicular to AB and contains the point C.<br><br><b>(i)</b> Find a vector equation for the line passing through A and B. <i>(2 marks)</i><br><br><b>(ii)</b> Obtain the equation of the plane m, giving your answer in the form $ax+by+cz=d$. <i>(2 marks)</i><br><br><b>(iii)</b> The line through A and B intersects the plane m at the point N. Find the position vector of N and show that $CN=\\sqrt{13}$ <i>(5 marks)</i><br><br>",
+        image: "",
+        marks: 9,
+        marking_scheme: ""
+    },
+    {
+        id: "vec_281",
+        topic: "vectors",
+        question: "A plane has equation $4x-y+5z=39$ A straight line is parallel to the vector $i-3j+4k$ and passes through the point $A(0,2,-8)$ The line meets the plane at the point B.<br><br><b>(i)</b> Find the coordinates of B. <i>(3 marks)</i><br><br><b>(ii)</b> Find the acute angle between the line and the plane. <i>(4 marks)</i><br><br><b>(iii)</b> The point C lies on the line and is such that the distance between C and B is twice the distance between A and B. Find the coordinates of each of the possible positions of the point C. <i>(3 marks)</i><br><br>",
+        image: "",
+        marks: 10,
+        marking_scheme: ""
     }
 ];
 
