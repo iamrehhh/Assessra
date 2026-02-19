@@ -471,6 +471,9 @@ function doLogout() {
 }
 
 function setView(viewName, addHistory = true) {
+    // Ensure any loading overlays are cleared when switching views
+    if (typeof hideLoading === 'function') hideLoading();
+
     // Save state - LocalStorage is fine for persistence across reloads
     localStorage.setItem('lastView', viewName);
 
@@ -1133,7 +1136,18 @@ async function submitAnswer(pid, qn) {
     // Model selection removed - defaulting to backend configuration
     const model = 'gpt';
 
-    // Show Loading Overlay
+    // Show Loading State on Button
+    const originalBtnText = btn.innerText;
+    btn.innerText = "AI is checking...";
+    btn.disabled = true;
+
+    // Optional: Keep the overlay if user wants "strict" feel, but make it less intrusive or remove if button feedback is enough.
+    // User asked for button feedback. Let's keep the overly but make it clear.
+    // Actually, user said "page gets refreshed idk why". The overlay + openPaper caused that feel.
+    // Let's TRY removing the full screen overlay for a smoother feel, OR keep it but remove openPaper.
+    // I will keep the overlay as it blocks interaction during grading (good for "strict" mode), 
+    // but the KEY fix is removing `openPaper` which re-renders the whole PDF+Question view.
+
     showLoading("AI is strictly marking your answer...\n(This ensures highest accuracy)");
 
     const qData = paperData[pid].questions.find(q => q.n === qn);
@@ -1144,13 +1158,11 @@ async function submitAnswer(pid, qn) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 question: qData.t,
-                // Send the PDF path so the backend can extract text
                 pdf_path: paperData[pid].pdf,
                 case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
                 marks: qData.m,
                 model: model,
-                // Dynamic Protocols (if present in DB/JS)
                 rubric: qData.rubric || paperData[pid].rubric || null,
                 system_prompt: qData.system_prompt || paperData[pid].system_prompt || null,
                 model_instruction: qData.model_instruction || paperData[pid].model_instruction || null
@@ -1160,7 +1172,7 @@ async function submitAnswer(pid, qn) {
         if (!res.ok) {
             hideLoading();
             btn.disabled = false;
-            btn.innerText = "Submit for Strict Marking";
+            btn.innerText = originalBtnText; // Restore text
             const errText = await res.text();
             throw new Error(`Server Error (${res.status}): ${errText || res.statusText}`);
         }
@@ -1188,17 +1200,59 @@ async function submitAnswer(pid, qn) {
             });
         }
 
-        // Get current scroll from closure or re-query if needed, 
-        // but better to get it from the panel currently in DOM before refresh
-        // Actually submitAnswer is called from the old DOM, so we can get it from document
-        const qPanel = document.getElementById('questions-panel');
-        const currentScroll = qPanel ? qPanel.scrollTop : 0;
+        // --- DOM UPDATE (NO REFRESH) ---
+        hideLoading(); // Remove overlay immediately
 
-        await openPaper(pid, currentScroll); // Refresh view with scroll preserved
+        // Update Button
+        btn.innerText = "✓ Re-Evaluate";
+        btn.disabled = false;
+        btn.classList.add('completed');
+
+        // Update Daily Limit Text
+        const limitDisplay = el.parentElement.querySelector('div[style*="text-align: center"]');
+        if (limitDisplay) {
+            const newLeft = Math.max(0, 12 - (dailyCount + 1));
+            limitDisplay.innerText = newLeft > 0 ? `📊 ${newLeft}/12 submissions remaining today` : '⚠️ Daily limit reached (12/12)';
+        }
+
+        // Construct Feedback HTML
+        const aoHtml = `
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
+                <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO1: ${json.ao1 || '-'}</span>
+                <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO2: ${json.ao2 || '-'}</span>
+                <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO3: ${json.ao3 || '-'}</span>
+                <span class="score-badge" style="background:#fff; font-size:0.8rem;">AO4: ${json.ao4 || '-'}</span>
+            </div>`;
+
+        const feedbackHtml = `
+            <h3>Score: ${json.score}/${qData.m}</h3>
+            ${aoHtml}
+            <div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;">
+                <strong>Detailed Critique:</strong><br>${json.detailed_critique || json.feedback || "No feedback available."}
+            </div>
+            <div class="model-ans-box">
+                <strong>Model Answer:</strong><br>${(json.model_answer || 'Model answer not generated.').replace(/\n/g, '<br>')}
+            </div>`;
+
+        // Check if feedback box exists
+        let feedbackBox = el.parentElement.querySelector('.feedback-box');
+        if (feedbackBox) {
+            feedbackBox.innerHTML = feedbackHtml;
+            // Scroll to it
+            feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+            // Create new
+            feedbackBox = document.createElement('div');
+            feedbackBox.className = 'feedback-box';
+            feedbackBox.innerHTML = feedbackHtml;
+            el.parentElement.appendChild(feedbackBox);
+            // Scroll to it
+            feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
     } catch (e) {
         console.error("Submission Error:", e);
-        hideLoading(); // <--- FIX: Ensure overlay is removed on error
+        hideLoading(); // ensure overlay is removed
 
         let errorMsg = "Server not responding. Please check your connection.";
         let errorType = 'error';
@@ -1216,7 +1270,6 @@ async function submitAnswer(pid, qn) {
 
         btn.innerText = "Retry Submission";
         btn.disabled = false;
-        // visual shake effect could be added here
         btn.classList.add('shake-animation');
         setTimeout(() => btn.classList.remove('shake-animation'), 500);
     }
