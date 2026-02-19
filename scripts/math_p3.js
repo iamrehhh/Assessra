@@ -449,7 +449,8 @@ async function submitMathAnswer() {
             4. OUTPUT:
                - Start with "**STATUS: CORRECT**" or "**STATUS: WRONG**".
                - Then "**Marks: X/${currentQuestion.marks}**".
-               - Then "**Step-by-Step Solution:**" (Provide the full working for the student to learn).`
+               - Then "**Step-by-Step Solution:**" (Provide the full working for the student to learn).`,
+            model_instruction: "Write a perfect step-by-step solution for this math problem. Use LaTeX for math symbols (e.g. $x^2$). Do not use conversational filler."
         };
 
         // Call Backend (Using /mark logic pattern)
