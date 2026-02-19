@@ -67,8 +67,7 @@
             }
         }, 4500);
     };
-};
-}) ();
+})();
 
 // === LOADING STATE MANAGER (NEW) ===
 function showLoading(msg = "Loading...") {
