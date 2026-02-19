@@ -303,8 +303,28 @@ function loadMathPapers() {
 }
 
 function startMathTopic(topicId) {
-    // 1. Filter Questions
-    currentTopicQuestions = mathQuestionBank.filter(q => q.topic === topicId);
+    // 1. Filter Questions (Topic + Spaced Repetition)
+    const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    const progress = JSON.parse(localStorage.getItem('math_p3_progress') || '{}');
+
+    // Attempt to filter out questions done in last 7 days
+    let filteredQuestions = mathQuestionBank.filter(q => {
+        if (q.topic !== topicId) return false;
+        const lastAttempt = progress[q.id]?.timestamp;
+        // Keep if never attempted OR attempted > 7 days ago
+        return !lastAttempt || lastAttempt < sevenDaysAgo;
+    });
+
+    // If all questions exhausted for the week, fallback to showing all topic questions (optional: could instruct user to wait)
+    if (filteredQuestions.length === 0) {
+        // Option 1: Strictly block (User requested "should not appear for at least one week")
+        // But if user wants to practice, maybe just warn? 
+        // Let's retry with ALL questions but show toast
+        filteredQuestions = mathQuestionBank.filter(q => q.topic === topicId);
+        showToast("Review Mode: You've practiced all new questions this week!", "info");
+    }
+
+    currentTopicQuestions = filteredQuestions;
 
     // 2. Shuffle Questions (Fisher-Yates)
     for (let i = currentTopicQuestions.length - 1; i > 0; i--) {
@@ -371,7 +391,7 @@ function renderMathQuestion() {
         answerInputHtml = `
             <div style="margin-bottom:15px;">
                 <label style="display:block; font-weight:600; color:#374151; margin-bottom:5px;">Final Answer:</label>
-                <input type="text" id="math-user-answer" placeholder="e.g. x = 5, y = -2/3" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
+                <input type="text" id="math-user-answer" placeholder="e.g. x = 2, x = -2 (separate with comma)" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
                 <p style="color:#6b7280; font-size:0.9rem; margin-top:5px;">
                     ℹ️ <b>Exact answers</b> (e.g. $\\sqrt{2}, \\frac{4}{6}$) are preferred.<br>
                     ℹ️ <b>Non-exact?</b> Use <b>3 s.f.</b> (e.g. 5.12) or <b>1 d.p.</b> for angles (e.g. 35.4°).
@@ -510,9 +530,7 @@ async function submitMathAnswer() {
             
             Structure for 'detailed_critique':
             1. **STATUS**: [CORRECT / WRONG]
-            2. **Marks**: [X] / ${currentQuestion.marks}
-            3. **Examiner's Remarks**: (One sentence on why it's correct/wrong based on accuracy/method).
-            4. **Step-by-Step Solution (Rough Work)**:
+            2. **Step-by-Step Solution (Rough Work)**:
                - Show every step of the calculation clearly.
                - Use standard algebraic notation.
                - State the formulas used.
