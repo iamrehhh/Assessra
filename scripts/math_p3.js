@@ -369,7 +369,7 @@ function renderMathQuestion() {
                 <!-- Answer Section -->
                 <div id="math-answer-section" style="background:white; border-radius:16px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
                     <h3 style="margin-top:0; color:#374151;">Your Solution</h3>
-                    <textarea id="math-user-answer" placeholder="Type your full solution here..." style="width:100%; height:200px; padding:15px; border:2px solid #e5e7eb; border-radius:12px; font-family:monospace; font-size:1rem; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"></textarea>
+                    <textarea id="math-user-answer" placeholder="Type your full working here... (Showing steps helps the AI give you partial marks!)" style="width:100%; height:200px; padding:15px; border:2px solid #e5e7eb; border-radius:12px; font-family:monospace; font-size:1rem; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"></textarea>
                     
                     <div style="display:flex; justify-content:flex-end; margin-top:20px;">
                         <button id="math-submit-btn" onclick="submitMathAnswer()" style="background:var(--lime-dark); color:white; padding:12px 30px; border-radius:10px; border:none; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
