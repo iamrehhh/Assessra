@@ -505,7 +505,19 @@ async function submitMathAnswer() {
                - Start with "**STATUS: CORRECT**" or "**STATUS: WRONG**".
                - Then "**Marks: X/${currentQuestion.marks}**".
                - Then "**Step-by-Step Solution:**" (Provide the full working for the student to learn).`,
-            model_instruction: "Write a perfect step-by-step solution for this math problem. Use LaTeX for math symbols (e.g. $x^2$). Do not use conversational filler."
+            model_instruction: "Write a perfect step-by-step solution for this math problem. Use LaTeX for math symbols (e.g. $x^2$). Do not use conversational filler.",
+            feedback_structure: `OUTPUT A STEP-BY-STEP MATHEMATICAL SOLUTION.
+            
+            Structure for 'detailed_critique':
+            1. **STATUS**: [CORRECT / WRONG]
+            2. **Marks**: [X] / ${currentQuestion.marks}
+            3. **Examiner's Remarks**: (One sentence on why it's correct/wrong based on accuracy/method).
+            4. **Step-by-Step Solution (Rough Work)**:
+               - Show every step of the calculation clearly.
+               - Use standard algebraic notation.
+               - State the formulas used.
+               - End with the final answer clearly stated.
+            `
         };
 
         // Call Backend (Using /mark logic pattern)

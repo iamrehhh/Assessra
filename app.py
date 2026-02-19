@@ -305,6 +305,7 @@ def mark():
     custom_rubric = data.get('rubric')
     custom_system_prompt = data.get('system_prompt')
     custom_model_instruction = data.get('model_instruction')
+    custom_feedback_structure = data.get('feedback_structure')
 
     # DETECT BUSINESS PAPER 3 or 4
     is_business_p3 = False
@@ -781,7 +782,9 @@ CRITICAL RULES:
         )
 
     # 4. DETERMINE FEEDBACK STRUCTURE
-    if is_general_paper:
+    if custom_feedback_structure:
+        feedback_structure = custom_feedback_structure
+    elif is_general_paper:
         feedback_structure = """
     You must output your final grading using the following structure for the 'detailed_critique' field.
     IMPORTANT: The feedback response MUST be concise. MAXIMUM 100-200 WORDS TOTAL for the entire feedback section.
