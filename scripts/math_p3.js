@@ -399,6 +399,11 @@ function renderMathQuestion() {
     `;
 
     document.getElementById('container-math-p3').innerHTML = html;
+
+    // Render MathJax
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
 }
 
 async function submitMathAnswer() {
@@ -450,6 +455,11 @@ async function submitMathAnswer() {
 
         feedbackContent.innerHTML = formattedFeedback;
         expSection.classList.remove('hidden');
+
+        // Render MathJax in explanation
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
 
         // Save Progress
         saveMathProgress(currentQuestion.id, userAnswer, aiFeedback);
