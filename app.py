@@ -138,8 +138,8 @@ def extract_text_from_pdf(pdf_path):
 
 def generate_with_gemini(api_key, system_instruction, user_prompt):
     """
-    Helper function to call Gemini API via REST to support multiple keys safely.
-    Returns (result_text, error_code) where error_code indicates the type of failure.
+    Helper function to call Gemini API via REST with retry logic.
+    Returns (result_text, error_code).
     """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={api_key}"
     
@@ -154,39 +154,56 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
     
     headers = {'Content-Type': 'application/json'}
     
-    try:
-        # Added timeout to prevent hanging indefinitely
-        response = requests.post(url, json=payload, headers=headers, timeout=30)
-        
-        # Check for quota/token errors before raising
-        if response.status_code == 429:
-            print(f"API Rate Limit/Quota Exceeded (429)")
-            return None, 429
-        elif response.status_code == 403:
-            print(f"API Quota Exceeded or Permission Denied (403)")
-            return None, 403
-        
-        response.raise_for_status()
-        result = response.json()
-        
-        # Extract text from response
-        if 'candidates' in result and result['candidates']:
-            content = result['candidates'][0]['content']['parts'][0]['text']
-            return content, None
-        else:
-            return None, None
-            
-    except Exception as e:
-        print(f"API Error: {e}")
+    import time
+    max_retries = 3
+    base_delay = 2
+
+    for attempt in range(max_retries):
         try:
-            if 'response' in locals() and response.text:
-                print(f"Response: {response.text}")
-                # Check for quota errors in response text
-                if 'quota' in response.text.lower() or 'limit' in response.text.lower():
-                    return None, 429
-        except:
-            pass
-        return None, None
+            # Added timeout to prevent hanging indefinitely
+            response = requests.post(url, json=payload, headers=headers, timeout=30)
+            
+            # Check for quota/token errors
+            if response.status_code == 429:
+                logger.warning(f"Gemini API Rate Limit (429) on attempt {attempt+1}")
+                if attempt < max_retries - 1:
+                    time.sleep(base_delay * (2 ** attempt))
+                    continue
+                return None, 429
+            elif response.status_code == 503:
+                 logger.warning(f"Gemini Service Unavailable (503) on attempt {attempt+1}")
+                 if attempt < max_retries - 1:
+                    time.sleep(base_delay * (2 ** attempt))
+                    continue
+                 return None, 503
+            elif response.status_code == 403:
+                logger.error(f"Gemini API Permission Denied (403)")
+                return None, 403
+            
+            response.raise_for_status()
+            result = response.json()
+            
+            # Extract text from response
+            if 'candidates' in result and result['candidates']:
+                content = result['candidates'][0]['content']['parts'][0]['text']
+                return content, None
+            else:
+                return None, None
+                
+        except requests.exceptions.Timeout:
+            logger.warning(f"Gemini Request Timed Out on attempt {attempt+1}")
+            if attempt < max_retries - 1:
+                time.sleep(base_delay * (2 ** attempt))
+                continue
+            return None, 504
+        except Exception as e:
+            logger.error(f"Gemini API Error: {e}")
+            if attempt < max_retries - 1 and "429" in str(e): # simplistic check
+                 time.sleep(base_delay * (2 ** attempt))
+                 continue
+            return None, 500
+            
+    return None, 500
 
 def generate_with_gpt(system_instruction, user_prompt):
     """

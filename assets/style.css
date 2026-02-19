@@ -3410,4 +3410,98 @@ textarea.expanded {
 
 .score-item:last-child {
     border-bottom: none;
+}/* === LOADING SPINNER (NEW) === */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    border-radius: inherit; /* Matches parent border radius */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--lime-light);
+    border-top: 4px solid var(--lime-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-weight: 600;
+    color: var(--lime-dark);
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* === MOBILE RESPONSIVENESS FIXES (NEW) === */
+@media (max-width: 768px) {
+    /* Fix tables overflowing */
+    .table-container, .leaderboard-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: block;
+    }
+
+    /* Fix modals to be practically full screen but with margin */
+    .liquid-modal, .swot-modal, .modal-content {
+        width: 95% !important;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* Stack grid items on mobile */
+    .formula-grid, .def-grid, .papers-grid, .stats-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Adjust header for small screens */
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .nav {
+        overflow-x: auto;
+        padding-bottom: 5px; /* Space for scrollbar if needed */
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .nav-btn {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
 }

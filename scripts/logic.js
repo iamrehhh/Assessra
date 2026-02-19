@@ -67,7 +67,42 @@
             }
         }, 4500);
     };
-})();
+};
+}) ();
+
+// === LOADING STATE MANAGER (NEW) ===
+function showLoading(msg = "Loading...") {
+    let overlay = document.querySelector('.loading-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'loading-overlay';
+        overlay.innerHTML = `
+            <div class="spinner"></div>
+            <div class="loading-text">${msg}</div>
+        `;
+        // Append to specific container if possible, else body
+        const appLayer = document.getElementById('app-layer');
+        if (appLayer) appLayer.appendChild(overlay);
+        else document.body.appendChild(overlay);
+    } else {
+        overlay.querySelector('.loading-text').innerText = msg;
+    }
+
+    // Force reflow
+    void overlay.offsetWidth;
+    overlay.classList.add('active');
+}
+
+function hideLoading() {
+    const overlay = document.querySelector('.loading-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        // Optional: Remove from DOM after transition
+        setTimeout(() => {
+            if (!overlay.classList.contains('active')) overlay.remove();
+        }, 300);
+    }
+}
 
 
 // === HISTORY MANAGER (NEW) ===
@@ -815,14 +850,18 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
 
     // 1. Try Cloud if not local
     if (!data && window.CloudManager) {
-        const cloudPaper = await window.CloudManager.getPaper(pid);
-        if (cloudPaper) {
-            data = cloudPaper;
-            // Normalize questions if needed (Cloud might store as object, we need array for logic)
-            if (data.questions && !Array.isArray(data.questions)) {
-                data.questions = Object.values(data.questions);
+        showLoading("Fetching Paper from Cloud...");
+        try {
+            const cloudPaper = await window.CloudManager.getPaper(pid);
+            if (cloudPaper) {
+                data = cloudPaper;
+                // Normalize questions if needed (Cloud might store as object, we need array for logic)
+                if (data.questions && !Array.isArray(data.questions)) {
+                    data.questions = Object.values(data.questions);
+                }
             }
-        }
+        } catch (e) { console.warn("Cloud fetch failed", e); }
+        hideLoading();
     }
 
     // --- SAVE LAST ACTIVITY ---
@@ -1091,12 +1130,12 @@ async function submitAnswer(pid, qn) {
     const ans = el.value.trim();
     if (!ans) return showToast("Please write an answer first.");
 
-    btn.innerText = "⏳ Strict Marking...";
-    btn.disabled = true;
-
     // Get selected model
     // Model selection removed - defaulting to backend configuration
     const model = 'gpt';
+
+    // Show Loading Overlay
+    showLoading("AI is strictly marking your answer...\n(This ensures highest accuracy)");
 
     const qData = paperData[pid].questions.find(q => q.n === qn);
 
@@ -1120,6 +1159,9 @@ async function submitAnswer(pid, qn) {
         });
 
         if (!res.ok) {
+            hideLoading();
+            btn.disabled = false;
+            btn.innerText = "Submit for Strict Marking";
             const errText = await res.text();
             throw new Error(`Server Error (${res.status}): ${errText || res.statusText}`);
         }
