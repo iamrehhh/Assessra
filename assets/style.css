@@ -1060,7 +1060,7 @@ textarea.expanded {
 .model-ans-box {
     background: #1a1a1a;
     color: #f0f0f0;
-    padding: 20px;
+    padding: 15px 20px 15px 12px; /* Reduced left padding */
     border-radius: 10px;
     margin-top: 15px;
     font-size: 0.95rem;
@@ -1068,6 +1068,18 @@ textarea.expanded {
     white-space: pre-wrap;
     font-style: italic;
     border-left: 4px solid var(--lime-primary);
+    text-align: left; /* Ensure left alignment */
+}
+
+/* New header style for model answer */
+.model-ans-header {
+    font-family: 'Playfair Display', serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--lime-primary);
+    margin-bottom: 8px;
+    display: block;
 }
 
 .hidden {

@@ -1231,7 +1231,8 @@ async function submitAnswer(pid, qn) {
                 <strong>Detailed Critique:</strong><br>${json.detailed_critique || json.feedback || "No feedback available."}
             </div>
             <div class="model-ans-box">
-                <strong>Model Answer:</strong><br>${(json.model_answer || 'Model answer not generated.').replace(/\n/g, '<br>')}
+                <div class="model-ans-header">Model Answer:</div>
+                ${(json.model_answer || 'Model answer not generated.').replace(/\n/g, '<br>')}
             </div>`;
 
         // Check if feedback box exists
