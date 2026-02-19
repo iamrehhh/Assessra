@@ -177,6 +177,9 @@ async function switchLeaderboardView(category) {
     } else if (category === 'economics') {
         titleEl.innerText = "📈 Economics Leaderboard";
         subEl.innerText = "Top performers in Economics (9708)";
+    } else if (category === 'gp') {
+        titleEl.innerText = "🌍 General Paper Leaderboard";
+        subEl.innerText = "Top performers in General Paper (8021)";
     }
 
     // Fetch and Render
@@ -198,12 +201,15 @@ async function renderBigLeaderboard(category) {
         sorted.sort((a, b) => (b.business || 0) - (a.business || 0));
     } else if (category === 'economics') {
         sorted.sort((a, b) => (b.economics || 0) - (a.economics || 0));
+    } else if (category === 'gp') {
+        sorted.sort((a, b) => (b.gp || 0) - (a.gp || 0));
     }
 
     // Build Table Header
     let scoreHeader = "Total Score";
     if (category === 'business') scoreHeader = "Business Score";
     if (category === 'economics') scoreHeader = "Econ Score";
+    if (category === 'gp') scoreHeader = "GP Score";
 
     let html = `<table class="modern-table" style="text-align:left;">
         <thead>
@@ -220,6 +226,7 @@ async function renderBigLeaderboard(category) {
         if (category === 'overall') score = s.total || 0;
         else if (category === 'business') score = s.business || 0;
         else if (category === 'economics') score = s.economics || 0;
+        else if (category === 'gp') score = s.gp || 0;
 
         // Medals
         let rankDisplay = `#${index + 1}`;

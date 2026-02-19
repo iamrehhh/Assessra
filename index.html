@@ -2685,16 +2685,57 @@
 
 <!-- Leaderboard Panel -->
 <div id="leaderboard-overlay" class="side-menu-overlay" onclick="toggleLeaderboardPanel()"></div>
-<div id="leaderboard-panel" class="side-menu left-side">
-    <div class="menu-header">
-        <h3 style="margin:0; color:var(--lime-dark); font-family:'Playfair Display', serif;">Leaderboards</h3>
-        <button class="menu-close" onclick="toggleLeaderboardPanel()">✖</button>
+<div id="leaderboard-panel" class="side-menu left-side lb-panel-redesign">
+    <div class="lb-panel-header">
+        <div class="lb-header-content">
+            <span class="lb-header-icon">🏆</span>
+            <div>
+                <h3 class="lb-header-title">Leaderboards</h3>
+                <p class="lb-header-sub">See who's on top</p>
+            </div>
+        </div>
+        <button class="lb-close-btn" onclick="toggleLeaderboardPanel()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
     </div>
 
-    <div class="subject-group">
-        <div class="paper-link" onclick="switchLeaderboardView('overall')">🏆 Overall Rankings</div>
-        <div class="paper-link" onclick="switchLeaderboardView('business')">💼 Business (9609)</div>
-        <div class="paper-link" onclick="switchLeaderboardView('economics')">📈 Economics (9708)</div>
+    <div class="lb-categories">
+        <div class="lb-cat-card" onclick="switchLeaderboardView('overall')">
+            <div class="lb-cat-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">🏆</div>
+            <div class="lb-cat-info">
+                <span class="lb-cat-name">Overall Rankings</span>
+                <span class="lb-cat-desc">All subjects combined</span>
+            </div>
+            <span class="lb-cat-arrow">›</span>
+        </div>
+        <div class="lb-cat-card" onclick="switchLeaderboardView('business')">
+            <div class="lb-cat-icon" style="background: linear-gradient(135deg, #34d399, #059669);">💼</div>
+            <div class="lb-cat-info">
+                <span class="lb-cat-name">Business (9609)</span>
+                <span class="lb-cat-desc">Paper 3 & Paper 4</span>
+            </div>
+            <span class="lb-cat-arrow">›</span>
+        </div>
+        <div class="lb-cat-card" onclick="switchLeaderboardView('economics')">
+            <div class="lb-cat-icon" style="background: linear-gradient(135deg, #60a5fa, #2563eb);">📈</div>
+            <div class="lb-cat-info">
+                <span class="lb-cat-name">Economics (9708)</span>
+                <span class="lb-cat-desc">Paper 3 & Paper 4</span>
+            </div>
+            <span class="lb-cat-arrow">›</span>
+        </div>
+        <div class="lb-cat-card" onclick="switchLeaderboardView('gp')">
+            <div class="lb-cat-icon" style="background: linear-gradient(135deg, #a78bfa, #7c3aed);">🌍</div>
+            <div class="lb-cat-info">
+                <span class="lb-cat-name">General Paper (8021)</span>
+                <span class="lb-cat-desc">Paper 1 & Paper 2</span>
+            </div>
+            <span class="lb-cat-arrow">›</span>
+        </div>
     </div>
 </div>
 
