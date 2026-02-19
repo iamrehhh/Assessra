@@ -305,12 +305,22 @@ function loadMathPapers() {
 function startMathTopic(topicId) {
     // 1. Filter Questions (Topic + Spaced Repetition)
     const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    const progress = JSON.parse(localStorage.getItem('math_p3_progress') || '{}');
+    const progressRaw = JSON.parse(localStorage.getItem('math_p3_progress') || '[]');
+
+    // Convert Array to Map for fast lookup (keep latest attempt)
+    const lastAttempts = {};
+    if (Array.isArray(progressRaw)) {
+        progressRaw.forEach(p => {
+            if (!lastAttempts[p.id] || p.timestamp > lastAttempts[p.id]) {
+                lastAttempts[p.id] = p.timestamp;
+            }
+        });
+    }
 
     // Attempt to filter out questions done in last 7 days
     let filteredQuestions = mathQuestionBank.filter(q => {
         if (q.topic !== topicId) return false;
-        const lastAttempt = progress[q.id]?.timestamp;
+        const lastAttempt = lastAttempts[q.id];
         // Keep if never attempted OR attempted > 7 days ago
         return !lastAttempt || lastAttempt < sevenDaysAgo;
     });
