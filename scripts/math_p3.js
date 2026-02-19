@@ -339,6 +339,47 @@ function renderMathQuestion() {
     currentQuestion = currentTopicQuestions[currentQuestionIndex];
     const topicInfo = mathTopics[currentQuestion.topic] || { title: "Mathematics" };
 
+    // Detect Parts (e.g. (i), (ii), (a), (b))
+    const partRegex = /<b>\(([ivx]+)\)<\/b>|<b>([a-z])\)<\/b>|\(([ivx]+)\)|\(([a-z])\)/gi;
+    // We use a set to ensure unique parts if regex matches multiple times (though matchAll usually handles order)
+    // Actually, simple match is better for sequential list
+    const partsMatch = [...currentQuestion.question.matchAll(partRegex)].map(m => m[1] || m[2] || m[3] || m[4]);
+    // Filter duplicates just in case, but keep order
+    const parts = [...new Set(partsMatch)];
+
+    let answerInputHtml = '';
+
+    if (parts.length > 1) {
+        // Multi-part Question
+        answerInputHtml += `<div style="margin-bottom:15px; font-weight:bold; color:#374151;">Please answer all parts:</div>`;
+        parts.forEach(part => {
+            answerInputHtml += `
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-weight:600; color:#374151; margin-bottom:5px;">Part (${part}) Answer:</label>
+                    <input type="text" class="math-socket-input" data-part="${part}" placeholder="Final Answer for (${part})..." style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
+                </div>
+             `;
+        });
+        answerInputHtml += `
+            <p style="color:#6b7280; font-size:0.9rem; margin-top:5px;">
+                ℹ️ <b>Exact answers</b> (e.g. $\\sqrt{2}, \\frac{4}{6}$) are preferred.<br>
+                ℹ️ <b>Non-exact?</b> Use <b>3 s.f.</b> (e.g. 5.12) or <b>1 d.p.</b> for angles (e.g. 35.4°).
+            </p>
+        `;
+    } else {
+        // Single Input (Default)
+        answerInputHtml = `
+            <div style="margin-bottom:15px;">
+                <label style="display:block; font-weight:600; color:#374151; margin-bottom:5px;">Final Answer:</label>
+                <input type="text" id="math-user-answer" placeholder="e.g. x = 5, y = -2/3" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
+                <p style="color:#6b7280; font-size:0.9rem; margin-top:5px;">
+                    ℹ️ <b>Exact answers</b> (e.g. $\\sqrt{2}, \\frac{4}{6}$) are preferred.<br>
+                    ℹ️ <b>Non-exact?</b> Use <b>3 s.f.</b> (e.g. 5.12) or <b>1 d.p.</b> for angles (e.g. 35.4°).
+                </p>
+            </div>
+        `;
+    }
+
     let html = `
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:#f3f4f6; z-index:1000; overflow-y:auto;">
             <!-- Header -->
@@ -360,7 +401,7 @@ function renderMathQuestion() {
                     </div>
                     
                     <div style="font-size:1.1rem; line-height:1.6; color:#374151; margin-bottom:20px;">
-                        ${currentQuestion.question.replace(/\n/g, '<br>')}
+                        ${currentQuestion.question.replace(/\\n/g, '<br>')}
                     </div>
 
                     ${currentQuestion.image ? `<img src="${currentQuestion.image}" style="max-width:100%; border-radius:8px; border:1px solid #e5e7eb; margin-bottom:20px;">` : ''}
@@ -368,14 +409,7 @@ function renderMathQuestion() {
 
                 <!-- Answer Section -->
                 <div id="math-answer-section" style="background:white; border-radius:16px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block; font-weight:600; color:#374151; margin-bottom:5px;">Final Answer:</label>
-                        <input type="text" id="math-user-answer" placeholder="e.g. x = 5, y = -2/3" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
-                        <p style="color:#6b7280; font-size:0.9rem; margin-top:5px;">
-                            ℹ️ <b>Exact answers</b> (e.g. $\\sqrt{2}, \\frac{4}{6}$) are preferred.<br>
-                            ℹ️ <b>Non-exact?</b> Use <b>3 s.f.</b> (e.g. 5.12) or <b>1 d.p.</b> for angles (e.g. 35.4°).
-                        </p>
-                    </div>
+                    ${answerInputHtml}
                     
                     <div style="display:flex; justify-content:flex-end; margin-top:20px;">
                         <button id="math-submit-btn" onclick="submitMathAnswer()" style="background:var(--lime-dark); color:white; padding:12px 30px; border-radius:10px; border:none; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
@@ -413,9 +447,30 @@ function renderMathQuestion() {
 }
 
 async function submitMathAnswer() {
-    const answerInput = document.getElementById('math-user-answer');
+    let userAnswer = '';
+    const singleInput = document.getElementById('math-user-answer');
+    const multiInputs = document.querySelectorAll('.math-socket-input');
     const submitBtn = document.getElementById('math-submit-btn');
-    const userAnswer = answerInput.value.trim();
+
+    if (singleInput) {
+        userAnswer = singleInput.value.trim();
+    } else if (multiInputs.length > 0) {
+        let parts = [];
+        let allFilled = true;
+        multiInputs.forEach(input => {
+            const val = input.value.trim();
+            if (!val) allFilled = false;
+            parts.push(`(${input.dataset.part}): ${val}`);
+            // Lock UI for multi inputs
+            input.disabled = true;
+        });
+
+        if (!allFilled) {
+            showToast("Please answer all parts.", "warning");
+            return;
+        }
+        userAnswer = parts.join(', '); // e.g., "(i): 5, (ii): 10"
+    }
 
     if (!userAnswer) {
         showToast("Please write your solution first.", "warning");
@@ -423,7 +478,7 @@ async function submitMathAnswer() {
     }
 
     // Lock UI
-    answerInput.disabled = true;
+    if (singleInput) singleInput.disabled = true;
     submitBtn.disabled = true;
     submitBtn.innerHTML = "Generating Explanation... 🧠";
 
@@ -488,7 +543,10 @@ async function submitMathAnswer() {
         showToast("Error generating explanation. Please try again.", "error");
         submitBtn.disabled = false;
         submitBtn.innerHTML = "Retry Submission";
-        answerInput.disabled = false;
+        if (singleInput) singleInput.disabled = false;
+        if (multiInputs.length > 0) {
+            multiInputs.forEach(input => input.disabled = false);
+        }
     }
 }
 
