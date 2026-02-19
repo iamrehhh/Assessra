@@ -1198,6 +1198,7 @@ async function submitAnswer(pid, qn) {
 
     } catch (e) {
         console.error("Submission Error:", e);
+        hideLoading(); // <--- FIX: Ensure overlay is removed on error
 
         let errorMsg = "Server not responding. Please check your connection.";
         let errorType = 'error';

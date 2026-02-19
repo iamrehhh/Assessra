@@ -280,63 +280,72 @@ function confirmSubmission() {
 
 function gradeMCQ(isRestoring = false) {
     if (testSubmitted && !isRestoring) return;
-    testSubmitted = true;
-    clearInterval(timerInterval);
 
-    const answers = paperDatabase[currentPaperID].answers;
-    let score = 0;
-    let cloudData = {};
+    try {
+        testSubmitted = true;
+        clearInterval(timerInterval);
 
-    answers.forEach((correctLetter, index) => {
-        const qNum = index + 1;
-        const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
-        const userChoice = selectedInput ? selectedInput.value : null;
+        const answers = paperDatabase[currentPaperID].answers;
+        let score = 0;
+        let cloudData = {};
 
-        // Visual Marking
-        ['A', 'B', 'C', 'D'].forEach(l => {
-            let lbl = document.getElementById(`label-q${index}-${l}`);
-            if (lbl) lbl.style.color = '#555';
+        answers.forEach((correctLetter, index) => {
+            const qNum = index + 1;
+            const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
+            const userChoice = selectedInput ? selectedInput.value : null;
+
+            // Visual Marking
+            ['A', 'B', 'C', 'D'].forEach(l => {
+                let lbl = document.getElementById(`label-q${index}-${l}`);
+                if (lbl) lbl.style.color = '#555';
+            });
+
+            const isCorrect = (userChoice === correctLetter);
+            if (isCorrect) score++;
+
+            // Add to Cloud Data Package
+            cloudData[qNum] = { answer: userChoice, score: isCorrect ? 1 : 0, correctAnswer: correctLetter };
+
+            if (isCorrect) {
+                let cl = document.getElementById(`label-q${index}-${correctLetter}`);
+                if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
+                document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #22c55e";
+            } else {
+                let cl = document.getElementById(`label-q${index}-${correctLetter}`);
+                if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
+                if (userChoice) {
+                    let ul = document.getElementById(`label-q${index}-${userChoice}`);
+                    if (ul) { ul.style.backgroundColor = "#ef4444"; ul.style.borderColor = "#ef4444"; ul.style.color = "white"; }
+                }
+                document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #ef4444";
+            }
         });
 
-        const isCorrect = (userChoice === correctLetter);
-        if (isCorrect) score++;
-
-        // Add to Cloud Data Package
-        cloudData[qNum] = { answer: userChoice, score: isCorrect ? 1 : 0, correctAnswer: correctLetter };
-
-        if (isCorrect) {
-            let cl = document.getElementById(`label-q${index}-${correctLetter}`);
-            if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
-            document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #22c55e";
-        } else {
-            let cl = document.getElementById(`label-q${index}-${correctLetter}`);
-            if (cl) { cl.style.backgroundColor = "#22c55e"; cl.style.borderColor = "#22c55e"; cl.style.color = "white"; }
-            if (userChoice) {
-                let ul = document.getElementById(`label-q${index}-${userChoice}`);
-                if (ul) { ul.style.backgroundColor = "#ef4444"; ul.style.borderColor = "#ef4444"; ul.style.color = "white"; }
-            }
-            document.getElementById(`block-q${index}`).style.borderLeft = "6px solid #ef4444";
+        const percent = Math.round((score / answers.length) * 100);
+        const resultBox = document.getElementById('mcq-result-box');
+        if (resultBox) {
+            resultBox.style.display = "block";
+            resultBox.innerHTML = `<h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1><h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>`;
         }
-    });
 
-    const percent = Math.round((score / answers.length) * 100);
-    const resultBox = document.getElementById('mcq-result-box');
-    if (resultBox) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `<h1 style="font-size:3.5rem; color:var(--lime-dark); margin:0;">${percent}%</h1><h2 style="font-size:1.8rem; color:#333; margin:10px 0;">Final Score: ${score} / ${answers.length}</h2>`;
-    }
+        const subBtn = document.getElementById('submit-btn');
+        if (subBtn) subBtn.style.display = "none";
 
-    const subBtn = document.getElementById('submit-btn');
-    if (subBtn) subBtn.style.display = "none";
+        // ⚠️ FIXED: Ensures data is saved using the correct Cloud method
+        if (!isRestoring && window.CloudManager && typeof window.CloudManager.saveMCQBatch === 'function') {
+            window.CloudManager.saveMCQBatch(getUser(), currentPaperID, cloudData).catch(e => console.warn("Cloud Save Error:", e));
+        }
 
-    // ⚠️ FIXED: Ensures data is saved using the correct Cloud method
-    if (!isRestoring && window.CloudManager && window.CloudManager.saveMCQBatch) {
-        window.CloudManager.saveMCQBatch(getUser(), currentPaperID, cloudData);
-    }
+        // Add to Daily Target
+        if (!isRestoring && window.StorageManager && typeof window.StorageManager.addDailyPoints === 'function') {
+            window.StorageManager.addDailyPoints('economics', score);
+        }
 
-    // Add to Daily Target
-    if (!isRestoring && window.StorageManager) {
-        window.StorageManager.addDailyPoints('economics', score);
+    } catch (error) {
+        console.error("MCQ Grading Error:", error);
+        alert("An error occurred while grading. Please check the console.");
+        // Re-enable submission in case of error so user isn't stuck
+        testSubmitted = false;
     }
 }
 
