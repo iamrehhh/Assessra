@@ -368,8 +368,14 @@ function renderMathQuestion() {
 
                 <!-- Answer Section -->
                 <div id="math-answer-section" style="background:white; border-radius:16px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="margin-top:0; color:#374151;">Your Solution</h3>
-                    <textarea id="math-user-answer" placeholder="Type your full working here... (Showing steps helps the AI give you partial marks!)" style="width:100%; height:200px; padding:15px; border:2px solid #e5e7eb; border-radius:12px; font-family:monospace; font-size:1rem; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box;"></textarea>
+                    <div style="margin-bottom:15px;">
+                        <label style="display:block; font-weight:600; color:#374151; margin-bottom:5px;">Final Answer:</label>
+                        <input type="text" id="math-user-answer" placeholder="e.g. x = 5, y = -2/3" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:1.1rem; outline:none; transition:border-color 0.2s;">
+                        <p style="color:#6b7280; font-size:0.9rem; margin-top:5px;">
+                            ℹ️ <b>Exact answers</b> (e.g. $\sqrt{2}, \frac{4}{6}$) are preferred.<br>
+                            ℹ️ <b>Non-exact?</b> Use <b>3 s.f.</b> (e.g. 5.12) or <b>1 d.p.</b> for angles (e.g. 35.4°).
+                        </p>
+                    </div>
                     
                     <div style="display:flex; justify-content:flex-end; margin-top:20px;">
                         <button id="math-submit-btn" onclick="submitMathAnswer()" style="background:var(--lime-dark); color:white; padding:12px 30px; border-radius:10px; border:none; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
@@ -425,13 +431,25 @@ async function submitMathAnswer() {
         // Prepare Payload
         const payload = {
             question: currentQuestion.question,
-            // If image exists, strictly logic should handle it. Assuming backend can take image URL or description.
-            // For now, passing text. 
             answer: userAnswer,
             marks: currentQuestion.marks,
             marking_scheme: currentQuestion.marking_scheme,
-            rubric: "Strictly follow the marking scheme provided. Explain step-by-step where the student gained or lost marks. Use LaTeX for math symbols if possible, or clear text.",
-            system_prompt: "You are an expert A-Level Math Tutor. Grade the student's answer based on the marking scheme. Provide a detailed, step-by-step explanation of the correct solution."
+            rubric: "STRICT FINAL ANSWER GRADING. 1. If final answer is CORRECT -> Award FULL MARKS. 2. If WRONG -> Award 0. 3. Accept exact unsimplified fractions. 4. Reject non-exact answers if not 3 s.f. (or 1 d.p. for angles).",
+            system_prompt: `You are a strict Cambridge A-Level Math Examiner.
+            
+            **Input:** Student has provided a FINAL ANSWER only.
+            **Task:**
+            1. CHECK if the Final Answer is correct based on the Question and Marking Scheme.
+            2. APPLY Atomic Grading:
+               - **CORRECT**: Award ${currentQuestion.marks}/${currentQuestion.marks}.
+               - **WRONG**: Award 0/${currentQuestion.marks}.
+            3. RULES:
+               - Accept unsimplified EXACT forms (e.g., 4/6, sqrt(8)).
+               - For NON-EXACT decimals, REQUIRE 3 significant figures (or 1 d.p. for angles in degrees).
+            4. OUTPUT:
+               - Start with "**STATUS: CORRECT**" or "**STATUS: WRONG**".
+               - Then "**Marks: X/${currentQuestion.marks}**".
+               - Then "**Step-by-Step Solution:**" (Provide the full working for the student to learn).`
         };
 
         // Call Backend (Using /mark logic pattern)
