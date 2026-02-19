@@ -1214,6 +1214,12 @@ async function renderPaperScore(pid) {
 }
 
 async function renderSubjectTotal(subject, user) {
+    // DISABLE MATH SCORECARD VIEW
+    if (subject === 'Mathematics') {
+        showToast("Mathematics scorecard is currently disabled.", "warning");
+        return;
+    }
+
     toggleScorecardPanel();
     setView('score-display');
     const data = await window.CloudManager.getAllData(user);
@@ -1735,6 +1741,12 @@ function toggleSubCat(subId) {
 }
 
 function selectPaper(subject, paper) {
+    // DISABLE MATH SUBJECT TEMPORARILY
+    if (subject === 'math') {
+        showToast("Mathematics is currently disabled.", "warning");
+        return;
+    }
+
     toggleSubjectsPanel(); // Close right panel
 
     // Switch to Papers view
