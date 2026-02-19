@@ -375,12 +375,12 @@ async function selectSetAnswerIdioms(selectedIdx) {
         isCorrect: isCorrect
     });
 
-    document.querySelectorAll('.idioms-set-option').forEach(btn => {
+    document.querySelectorAll('#idioms-set-options .option-card').forEach(btn => {
         btn.disabled = true;
         btn.style.cursor = 'not-allowed';
     });
 
-    const options = document.querySelectorAll('.idioms-set-option');
+    const options = document.querySelectorAll('#idioms-set-options .option-card');
     options[q.correct].style.background = '#22c55e';
     options[q.correct].style.borderColor = '#22c55e';
     options[q.correct].style.color = 'white';

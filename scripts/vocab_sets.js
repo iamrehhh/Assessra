@@ -6186,13 +6186,13 @@ async function selectSetAnswer(selectedIdx) {
     });
 
     // Disable all options
-    document.querySelectorAll('.vocab-set-option').forEach(btn => {
+    document.querySelectorAll('#vocab-set-options .option-card').forEach(btn => {
         btn.disabled = true;
         btn.style.cursor = 'not-allowed';
     });
 
     // Highlight correct and incorrect
-    const options = document.querySelectorAll('.vocab-set-option');
+    const options = document.querySelectorAll('#vocab-set-options .option-card');
     options[q.correct].style.background = '#22c55e';
     options[q.correct].style.borderColor = '#22c55e';
     options[q.correct].style.color = 'white';
