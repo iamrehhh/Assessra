@@ -102,26 +102,17 @@ function renderMonthSelectionIdioms() {
     if (!container) return;
 
     const html = `
-        <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div class="practice-container">
             <!-- Header -->
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h1 style="color: var(--lime-dark); font-size: 3rem; margin-bottom: 15px; font-weight: 800;">💬 Idioms Practice Sets</h1>
-                <p style="color: #666; font-size: 1.2rem;">Choose a month and complete daily sets (5 idioms each)</p>
+            <div class="practice-header">
+                <h1 class="practice-title">💬 Idioms Practice</h1>
+                <p class="practice-subtitle">Master expressions with daily 5-question sets</p>
             </div>
 
             <!-- Month Selector -->
-            <div style="text-align: center; margin-bottom: 40px;">
-                <label style="font-size: 1.2rem; font-weight: 600; color: #333; margin-right: 15px;">Select Month:</label>
-                <select id="month-selector-idioms" onchange="selectMonthIdioms(this.value)" style="
-                    padding: 12px 20px;
-                    font-size: 1.1rem;
-                    border: 2px solid var(--lime-primary);
-                    border-radius: 10px;
-                    background: white;
-                    cursor: pointer;
-                    font-weight: 600;
-                    color: var(--lime-dark);
-                ">
+            <div class="month-selector-container">
+                <label class="month-label">Select Month:</label>
+                <select id="month-selector-idioms" onchange="selectMonthIdioms(this.value)" class="month-select">
                     ${MONTH_NAMES_IDIOMS.map(month => `
                         <option value="${month}" ${month === currentMonthIdioms ? 'selected' : ''}>${month} 2026</option>
                     `).join('')}
@@ -149,26 +140,26 @@ function renderSetsGridIdioms(month) {
 
     const html = `
         <!-- Month Statistics -->
-        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 16px; padding: 30px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-            <h2 style="color: var(--lime-dark); margin: 0 0 20px 0; font-size: 1.8rem;">${month} 2026 Progress</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 800; color: #16a34a;">${completedSets}/${daysInMonth}</div>
-                    <div style="color: #666; font-weight: 600;">Sets Completed</div>
+        <div class="stats-card">
+            <h2 class="stats-title">${month} 2026 Progress</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">${completedSets}/${daysInMonth}</div>
+                    <div class="stat-label">Sets Completed</div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 800; color: #16a34a;">${totalScore}</div>
-                    <div style="color: #666; font-weight: 600;">Total Correct</div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalScore}</div>
+                    <div class="stat-label">Total Correct</div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 800; color: #16a34a;">${Math.round((completedSets / daysInMonth) * 100)}%</div>
-                    <div style="color: #666; font-weight: 600;">Month Complete</div>
+                <div class="stat-item">
+                    <div class="stat-value">${Math.round((completedSets / daysInMonth) * 100)}%</div>
+                    <div class="stat-label">Month Complete</div>
                 </div>
             </div>
         </div>
 
         <!-- Sets Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;">
+        <div class="sets-grid">
             ${Array.from({ length: daysInMonth }, (_, i) => {
         const setNum = i + 1;
         const setKey = `set_${setNum}`;
@@ -176,8 +167,6 @@ function renderSetsGridIdioms(month) {
 
         let status = 'not-started';
         let statusIcon = '⭕';
-        let statusColor = '#e5e7eb';
-        let textColor = '#9ca3af';
         let clickHandler = `onclick="startSetIdioms('${month}', ${setNum})"`;
 
         // Check if we can generate questions (should be always yes for idioms now)
@@ -188,31 +177,19 @@ function renderSetsGridIdioms(month) {
             if (setData.completed) {
                 status = 'completed';
                 statusIcon = '✅';
-                statusColor = '#22c55e';
-                textColor = '#16a34a';
                 clickHandler = `onclick="reviewSetIdioms('${month}', ${setNum})"`;
             } else {
                 status = 'in-progress';
                 statusIcon = '🔄';
-                statusColor = '#fbbf24';
-                textColor = '#d97706';
             }
         }
 
         return `
-                    <button ${clickHandler} style="
-                        background: ${status === 'completed' ? '#f0fdf4' : status === 'in-progress' ? '#fffbeb' : 'white'};
-                        border: 3px solid ${statusColor};
-                        border-radius: 12px;
-                        padding: 20px 15px;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        text-align: center;
-                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="font-size: 2rem; margin-bottom: 8px;">${statusIcon}</div>
-                        <div style="font-weight: 700; font-size: 1.05rem; color: ${textColor};">Set ${setNum}</div>
-                        ${setData ? `<div style="font-size: 0.85rem; color: #888; margin-top: 5px;">${setData.score || 0}/5</div>` : ''}
-                    </button>
+                    <div class="set-card ${status}" ${clickHandler}>
+                        <div class="set-icon">${statusIcon}</div>
+                        <div class="set-number">Set ${setNum}</div>
+                        ${setData ? `<div class="set-score">${setData.score || 0}/5 Correct</div>` : ''}
+                    </div>
                 `;
     }).join('')}
         </div>
@@ -347,46 +324,39 @@ function renderSetQuestionIdioms() {
     const progress = Math.round(((currentQuestionIdioms) / 5) * 100);
 
     const html = `
-        <div style="max-width: 900px; margin: 40px auto; padding: 30px;">
+        <div class="question-container">
             <!-- Header -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <button onclick="backToMonthViewIdioms()" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
-                    ← Back to ${currentMonthIdioms}
+            <div class="question-header">
+                <button onclick="backToMonthViewIdioms()" class="back-btn">
+                    <span>←</span> Back
                 </button>
-                <h1 style="color: var(--lime-dark); font-size: 2rem; margin: 0;">Set ${currentSetNumberIdioms} - Question ${currentQuestionIdioms + 1}/5</h1>
-                <div style="width: 120px;"></div>
+                <div style="color: #64748b; font-weight: 600;">Question ${currentQuestionIdioms + 1}/5</div>
             </div>
 
             <!-- Progress Bar -->
-            <div style="background: #e5e7eb; border-radius: 10px; height: 12px; margin-bottom: 30px; overflow: hidden;">
-                <div style="background: linear-gradient(90deg, var(--lime-primary) 0%, #16a34a 100%); height: 100%; width: ${progress}%; transition: width 0.3s;"></div>
+            <div class="question-progress-track">
+                <div class="question-progress-fill" style="width: ${progress}%;"></div>
             </div>
 
-            <!-- Question Card -->
-            <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                <h2 style="font-size: 2rem; color: var(--lime-dark); margin-bottom: 30px;">What does "<strong>${q.idiom}</strong>" mean?</h2>
+            <!-- Question Content -->
+            <div style="text-align: center;">
+                <h2 class="question-text">What does "<strong>${q.idiom}</strong>" mean?</h2>
 
                 <!-- Options -->
-                <div id="idioms-set-options" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="options-grid" id="idioms-set-options">
                     ${q.options.map((opt, idx) => `
-                        <button class="idioms-set-option" onclick="selectSetAnswerIdioms(${idx})" style="
-                            padding: 20px 25px;
-                            border: 3px solid #e5e7eb;
-                            border-radius: 12px;
-                            background: white;
-                            text-align: left;
-                            cursor: pointer;
-                            transition: all 0.2s;
-                            font-size: 1.1rem;
-                        " onmouseover="if(!this.disabled) { this.style.borderColor='var(--lime-primary)'; this.style.background='#f0fdf4'; }" onmouseout="if(!this.disabled) { this.style.borderColor='#e5e7eb'; this.style.background='white'; }">
-                            <span style="display: inline-block; width: 30px; height: 30px; background: #f0f0f0; border-radius: 50%; text-align: center; line-height: 30px; margin-right: 15px; font-weight: 700;">${String.fromCharCode(65 + idx)}</span>
+                        <button class="option-card" onclick="selectSetAnswerIdioms(${idx})">
+                            <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
                             ${opt}
                         </button>
                     `).join('')}
                 </div>
 
-                <div id="idioms-set-feedback" style="display: none; margin-top: 30px; padding: 20px; border-radius: 12px;"></div>
-                <button id="next-set-question-btn-idioms" onclick="nextSetQuestionIdioms()" style="display: none; width: 100%; padding: 16px; margin-top: 20px; background: var(--lime-primary); color: white; border: none; border-radius: 10px; font-size: 1.15rem; font-weight: 700; cursor: pointer;">Next Question →</button>
+                <!-- Feedback Area -->
+                <div id="idioms-set-feedback"></div>
+
+                <!-- Next Button -->
+                <button id="next-set-question-btn-idioms" onclick="nextSetQuestionIdioms()" class="next-btn">Next Question →</button>
             </div>
         </div>
     `;
