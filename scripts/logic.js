@@ -70,6 +70,38 @@
 })();
 
 
+// === HISTORY MANAGER (NEW) ===
+// Handles Back/Forward button navigation
+window.onpopstate = function (event) {
+    if (event.state) {
+        const s = event.state;
+        // console.log("Restoring state:", s); // Debug
+
+        // Close any open papers first (cleans up UI)
+        closePaperView(false); // false = do not modify history
+
+        if (s.view === 'paper' && s.pid) {
+            openPaper(s.pid, 0, false);
+        } else if (s.view === 'papers' && s.subject && s.paper) {
+            selectPaper(s.subject, s.paper, false);
+        } else if (s.view) {
+            setView(s.view, false);
+        }
+    } else {
+        // Default to home if no state (e.g., direct load)
+        setView('home', false);
+    }
+};
+
+function pushHistory(stateObj, title, urlHash) {
+    // Only push if different from current state
+    const current = history.state;
+    if (current && JSON.stringify(current) === JSON.stringify(stateObj)) return;
+
+    history.pushState(stateObj, title, urlHash);
+}
+
+
 // === 1. GLOBAL UI & MENU MANAGEMENT ===
 // Updated: Force Refresh v1.1
 
@@ -303,6 +335,16 @@ function selectPaper(subject, paper) {
     }
     else if (subject === 'general') targetId = `container-general-p1`; // general-p1 only
 
+    // --- HISTORY UPDATE ---
+    if (addHistory) {
+        pushHistory(
+            { view: 'papers', subject: subject, paper: paper },
+            `${subject.toUpperCase()} - ${paper.toUpperCase()}`,
+            `#${subject}-${paper}`
+        );
+    }
+
+
     // 3. Show target container
     const target = document.getElementById(targetId);
     if (target) {
@@ -363,6 +405,10 @@ function tryLogin() {
 function initApp(u) {
     document.getElementById('login-layer').classList.add('hidden');
     document.getElementById('app-layer').classList.remove('hidden');
+
+    // Replace current state so we don't go back to login logic
+    history.replaceState({ view: 'home' }, 'Home', '#home');
+
     initHome();
     if (window.loadDynamicPapers && window.CloudManager) {
         try {
@@ -375,9 +421,13 @@ function initApp(u) {
     // Admin Button Removed per user request
 
 
-    // Restore Last View
-    const lastView = localStorage.getItem('lastView') || 'home';
-    setView(lastView);
+    // Restore Last View - DEPRECATED in favor of History API, but kept as fallback
+    // const lastView = localStorage.getItem('lastView') || 'home';
+    // setView(lastView);
+    // Instead, trust the default initHome or the URL hash if we implemented hash parsing
+
+    // For now, load Home by default on login/refresh
+    setView('home', false);
 }
 
 function doLogout() {
@@ -386,9 +436,18 @@ function doLogout() {
     location.reload();
 }
 
-function setView(viewName) {
-    // Save state
+function setView(viewName, addHistory = true) {
+    // Save state - LocalStorage is fine for persistence across reloads
     localStorage.setItem('lastView', viewName);
+
+    // --- HISTORY UPDATE ---
+    if (addHistory) {
+        pushHistory(
+            { view: viewName },
+            viewName.charAt(0).toUpperCase() + viewName.slice(1),
+            `#${viewName}`
+        );
+    }
 
     // 1. Hide all main views
     ['papers', 'scorecard', 'workspace', 'formulae', 'definitions', 'leaderboard', 'tips', 'score-display', 'home'].forEach(v => {
@@ -568,6 +627,45 @@ function backToDash() {
     document.body.style.overflow = 'auto';
     setView('papers');
 }
+window.closePaperView = function (addHistory = true) {
+    // Stop any active timer
+    if (window.stopPaperTimer) window.stopPaperTimer();
+
+    // Hide the view container
+    const viewContainer = document.getElementById('view-home'); // Actually using view-papers mostly
+    // But specific paper view is created dynamically or overlays?
+    // Based on openPaper, it seems it overwrites innerHTML of a container OR creates a full screen overlay for GP.
+
+    // Remove Full Screen Overlay if exists (GP)
+    const overlay = document.querySelector('div[style*="position: fixed"][style*="z-index: 9999"]');
+    if (overlay) overlay.remove();
+
+    // For standard papers, we simply switch back to 'papers' view
+    document.getElementById('view-papers').classList.remove('hidden');
+    document.querySelectorAll('.subject-container').forEach(el => {
+        // We keep the subject container open, just hide the specific paper content if it was injected?
+        // Wait, openPaper logic for standard papers isn't fully visible in snippets. 
+        // Assuming it replaces content or hides list.
+        // Let's rely on setView('papers') to restore valid state.
+    });
+
+    // Restore scrolling
+    document.body.style.overflow = 'auto';
+
+    if (addHistory) {
+        // If user clicked a manual "Close" button instead of Back button, we go back in history
+        // to keep history clean, OR we push 'papers' state.
+        // Better to just go back if we are in a 'paper' state.
+        if (history.state && history.state.view === 'paper') {
+            history.back();
+        } else {
+            setView('papers', true);
+        }
+    } else {
+        // Just restore UI
+        setView('papers', false); // Don't push state if handling popstate
+    }
+};
 // toggleInsert removed - no longer needed with split-screen view
 
 // === 3. CORE PAPER LOGIC (CLOUD ENABLED) ===
@@ -711,7 +809,7 @@ function stopPaperTimer() {
 }
 
 
-async function openPaper(pid, preservedScrollTop = 0) {
+async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
     let data = paperData[pid];
     const u = getUser();
 
@@ -734,6 +832,15 @@ async function openPaper(pid, preservedScrollTop = 0) {
         title: data ? data.title : pid,
         subtitle: 'Resume Paper'
     }));
+
+    // --- HISTORY UPDATE ---
+    if (addHistory) {
+        pushHistory(
+            { view: 'paper', pid: pid },
+            data ? data.title : pid,
+            `#paper-${pid}`
+        );
+    }
 
     if (!data) return showToast("Paper not found or loading...");
 
@@ -797,7 +904,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
             <!-- Header -->
             <div style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 <div style="display:flex; align-items:center; gap:20px;">
-                    <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
+                    <button onclick="history.back()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
                     <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
                 </div>
                 ${gpTimerHTML}
@@ -823,7 +930,7 @@ async function openPaper(pid, preservedScrollTop = 0) {
             <!-- Header -->
             <div style="flex-shrink: 0; background: white; padding: 15px 30px; border-bottom: 2px solid var(--lime-primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 <div style="display:flex; align-items:center; gap:20px;">
-                    <button onclick="closePaperView()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
+                    <button onclick="history.back()" style="background: #eee; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight:bold;">← Back to Papers</button>
                     <h3 style="margin:0; color:var(--lime-dark);">${data.title}</h3>
                 </div>
                 ${splitTimerHTML}
@@ -889,12 +996,6 @@ async function openPaper(pid, preservedScrollTop = 0) {
         const qPanel = document.getElementById('questions-panel');
         if (qPanel) qPanel.scrollTop = preservedScrollTop;
     }
-}
-
-function closePaperView() {
-    stopPaperTimer();
-    document.body.style.overflow = 'auto';
-    setView('papers');
 }
 
 // Setup resizable divider for split-screen
@@ -1034,7 +1135,6 @@ async function submitAnswer(pid, qn) {
             score: json.score,
             ao1: json.ao1, ao2: json.ao2, ao3: json.ao3, ao4: json.ao4,
             feedback: json.detailed_critique,
-            feedback: json.detailed_critique || "No feedback available.",
             modelAnswer: json.model_answer || "Model answer not generated."
         });
 
