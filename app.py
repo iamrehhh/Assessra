@@ -1022,14 +1022,14 @@ CRITICAL RULES:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
     elif is_economics_p4:
         if marks <= 8:
-            model_answer_instruction = f"""<ECONOMICS PAPER 4 MODEL ANSWER ({marks} marks):
-You are an expert Cambridge International A Level Economics teacher generating a PERFECT MODEL ANSWER for Paper 4 (9708). 
-Your answer must reflect what a top-scoring candidate would write under exam conditions.
+            model_answer_instruction = f"""<INSTRUCTION: You must GENERATE a perfect Economics Paper 4 Model Answer ({marks} marks).
+You are an expert Cambridge International A Level Economics teacher writing a flawless model response. 
+Your generated answer must reflect what a top-scoring candidate would write under exam conditions.
 
 MARKS AVAILABLE: {marks}
 QUESTION TYPE: Short Answer / Point-Based
 
-Follow these strict rules for Section A point-based questions:
+Follow these strict rules for generating your answer:
 
 1. DEFINITIONS (if asked):
    - Open with a precise, technically correct definition.
@@ -1051,17 +1051,17 @@ Follow these strict rules for Section A point-based questions:
 
 Do NOT simply summarize the case study, but you MUST refer back to the specific context and data provided in the case study for Application marks.
 Use formal, precise economic language.
-OUTPUT ONLY THE MODEL ANSWER, formatted logically into paragraphs. Nothing else.>"""
+CRITICAL: DO NOT copy these instructions into the output. You must strictly output ONLY the newly generated text answering the specific question above.>"""
         else:
-            model_answer_instruction = f"""<ECONOMICS PAPER 4 MODEL ESSAY ({marks} marks):
-You are an expert Cambridge International A Level Economics teacher generating a PERFECT MODEL ESSAY for Paper 4 (9708). 
-Your answer must reflect what a top-scoring candidate would write under exam conditions, targeting full marks (Level 3 AO1/AO2, Level 2 AO3).
+            model_answer_instruction = f"""<INSTRUCTION: You must GENERATE a perfect Economics Paper 4 Model Essay ({marks} marks).
+You are an expert Cambridge International A Level Economics teacher writing a flawless model response. 
+Your generated answer must reflect what a top-scoring candidate would write under exam conditions.
 
 MARKS AVAILABLE: {marks}
 QUESTION TYPE: Extended Essay (Levels-Based)
 TARGET LENGTH: Approx 600-900 words, 6-8 paragraphs.
 
-You MUST structure your essay EXACTLY as follows:
+You MUST structure your GENERATED essay exactly as follows:
 
 1. INTRODUCTION (2-4 sentences max):
    - Define all key terms in the question precisely.
@@ -1086,7 +1086,7 @@ You MUST structure your essay EXACTLY as follows:
 
 Use precise terminology (e.g., "allocative efficiency", "PED").
 Use causal connectives ("therefore", "consequently").
-OUTPUT ONLY THE MODEL ESSAY text. Do not include meta-commentary.>"""
+CRITICAL: DO NOT copy these instructions into the output. You must strictly output ONLY the newly generated essay text answering the specific question above.>"""
     else:
         # FALLBACK FOR OTHER PAPERS
         model_answer_instruction = (
@@ -1291,11 +1291,12 @@ OUTPUT ONLY THE MODEL ESSAY text. Do not include meta-commentary.>"""
                 # ---- FALLBACK: Dedicated second API call for model answer ----
                 logger.warning("⚠️ Model answer missing from grading response. Making dedicated call...")
                 try:
+                    safe_case_study = str(case_study_text) if case_study_text else ""
                     ma_prompt = f"""
                     QUESTION: {question_text}
                     
                     CASE STUDY / CONTEXT:
-                    {case_study_text[:3000]}
+                    {safe_case_study[:3000]}
                     
                     INSTRUCTION:
                     {model_answer_instruction}
