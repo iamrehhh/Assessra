@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habibi Studies</title>
+    <title>Assessra</title>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
     <link
@@ -63,22 +63,17 @@
 
     <div id="login-layer" class="login-screen">
         <div class="login-card">
-            <img src="assets/logo.png" alt="Logo" class="login-logo-img">
-            <div class="login-header-group">
-                <h2 class="login-heading">Student | Sign in</h2>
+            <img src="assets/logo.jpg" alt="Logo" class="login-logo-img">
+
+            <div class="input-group">
+                <input type="text" id="u-in" class="login-input" placeholder="username" required>
             </div>
 
             <div class="input-group">
-                <input type="text" id="u-in" class="login-input" required>
-                <label for="u-in" class="floating-label">Username *</label>
+                <input type="password" id="p-in" class="login-input" placeholder="******" required>
             </div>
 
-            <div class="input-group">
-                <input type="password" id="p-in" class="login-input" required>
-                <label for="p-in" class="floating-label">Password *</label>
-            </div>
-
-            <button class="submit-btn" onclick="tryLogin()">SIGN IN</button>
+            <button class="submit-btn" onclick="tryLogin()">Sign in</button>
         </div>
     </div>
 
@@ -88,7 +83,7 @@
 
             <div class="app-header">
                 <div class="header-left">
-                    <img src="assets/logo.png" alt="Habibi Studies" class="app-logo" onclick="setView('home')">
+                    <img src="assets/logo.jpg" alt="Assessra" class="app-logo" onclick="setView('home')">
                 </div>
                 <!-- Changed 'nav' to match new requirements -->
                 <div class="nav">
