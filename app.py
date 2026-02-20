@@ -404,6 +404,10 @@ def mark():
         consistently for ANY Paper 4 question. Always award whole marks only. 
         Mark positively — reward what is correct, never deduct for errors or omissions.
 
+        CRITICAL INSTRUCTION:
+        If a Marking Scheme is provided below, you MUST use it as the absolute ground truth for grading.
+        You must verify the student's answer against the specific points in the Marking Scheme.
+
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
         """
@@ -1045,7 +1049,8 @@ Follow these strict rules for Section A point-based questions:
    - Include a brief evaluative comment.
    - End with a clear conclusion answering the question.
 
-Do NOT simply summarize the case study. Use formal, precise economic language.
+Do NOT simply summarize the case study, but you MUST refer back to the specific context and data provided in the case study for Application marks.
+Use formal, precise economic language.
 OUTPUT ONLY THE MODEL ANSWER, formatted logically into paragraphs. Nothing else.>"""
         else:
             model_answer_instruction = f"""<ECONOMICS PAPER 4 MODEL ESSAY ({marks} marks):
