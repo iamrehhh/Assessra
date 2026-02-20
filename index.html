@@ -64,9 +64,21 @@
     <div id="login-layer" class="login-screen">
         <div class="login-card">
             <img src="assets/logo.png" alt="Logo" class="login-logo-img">
-            <input type="text" id="u-in" class="login-input" placeholder="username">
-            <input type="password" id="p-in" class="login-input" placeholder="******">
-            <button class="submit-btn" onclick="tryLogin()">Sign in</button>
+            <div class="login-header-group">
+                <h2 class="login-heading">Student | Sign in</h2>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="u-in" class="login-input" required>
+                <label for="u-in" class="floating-label">Username *</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="p-in" class="login-input" required>
+                <label for="p-in" class="floating-label">Password *</label>
+            </div>
+
+            <button class="submit-btn" onclick="tryLogin()">SIGN IN</button>
         </div>
     </div>
 
@@ -2568,7 +2580,8 @@
 
             <div id="view-leaderboard" class="hidden">
                 <div style="text-align:center; margin-bottom:40px;">
-                    <h2 id="lb-title" style="font-size:2.5rem; color:var(--lime-dark); font-family:'Playfair Display', serif;">🏆
+                    <h2 id="lb-title"
+                        style="font-size:2.5rem; color:var(--lime-dark); font-family:'Playfair Display', serif;">🏆
                         Class Leaderboard</h2>
                     <p id="lb-subtitle" style="color:#666;">Top performers in Business Practice</p>
                 </div>
