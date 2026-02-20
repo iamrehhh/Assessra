@@ -1017,7 +1017,71 @@ CRITICAL RULES:
         else:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
     elif is_economics_p4:
-        model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks) that exemplifies the highest levels of the Economics grading rubric.>"
+        if marks <= 8:
+            model_answer_instruction = f"""<ECONOMICS PAPER 4 MODEL ANSWER ({marks} marks):
+You are an expert Cambridge International A Level Economics teacher generating a PERFECT MODEL ANSWER for Paper 4 (9708). 
+Your answer must reflect what a top-scoring candidate would write under exam conditions.
+
+MARKS AVAILABLE: {marks}
+QUESTION TYPE: Short Answer / Point-Based
+
+Follow these strict rules for Section A point-based questions:
+
+1. DEFINITIONS (if asked):
+   - Open with a precise, technically correct definition.
+   - Follow immediately with a clear elaboration or qualification.
+   - Include a brief, accurate example if helpful.
+   - 2 marks: 2-3 sentences. No padding.
+
+2. EXPLANATIONS (if asked to explain/analyse):
+   - Identify the relevant economic concept clearly.
+   - Explain the mechanism: why and how it works.
+   - Develop the consequence: what happens as a result, and to whom.
+   - Target length: 1 developed point per 2-3 marks available.
+
+3. DISCUSSIONS (if asked to consider/discuss/assess):
+   - Cover all aspects demanded by the question.
+   - Identify -> Explain Mechanism -> Develop Consequence for each point.
+   - Include a brief evaluative comment.
+   - End with a clear conclusion answering the question.
+
+Do NOT simply summarize the case study. Use formal, precise economic language.
+OUTPUT ONLY THE MODEL ANSWER, formatted logically into paragraphs. Nothing else.>"""
+        else:
+            model_answer_instruction = f"""<ECONOMICS PAPER 4 MODEL ESSAY ({marks} marks):
+You are an expert Cambridge International A Level Economics teacher generating a PERFECT MODEL ESSAY for Paper 4 (9708). 
+Your answer must reflect what a top-scoring candidate would write under exam conditions, targeting full marks (Level 3 AO1/AO2, Level 2 AO3).
+
+MARKS AVAILABLE: {marks}
+QUESTION TYPE: Extended Essay (Levels-Based)
+TARGET LENGTH: Approx 600-900 words, 6-8 paragraphs.
+
+You MUST structure your essay EXACTLY as follows:
+
+1. INTRODUCTION (2-4 sentences max):
+   - Define all key terms in the question precisely.
+   - Briefly signpost what the essay will cover.
+   - Directly engage with the specific question immediately.
+
+2. ANALYSIS SECTION (3-4 distinct paragraphs):
+   - Each paragraph must: State concept -> Explain mechanism -> Develop consequence -> Support with diagram OR example.
+   - Diagram rules: If relevant, describe diagrams fully: Axes, Curves (shape/direction), Intersections, Shifts (and why), Areas shaded, Conclusion drawn from diagram.
+   - Connect every paragraph back to the question.
+
+3. EVALUATION SECTION (2-3 distinct paragraphs):
+   - Challenge, qualify, or add conditions to analytical points.
+   - Explain WHY it matters to the conclusion.
+   - Use evaluative moves: Short-run vs Long-run, trade-offs, assumptions/limitations, relative significance of factors.
+   - Do NOT just list opposites; weigh them.
+
+4. CONCLUSION (3-5 sentences):
+   - Make a definite, reasoned judgement answering the specific question.
+   - Start with "Overall...", "On balance...", or "The evidence suggests...".
+   - Support with preceding arguments.
+
+Use precise terminology (e.g., "allocative efficiency", "PED").
+Use causal connectives ("therefore", "consequently").
+OUTPUT ONLY THE MODEL ESSAY text. Do not include meta-commentary.>"""
     else:
         # FALLBACK FOR OTHER PAPERS
         model_answer_instruction = (
