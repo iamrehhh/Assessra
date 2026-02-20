@@ -1261,6 +1261,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     
     2. BE CRITICAL. Do not give "benefit of the doubt". 
     3. If the student uses generic points not linked to the case, do not award marks for Application.
+    4. ZERO TOLERANCE FOR GIBBERISH/NON-ANSWERS: If the student answer is extremely short (e.g., just a few letters like "mm"), mostly blank, or contains no meaningful academic content related to the question, you MUST award 0 marks for all AOs and a total score of 0. Do NOT hallucinate a score or positive feedback for garbage input.
 
     OUTPUT FORMAT REQUIREMENT:
     {feedback_structure}
