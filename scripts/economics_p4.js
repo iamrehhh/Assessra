@@ -10,28 +10,23 @@ Object.assign(paperData, {
         "questions": [
             {
                 "n": "1a",
-                "m": 2,
-                "t": "Explain what is meant by a maximum price."
+                "m": 5,
+                "t": "Identify what caused the rise in the electricity prices and explain whether it can be concluded from the article that the price rise was an example of market failure."
             },
             {
                 "n": "1b",
-                "m": 5,
-                "t": "Use the information to explain how the government hoped to keep its country competitive."
+                "m": 4,
+                "t": "Is there any evidence in the article that the French government\u2019s decisions will increase competition or efficiency in the energy market?"
             },
             {
                 "n": "1c",
-                "m": 5,
-                "t": "Explain with the help of a diagram the effect of the increase in the wholesale price of electricity on the quantity demanded by consumers."
-            },
-            {
-                "n": "1d",
-                "m": 8,
-                "t": "Evaluate the effect of a maximum price on the allocative efficiency of a market."
+                "m": 3,
+                "t": "(i) Distinguish between equality and equity."
             },
             {
                 "n": "2",
                 "m": 20,
-                "t": "With the help of a diagram, assess the effectiveness of a government's intervention in the price mechanism to address the causes of climate change.",
+                "t": "With the help of a diagram, assess the effectiveness of a government\u2019s intervention in the price mechanism to address the causes of climate change.",
                 "l": "400-600"
             },
             {
@@ -54,206 +49,6 @@ Object.assign(paperData, {
             }
         ]
     },
-    "econ_2024_mj_41": {
-        "title": "Income inequality",
-        "pdf": "papers/9708_s24_qp_41.pdf",
-        "questions": [
-            {
-                "n": "1a",
-                "m": 2,
-                "t": "Identify two characteristics of a developing country."
-            },
-            {
-                "n": "1b",
-                "m": 4,
-                "t": "Explain how the Gini coefficient is used to measure income inequality."
-            },
-            {
-                "n": "1c",
-                "m": 6,
-                "t": "Analyse the causes of income inequality in developing countries."
-            },
-            {
-                "n": "1d",
-                "m": 8,
-                "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
-            },
-            {
-                "n": "2",
-                "m": 20,
-                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
-                "l": "400-600"
-            },
-            {
-                "n": "3",
-                "m": 20,
-                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
-                "l": "400-600"
-            },
-            {
-                "n": "4",
-                "m": 20,
-                "t": "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?",
-                "l": "400-600"
-            },
-            {
-                "n": "5",
-                "m": 20,
-                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
-                "l": "400-600"
-            }
-        ]
-    },
-    "econ_2024_mj_42": {
-        "title": "Developments in the electric vehicle (EV) industry",
-        "pdf": "papers/9708_s24_qp_42.pdf",
-        "questions": [
-            {
-                "n": "1a",
-                "m": 2,
-                "t": "Calculate the percentage increase in EV sales in Europe between 2021 and 2022."
-            },
-            {
-                "n": "1b",
-                "m": 5,
-                "t": "Use the information to explain two reasons for the increase in demand for EVs."
-            },
-            {
-                "n": "1c",
-                "m": 5,
-                "t": "Explain why the supply of EVs might be relatively price inelastic in the short run."
-            },
-            {
-                "n": "1d",
-                "m": 8,
-                "t": "Analyse how the development of the EV industry could affect employment and economic growth."
-            },
-            {
-                "n": "2",
-                "m": 20,
-                "t": "Market failure exists in all economies. Evaluate, with the aid of a diagram(s), the meaning of market failure and two policies a government may use to correct market failure.",
-                "l": "400-600"
-            },
-            {
-                "n": "3",
-                "m": 20,
-                "t": "Evaluate, with the aid of a diagram(s), whether excess profit (supernormal profit) is always necessary for the continued existence of firms in perfect competition and monopoly.",
-                "l": "400-600"
-            },
-            {
-                "n": "4",
-                "m": 20,
-                "t": "Economies have recently suffered severe negative macroeconomic shocks to the supply of goods and services arising from the Covid-19 pandemic and the conflict between Russia and Ukraine. In one country, the government cut taxes and the central bank raised interest rates. Evaluate the likely impact of these policies on that government's ability to control inflation.",
-                "l": "400-600"
-            },
-            {
-                "n": "5",
-                "m": 20,
-                "t": "Evaluate the likely impact of globalisation on a low-income country's standard of living.",
-                "l": "400-600"
-            }
-        ]
-    },
-    "econ_2024_mj_43": {
-        "title": "Income inequality",
-        "pdf": "papers/9708_s24_qp_43.pdf",
-        "questions": [
-            {
-                "n": "1a",
-                "m": 2,
-                "t": "Identify two characteristics of a developing country."
-            },
-            {
-                "n": "1b",
-                "m": 4,
-                "t": "Explain how the Gini coefficient is used to measure income inequality."
-            },
-            {
-                "n": "1c",
-                "m": 6,
-                "t": "Analyse the causes of income inequality in developing countries."
-            },
-            {
-                "n": "1d",
-                "m": 8,
-                "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
-            },
-            {
-                "n": "2",
-                "m": 20,
-                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
-                "l": "400-600"
-            },
-            {
-                "n": "3",
-                "m": 20,
-                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
-                "l": "400-600"
-            },
-            {
-                "n": "4",
-                "m": 20,
-                "t": "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?",
-                "l": "400-600"
-            },
-            {
-                "n": "5",
-                "m": 20,
-                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
-                "l": "400-600"
-            }
-        ]
-    },
-    "econ_2024_on_42": {
-        "title": "Reduced Migration to the United States (US)",
-        "pdf": "papers/9708_w24_qp_42.pdf",
-        "questions": [
-            {
-                "n": "1a",
-                "m": 2,
-                "t": "Identify the relationship between the variables shown in Fig. 1.1 and suggest one possible reason for the relationship."
-            },
-            {
-                "n": "1b",
-                "m": 4,
-                "t": "With the help of a production possibility curve (PPC) diagram, explain both the likely effect of the prevention of migration to the US from 2019 and the retirement of older US workers on the US's productive potential."
-            },
-            {
-                "n": "1c",
-                "m": 6,
-                "t": "Using the information and labour market theory, analyse why the wages received by migrant workers in the high-tech industries are likely to be higher than the wages received by migrant workers in the hospitality industry."
-            },
-            {
-                "n": "1d",
-                "m": 8,
-                "t": "Evaluate the likely impact of a return to the migration levels prior to 2019 on the macroeconomic performance of the US economy."
-            },
-            {
-                "n": "2",
-                "m": 20,
-                "t": "Evaluate whether marginal utility theory can fully explain the link between the changing price of a good and quantity demanded of that good.",
-                "l": "400-600"
-            },
-            {
-                "n": "3",
-                "m": 20,
-                "t": "Privatisation is often required by the International Monetary Fund (IMF) and the World Bank before they are prepared to offer support to countries requiring loans, grants, debt relief and debt cancellation programs. Evaluate the view that privatisation will always improve the allocation of resources in a country.",
-                "l": "400-600"
-            },
-            {
-                "n": "4",
-                "m": 20,
-                "t": "The table below contains some key economic data for Mexico in 2020. Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.",
-                "l": "400-600"
-            },
-            {
-                "n": "5",
-                "m": 20,
-                "t": "Between 2010 and 2020, very low interest rates encouraged low-income countries to borrow money from foreign investors and governments to finance long-term economic growth. Evaluate this approach to promoting long-term economic growth.",
-                "l": "400-600"
-            }
-        ]
-    },
     "econ_2025_fm_42": {
         "title": "China's population trend",
         "pdf": "papers/9708_m25_qp_42.pdf",
@@ -261,33 +56,33 @@ Object.assign(paperData, {
             {
                 "n": "1a",
                 "m": 2,
-                "t": "Identify two possible causes of a falling birth rate."
+                "t": "Explain what is meant by an optimum population."
             },
             {
                 "n": "1b",
-                "m": 4,
-                "t": "Explain two potential economic problems associated with an ageing population."
+                "m": 5,
+                "t": "Explain how China\u2019s population structure changed between 1970 and 2020 and consider whether the statement \u2018its population is decreasing\u2019 is supported by Fig. 1.1."
             },
             {
                 "n": "1c",
                 "m": 6,
-                "t": "Analyse the likely impact of a declining population on the supply of labour and wages."
+                "t": "Identify two observations economists have made about changes in China\u2019s population and analyse how these changes would affect GDP."
             },
             {
                 "n": "1d",
-                "m": 8,
-                "t": "Discuss whether government intervention and policies can effectively reverse a long-term population decline."
+                "m": 7,
+                "t": "China\u2019s government has a different view from what it says are the alarming statements made by economists. Consider the effects on the economy of the population policies suggested by China\u2019s government."
             },
             {
                 "n": "2",
                 "m": 20,
-                "t": "With the help of a diagram, evaluate the consequences of imposing an effective minimum wage on the employment level and the wage level in a monopsony labour market.",
+                "t": "Oligopolies are able to avoid price competition while maintaining supernormal profits in the long run. Evaluate this statement.",
                 "l": "400-600"
             },
             {
                 "n": "3",
                 "m": 20,
-                "t": "With the help of a diagram, evaluate the short-run and long-run consequences on profit, output and price for a monopoly as it becomes perfectly competitive.",
+                "t": "With the help of a diagram, evaluate the consequences of imposing an effective minimum wage on the employment level and the wage level in a monopsony labour market.",
                 "l": "400-600"
             },
             {
@@ -304,34 +99,184 @@ Object.assign(paperData, {
             }
         ]
     },
+    "econ_2024_mj_41": {
+        "title": "Income inequality",
+        "pdf": "papers/9708_s24_qp_41.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "Describe what is meant by the Gini coefficient and its possible range of values."
+            },
+            {
+                "n": "1b",
+                "m": 3,
+                "t": "Distinguish between absolute poverty and relative poverty."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Consider whether Table 1.1 supports the conclusion that greater inequality of incomes is linked to poor literacy ratios of females to males and leads to greater poverty."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Use one example of a supply-side policy and one example of a fiscal policy to assess how a government might be able to achieve greater equality in the distribution of income."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "In many countries increased government spending is regarded as a cause of economic growth. It is sensible, therefore, for a government to spend more to increase economic growth as it is good for its country. To what extent do you agree with this argument?",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
+                "l": "400-600"
+            }
+        ]
+    },
+    "econ_2024_mj_42": {
+        "title": "Developments in the electric vehicle (EV) industry",
+        "pdf": "papers/9708_s24_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "Explain what is meant by internal economies of scale, using an example from the information."
+            },
+            {
+                "n": "1b",
+                "m": 3,
+                "t": "Consider what is meant by minimum efficient scale and to what extent the data in Table 1.1 suggest this has been achieved."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Analyse, with the aid of a diagram, the likely impact of the change to EV on the labour market for workers producing ICE in southern Germany."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Evaluate the likely macroeconomic effects of the switch to EV for both Saudi Arabia and Singapore."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Market failure exists in all economies. Evaluate, with the aid of a diagram(s), the meaning of market failure and two policies a government may use to correct market failure.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Evaluate, with the aid of a diagram(s), whether excess profit (supernormal profit) is always necessary for the continued existence of firms in perfect competition and monopoly.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "In 2022, many countries experienced a high rate of inflation caused by disruptions to the supply of goods and services arising from the Covid-19 pandemic and the conflict between Russia and Ukraine. In one country, the government cut taxes and the central bank raised interest rates. Evaluate the likely impact of these policies on that government\u2019s ability to control inflation.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Evaluate the likely impact of globalisation on a low-income country\u2019s standard of living.",
+                "l": "400-600"
+            }
+        ]
+    },
+    "econ_2024_mj_43": {
+        "title": "Income inequality",
+        "pdf": "papers/9708_s24_qp_43.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "Describe what is meant by the Gini coefficient and its possible range of values."
+            },
+            {
+                "n": "1b",
+                "m": 3,
+                "t": "Distinguish between absolute poverty and relative poverty."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Consider whether Table 1.1 supports the conclusion that greater inequality of incomes is linked to poor literacy ratios of females to males and leads to greater poverty."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Use one example of a supply-side policy and one example of a fiscal policy to assess how a government might be able to achieve greater equality in the distribution of income."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "In many countries increased government spending is regarded as a cause of economic growth. It is sensible, therefore, for a government to spend more to increase economic growth as it is good for its country. To what extent do you agree with this argument?",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
+                "l": "400-600"
+            }
+        ]
+    },
     "econ_2025_mj_41": {
         "title": "The influence of governments",
         "pdf": "papers/9708_s25_qp_41.pdf",
         "questions": [
             {
                 "n": "1a",
-                "m": 2,
-                "t": "Identify two examples of government macroeconomic aims."
+                "m": 3,
+                "t": "The article refers to structural unemployment. Explain what this means and whether it is the same as the natural rate of unemployment."
             },
             {
                 "n": "1b",
-                "m": 4,
-                "t": "Explain how a government might use monetary policy to achieve stable economic growth."
+                "m": 6,
+                "t": "To keep unemployment low, one government used fiscal policy. Analyse how this policy can affect unemployment rates."
             },
             {
                 "n": "1c",
-                "m": 6,
-                "t": "Analyse the conflicts that might occur between the different macroeconomic aims of a government."
+                "m": 3,
+                "t": "Explain how the policies of high-income economies towards \u2018green energy\u2019 changed between 2015 and 2022."
             },
             {
                 "n": "1d",
                 "m": 8,
-                "t": "Evaluate the extent to which a government can influence the level of economic activity in a mixed economy."
+                "t": "Assess whether the article provides sufficient evidence to justify its conclusion that the intervention of governments has little effect on economic outcomes."
             },
             {
                 "n": "2",
                 "m": 20,
-                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer's demand for this product.",
+                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer\u2019s demand for this product.",
                 "l": "400-600"
             },
             {
@@ -371,7 +316,7 @@ Object.assign(paperData, {
             {
                 "n": "1c",
                 "m": 4,
-                "t": "Discuss why the article says that 'China is a country of contradictions'."
+                "t": "Discuss why the article says that \u2018China is a country of contradictions\u2019."
             },
             {
                 "n": "1d",
@@ -421,7 +366,7 @@ Object.assign(paperData, {
             {
                 "n": "1c",
                 "m": 3,
-                "t": "Explain how the policies of high-income economies towards 'green energy' changed between 2015 and 2022."
+                "t": "Explain how the policies of high-income economies towards \u2018green energy\u2019 changed between 2015 and 2022."
             },
             {
                 "n": "1d",
@@ -431,7 +376,7 @@ Object.assign(paperData, {
             {
                 "n": "2",
                 "m": 20,
-                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer's demand for this product.",
+                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer\u2019s demand for this product.",
                 "l": "400-600"
             },
             {
@@ -466,7 +411,7 @@ Object.assign(paperData, {
             {
                 "n": "1b",
                 "m": 3,
-                "t": "The passage states that the RMG industry 'uses significant division of labour'. Explain how this is likely to affect the average costs of firms in Bangladesh's RMG industry."
+                "t": "The passage states that the RMG industry \u2018uses significant division of labour\u2019. Explain how this is likely to affect the average costs of firms in Bangladesh\u2019s RMG industry."
             },
             {
                 "n": "1c",
@@ -504,6 +449,151 @@ Object.assign(paperData, {
             }
         ]
     },
+    "econ_2024_on_41": {
+        "title": "Resource dependence",
+        "pdf": "papers/9708_w24_qp_41.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 4,
+                "t": "With the aid of a diagram, explain the effect of natural resource development on the potential growth of Ghana."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain how the extraction of natural resources in Ghana will \u2018create further employment in other sectors through the multiplier effect\u2019."
+            },
+            {
+                "n": "1c",
+                "m": 4,
+                "t": "Explain what the information means by the \u2018Dutch disease\u2019 and using Fig. 1.1, consider to what extent Ghana suffered from this problem."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Use the information to assess the impact of the extraction of oil on the standard of living in Ghana."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Governments in many countries are promoting policies that reduce the impact of the negative externalities. Evaluate, using appropriate diagram(s), the extent to which two policies used to reduce negative externalities can also improve allocative efficiency.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Evaluate the consequences for the price and output of a firm if it changes its objective from profit maximisation to sales maximisation as a response to the principal-agent problem.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "In periods of rising and persistent inflation, consumers and workers change their expectations of the future rate of inflation. Evaluate, with the help of a diagram(s), the consequences of these changes of expectations for fiscal policy.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "In recent years many countries have joined or established a free trade area (FTA). Evaluate, with the help of a diagram(s), whether membership of an FTA is always beneficial to a country.",
+                "l": "400-600"
+            }
+        ]
+    },
+    "econ_2024_on_42": {
+        "title": "Reduced Migration to the United States (US)",
+        "pdf": "papers/9708_w24_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify the relationship between the variables shown in Fig. 1.1 and suggest one possible reason for the relationship."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "With the help of a production possibility curve (PPC) diagram, explain both the likely effect of the prevention of migration to the US from 2019 and the retirement of older US workers on the US\u2019s productive potential."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Using the information and labour market theory, analyse why the wages received by migrant workers in the high-tech industries are likely to be higher than the wages received by migrant workers in the hospitality industry."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Evaluate the likely impact of a return to the migration levels prior to 2019 on the macroeconomic performance of the US economy."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Evaluate whether marginal utility theory can fully explain the link between the changing price of a good and quantity demanded of that good.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Privatisation is often required by the International Monetary Fund (IMF) and the World Bank before they are prepared to offer support to countries requiring loans, grants, debt relief and debt cancellation programs. Evaluate the view that privatisation will always improve the allocation of resources in a country.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "The table below contains some key economic data for Mexico in 2020. Gross National Income (GNI) 18.5 billion pesos nominal wages +2.8% disposable income +1.2% unemployment rate 4.2% population growth rate 1.1% inflation rate 3.4% Source: knoema.com Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Between 2010 and 2020, very low interest rates encouraged low-income countries to borrow money from foreign investors and governments to finance long-term economic growth. Evaluate this approach to promoting long-term economic growth.",
+                "l": "400-600"
+            }
+        ]
+    },
+    "econ_2024_on_43": {
+        "title": "Large tech companies",
+        "pdf": "papers/9708_w24_qp_43.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 4,
+                "t": "(i) Distinguish between limit pricing and predatory pricing."
+            },
+            {
+                "n": "1b",
+                "m": 6,
+                "t": "Assess three possible positive effects on the macroeconomy of the huge increase in the size of the five largest technology companies."
+            },
+            {
+                "n": "1c",
+                "m": 8,
+                "t": "The article says the growth of large firms is bad for consumers, bad for competition, and causes inequality. Consider whether this statement can be supported by the article and by economic theory."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Negative externalities of production cause market failure. With the help of a diagram, assess the extent to which the introduction of indirect taxation is likely to address this cause of market failure.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Wages in a perfectly competitive labour market will always be higher than wages in a monopsony labour market. With the help of a diagram, evaluate this statement.",
+                "l": "400-600"
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "Central banks can control the money supply. An increase in the money supply will cause inflation, therefore central banks can control inflation. Evaluate this statement.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Some high-income countries have introduced a policy of high tariffs on some imports to reduce the negative effects of globalisation on their economies. With the help of a diagram, evaluate this policy.",
+                "l": "400-600"
+            }
+        ]
+    },
     "econ_2025_on_41": {
         "title": "Working overseas",
         "pdf": "papers/9708_w25_qp_41.pdf",
@@ -521,7 +611,7 @@ Object.assign(paperData, {
             {
                 "n": "1c",
                 "m": 6,
-                "t": "The article states: 'Total remittances received by those countries in 2022 was  billion.' Analyse how this is likely to benefit the migrants' home economies."
+                "t": "The article states: \u2018Total remittances received by those countries in 2022 was $650 billion.\u2019 Analyse how this is likely to benefit the migrants\u2019 home economies."
             },
             {
                 "n": "1d",
@@ -616,7 +706,7 @@ Object.assign(paperData, {
             {
                 "n": "1b",
                 "m": 2,
-                "t": "Distinguish between equity and equality."
+                "t": "(i) Distinguish between equity and equality."
             },
             {
                 "n": "1c",
@@ -644,7 +734,7 @@ Object.assign(paperData, {
             {
                 "n": "5",
                 "m": 20,
-                "t": "'The use of tariffs is the most effective way to correct a balance of payments deficit.' With the help of a diagram, evaluate this statement.",
+                "t": "\u2018The use of tariffs is the most effective way to correct a balance of payments deficit.\u2019 With the help of a diagram, evaluate this statement.",
                 "l": "400-600"
             }
         ]
@@ -656,17 +746,17 @@ Object.assign(paperData, {
             {
                 "n": "1a",
                 "m": 4,
-                "t": "Explain the meaning of 'allocative efficiency and productive efficiency'."
+                "t": "Explain the meaning of \u2018allocative efficiency and productive efficiency\u2019."
             },
             {
                 "n": "1b",
                 "m": 2,
-                "t": "Explain what is meant by a negative production externality."
+                "t": "(i) Explain what is meant by a negative production externality."
             },
             {
                 "n": "1c",
                 "m": 8,
-                "t": "Consider whether 'a monopoly always operates against the interests of the consumer'."
+                "t": "Consider whether \u2018a monopoly always operates against the interests of the consumer\u2019."
             },
             {
                 "n": "2",
@@ -689,7 +779,7 @@ Object.assign(paperData, {
             {
                 "n": "5",
                 "m": 20,
-                "t": "Evaluate whether an increase in a government's budget deficit will always lead to economic growth.",
+                "t": "Evaluate whether an increase in a government\u2019s budget deficit will always lead to economic growth.",
                 "l": "400-600"
             }
         ]
