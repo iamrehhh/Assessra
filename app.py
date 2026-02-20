@@ -336,6 +336,13 @@ def mark():
             is_business_p4 = True
             print("⚠ MODE ACTIVE: Business Paper 4 Detected")
 
+    # DETECT ECONOMICS PAPER 4
+    is_economics_p4 = False
+    if pdf_path and "9708" in pdf_path:
+        if "_4" in pdf_path or "41" in pdf_path or "42" in pdf_path or "43" in pdf_path:
+            is_economics_p4 = True
+            print("⚠ MODE ACTIVE: Economics Paper 4 Detected")
+
     # DETECT GENERAL PAPER 8021
     is_general_paper = False
     if pdf_path and ("8021" in pdf_path or "General" in pdf_path):
@@ -386,6 +393,16 @@ def mark():
         3. You MUST compare the student's answer to the CORRECT calculated answer (from MS or your own calculation).
         4. Do NOT guess or approximate — use the exact figures.
         5. Award marks based on whether the student's calculation matches the correct answer.
+
+        {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
+        {marking_scheme_text if marking_scheme_text else ''}
+        """
+    elif is_economics_p4:
+        system_prompt = f"""
+        You are an experienced Cambridge International A Level Economics examiner 
+        marking Paper 4 (9708). Apply the marking criteria precisely and 
+        consistently for ANY Paper 4 question. Always award whole marks only. 
+        Mark positively — reward what is correct, never deduct for errors or omissions.
 
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
@@ -585,6 +602,238 @@ def mark():
         APPLY positive marking. IGNORE spelling/grammar if meaning is clear.
         """
         word_guide = "400-500 words for A* response"
+    elif is_economics_p4:
+        rubric = """
+        =============================================================
+        PAPER 4 STRUCTURE OVERVIEW
+        =============================================================
+        
+        Paper 4 consists of two sections:
+        
+        SECTION A — Data Response (20 marks total)
+        Contains short-answer sub-questions based on stimulus material 
+        (data, figures, tables, extracts). Uses point-based marking.
+        
+        SECTION B — Essays (20 marks each, candidates answer 2 from 4)
+        Extended response questions. Uses levels-based marking split into:
+          - AO1 Knowledge & Understanding + AO2 Analysis: 14 marks
+          - AO3 Evaluation: 6 marks
+        
+        =============================================================
+        SECTION A — POINT-BASED MARKING RULES
+        =============================================================
+        
+        Apply these rules to ALL Section A sub-questions:
+        
+        GENERAL PRINCIPLES:
+        - Award marks for correct, clearly relevant economic points only.
+        - A key term alone is insufficient — the candidate must demonstrate 
+          they understand it and are not using it incorrectly.
+        - Do not award marks for vague, self-contradictory, or repeated points.
+        - Alternative correct answers not in the mark scheme should still be 
+          credited if they are economically valid.
+        - Do not penalise for poor spelling or grammar unless meaning is 
+          made ambiguous.
+        - Marks are never deducted — only awarded.
+        
+        TYPES OF SUB-QUESTIONS AND HOW TO MARK THEM:
+        
+        [Define / Explain what is meant by...] (typically 2–3 marks)
+        - Award marks for accurate definition of the concept (1 mark)
+        - Award further marks for elaboration, qualification, or a correct example
+        - The candidate must show understanding, not just name the term
+        
+        [Explain / Analyse...] (typically 4–6 marks)
+        - Award marks for: identification of relevant point (1), explanation 
+          of the mechanism or relationship (1), further developed consequence 
+          or application to context (1)
+        - Marks are typically structured in clusters of 2–3 per valid point
+        - Require economic reasoning, not just description
+        
+        [Consider / Discuss / Assess...] (typically 6–8 marks)
+        - Award marks for analysis of relevant factors/policies/effects
+        - Require development beyond identification — the mechanism must 
+          be explained
+        - Award 1 additional mark for a supported conclusion where indicated
+        - Do not award maximum marks without some form of evaluative comment 
+          or conclusion
+        
+        [Using the data / figure / extract...] 
+        - Require explicit reference to the stimulus material for full marks
+        - Data must be used accurately and in context
+        - Observations must be correctly interpreted — not just quoted
+        
+        MARK ALLOCATION GUIDANCE FOR SECTION A:
+        - Each valid, distinct, developed point typically earns up to 3 marks
+          (identification + explanation + consequence/application)
+        - Do not award more marks than the sub-question maximum allows
+        - Do not award the same mark twice for a point already credited, 
+          even if restated differently (no mirror statements)
+        
+        =============================================================
+        SECTION B — LEVELS-BASED MARKING RULES
+        =============================================================
+        
+        Each essay is marked out of 20 marks total:
+          AO1 + AO2 (Knowledge, Understanding & Analysis): out of 14 marks
+          AO3 (Evaluation): out of 6 marks
+        
+        These are assessed and awarded SEPARATELY.
+        
+        ---
+        TABLE A — AO1 Knowledge & Understanding + AO2 Analysis (out of 14)
+        
+        LEVEL 3 (11–14 marks) — Detailed and Developed
+        Award Level 3 when the response:
+        ✓ Shows detailed, accurate knowledge of relevant economic concepts 
+          with clear explanations and appropriate examples
+        ✓ Directly and fully addresses the specific requirements of the question 
+          (not just the general topic)
+        ✓ Develops analysis in depth — explains mechanisms, causes, effects, 
+          and relationships using economic theory
+        ✓ Makes accurate and relevant use of diagrams and/or formulae 
+          where required, AND fully explains them in the written response
+        ✓ Is well-organised, logical, and coherent throughout
+        
+          14 marks — Response CONVINCINGLY meets all Level 3 descriptors
+          12–13 marks — Response ADEQUATELY meets Level 3 descriptors
+          11 marks — Response JUST meets Level 3 descriptors
+        
+        LEVEL 2 (6–10 marks) — Partial and Limited
+        Award Level 2 when the response:
+        ✓ Shows knowledge of some relevant economic concepts but explanations 
+          are limited, over-generalised, or contain inaccuracies
+        ✓ Addresses the general theme of the question but with limited development
+        ✓ Provides generally accurate analysis with some development but 
+          lacks depth or detail
+        ✓ Uses diagrams/formulae where required but they are partially accurate 
+          or not fully explained in the written response
+        ✓ Is generally logical but sometimes lacks focus or organisation
+        
+          10 marks — Response CONVINCINGLY meets Level 2 descriptors
+          7–9 marks — Response ADEQUATELY meets Level 2 descriptors
+          6 marks — Response JUST meets Level 2 descriptors
+        
+        ⚠️ DIAGRAM CAP RULE: If the question requires a diagram AND no 
+        relevant diagram is provided, the response is CAPPED at Level 2 
+        Maximum (10/14) for AO1/AO2, regardless of the quality of 
+        written analysis.
+        
+        LEVEL 1 (1–5 marks) — Weak and Underdeveloped
+        Award Level 1 when the response:
+        ✓ Includes only a small number of relevant knowledge points
+        ✓ Contains significant errors, omissions, or misunderstanding
+        ✓ Has little direct relevance to the specific question asked
+        ✓ Provides only descriptive or narrative writing with minimal analysis
+        ✓ Diagrams, if present, contain significant errors or are irrelevant
+        
+          5 marks — Response CONVINCINGLY meets Level 1 descriptors
+          2–4 marks — Response ADEQUATELY meets Level 1 descriptors
+          1 mark — Response JUST meets Level 1 descriptors
+        
+        LEVEL 0 (0 marks): No creditable response.
+        
+        ---
+        TABLE B — AO3 Evaluation (out of 6)
+        
+        Evaluation must go BEYOND analysis. It involves making reasoned 
+        judgements, weighing evidence, recognising limitations, considering 
+        conditions, and reaching supported conclusions.
+        
+        LEVEL 2 (4–6 marks) — Developed and Justified Evaluation
+        Award Level 2 when the response:
+        ✓ Provides a justified conclusion or judgement that directly addresses 
+          the specific wording of the question (not a generic summary)
+        ✓ Makes developed, reasoned evaluative comments supported by 
+          economic argument — for example:
+            - Considers conditions under which a conclusion holds or does not hold
+            - Weighs competing arguments against each other
+            - Distinguishes between short-run and long-run effects
+            - Considers trade-offs between economic objectives
+            - Identifies significant assumptions or limitations of the analysis
+            - Assesses the relative importance or significance of factors discussed
+        
+          6 marks — Evaluation is CONVINCINGLY at Level 2
+          5 marks — Evaluation ADEQUATELY meets Level 2
+          4 marks — Evaluation JUST meets Level 2
+        
+        LEVEL 1 (1–3 marks) — Superficial Evaluation
+        Award Level 1 when the response:
+        ✓ Provides only a vague or general conclusion (e.g. "it depends on 
+          the situation" with no further explanation)
+        ✓ Makes simple evaluative comments that are asserted rather than 
+          argued — no development and little supporting evidence
+        ✓ Evaluative points feel bolted on rather than integrated into the argument
+        
+          3 marks — CONVINCINGLY at Level 1
+          2 marks — ADEQUATELY at Level 1
+          1 mark — JUST at Level 1
+        
+        LEVEL 0 (0 marks): No creditable response.
+        
+        ---
+        WHAT GOOD EVALUATION LOOKS LIKE (apply to any question):
+        
+        Strong evaluative moves include:
+        - "This policy will be more/less effective depending on [specific condition] 
+          because..."
+        - "In the short run... however in the long run..."
+        - "This assumes [X], but in practice [Y] because..."
+        - "While [argument A] suggests [conclusion], [argument B] suggests the 
+          opposite is true when..."
+        - "The most significant factor is [X] because... compared to [Y] which..."
+        - A final conclusion that makes a definite, reasoned judgement on 
+          the question — not a list of "on the one hand / on the other hand" 
+          with no resolution
+        
+        Poor evaluation that should NOT receive Level 2:
+        - Simply listing more analysis points and calling it evaluation
+        - A one-sentence conclusion with no justification
+        - "There are advantages and disadvantages" with no weighing
+        - Repeating earlier analysis in different words
+        
+        =============================================================
+        ASSESSMENT OBJECTIVES — REFERENCE GUIDE
+        =============================================================
+        
+        AO1 — Knowledge and Understanding
+        - Accurate recall of economic facts, definitions, formulae, concepts
+        - Clear explanation of economic ideas with appropriate examples
+        - Correct application of knowledge to the question context
+        
+        AO2 — Analysis
+        - Examining economic issues using relevant theory and concepts
+        - Explaining causes, effects, mechanisms, and relationships
+        - Accurate use of diagrams, data, and formulae where relevant
+        - Logical development of an economic argument
+        
+        AO3 — Evaluation
+        - Recognising assumptions and limitations of models/arguments
+        - Assessing the strength and weakness of economic arguments
+        - Making reasoned judgements that account for priorities and 
+          value judgements
+        - Communicating a clear, justified conclusion
+        
+        =============================================================
+        COMMON MARKING ERRORS TO AVOID
+        =============================================================
+        
+        DO credit:
+        - Answers worded differently from any mark scheme if they clearly 
+          convey the same correct economic meaning
+        - Valid alternative examples or policies not explicitly listed
+        - Diagrams that are accurately drawn even if not perfectly labelled, 
+          provided the economic meaning is clear
+        - Analysis that goes beyond the syllabus if it is correct
+        
+        DO NOT credit:
+        - Key terms used without demonstrated understanding
+        - Points that contradict each other within the same answer
+        - The same point restated in different words (repetition)
+        - Descriptions of what a diagram shows without economic explanation
+        - Conclusions that are asserted without any supporting argument
+        """
+        word_guide = "Subject to detailed Economics output format"
     elif is_general_paper:
         rubric = """
         CAMBRIDGE AS LEVEL ENGLISH GENERAL PAPER 8021/12 MARKING RUBRIC
@@ -767,6 +1016,8 @@ CRITICAL RULES:
 - Output ONLY the candidate response, nothing else.>"""
         else:
             model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks). Continuous prose, no bullets, fully applied to the case.>"
+    elif is_economics_p4:
+        model_answer_instruction = f"<Write a perfect A* model answer ({marks} marks) that exemplifies the highest levels of the Economics grading rubric.>"
     else:
         # FALLBACK FOR OTHER PAPERS
         model_answer_instruction = (
@@ -801,6 +1052,49 @@ CRITICAL RULES:
     # 4. DETERMINE FEEDBACK STRUCTURE
     if custom_feedback_structure:
         feedback_structure = custom_feedback_structure
+    elif is_economics_p4:
+        feedback_structure = """
+    For every question or sub-question marked, provide your output 
+    in the following structured format inside the 'detailed_critique' string:
+    
+    ---
+    QUESTION [number/letter]:
+    
+    SECTION A (point-based) format:
+    Points awarded:
+      [Mark] — [Brief justification for awarding or not awarding the mark]
+      [Mark] — [Brief justification]
+      ... (continue for all marks available)
+    
+    Total awarded: [X] / [maximum marks]
+    
+    Examiner comment: [2–3 sentences summarising overall quality, 
+    noting key strengths, and explaining what would be needed to 
+    score higher if applicable]
+    
+    ---
+    SECTION B (levels-based) format:
+    AO1/AO2 Assessment:
+      Level awarded: [1 / 2 / 3]
+      Mark: [X] / 14
+      Justification: [2–3 sentences explaining why this level and 
+      specific mark was awarded, referencing level descriptors]
+      Diagram: [Present and accurate / Present but incomplete / 
+      Absent — cap applied]
+    
+    AO3 Assessment:
+      Level awarded: [1 / 2]
+      Mark: [X] / 6
+      Justification: [2–3 sentences explaining the evaluation quality, 
+      noting whether the conclusion was justified and specific]
+    
+    Total: [X] / 20
+    
+    Examiner comment: [2–3 sentences on overall essay quality — 
+    what distinguished this response, and what would be needed 
+    to reach the next level]
+    ---
+    """
     elif is_general_paper:
         feedback_structure = """
     You must output your final grading using the following structure for the 'detailed_critique' field.
