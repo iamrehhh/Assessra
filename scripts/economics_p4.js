@@ -29,6 +29,18 @@ Object.assign(paperData, {
                 "t": "Evaluate the effect of a maximum price on the allocative efficiency of a market."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, assess the effectiveness of a government's intervention in the price mechanism to address the causes of climate change.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "The introduction of a trade union into a perfectly competitive labour market will always lead to higher wage levels and a higher level of unemployment. With the help of a diagram, evaluate this statement.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "With the help of a diagram, assess the effectiveness of government policies which might be used to reduce cost-push inflation.",
@@ -65,6 +77,18 @@ Object.assign(paperData, {
                 "n": "1d",
                 "m": 8,
                 "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
+                "l": "400-600"
             },
             {
                 "n": "4",
@@ -105,6 +129,18 @@ Object.assign(paperData, {
                 "t": "Analyse how the development of the EV industry could affect employment and economic growth."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "Market failure exists in all economies. Evaluate, with the aid of a diagram(s), the meaning of market failure and two policies a government may use to correct market failure.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Evaluate, with the aid of a diagram(s), whether excess profit (supernormal profit) is always necessary for the continued existence of firms in perfect competition and monopoly.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "Economies have recently suffered severe negative macroeconomic shocks to the supply of goods and services arising from the Covid-19 pandemic and the conflict between Russia and Ukraine. In one country, the government cut taxes and the central bank raised interest rates. Evaluate the likely impact of these policies on that government's ability to control inflation.",
@@ -141,6 +177,18 @@ Object.assign(paperData, {
                 "n": "1d",
                 "m": 8,
                 "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "The long-term equilibrium position in perfect competition is frequently used to illustrate efficient resource allocation in a free market economy. Explain why this is so and consider what prevents efficiency from being achieved.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of an indifference curve diagram, assess the extent to which a rise in price would affect the demand for a normal good differently from the demand for a Giffen good.",
+                "l": "400-600"
             },
             {
                 "n": "4",
@@ -181,6 +229,18 @@ Object.assign(paperData, {
                 "t": "Evaluate the likely impact of a return to the migration levels prior to 2019 on the macroeconomic performance of the US economy."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "Evaluate whether marginal utility theory can fully explain the link between the changing price of a good and quantity demanded of that good.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Privatisation is often required by the International Monetary Fund (IMF) and the World Bank before they are prepared to offer support to countries requiring loans, grants, debt relief and debt cancellation programs. Evaluate the view that privatisation will always improve the allocation of resources in a country.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "The table below contains some key economic data for Mexico in 2020. Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.",
@@ -217,6 +277,18 @@ Object.assign(paperData, {
                 "n": "1d",
                 "m": 8,
                 "t": "Discuss whether government intervention and policies can effectively reverse a long-term population decline."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the consequences of imposing an effective minimum wage on the employment level and the wage level in a monopsony labour market.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the short-run and long-run consequences on profit, output and price for a monopoly as it becomes perfectly competitive.",
+                "l": "400-600"
             },
             {
                 "n": "4",
@@ -257,6 +329,18 @@ Object.assign(paperData, {
                 "t": "Evaluate the extent to which a government can influence the level of economic activity in a mixed economy."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer's demand for this product.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "The growth of a firm using a takeover is desirable because it enables consumers to benefit from lower prices and the firm to gain additional profits. Evaluate this statement.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.",
@@ -293,6 +377,18 @@ Object.assign(paperData, {
                 "n": "1d",
                 "m": 10,
                 "t": "With the help of a marginal social cost and benefit diagram discuss whether the continued use of coal to produce electricity makes the achievement of allocative efficiency less likely."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Monopolies restrict output to raise prices to exploit consumers. With the help of a diagram, assess the extent to which a government should intervene in monopoly markets.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of a diagram, assess whether the impact of an increase in labour productivity on the wages and employment of a firm is likely to be greater in a perfectly competitive labour market than in an imperfectly competitive labour market.",
+                "l": "400-600"
             },
             {
                 "n": "4",
@@ -333,6 +429,18 @@ Object.assign(paperData, {
                 "t": "Assess whether the article provides sufficient evidence to justify its conclusion that the intervention of governments has little effect on economic outcomes."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the use of indifference curve analysis to explain the relationship between a change in the price of a product and the change in an individual consumer's demand for this product.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "The growth of a firm using a takeover is desirable because it enables consumers to benefit from lower prices and the firm to gain additional profits. Evaluate this statement.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.",
@@ -369,6 +477,18 @@ Object.assign(paperData, {
                 "n": "1d",
                 "m": 8,
                 "t": "With reference to the article, assess whether there is enough evidence to conclude that living standards in Bangladesh have improved since 1971."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, consider whether economic efficiency can be achieved without government intervention in a market economy.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Evaluate whether the marginal revenue product theory (MRP) always explains the differences in wages.",
+                "l": "400-600"
             },
             {
                 "n": "4",
@@ -409,6 +529,18 @@ Object.assign(paperData, {
                 "t": "Consider if the article contains sufficient information to support the view that migrants have only a beneficial economic impact on the host country."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "Market failure is to blame for climate change and the inefficient allocation of resources. The only solution is for governments to intervene to improve resource allocation. Assess the extent to which you agree with this statement.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "The degree of competition that a firm experiences is determined only by the barriers to entry into its market. With the help of a diagram(s), evaluate this statement.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "Evaluate the effect of a rise in the exchange rate on the achievement of the macroeconomic aims of a country.",
@@ -447,6 +579,18 @@ Object.assign(paperData, {
                 "t": "Use the article to evaluate the impact of the development of the agricultural and mining industries on the standard of living in Brazil."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "Traffic congestion is a cause of allocative inefficiency. Evaluate, with the help of diagram(s) two policies that a government may introduce to reduce the problem of allocative inefficiency caused by traffic congestion.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "The average wage of chief executives in large companies in a country is over 100 times greater than the average wage of their employees. Assess how economic theory can account for this variation in average wages.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "Evaluate the effect of a fall in the exchange rate on the achievement of the macroeconomic aims of a country.",
@@ -480,6 +624,18 @@ Object.assign(paperData, {
                 "t": "With reference to the article, explain the idea of globalisation and assess whether there is enough evidence to conclude that globalisation has a net benefit for everyone."
             },
             {
+                "n": "2",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the impact on consumers and producers of an increase in market contestability.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "With the help of a diagram, assess the importance of the supply of labour in relation to the wage and employment levels for firms operating in perfectly competitive and monopsony labour markets.",
+                "l": "400-600"
+            },
+            {
                 "n": "4",
                 "m": 20,
                 "t": "With the help of a diagram, evaluate the effectiveness of using monetary policy to increase the rate of economic growth in a country.",
@@ -511,6 +667,18 @@ Object.assign(paperData, {
                 "n": "1c",
                 "m": 8,
                 "t": "Consider whether 'a monopoly always operates against the interests of the consumer'."
+            },
+            {
+                "n": "2",
+                "m": 20,
+                "t": "Evaluate, with the aid of a diagram, whether the diminishing marginal utility theory of demand provides an adequate explanation of the market demand curve for all goods and services.",
+                "l": "400-600"
+            },
+            {
+                "n": "3",
+                "m": 20,
+                "t": "Subnormal and supernormal profits are only experienced in the short run and only by firms in perfect competition. With the help of diagrams, evaluate this statement.",
+                "l": "400-600"
             },
             {
                 "n": "4",
