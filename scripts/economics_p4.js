@@ -852,9 +852,19 @@ const econP4Cards = `
 
     <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
     <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('econ_2024_on_41')">
+            <span class="paper-tag">9708/41</span>
+            <h3>Resource dependence</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
         <div class="paper-card" onclick="openPaper('econ_2024_on_42')">
             <span class="paper-tag">9708/42</span>
             <h3>Reduced Migration to the United States (US)</h3>
+            <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('econ_2024_on_43')">
+            <span class="paper-tag">9708/43</span>
+            <h3>Large tech companies</h3>
             <p style="color:#888; margin-top:5px;">Paper 4 • PDF Available</p>
         </div>
     </div>
