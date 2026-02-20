@@ -501,8 +501,8 @@ h2 {
 }
 
 .login-logo-img {
-    width: 360px;
-    height: 360px;
+    width: 400px;
+    height: 400px;
     object-fit: contain;
     margin-bottom: 30px;
     mix-blend-mode: multiply;
@@ -524,11 +524,11 @@ h2 {
 
 .login-input {
     width: 100%;
-    padding: 16px;
-    margin: 12px 0;
+    padding: 12px 14px;
+    margin: 10px 0;
     border-radius: 12px;
     border: 1px solid #e0e0e0;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     background: #fafafa;
     color: #333;
@@ -549,11 +549,11 @@ h2 {
 
 .submit-btn {
     width: 100%;
-    padding: 16px;
-    margin: 12px 0;
+    padding: 14px;
+    margin: 10px 0;
     border-radius: 12px;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: white;
     background: linear-gradient(135deg, var(--lime-primary), var(--lime-dark));
@@ -1059,7 +1059,8 @@ textarea.expanded {
 .model-ans-box {
     background: #1a1a1a;
     color: #f0f0f0;
-    padding: 15px 20px 15px 12px; /* Reduced left padding */
+    padding: 15px 20px 15px 12px;
+    /* Reduced left padding */
     border-radius: 10px;
     margin-top: 15px;
     font-size: 0.95rem;
@@ -1067,7 +1068,8 @@ textarea.expanded {
     white-space: pre-wrap;
     font-style: italic;
     border-left: 4px solid var(--lime-primary);
-    text-align: left; /* Ensure left alignment */
+    text-align: left;
+    /* Ensure left alignment */
 }
 
 /* New header style for model answer */
@@ -3421,7 +3423,9 @@ textarea.expanded {
 
 .score-item:last-child {
     border-bottom: none;
-}/* === LOADING SPINNER (NEW) === */
+}
+
+/* === LOADING SPINNER (NEW) === */
 .loading-overlay {
     position: absolute;
     top: 0;
@@ -3435,7 +3439,8 @@ textarea.expanded {
     justify-content: center;
     align-items: center;
     z-index: 50;
-    border-radius: inherit; /* Matches parent border radius */
+    border-radius: inherit;
+    /* Matches parent border radius */
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -3457,8 +3462,13 @@ textarea.expanded {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-text {
@@ -3470,14 +3480,23 @@ textarea.expanded {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 /* === MOBILE RESPONSIVENESS FIXES (NEW) === */
 @media (max-width: 768px) {
+
     /* Fix tables overflowing */
-    .table-container, .leaderboard-container {
+    .table-container,
+    .leaderboard-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         width: 100%;
@@ -3485,14 +3504,19 @@ textarea.expanded {
     }
 
     /* Fix modals to be practically full screen but with margin */
-    .liquid-modal, .swot-modal, .modal-content {
+    .liquid-modal,
+    .swot-modal,
+    .modal-content {
         width: 95% !important;
         max-height: 90vh;
         overflow-y: auto;
     }
 
     /* Stack grid items on mobile */
-    .formula-grid, .def-grid, .papers-grid, .stats-container {
+    .formula-grid,
+    .def-grid,
+    .papers-grid,
+    .stats-container {
         grid-template-columns: 1fr !important;
     }
 
@@ -3503,10 +3527,11 @@ textarea.expanded {
         padding: 15px;
         gap: 15px;
     }
-    
+
     .nav {
         overflow-x: auto;
-        padding-bottom: 5px; /* Space for scrollbar if needed */
+        padding-bottom: 5px;
+        /* Space for scrollbar if needed */
         width: 100%;
         justify-content: flex-start;
     }
