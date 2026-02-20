@@ -477,8 +477,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f4f4f4;
-    /* Clean light gray background */
+    background: radial-gradient(circle at center, #f0fdf4, #dcfce7 60%, #fff);
+    backdrop-filter: blur(10px);
     z-index: 1000;
 }
 
@@ -496,12 +496,11 @@ h2 {
 
 .login-logo-img {
     width: 100%;
-    max-width: 300px;
-    /* Reduced to fit reasonably */
+    max-width: 360px;
+    /* Enlarged slightly */
     height: auto;
     object-fit: contain;
     margin-bottom: 20px;
-    /* Reduced gap */
     mix-blend-mode: multiply;
 }
 
