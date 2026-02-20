@@ -501,9 +501,8 @@ h2 {
 }
 
 .login-logo-img {
-    width: 220px;
-    /* Further enlarged from 180px */
-    height: 220px;
+    width: 360px;
+    height: 360px;
     object-fit: contain;
     margin-bottom: 30px;
     mix-blend-mode: multiply;
