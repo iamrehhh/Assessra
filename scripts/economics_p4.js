@@ -4,128 +4,526 @@
 
 // === 1. ADD DATA TO THE GLOBAL AI ENGINE ===
 Object.assign(paperData, {
-
-    // --- 2024 FEB / MARCH SERIES ---
-    'econ_2024_fm_42': {
-        title: "French electricity prices",
-        pdf: "papers/9708_m24_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "With the help of a diagram, assess the effectiveness of government policies which might be used to reduce cost-push inflation.", l: '400-600' },
-            { n: '5', m: 20, t: "Globalisation will help to achieve economic growth in high-income economies and this will automatically improve living standards. Evaluate this statement.", l: '400-600' }
+    "econ_2024_fm_42": {
+        "title": "French electricity prices",
+        "pdf": "papers/9708_m24_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Explain what is meant by a maximum price."
+            },
+            {
+                "n": "1b",
+                "m": 5,
+                "t": "Use the information to explain how the government hoped to keep its country competitive."
+            },
+            {
+                "n": "1c",
+                "m": 5,
+                "t": "Explain with the help of a diagram the effect of the increase in the wholesale price of electricity on the quantity demanded by consumers."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Evaluate the effect of a maximum price on the allocative efficiency of a market."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "With the help of a diagram, assess the effectiveness of government policies which might be used to reduce cost-push inflation.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Globalisation will help to achieve economic growth in high-income economies and this will automatically improve living standards. Evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-
-    // --- 2024 MAY / JUNE SERIES ---
-    'econ_2024_mj_41': {
-        title: "Income inequality",
-        pdf: "papers/9708_s24_qp_41.pdf",
-        questions: [
-            { n: '4', m: 20, t: "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?", l: '400-600' },
-            { n: '5', m: 20, t: "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.", l: '400-600' }
+    "econ_2024_mj_41": {
+        "title": "Income inequality",
+        "pdf": "papers/9708_s24_qp_41.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify two characteristics of a developing country."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain how the Gini coefficient is used to measure income inequality."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Analyse the causes of income inequality in developing countries."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2024_mj_42': {
-        title: "Developments in the electric vehicle (EV) industry",
-        pdf: "papers/9708_s24_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "Economies have recently suffered severe negative macroeconomic shocks to the supply of goods and services arising from the Covid-19 pandemic and the conflict between Russia and Ukraine. In one country, the government cut taxes and the central bank raised interest rates. Evaluate the likely impact of these policies on that government's ability to control inflation.", l: '400-600' },
-            { n: '5', m: 20, t: "Evaluate the likely impact of globalisation on a low-income country's standard of living.", l: '400-600' }
+    "econ_2024_mj_42": {
+        "title": "Developments in the electric vehicle (EV) industry",
+        "pdf": "papers/9708_s24_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Calculate the percentage increase in EV sales in Europe between 2021 and 2022."
+            },
+            {
+                "n": "1b",
+                "m": 5,
+                "t": "Use the information to explain two reasons for the increase in demand for EVs."
+            },
+            {
+                "n": "1c",
+                "m": 5,
+                "t": "Explain why the supply of EVs might be relatively price inelastic in the short run."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Analyse how the development of the EV industry could affect employment and economic growth."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "Economies have recently suffered severe negative macroeconomic shocks to the supply of goods and services arising from the Covid-19 pandemic and the conflict between Russia and Ukraine. In one country, the government cut taxes and the central bank raised interest rates. Evaluate the likely impact of these policies on that government's ability to control inflation.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Evaluate the likely impact of globalisation on a low-income country's standard of living.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2024_mj_43': {
-        title: "Income inequality",
-        pdf: "papers/9708_s24_qp_43.pdf",
-        questions: [
-            { n: '4', m: 20, t: "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?", l: '400-600' },
-            { n: '5', m: 20, t: "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.", l: '400-600' }
+    "econ_2024_mj_43": {
+        "title": "Income inequality",
+        "pdf": "papers/9708_s24_qp_43.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify two characteristics of a developing country."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain how the Gini coefficient is used to measure income inequality."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Analyse the causes of income inequality in developing countries."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Discuss whether rapid economic growth is always accompanied by an increase in income inequality."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "'The achievement of economic growth requires a reallocation of resources. It is wrong, therefore, for a government to spend more to increase economic growth as it is good for its country.' To what extent do you agree with this argument?",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "National income statistics are often used as a measure of the standard of living. Consider to what extent national income statistics can be used to compare the standard of living between low-income countries and high-income countries.",
+                "l": "400-600"
+            }
         ]
     },
-
-    // --- 2024 OCT / NOV SERIES ---
-    'econ_2024_on_42': {
-        title: "Reduced Migration to the United States (US)",
-        pdf: "papers/9708_w24_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "The table below contains some key economic data for Mexico in 2020. Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.", l: '400-600' },
-            { n: '5', m: 20, t: "Between 2010 and 2020, very low interest rates encouraged low-income countries to borrow money from foreign investors and governments to finance long-term economic growth. Evaluate this approach to promoting long-term economic growth.", l: '400-600' }
+    "econ_2024_on_42": {
+        "title": "Reduced Migration to the United States (US)",
+        "pdf": "papers/9708_w24_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify the relationship between the variables shown in Fig. 1.1 and suggest one possible reason for the relationship."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "With the help of a production possibility curve (PPC) diagram, explain both the likely effect of the prevention of migration to the US from 2019 and the retirement of older US workers on the US's productive potential."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Using the information and labour market theory, analyse why the wages received by migrant workers in the high-tech industries are likely to be higher than the wages received by migrant workers in the hospitality industry."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Evaluate the likely impact of a return to the migration levels prior to 2019 on the macroeconomic performance of the US economy."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "The table below contains some key economic data for Mexico in 2020. Evaluate the use of these statistics in assessing the standard of living in Mexico in 2020.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Between 2010 and 2020, very low interest rates encouraged low-income countries to borrow money from foreign investors and governments to finance long-term economic growth. Evaluate this approach to promoting long-term economic growth.",
+                "l": "400-600"
+            }
         ]
     },
-
-    // --- 2025 FEB / MARCH SERIES ---
-    'econ_2025_fm_42': {
-        title: "China's population trend",
-        pdf: "papers/9708_m25_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "With the help of a diagram, assess the effectiveness of government policies that might be used to reduce demand-pull inflation.", l: '400-600' },
-            { n: '5', m: 20, t: "With the help of a diagram, evaluate the effectiveness of the use of expenditure-switching policies to reduce a current account deficit on the balance of payments.", l: '400-600' }
+    "econ_2025_fm_42": {
+        "title": "China's population trend",
+        "pdf": "papers/9708_m25_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify two possible causes of a falling birth rate."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain two potential economic problems associated with an ageing population."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Analyse the likely impact of a declining population on the supply of labour and wages."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Discuss whether government intervention and policies can effectively reverse a long-term population decline."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "With the help of a diagram, assess the effectiveness of government policies that might be used to reduce demand-pull inflation.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the effectiveness of the use of expenditure-switching policies to reduce a current account deficit on the balance of payments.",
+                "l": "400-600"
+            }
         ]
     },
-
-    // --- 2025 MAY / JUNE SERIES ---
-    'econ_2025_mj_41': {
-        title: "The influence of governments",
-        pdf: "papers/9708_s25_qp_41.pdf",
-        questions: [
-            { n: '4', m: 20, t: "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.", l: '400-600' },
-            { n: '5', m: 20, t: "A free trade area gains all the benefits associated with being a member of a customs union while avoiding all the costs associated with being a member of a customs union. Evaluate this statement.", l: '400-600' }
+    "econ_2025_mj_41": {
+        "title": "The influence of governments",
+        "pdf": "papers/9708_s25_qp_41.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Identify two examples of government macroeconomic aims."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain how a government might use monetary policy to achieve stable economic growth."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Analyse the conflicts that might occur between the different macroeconomic aims of a government."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Evaluate the extent to which a government can influence the level of economic activity in a mixed economy."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "A free trade area gains all the benefits associated with being a member of a customs union while avoiding all the costs associated with being a member of a customs union. Evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_mj_42': {
-        title: "Global carbon emissions",
-        pdf: "papers/9708_s25_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "With the help of an injections and withdrawals graph, assess the impact of a decrease in interest rates on the level of employment in an economy.", l: '400-600' },
-            { n: '5', m: 20, t: "Globalisation will have an equally beneficial effect on the standard of living in both high-income and low-income countries. Evaluate this statement.", l: '400-600' }
+    "econ_2025_mj_42": {
+        "title": "Global carbon emissions",
+        "pdf": "papers/9708_s25_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Define economic sustainability and give one example from the information of a change that can be used to illustrate it."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Use the information to comment on the possible effects on the economies of the countries that refused to sign the carbon policy agreement."
+            },
+            {
+                "n": "1c",
+                "m": 4,
+                "t": "Discuss why the article says that 'China is a country of contradictions'."
+            },
+            {
+                "n": "1d",
+                "m": 10,
+                "t": "With the help of a marginal social cost and benefit diagram discuss whether the continued use of coal to produce electricity makes the achievement of allocative efficiency less likely."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "With the help of an injections and withdrawals graph, assess the impact of a decrease in interest rates on the level of employment in an economy.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Globalisation will have an equally beneficial effect on the standard of living in both high-income and low-income countries. Evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_mj_43': {
-        title: "The influence of governments",
-        pdf: "papers/9708_s25_qp_43.pdf",
-        questions: [
-            { n: '4', m: 20, t: "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.", l: '400-600' },
-            { n: '5', m: 20, t: "A free trade area gains all the benefits associated with being a member of a customs union while avoiding all the costs associated with being a member of a customs union. Evaluate this statement.", l: '400-600' }
+    "econ_2025_mj_43": {
+        "title": "The influence of governments",
+        "pdf": "papers/9708_s25_qp_43.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "The article refers to structural unemployment. Explain what this means and whether it is the same as the natural rate of unemployment."
+            },
+            {
+                "n": "1b",
+                "m": 6,
+                "t": "To keep unemployment low, one government used fiscal policy. Analyse how this policy can affect unemployment rates."
+            },
+            {
+                "n": "1c",
+                "m": 3,
+                "t": "Explain how the policies of high-income economies towards 'green energy' changed between 2015 and 2022."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "Assess whether the article provides sufficient evidence to justify its conclusion that the intervention of governments has little effect on economic outcomes."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "A country is experiencing stagflation, when there is a high rate of inflation at the same time as a negative output gap. With the help of a diagram, evaluate the effectiveness of using fiscal policy to solve this problem.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "A free trade area gains all the benefits associated with being a member of a customs union while avoiding all the costs associated with being a member of a customs union. Evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_mj_44': {
-        title: "Economic development in Bangladesh",
-        pdf: "papers/9708_s25_qp_44.pdf",
-        questions: [
-            { n: '4', m: 20, t: "A country with an open economy has falling demand for exports. Consider the view that monetary policy alone will solve this problem.", l: '400-600' },
-            { n: '5', m: 20, t: "Evaluate how a country might increase its potential economic growth.", l: '400-600' }
+    "econ_2025_mj_44": {
+        "title": "Economic development in Bangladesh",
+        "pdf": "papers/9708_s25_qp_44.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "Identify what is included in the HDI."
+            },
+            {
+                "n": "1b",
+                "m": 3,
+                "t": "The passage states that the RMG industry 'uses significant division of labour'. Explain how this is likely to affect the average costs of firms in Bangladesh's RMG industry."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Identify the probable market structure of the RMG industry in Bangladesh and with the help of a diagram, consider the likely effect on the level of long-run profits of firms in this industry."
+            },
+            {
+                "n": "1d",
+                "m": 8,
+                "t": "With reference to the article, assess whether there is enough evidence to conclude that living standards in Bangladesh have improved since 1971."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "A country with an open economy has falling demand for exports. Consider the view that monetary policy alone will solve this problem.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Evaluate how a country might increase its potential economic growth.",
+                "l": "400-600"
+            }
         ]
     },
-
-    // --- 2025 OCT / NOV SERIES ---
-    'econ_2025_on_41': {
-        title: "Working overseas",
-        pdf: "papers/9708_w25_qp_41.pdf",
-        questions: [
-            { n: '4', m: 20, t: "Evaluate the effect of a rise in the exchange rate on the achievement of the macroeconomic aims of a country.", l: '400-600' },
-            { n: '5', m: 20, t: "Economic growth can only occur when an economy is below full employment. Evaluate this statement.", l: '400-600' }
+    "econ_2025_on_41": {
+        "title": "Working overseas",
+        "pdf": "papers/9708_w25_qp_41.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 2,
+                "t": "Explain what is meant by absolute poverty."
+            },
+            {
+                "n": "1b",
+                "m": 5,
+                "t": "Explain, with the aid of a diagram, how the migration of workers from a low-income country is likely to affect wages in the low-income country."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "The article states: 'Total remittances received by those countries in 2022 was  billion.' Analyse how this is likely to benefit the migrants' home economies."
+            },
+            {
+                "n": "1d",
+                "m": 7,
+                "t": "Consider if the article contains sufficient information to support the view that migrants have only a beneficial economic impact on the host country."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "Evaluate the effect of a rise in the exchange rate on the achievement of the macroeconomic aims of a country.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Economic growth can only occur when an economy is below full employment. Evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_on_42': {
-        title: "Resources in Brazil",
-        pdf: "papers/9708_w25_qp_42.pdf",
-        questions: [
-            { n: '4', m: 20, t: "Evaluate the effect of a fall in the exchange rate on the achievement of the macroeconomic aims of a country.", l: '400-600' },
-            { n: '5', m: 20, t: "Evaluate whether the presence of multinational companies (MNCs) in low-income countries is always beneficial.", l: '400-600' }
+    "econ_2025_on_42": {
+        "title": "Resources in Brazil",
+        "pdf": "papers/9708_w25_qp_42.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 3,
+                "t": "Explain the significance of measuring GDP at constant prices."
+            },
+            {
+                "n": "1b",
+                "m": 4,
+                "t": "Explain one possible benefit of horizontal integration and one possible benefit of vertical integration."
+            },
+            {
+                "n": "1c",
+                "m": 6,
+                "t": "Describe how the market structure in which individual farmers operate is likely to differ from the market structure in which the commodity traders operate."
+            },
+            {
+                "n": "1d",
+                "m": 7,
+                "t": "Use the article to evaluate the impact of the development of the agricultural and mining industries on the standard of living in Brazil."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "Evaluate the effect of a fall in the exchange rate on the achievement of the macroeconomic aims of a country.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Evaluate whether the presence of multinational companies (MNCs) in low-income countries is always beneficial.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_on_43': {
-        title: "Inequality and globalisation",
-        pdf: "papers/9708_w25_qp_43.pdf",
-        questions: [
-            { n: '4', m: 20, t: "With the help of a diagram, evaluate the effectiveness of using monetary policy to increase the rate of economic growth in a country.", l: '400-600' },
-            { n: '5', m: 20, t: "'The use of tariffs is the most effective way to correct a balance of payments deficit.' With the help of a diagram, evaluate this statement.", l: '400-600' }
+    "econ_2025_on_43": {
+        "title": "Inequality and globalisation",
+        "pdf": "papers/9708_w25_qp_43.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 5,
+                "t": "The article refers to the Gini coefficient. With the help of a diagram explain the link between a Gini coefficient and a Lorenz curve."
+            },
+            {
+                "n": "1b",
+                "m": 2,
+                "t": "Distinguish between equity and equality."
+            },
+            {
+                "n": "1c",
+                "m": 8,
+                "t": "With reference to the article, explain the idea of globalisation and assess whether there is enough evidence to conclude that globalisation has a net benefit for everyone."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "With the help of a diagram, evaluate the effectiveness of using monetary policy to increase the rate of economic growth in a country.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "'The use of tariffs is the most effective way to correct a balance of payments deficit.' With the help of a diagram, evaluate this statement.",
+                "l": "400-600"
+            }
         ]
     },
-    'econ_2025_on_44': {
-        title: "Market Economies",
-        pdf: "papers/9708_w25_qp_44.pdf",
-        questions: [
-            { n: '4', m: 20, t: "A country imposes a tariff of 20% on imported goods and restricts the number of immigrants entering the country. Evaluate, with the aid of a diagram(s), the impact of these two policies on the rate of inflation in that country.", l: '400-600' },
-            { n: '5', m: 20, t: "Evaluate whether an increase in a government's budget deficit will always lead to economic growth.", l: '400-600' }
+    "econ_2025_on_44": {
+        "title": "Market Economies",
+        "pdf": "papers/9708_w25_qp_44.pdf",
+        "questions": [
+            {
+                "n": "1a",
+                "m": 4,
+                "t": "Explain the meaning of 'allocative efficiency and productive efficiency'."
+            },
+            {
+                "n": "1b",
+                "m": 2,
+                "t": "Explain what is meant by a negative production externality."
+            },
+            {
+                "n": "1c",
+                "m": 8,
+                "t": "Consider whether 'a monopoly always operates against the interests of the consumer'."
+            },
+            {
+                "n": "4",
+                "m": 20,
+                "t": "A country imposes a tariff of 20% on imported goods and restricts the number of immigrants entering the country. Evaluate, with the aid of a diagram(s), the impact of these two policies on the rate of inflation in that country.",
+                "l": "400-600"
+            },
+            {
+                "n": "5",
+                "m": 20,
+                "t": "Evaluate whether an increase in a government's budget deficit will always lead to economic growth.",
+                "l": "400-600"
+            }
         ]
     }
 });
