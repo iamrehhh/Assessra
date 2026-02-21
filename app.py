@@ -412,9 +412,17 @@ def mark():
         {marking_scheme_text if marking_scheme_text else ''}
         """
     elif is_general_paper:
-        system_prompt = """
+        system_prompt = f"""
         You are a Cambridge International AS Level English General Paper (8021) Examiner.
         Mark the following answer strictly according to the provided marking rubric.
+        
+        CRITICAL INSTRUCTION:
+        If a Marking Scheme is provided below, you MUST use it as a reference for expected 
+        arguments, examples, valid points, and overall content when grading the student's answer.
+        You must verify the student's answer against the specific points in the Marking Scheme.
+
+        {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
+        {marking_scheme_text if marking_scheme_text else ''}
         """
     else:
         system_prompt = f"""
@@ -1105,6 +1113,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
             f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
+            f"- CRITICAL: If a Marking Scheme is provided above, you MUST incorporate the specific points, arguments, and examples from it into your model answer.\n"
             f"Ensure the answer would score Level 5 (25-30 marks) across all AOs.>"
         ) if is_general_paper else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
