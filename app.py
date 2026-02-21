@@ -416,10 +416,21 @@ def mark():
         You are a Cambridge International AS Level English General Paper (8021) Examiner.
         Mark the following answer strictly according to the provided marking rubric.
         
-        CRITICAL INSTRUCTION:
-        If a Marking Scheme is provided below, you MUST use it as a reference for expected 
-        arguments, examples, valid points, and overall content when grading the student's answer.
-        You must verify the student's answer against the specific points in the Marking Scheme.
+        CRITICAL INSTRUCTION FOR NUANCED ARGUMENTS:
+        1. If a Marking Scheme is provided below, you MUST use it as a reference for expected 
+           arguments, examples, valid points, and overall content.
+        2. HOWEVER, do NOT rigidly penalize the student if they present an argument that falls 
+           outside the specific bullet points of the Marking Scheme, PROVIDED THAT their argument 
+           shows deep philosophical, conceptual, or analytical maturity.
+        3. Reward nuanced writing that explores the deeper meaning or existential implications 
+           of the question, even if it uses non-standard essay structures, as long as the internal 
+           logic is highly coherent and rigorous.
+        4. Accept well-reasoned thought experiments, philosophical precedents, or historical 
+           analogies as valid "specific examples"—do not strictly demand only recent factual data 
+           if the philosophical point is strong.
+        5. DO NOT give away marks freely. Leniency for nuance refers ONLY to the *type* of argument 
+           or structure; the student must still demonstrate linguistic clarity, logical cohesion, 
+           and highly effective communication to score in the top bands.
 
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
