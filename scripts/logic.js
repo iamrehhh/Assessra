@@ -422,7 +422,8 @@ const ALLOWED_USERS = {
     "Shefa.Hassan": "maths",
     "Swapneel.Tiwari": "2026",
     "Satyaki.Das": "Satyaki",
-    "Guest.User": "Guest"
+    "Guest.User": "Guest",
+    "Angira.Barman": "Angira"
 };
 
 function getUser() { return localStorage.getItem('user'); }
