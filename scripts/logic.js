@@ -352,22 +352,32 @@ function toggleScorecardCard(cardId) {
     card.classList.toggle('expanded');
 }
 
-function selectPaper(subject, paper) {
+function selectPaper(subject, paper, addHistory = true) {
+    if (subject === 'math') {
+        showToast("Mathematics is currently disabled.", "warning");
+        return;
+    }
+
+    // Close right panel
+    if (typeof toggleSubjectsPanel === 'function') toggleSubjectsPanel();
+    else if (typeof closeAllPanels === 'function') closeAllPanels();
+
+    // Switch to Papers view early
+    setView('papers', addHistory);
+
     // 1. Hide all containers first
     document.querySelectorAll('.subject-container').forEach(el => el.classList.add('hidden'));
 
     // 2. Determine target container ID
-    let targetId = '';
-    if (subject === 'business') targetId = `container-bus-${paper}`; // bus-p3, bus-p4
-    else if (subject === 'economics') {
-        targetId = `container-econ-${paper}`; // econ-p3, econ-p4
-        if (paper === 'p3' && window.loadMCQPapers) window.loadMCQPapers();
-    }
-    else if (subject === 'math') {
-        targetId = `container-math-${paper}`; // math-p3
-        if (paper === 'p3' && window.loadMathPapers) window.loadMathPapers();
-    }
-    else if (subject === 'general') targetId = `container-general-p1`; // general-p1 only
+    let shortSub = subject;
+    if (subject === 'business') shortSub = 'bus';
+    else if (subject === 'economics') shortSub = 'econ';
+
+    let targetId = `container-${shortSub}-${paper}`;
+
+    // Load dynamic data if needed
+    if (subject === 'economics' && paper === 'p3' && window.loadMCQPapers) window.loadMCQPapers();
+    if (subject === 'math' && paper === 'p3' && window.loadMathPapers) window.loadMathPapers();
 
     // --- HISTORY UPDATE ---
     if (addHistory) {
@@ -378,18 +388,20 @@ function selectPaper(subject, paper) {
         );
     }
 
-
     // 3. Show target container
     const target = document.getElementById(targetId);
     if (target) {
         target.classList.remove('hidden');
     } else {
         console.warn(`Container not found for ${subject} ${paper} (ID: ${targetId})`);
+        // Fallback: Show everything for this subject so user sees SOMETHING
+        const container = document.getElementById('view-papers');
+        if (container) {
+            container.querySelectorAll('.subject-container').forEach(section => {
+                if (section.id.includes(shortSub)) section.classList.remove('hidden');
+            });
+        }
     }
-
-    // 4. Close the menu
-    closeAllPanels();
-    setView('papers');
 }
 
 function switchPaperView(targetViewId) {
@@ -1938,60 +1950,7 @@ function toggleSubCat(subId) {
     }
 }
 
-function selectPaper(subject, paper) {
-    // DISABLE MATH SUBJECT TEMPORARILY
-    if (subject === 'math') {
-        showToast("Mathematics is currently disabled.", "warning");
-        return;
-    }
-
-    toggleSubjectsPanel(); // Close right panel
-
-    // Switch to Papers view
-    setView('papers');
-
-    // Construct valid ID
-    // input: subject='business' paper='p3' -> target='container-bus-p3'
-    // input: subject='economics' paper='p3' -> target='container-econ-p3'
-
-    let shortSub = subject;
-    if (subject === 'business') shortSub = 'bus';
-    if (subject === 'economics') shortSub = 'econ';
-
-    const targetIdCheck = `container-${shortSub}-${paper}`;
-
-    const container = document.getElementById('view-papers');
-    if (!container) return;
-
-    const sections = container.querySelectorAll('.subject-container');
-
-    let found = false;
-    sections.forEach(section => {
-        if (section.id === targetIdCheck) {
-            section.classList.remove('hidden');
-            found = true;
-        } else {
-            section.classList.add('hidden');
-        }
-    });
-
-    if (!found) {
-        console.warn('Paper container not found:', targetIdCheck);
-        // Fallback: Show everything for this subject so user sees SOMETHING
-        sections.forEach(section => {
-            if (section.id.includes(shortSub)) section.classList.remove('hidden');
-        });
-    }
-
-    // Fallback: if not found, maybe show all for that subject?
-    if (!found) {
-        console.warn('Paper container not found:', targetIdCheck);
-        // Try to show at least something for the subject
-        sections.forEach(section => {
-            if (section.id.includes(shortSub)) section.classList.remove('hidden');
-        });
-    }
-}
+// selectPaper originally defined here has been consolidated to the top of logic.js
 // === FIX: Mock Data for all papers to prevent crashes ===
 
 // Ensure paperData exists
