@@ -1167,7 +1167,8 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     elif is_general_paper:
         feedback_structure = """
     You must output your final grading using the following structure for the 'detailed_critique' field.
-    IMPORTANT: The feedback response MUST be concise. MAXIMUM 100-200 WORDS TOTAL for the entire feedback section.
+    IMPORTANT: The feedback MUST be highly contextual to the student's actual writing. Do not provide generic advice. Quote or reference specific sentences they wrote when explaining the pros and cons.
+    MAXIMUM 200-250 WORDS TOTAL for the entire feedback section.
     
     Structure:
     1. Final Score: [X]/30
@@ -1175,13 +1176,12 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
        - AO1 (Selection & Application): [X]/10
        - AO2 (Analysis & Evaluation): [X]/10
        - AO3 (Communication): [X]/10
-       - AO4: 0/0
     3. Comprehensive Examiner Report:
        - Grade Equivalence: [Distinction/Credit/Pass/Fail]
-       - Overall Assessment: [One sentence verdict]
-       - Strengths: [Brief bullet points]
-       - Areas for Development: [Brief bullet points]
-       - Next Steps: [1-2 priority actions]
+       - Overall Assessment: [One sentence verdict based on their specific arguments]
+       - Strengths (Pros): [Detail exact concepts they explained well or evidence they used effectively. Quote them.]
+       - Shortcomings (Cons): [Pinpoint exactly where their logic failed, was too vague, or lacked specific examples. Quote the weak parts.]
+       - Actionable Fixes: [Provide 1-2 specific ways they could have rewritten their weak points to score higher. Give an example of a stronger sentence they could have used.]
     """
     elif is_business_p3 or is_business_p4:
         # PRAISE-POLISH-PONDER FEEDBACK STRUCTURE FOR BUSINESS PAPERS
