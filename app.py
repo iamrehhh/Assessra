@@ -426,9 +426,7 @@ def mark():
         2. HOWEVER, do NOT rigidly penalize the student if they present an argument that falls 
            outside the specific bullet points of the Marking Scheme, PROVIDED THAT their argument 
            shows deep philosophical, conceptual, or analytical maturity.
-        3. Reward nuanced writing that explores the deeper meaning or existential implications 
-           of the question, even if it uses non-standard essay structures, as long as the internal 
-           logic is highly coherent and rigorous.
+        3. REWARD CREATIVITY AND EXTERNAL KNOWLEDGE: If the student provides an argument or example that is NOT in the Marking Scheme but is factually accurate, highly relevant, and creatively explores the deeper meaning of the question, you MUST give it full credit. Assess the factual accuracy and relevance independently. Good, creative, and factually correct writing MUST be marked well.
         4. Accept well-reasoned thought experiments, philosophical precedents, or historical 
            analogies as valid "specific examples"—do not strictly demand only recent factual data 
            if the philosophical point is strong.
@@ -908,6 +906,11 @@ def mark():
         AO3: Lack of clarity, inappropriate register, basic vocabulary, frequent errors.
 
         If score is 0: No creditable content.
+        
+        CRITICAL SCORING INSTRUCTION:
+        - EACH Assessment Objective (AO1, AO2, AO3) MUST be scored exactly out of 10.
+        - Do NOT arbitrarily deduct marks. If a student's point is valid, factually accurate, and well-argued, award high marks even if it isn't specifically named in the marking scheme.
+        - Add the three AO scores together to get the final score out of 30.
         """
         word_guide = "Subject to 100-200 word feedback limit"
     elif marks <= 4:
@@ -1264,6 +1267,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
        - Grade Equivalence: [Distinction/Credit/Pass/Fail]
        - Overall Assessment: [One sentence verdict based on their specific arguments]
        - Strengths (Pros): [Detail exact concepts they explained well or evidence they used effectively. Quote them.]
+       - Nuance & Creativity: [If they used examples outside the marking scheme that were factually correct, praise them here and note the marks awarded. If not, note how they could have expanded creatively.]
        - Shortcomings (Cons): [Pinpoint exactly where their logic failed, was too vague, or lacked specific examples. Quote the weak parts.]
        - Actionable Fixes: [Provide 1-2 specific ways they could have rewritten their weak points to score higher. Give an example of a stronger sentence they could have used.]
     """
