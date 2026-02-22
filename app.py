@@ -1192,15 +1192,16 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"\n"
             f"*** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"
         ) if is_general_paper else (
-            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
-            f"The answer MUST follow standard A-Level Essay structure with proper paragraph breaks.\n"
-            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\n"
-            f"Structure:\n"
-            f"1. DEFINITION (AO1): Define terms precisely.\n"
-            f"2. APPLICATION (AO2): Use specific facts/figures from the case.\n"
-            f"3. ANALYSIS (AO3): Develop chains of argument (Point -> Evidence -> Explanation + Connectors).\n"
-            f"4. EVALUATION (AO4): Balanced conclusion, weighting, short/long term view.\n"
-            f"CRITICAL: The model answer must be a standalone perfect response. DO NOT mention the student.> "
+            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\\n"
+            f"The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').\\n"
+            f"It MUST follow standard A-Level Essay structure with proper paragraph breaks.\\n"
+            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\\n"
+            f"Your essay should naturally embed:\\n"
+            f"- Precise definition of terms.\\n"
+            f"- Specific facts/figures applied from the case.\\n"
+            f"- Developed chains of argument (Point -> Evidence -> Explanation + Connectors).\\n"
+            f"- A balanced conclusion with short/long term view.\\n"
+            f"CRITICAL: The model answer must read exactly like a perfect student essay. DO NOT mention the student.> "
         )
 
     # 4. DETERMINE FEEDBACK STRUCTURE
