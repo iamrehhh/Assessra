@@ -1156,7 +1156,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
         ) if marks <= 4 else (
             f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
             f"General Paper 8021 Model Answer Specifications:\n"
-            f"- Word Count: 600-700 words (STRICT LIMIT - do NOT exceed 700 words)\n"
+            f"- Word Count: 600-700 words. THIS IS A HARD LIMIT. Count your words. Do NOT generate less than 600 words. Do NOT generate more than 700 words.\n"
             f"- Structure: Intro (70-80w), Body (4-5 paragraphs, 110-130w each), Conclusion (70-80w)\n"
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
