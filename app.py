@@ -1730,24 +1730,32 @@ def swot_analysis():
         performance_data = data.get('performance_data', {})
         
         # Construct prompt for the AI
+        papers_analyzed = performance_data.get('papers_analyzed', 'multiple')
+        
         system_prompt = f"""
         You are an expert Cambridge International A-Level Academic Counselor.
-        Your task is to perform a detailed SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats) for a student based on their compiled performance data for {subject} {paper}.
+        Your task is to perform a detailed SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats) for a student.
+        
+        This analysis is specifically based on the student's performance across the {papers_analyzed} past paper(s) they have attempted for {subject} {paper}.
+        The strengths, weaknesses, threats, and opportunities demonstrated in these exact {papers_analyzed} papers MUST be combined and summarized in your response.
 
         DATA PROVIDED:
-        - Average Scores per Question Type/Topic.
-        - Recent detailed examiner critiques.
-        - Trend of improvement/decline.
+        - Number of papers analyzed: {papers_analyzed}
+        - Total questions attempted.
+        - Average overall score.
+        - Detailed examiner critiques directly from the user's attempted papers.
+        - Trend of past scores.
 
         OUTPUT FORMAT (JSON ONLY):
         {{
-            "strengths": ["point 1", "point 2", ...],
-            "weaknesses": ["point 1", "point 2", ...],
+            "strengths": ["point 1 based on the {papers_analyzed} papers", "point 2", ...],
+            "weaknesses": ["point 1 demonstrated in these papers", "point 2", ...],
             "opportunities": ["Actionable advice 1", "advice 2", ...],
             "threats": ["Risk factor 1", "risk 2", ...]
         }}
 
         Keep points concise, actionable, and encouraging but realistic. Focus on academic skills (Analysis, Evaluation, Knowledge) and exam technique.
+        IMPORTANT: Your language MUST reflect that this analysis is an aggregate look across the {papers_analyzed} paper(s) provided.
         """
 
         user_prompt = f"""

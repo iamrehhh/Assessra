@@ -135,14 +135,12 @@ const SWOTManager = {
 
         // Identify Paper ID (e.g., 'p3' from 'Paper 3')
         const pTag = paperName.toLowerCase().replace(' ', '').replace('paper', 'p'); // p3
-        // Logic to filter essays by subject AND paper tag is tricky because IDs store the paper code (e.g. 9609_w24_qp_31)
-        // We need to loop all data and match the pattern.
 
         const user = window.StorageManager.getUser();
         const allData = window.StorageManager.getData(user);
         const essays = allData.essays || {};
 
-        let relevantEssays = [];
+        let relevantPapers = [];
         let totalScore = 0;
         let count = 0;
 
@@ -162,28 +160,50 @@ const SWOTManager = {
 
             if (isMatch && isPaperMatch) {
                 const paperQuestions = essays[paperId];
+                let paperCritiques = [];
+                let paperScores = [];
                 Object.values(paperQuestions).forEach(q => {
-                    relevantEssays.push({
-                        score: q.score,
-                        critique: q.detailed_critique ? q.detailed_critique.substring(0, 500) : "", // Truncate
-                        ao1: q.ao1, ao2: q.ao2, ao3: q.ao3, ao4: q.ao4
-                    });
+                    if (q.detailed_critique) {
+                        paperCritiques.push(q.detailed_critique.substring(0, 500)); // Truncate
+                    }
                     if (q.score) {
+                        paperScores.push(q.score);
                         totalScore += q.score;
                         count++;
                     }
                 });
+                
+                if (paperCritiques.length > 0) {
+                    relevantPapers.push({
+                        paper_id: paperId,
+                        critiques: paperCritiques,
+                        scores: paperScores
+                    });
+                }
             }
         });
+
+        // To avoid overflowing API context, limit to last 5 papers if many.
+        const recentPapers = relevantPapers.slice(-5);
 
         // Calculate Averages
         const avgScore = count > 0 ? (totalScore / count).toFixed(1) : 0;
 
+        let recentCritiques = [];
+        let scoresTrend = [];
+        
+        recentPapers.forEach(p => {
+            recentCritiques = recentCritiques.concat(p.critiques);
+            scoresTrend = scoresTrend.concat(p.scores);
+        });
+
         return {
-            total_attempts: count,
+            total_questions_attempted: count,
+            papers_analyzed: recentPapers.length,
+            total_papers_attempted: relevantPapers.length,
             average_score: avgScore,
-            recent_critiques: relevantEssays.slice(-4).map(e => e.critique), // Last 4 only
-            scores_trend: relevantEssays.map(e => e.score)
+            recent_critiques: recentCritiques,
+            scores_trend: scoresTrend
         };
     },
 
