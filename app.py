@@ -1186,7 +1186,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"Yes, it is this place that I love the most. This is the place that never fails to intoxicate me with a potent solution of liberty and power- a sense of collective invinciblity that will be a part of our teenage memories, a page with a turned corner that we will all revisit from time to time.\"\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
             f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
-            f"- CRITICAL REQUIREMENT: You MUST base your model answer heavily on the exact Marking Scheme provided above. However, IF NEEDED to create a top-notch A* response and score Level 5 across all AOs, you MAY strategically go beyond the Marking Scheme to include compelling external data points and credible specific examples to bolster your arguments, AS LONG AS you strictly follow the aforementioned essential criteria for the Model Answer Rubric and structure.\n"
+            f"- CRITICAL REQUIREMENT (MARKING SCHEME ADHERENCE): You MUST construct your entire argument using EXACTLY the points, evidence, and perspectives listed in the Marking Scheme provided above. DO NOT invent random generic arguments. If the question refers to specific texts (e.g., Essay Paper 12), you MUST analyze those exact texts as specified in the marking scheme. Do not wander off-topic.\n"
             f"- Ensure the answer would score Level 5 (25-30 marks) across all AOs.\n"
             f"\n"
             f"*** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"
@@ -1384,6 +1384,9 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
                     
                     CASE STUDY / CONTEXT:
                     {safe_case_study[:3000]}
+                    
+                    MARKING SCHEME / GROUND TRUTH:
+                    {marking_scheme_text if marking_scheme_text else "None provided."}
                     
                     INSTRUCTION:
                     YOU MUST strictly follow the exact paragraph structure and rules below:
