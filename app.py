@@ -932,11 +932,11 @@ def mark():
         model_answer_instruction = custom_model_instruction
     elif is_business_p4:
         # BUSINESS PAPER 4 MODEL ANSWER (SPECIFIC RUBRIC)
-        model_answer_instruction = """<BUSINESS PAPER 4 MODEL ANSWER:
+        model_answer_instruction = """<BUSINESS PAPER 4 MODEL ANSWER (7 PARAGRAPH STRUCTURE):
 You are an expert Cambridge A Level Business (9609) examiner. Write a formal, evaluative essay response for Business Paper 4 in continuous prose targeting full marks. Do not use bullet points or subheadings. Do not label paragraphs with assessment objective codes. 
 Your writing must naturally embed knowledge, application to the business context, analysis of causes/impacts/consequences, and evaluative judgement throughout. Write as a confident, well-prepared exam candidate.
 
-Follow this exact paragraph structure strictly:
+CRITICAL FORMATTING REQUIREMENT: You MUST generate EXACTLY 7 distinct paragraphs, separated by blank lines.
 
 Paragraph 1 – Introduction
 Briefly define the key concept(s) in the question using precise business terminology. Introduce the business context and signal the line of argument your response will take. Do not simply repeat the question.
@@ -1324,6 +1324,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     {feedback_structure}
 
     4. MODEL ANSWER INSTRUCTION:
+    YOU MUST strictly follow the format below for generating the model answer:
     {model_answer_instruction}
 
     OUTPUT FORMAT (JSON ONLY):
@@ -1357,6 +1358,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
                     {safe_case_study[:3000]}
                     
                     INSTRUCTION:
+                    YOU MUST strictly follow the exact paragraph structure and rules below:
                     {model_answer_instruction}
                     
                     OUTPUT FORMAT (JSON ONLY):
