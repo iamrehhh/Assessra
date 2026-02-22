@@ -930,8 +930,37 @@ def mark():
     # 3. DETERMINE MODEL ANSWER INSTRUCTION
     if custom_model_instruction:
         model_answer_instruction = custom_model_instruction
-    elif is_business_p3 or is_business_p4:
-        # BUSINESS PAPERS MODEL ANSWER WITH WORD LIMITS
+    elif is_business_p4:
+        # BUSINESS PAPER 4 MODEL ANSWER (SPECIFIC RUBRIC)
+        model_answer_instruction = """<BUSINESS PAPER 4 MODEL ANSWER:
+You are an expert Cambridge A Level Business (9609) examiner. Write a formal, evaluative essay response for Business Paper 4 in continuous prose targeting full marks. Do not use bullet points or subheadings. Do not label paragraphs with assessment objective codes. 
+Your writing must naturally embed knowledge, application to the business context, analysis of causes/impacts/consequences, and evaluative judgement throughout. Write as a confident, well-prepared exam candidate.
+
+Follow this exact paragraph structure strictly:
+
+Paragraph 1 – Introduction
+Briefly define the key concept(s) in the question using precise business terminology. Introduce the business context and signal the line of argument your response will take. Do not simply repeat the question.
+
+Paragraph 2 – Body Paragraph 1
+Identify and explain a relevant business concept, theory or factor. Apply it directly and specifically to the business in the case study using evidence from the context provided. Analyse the cause-and-effect chain, exploring the impact or consequence of this factor on the business. End with a counter-argument or limitation to show balance.
+
+Paragraph 3 – Body Paragraph 2
+Identify and explain a second relevant concept or factor. Apply it specifically to the business context with reference to case detail. Analyse how this connects to the business's performance, objectives or strategy. Include a contrasting point or condition that qualifies the analysis.
+
+Paragraph 4 – Body Paragraph 3
+Identify and explain a third relevant concept or factor. Apply to the business context. Develop the analysis by exploring consequences for the business's strategy, stakeholders or outcomes. Balance with an alternative perspective or complicating factor.
+
+Paragraph 5 – Body Paragraph 4
+Identify and explain a fourth relevant concept or factor. Apply to the case. Analyse connections between causes, impacts and consequences at a developed level. Include a nuanced counter-point or condition.
+
+Paragraph 6 – Other Factors / Wider Considerations
+Evaluate additional factors that could influence the outcome of the strategy or decision discussed. Consider conditions under which the strategy may or may not succeed (e.g. market conditions, internal resources, competition, external environment, stakeholder response). This paragraph should demonstrate mature, contextualised judgement.
+
+Paragraph 7 – Conclusion
+Make a clear, justified overall judgement that directly answers the question. Draw together the key arguments from your response. Your conclusion must be supported by reasoning rooted in the business context — avoid generic or unsupported statements. Acknowledge that the outcome may depend on specific conditions or circumstances.
+>"""
+    elif is_business_p3:
+        # BUSINESS PAPER 3 MODEL ANSWER WITH WORD LIMITS
         if marks <= 4:
             # CALCULATION QUESTIONS
             model_answer_instruction = f"""<CALCULATION MODEL ANSWER ({marks} marks):
@@ -1018,7 +1047,7 @@ CRITICAL RULES:
 - Separate paragraphs with a blank line.
 - Output ONLY the candidate response, nothing else.>"""
         elif marks == 20:
-            # 20-MARK STRATEGY (PEEL STRUCTURE)
+            # THIS IS A FALLBACK IN CASE P3 HAS 20 MARKER (HIGHLY UNLIKELY BUT KEPT FOR SAFETY)
             model_answer_instruction = """<20-MARK STRATEGY MODEL ANSWER (A* STUDENT RESPONSE):
 You are an expert Cambridge A Level Business (9609) examiner. Write a model answer for the question below, targeting full marks. Follow these rules strictly:
 
