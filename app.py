@@ -394,6 +394,10 @@ def mark():
         4. Do NOT guess or approximate — use the exact figures.
         5. Award marks based on whether the student's calculation matches the correct answer.
 
+        CRITICAL FOR ESSAY/STRATEGY QUESTIONS:
+        If a Marking Scheme is provided below, you MUST use it as the absolute ground truth for identifying valid points, analysis, and evaluation.
+        You must cross-reference the student's answer with the Marking Scheme to award Knowledge (AO1), Application (AO2), Analysis (AO3), and Evaluation (AO4) marks according to the rubric.
+
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
         """
@@ -561,6 +565,7 @@ def mark():
         Total: AO1 (3) + AO2 (2) + AO3 (8) + AO4 (7) = 20 marks
         
         AO1 – KNOWLEDGE & UNDERSTANDING (max 3 marks):
+        (Use the Marking Scheme to identify valid knowledge points)
         Level 2 (2-3 marks):
         - Developed knowledge of strategic terms and factors
         - Clear understanding of business concepts
@@ -585,6 +590,7 @@ def mark():
         0 marks: Generic answer with no context
         
         AO3 – ANALYSIS (max 8 marks):
+        (Use the Marking Scheme to verify the validity of analytical chains)
         Level 3 (7-8 marks):
         - Developed analysis of overall strategy
         - Integrated connections between strategic elements
@@ -604,6 +610,7 @@ def mark():
         0 marks: Descriptive only, no analysis
         
         AO4 – EVALUATION (max 7 marks):
+        (Use the Marking Scheme to identify expected evaluative points and justified conclusions)
         Level 3 (6-7 marks):
         - Effective evaluation with developed judgement
         - Highly contextualized to the case business
@@ -623,6 +630,7 @@ def mark():
         
         MARK using best-fit within levels. Award whole marks only.
         APPLY positive marking. IGNORE spelling/grammar if meaning is clear.
+        IMPORTANT: Your feedback MUST explicitly reference both the rubric levels and the specific points from the Marking Scheme.
         """
         word_guide = "400-500 words for A* response"
     elif is_economics_p4:
