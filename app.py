@@ -225,7 +225,7 @@ def generate_with_gpt(system_instruction, user_prompt):
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=1.0,
-                max_tokens=8192,
+                max_tokens=16384,
                 response_format={"type": "json_object"}
             )
             
@@ -1357,10 +1357,11 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     OUTPUT FORMAT (JSON ONLY):
     {{
         "score": <total_score_int>,
-        "ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,
+        {('"ao1": <AO1_Selection_and_Application_score_out_of_10>, "ao2": <AO2_Analysis_and_Evaluation_score_out_of_10>, "ao3": <AO3_Communication_score_out_of_10>, "ao4": 0,' if is_general_paper else '"ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,')}
         "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' and '2. Assessment Objective Breakdown:...' followed by the report.>",
         "model_answer": "<The generated A* model answer string based on the instruction above>"
     }}
+    {('CRITICAL: For General Paper 8021, the total score is out of 30. Each AO (ao1, ao2, ao3) is scored out of 10. ao4 MUST always be 0. The sum ao1 + ao2 + ao3 MUST equal the total score.' if is_general_paper else '')}
     """
     
     # Use GPT-4o Mini for all marking
