@@ -435,7 +435,8 @@ const ALLOWED_USERS = {
     "Swapneel.Tiwari": "2026",
     "Satyaki.Das": "Satyaki",
     "Guest.User": "Guest",
-    "Angira.Barman": "Angira"
+    "Angira.Barman": "Angira",
+    "Mod.Discord": "Mod"
 };
 
 function getUser() { return localStorage.getItem('user'); }
