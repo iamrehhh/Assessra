@@ -1161,7 +1161,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
             f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
-            f"- CRITICAL REQUIREMENT: You MUST base your model answer heavily on the exact Marking Scheme provided above. Your generated essay MUST incorporate the specific points, arguments, and examples directly from the supplied Marking Scheme while still strictly adhering to the Model Answer Rubric and structure.\n"
+            f"- CRITICAL REQUIREMENT: You MUST base your model answer heavily on the exact Marking Scheme provided above. However, IF NEEDED to create a top-notch A* response and score Level 5 across all AOs, you MAY strategically go beyond the Marking Scheme to include compelling external data points and credible specific examples to bolster your arguments, AS LONG AS you strictly follow the aforementioned essential criteria for the Model Answer Rubric and structure.\n"
             f"Ensure the answer would score Level 5 (25-30 marks) across all AOs.>"
         ) if is_general_paper else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\n"
