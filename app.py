@@ -1168,16 +1168,14 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"- If you are under 600 words, you MUST expand your arguments with more depth, examples, and analysis until you reach at least 600.\n"
             f"- If you are over 700 words, you MUST trim unnecessary elaboration until you are at or below 700.\n"
             f"\n"
-            f"- MANDATORY Structure and per-paragraph word targets (follow these closely to hit 600-700 total):\n"
-            f"  * Introduction: ~80 words (define key terms, establish your thesis, signal your argument direction)\n"
-            f"  * Body Paragraph 1: ~120 words (first major argument with a specific, credible example)\n"
-            f"  * Body Paragraph 2: ~120 words (second argument, developing the same side or a nuance)\n"
-            f"  * Body Paragraph 3: ~120 words (counter-argument or opposing perspective, taken seriously with its own example)\n"
-            f"  * Body Paragraph 4: ~120 words (further counter-argument or synthesis of both sides)\n"
-            f"  * Conclusion: ~80 words (nuanced, weighed judgement — not a simple restatement of the introduction)\n"
-            f"  TOTAL: ~640 words (adjust slightly within paragraphs to stay in the 600-700 range)\n"
+            f"- MANDATORY Structure and Paragraph Constraints (to ensure length and depth):\n"
+            f"  * Introduction: Minimum 5 detailed sentences (define key terms, establish your thesis, signal argument direction).\n"
+            f"  * Body Paragraphs 1 to 4: EACH MUST be highly verbose and elaborative. Minimum 8 to 10 long, highly detailed sentences per paragraph. You MUST include at least TWO specific, deeply analyzed examples per paragraph. Do not be concise; elaborate deeply on every point.\n"
+            f"  * Conclusion: Minimum 5 sentences summarizing the nuanced judgement.\n"
+            f"- Word Count Target: Ensure you write abundantly to hit the 600-700 word mark by fulfilling the heavy sentence constraints above.\n"
+            f"  TOTAL TARGET: ~640 words minimum to score well.\n"
             f"\n"
-            f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
+            f"- Must demonstrate: Sophisticated question interpretation, deeply expanded analytical thinking, evaluative thinking, extremely specific credible examples. DO NOT be concise.\n"
             f"- Argument Balance: You MUST provide a balanced, two-sided evaluation. Develop counter-arguments seriously and in-depth. Do not provide a one-sided list. Your conclusion MUST reflect a nuanced, weighed judgement rather than just a reinforcement of an opening thesis.\n"
             f"- Writing Style (CRITICAL): The tone must NOT sound like an AI. It must sound like a high-level high school student. The language should be human-like and not overly complex or artificially sophisticated. It is perfectly fine to use standard connectors like 'Furthermore' or 'In conclusion' when needed, but keep the overall style accessible and authentic. Use varied sentence lengths, descriptive imagery, natural transitions, and personal/observational anecdotes where appropriate. Mimic the cadence of a thoughtful student who connects abstract ideas to tangible, lived experiences.\n"
             f"Here is a direct example of the exact writing style and tone you MUST emulate:\n"
@@ -1365,7 +1363,10 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
         "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' and '2. Assessment Objective Breakdown:...' followed by the report.>",
         "model_answer": "<The generated A* model answer string based on the instruction above>"
     }}
-    {('CRITICAL: For General Paper 8021, the total score is out of 30. Each AO (ao1, ao2, ao3) is scored out of 10. ao4 MUST always be 0. The sum ao1 + ao2 + ao3 MUST equal the total score.' if is_general_paper else '')}
+    {('CRITICAL ALGORITHMIC RULE FOR GENERAL PAPER SCORING:\n'
+      '1. Determine the TOTAL holistic score out of 30 FIRST (e.g., 16).\n'
+      '2. You MUST mathematically divide this exact total across ao1, ao2, and ao3 (maximum 10 each).\n'
+      '3. THE SUM OF ao1 + ao2 + ao3 MUST EXACTLY EQUAL THE TOTAL SCORE. Double check your math. (e.g., if total is 16, AOs must be 5, 5, 6). ao4 must always be 0.' if is_general_paper else '')}
     """
     
     # Use GPT-4o Mini for all marking
