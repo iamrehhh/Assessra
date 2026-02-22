@@ -1159,6 +1159,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"- Word Count: 600-700 words. THIS IS A HARD LIMIT. Count your words. Do NOT generate less than 600 words. Do NOT generate more than 700 words.\n"
             f"- Structure: Intro (70-80w), Body (4-5 paragraphs, 110-130w each), Conclusion (70-80w)\n"
             f"- Must demonstrate: Sophisticated question interpretation, analytical depth, evaluative thinking, specific credible examples (post-2020 preferred), logical coherence, academic expression.\n"
+            f"- Argument Balance: You MUST provide a balanced, two-sided evaluation. Develop counter-arguments seriously and in-depth. Do not provide a one-sided list. Your conclusion MUST reflect a nuanced, weighed judgement rather than just a reinforcement of an opening thesis.\n"
             f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
             f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
             f"- CRITICAL REQUIREMENT: You MUST base your model answer heavily on the exact Marking Scheme provided above. However, IF NEEDED to create a top-notch A* response and score Level 5 across all AOs, you MAY strategically go beyond the Marking Scheme to include compelling external data points and credible specific examples to bolster your arguments, AS LONG AS you strictly follow the aforementioned essential criteria for the Model Answer Rubric and structure.\n"
