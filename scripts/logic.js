@@ -359,8 +359,7 @@ function selectPaper(subject, paper, addHistory = true) {
     }
 
     // Close right panel
-    if (typeof toggleSubjectsPanel === 'function') toggleSubjectsPanel();
-    else if (typeof closeAllPanels === 'function') closeAllPanels();
+    if (typeof closeAllPanels === 'function') closeAllPanels();
 
     // Switch to Papers view early
     setView('papers', addHistory);
