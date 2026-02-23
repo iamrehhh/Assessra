@@ -437,7 +437,8 @@ const ALLOWED_USERS = {
     "Guest.User": "Guest",
     "Angira.Barman": "Angira",
     "Mod.Discord": "Mod",
-    "IGCSE.Mod": "IGCSE"
+    "IGCSE.Mod": "IGCSE",
+    "Ahana.Bera": "Ahana"
 };
 
 function getUser() { return localStorage.getItem('user'); }
