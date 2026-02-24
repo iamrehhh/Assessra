@@ -344,10 +344,18 @@ def mark():
             print("⚠ MODE ACTIVE: Economics Paper 4 Detected")
 
     # DETECT GENERAL PAPER 8021
-    is_general_paper = False
+    is_general_paper_1 = False
+    is_general_paper_2 = False
     if pdf_path and ("8021" in pdf_path or "General" in pdf_path):
-        is_general_paper = True
-        print("⚠ MODE ACTIVE: General Paper 8021 Detected")
+        if "_1" in pdf_path or "11" in pdf_path or "12" in pdf_path or "13" in pdf_path:
+            is_general_paper_1 = True
+            print("⚠ MODE ACTIVE: General Paper 8021/1 (Essay) Detected")
+        elif "_2" in pdf_path or "21" in pdf_path or "22" in pdf_path or "23" in pdf_path:
+            is_general_paper_2 = True
+            print("⚠ MODE ACTIVE: General Paper 8021/2 (Comprehension) Detected")
+        else:
+            is_general_paper_1 = True
+            print("⚠ MODE ACTIVE: General Paper 8021/1 (Essay) Default Detected")
 
     # ---------------------------------------------------------
     # ATTEMPT TO FIND & EXTRACT MARKING SCHEME
@@ -359,19 +367,32 @@ def mark():
         ms_filename = None
 
         # Standard naming convention replacements
+        in_filename = None
         if "_in_" in filename:
             ms_filename = filename.replace("_in_", "_ms_")
+            in_filename = filename
         elif "_qp_" in filename:
             ms_filename = filename.replace("_qp_", "_ms_")
+            in_filename = filename.replace("_qp_", "_in_")
         
+        insert_text = ""
+        if in_filename:
+            in_path = os.path.join(base_dir, in_filename)
+            if os.path.exists(in_path):
+                print(f"✅ FOUND Insert: {in_path}")
+                try:
+                    insert_text = extract_text_from_pdf(in_path)
+                except Exception as e:
+                    print(f"❌ Failed to extract Insert: {e}")
+                    
         if ms_filename:
             ms_path = os.path.join(base_dir, ms_filename)
             if os.path.exists(ms_path):
                 print(f"✅ FOUND Marking Scheme: {ms_path}")
                 try:
                     marking_scheme_text = extract_text_from_pdf(ms_path)
-                    # Limit MS text length to avoid token limits, prioritizing the relevant sections if possible
-                    # For now we take the whole thing as they aren't huge
+                    if insert_text:
+                        marking_scheme_text += "\n\n[INSERT / PASSAGE TEXT]\n" + insert_text
                 except Exception as e:
                     print(f"❌ Failed to extract Marking Scheme: {e}")
 
@@ -415,7 +436,7 @@ def mark():
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
         """
-    elif is_general_paper:
+    elif is_general_paper_1:
         system_prompt = f"""
         You are a Cambridge International AS Level English General Paper (8021) Examiner.
         Mark the following answer strictly according to the provided marking rubric.
@@ -435,6 +456,48 @@ def mark():
            and highly effective communication to score in the top bands.
 
         {'[MARKING SCHEME REFERENCE DATA]' if marking_scheme_text else ''}
+        {marking_scheme_text if marking_scheme_text else ''}
+        """
+    elif is_general_paper_2:
+        system_prompt = f"""
+        You are a Cambridge International AS Level English General Paper (8021/2 Comprehension) Examiner.
+        Mark the following answer strictly according to the provided marking rubric and marking scheme/insert text.
+
+        Core AI Marking Principles:
+        • Positive Marking: Marks must be awarded for correct/valid answers. Do not deduct marks for errors or omissions.
+        • No Half Marks: Marks awarded must always be whole numbers.
+        • Language & Grammar: Answers should only be judged on spelling, punctuation, and grammar if those features are specifically assessed by the question (e.g., extended writing). Otherwise, if the meaning is unambiguous, do not penalize grammatical errors.
+        • First Response Rule: For single-mark identification questions, only evaluate the first attempted response.
+
+        Question-Type Specific Rubrics:
+        A. Logical Reasoning & Extended Writing (e.g., 10-mark scenario questions):
+        - Connecting Evidence: Award marks when the student successfully links two separate pieces of information from the text to form a developed point.
+        - Rejecting Speculation: Do not credit advantages or disadvantages based on pure assumptions that have no supporting evidence in the text.
+        - True Disadvantages vs. Mitigation: If a question asks for a disadvantage, the student must explain why something is a negative constraint. If they simply offer a mitigation, do not award the mark for a disadvantage.
+        - Levels-Based Marking (10 Marks):
+          ◦ Level 4 (9–10 marks): Comprehensive approach. Selects relevant information, sustains a strong focus, and communicates fluently with accurate grammar.
+          ◦ Level 3 (6–8 marks): Moderate range of arguments. Shows some grasp of key issues but may lose focus or include some irrelevant material. Communicates clearly.
+          ◦ Level 2 (3–5 marks): Limited analysis. Mainly undeveloped material. Modest range of points, some irrelevant/incorrect. Errors in expression impede flow.
+          ◦ Level 1 (1–2 marks): Simple, unexplained points. Very narrow range. Little interpretation. Significant spelling/grammar errors hinder communication.
+
+        B. "Own Words" Questions:
+        - Lifted Text Penalty: Scan for phrases copied directly from the text. Direct copying without paraphrasing should not receive credit.
+        - Permitted Exceptions: Allow repetition of specialist vocabulary with no obvious synonym.
+        - Grammatical Shifts: Award marks if the student successfully changes the word form of the original text (e.g., noun to adjective).
+
+        C. Word-Limited Summaries (e.g., "Answer in about 30 words"):
+        - Strict Cut-off: Count words. Any correct points made after the specified word limit must not be credited.
+        - Continuous Prose Requirement: Answers must be written in continuous prose/complete sentences. Penalize answers written in bullet points or incomplete sentences.
+        - Question Stem Wording: Do not award marks for repeating the question stem (wastes word count).
+
+        D. Exact Word / Synonym Identification:
+        - Grammatical Matching: Ensure the identified word exactly matches the grammatical form of the prompt (e.g., noun for noun).
+        - Single Word Rule: If asking for an "exact word", reject answers that include extra adjectives.
+
+        CRITICAL: 
+        You MUST use the provided Marking Scheme AND the Insert/Case Study text as the absolute ground truth. Compare the student's answer against the Marking Scheme directly to verify points.
+
+        {'[MARKING SCHEME AND INSERT REFERENCE DATA]' if marking_scheme_text else ''}
         {marking_scheme_text if marking_scheme_text else ''}
         """
     else:
@@ -863,9 +926,9 @@ def mark():
         - Conclusions that are asserted without any supporting argument
         """
         word_guide = "Subject to detailed Economics output format"
-    elif is_general_paper:
+    elif is_general_paper_1:
         rubric = """
-        CAMBRIDGE AS LEVEL ENGLISH GENERAL PAPER 8021/12 MARKING RUBRIC
+        CAMBRIDGE AS LEVEL ENGLISH GENERAL PAPER 8021/1 PAPER 1 MARKING RUBRIC
         Maximum Marks: 30
 
         LEVEL 5 (25-30 marks) - EXCELLENT
@@ -913,6 +976,18 @@ def mark():
         - Add the three AO scores together to get the final score out of 30.
         """
         word_guide = "Subject to 100-200 word feedback limit"
+    elif is_general_paper_2:
+        rubric = f"""
+        GENERAL PAPER 2 (COMPREHENSION) RUBRIC
+        Maximum Marks: {marks}
+
+        If {marks} >= 8:
+        Apply the Levels-Based Marking (Level 1-4) outlined in the system prompt for 10-mark scenario/logical reasoning questions.
+        
+        If {marks} < 8:
+        Apply Strict Point-Based Marking. Check against the marking scheme. Ensure no lifted text if it's an "own words" question. Check word limits if applicable. Check grammatical match if exact word.
+        """
+        word_guide = "According to question constraints"
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER (non-business)
         rubric = f"""
@@ -1191,7 +1266,14 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
             f"- Ensure the answer would score Level 5 (25-30 marks) across all AOs.\n"
             f"\n"
             f"*** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"
-        ) if is_general_paper else (
+        ) if is_general_paper_1 else (
+            f"<GENERAL PAPER 2 MODEL ANSWER:\n"
+            f"You are an expert Cambridge General Paper 2 examiner. Write a perfect standalone model answer for {marks} marks.\n"
+            f"If it is a 10-mark logical reasoning question, provide a balanced response, evaluating advantages and disadvantages with developed points linking evidence from the text.\n"
+            f"If it is an 'own words' question, perfectly paraphrase the text.\n"
+            f"If it is an exact word/phrase question, provide just the exact word/phrase in the correct grammatical form.\n"
+            f"Write exactly what the student should write to get full marks. Do NOT include examiner commentary in the model answer.>"
+        ) if is_general_paper_2 else (
             f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\\n"
             f"The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').\\n"
             f"It MUST follow standard A-Level Essay structure with proper paragraph breaks.\\n"
@@ -1250,7 +1332,7 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     to reach the next level]
     ---
     """
-    elif is_general_paper:
+    elif is_general_paper_1:
         feedback_structure = """
     You must output your final grading using the following structure for the 'detailed_critique' field.
     IMPORTANT: The feedback MUST be highly contextual to the student's actual writing. Do not provide generic advice. Quote or reference specific sentences they wrote when explaining the pros and cons.
@@ -1269,6 +1351,43 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
        - Nuance & Creativity: [If they used examples outside the marking scheme that were factually correct, praise them here and note the marks awarded. If not, note how they could have expanded creatively.]
        - Shortcomings (Cons): [Pinpoint exactly where their logic failed, was too vague, or lacked specific examples. Quote the weak parts.]
        - Actionable Fixes: [Provide 1-2 specific ways they could have rewritten their weak points to score higher. Give an example of a stronger sentence they could have used.]
+    """
+    elif is_general_paper_2:
+        feedback_structure = f"""
+    You must output your final grading using the following structure for the 'detailed_critique' field.
+    IMPORTANT: The feedback MUST follow this exact template and be highly contextual to the student's actual writing. Stop generating the response after 'How to Fix It'. No extra text.
+
+    Structure:
+    1. Final Score: [X]/{marks}
+    
+    🌟 2. Criteria Fulfilled (Strengths & Marks Awarded)
+    Start with positive reinforcement based on Positive Marking. Check which apply to their answer and use bullet points similar to these:
+    • Valid Points Identified [Tick 1]: "You successfully identified valid points from the text, specifically..."
+    • Developed Points [DEV/Tick 2]: "You successfully linked two pieces of information together to create a developed point..."
+    • Balanced Argument [Bal]: "You successfully provided a balanced argument by including clear advantages and at least one valid disadvantage."
+    • Word Limit Compliance: "You successfully communicated your ideas concisely and stayed within the required word limit."
+    • Own Words Mastery: "You successfully captured the meaning of the text using your own words, substituting synonyms effectively without losing precision."
+    • Continuous Prose: "You correctly wrote your response in continuous prose rather than bullet points."
+    
+    ⚠️ 3. Flaws and Cons (Marks Lost & Diagnostic Tags)
+    Identify exactly where the student went wrong using official diagnostic tags if they made mistakes:
+    • [NAQ] Not Answering the Question: "Your response contained information that did not directly address the prompt..."
+    • [NAR] Narration vs. Analysis: "You narrated or described the events in the text rather than explaining why they act as an advantage/disadvantage."
+    • [TV] Too Vague: "Your point lacked precision..."
+    • [REP] Repetition & Reversal: "You repeated a point you already made, or offered the exact inverse..."
+    • Word Limit Exceeded: "You exceeded the word limit. Any valid points made after the cut-off count could not be credited."
+    • Lifted Text Penalty: "You copied phrases directly from the text instead of using your own words."
+    • Grammatical Mismatch: "Your answer did not match the grammatical form of the prompt."
+    • Mitigation vs. Disadvantage: "Instead of providing a pure disadvantage, you offered a mitigation."
+
+    🛠️ 4. How to Fix It (Actionable Steps)
+    Provide specific, actionable steps to prevent these errors in the future (if they made errors) or how to keep improving:
+    • Stop Repeating the Question Stem: "Never start your answer by repeating the question stem..."
+    • How to Paraphrase Effectively: "To fix the 'lifted text' penalty, try changing the word class..."
+    • Avoid Extra Adjectives: "When a question asks for an 'exact word', only provide that single word."
+    • Check the Subject of the Question: "Carefully read whose perspective the question asks for."
+    • Separate Combined Information: "If the text lists two great things in one sentence, treat these as two separate points..."
+    • Write in Complete Sentences: "Ensure you are writing in complete, coherent sentences."
     """
     elif is_business_p3 or is_business_p4:
         # PRAISE-POLISH-PONDER FEEDBACK STRUCTURE FOR BUSINESS PAPERS
@@ -1332,6 +1451,12 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     Required phrasing: Start your critiques with phrases like: "You failed to...", "Your chain of reasoning broke down when...", "Your evaluation was capped at Level 2 because...".
     """
 
+    ao_format = ('"ao1": <AO1_Selection_and_Application_score_out_of_10>, "ao2": <AO2_Analysis_and_Evaluation_score_out_of_10>, "ao3": <AO3_Communication_score_out_of_10>, "ao4": 0,' if is_general_paper_1 else '"ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,')
+    gp1_rule = ('CRITICAL ALGORITHMIC RULE FOR GENERAL PAPER 1 SCORING:\n'
+      '1. Determine the TOTAL holistic score out of 30 FIRST (e.g., 16).\n'
+      '2. You MUST mathematically divide this exact total across ao1, ao2, and ao3 (maximum 10 each).\n'
+      '3. THE SUM OF ao1 + ao2 + ao3 MUST EXACTLY EQUAL THE TOTAL SCORE. Double check your math. (e.g., if total is 16, AOs must be 5, 5, 6). ao4 must always be 0.' if is_general_paper_1 else '')
+
     user_prompt = f"""
     CASE STUDY CONTEXT:
     {case_study_text}
@@ -1360,14 +1485,11 @@ CRITICAL: DO NOT copy these instructions into the output. You must strictly outp
     OUTPUT FORMAT (JSON ONLY):
     {{
         "score": <total_score_int>,
-        {('"ao1": <AO1_Selection_and_Application_score_out_of_10>, "ao2": <AO2_Analysis_and_Evaluation_score_out_of_10>, "ao3": <AO3_Communication_score_out_of_10>, "ao4": 0,' if is_general_paper else '"ao1": <score_int>, "ao2": <score_int>, "ao3": <score_int>, "ao4": <score_int>,')}
-        "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' and '2. Assessment Objective Breakdown:...' followed by the report.>",
+        {ao_format}
+        "detailed_critique": "<Markdown string that MUST START with '1. Final Score:...' followed by the report.>",
         "model_answer": "<The generated A* model answer string based on the instruction above>"
     }}
-    {('CRITICAL ALGORITHMIC RULE FOR GENERAL PAPER SCORING:\n'
-      '1. Determine the TOTAL holistic score out of 30 FIRST (e.g., 16).\n'
-      '2. You MUST mathematically divide this exact total across ao1, ao2, and ao3 (maximum 10 each).\n'
-      '3. THE SUM OF ao1 + ao2 + ao3 MUST EXACTLY EQUAL THE TOTAL SCORE. Double check your math. (e.g., if total is 16, AOs must be 5, 5, 6). ao4 must always be 0.' if is_general_paper else '')}
+    {gp1_rule}
     """
     
     # Use GPT-4o Mini for all marking
