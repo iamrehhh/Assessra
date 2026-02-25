@@ -2449,6 +2449,158 @@ function openExamTimeline() {
     document.body.appendChild(modal);
 }
 
+// ==========================================
+// ABOUT SECTION MODAL
+// ==========================================
+window.openAboutModal = function() {
+    // Remove existing modal if any
+    const existing = document.getElementById('about-section-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'about-section-modal';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10000;
+        display: flex; justify-content: center; align-items: center;
+        animation: fadeIn 0.3s ease;
+        padding: 20px;
+    `;
+
+    modal.innerHTML = `
+        <div style="
+            max-width: 640px; width: 100%; max-height: 85vh;
+            background: linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(240,253,244,0.5) 50%, rgba(255,255,255,0.6) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 28px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+            overflow: hidden;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        ">
+            <!-- Header -->
+            <div style="
+                padding: 28px 32px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.4);
+                background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(240,253,244,0.2) 100%);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 style="
+                            font-family: 'Playfair Display', serif;
+                            font-size: 1.8rem; font-weight: 700;
+                            color: #1e293b; margin: 0 0 6px 0;
+                            background: linear-gradient(135deg, #1e293b, #16a34a);
+                            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                        ">✨ About Assessra</h2>
+                        <p style="font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #64748b; margin: 0;">Meet the minds behind the project.</p>
+                    </div>
+                    <button onclick="document.getElementById('about-section-modal').remove()" style="
+                        width: 36px; height: 36px;
+                        background: rgba(0,0,0,0.06);
+                        border: none; border-radius: 50%;
+                        font-size: 1.2rem; cursor: pointer;
+                        display: flex; align-items: center; justify-content: center;
+                        transition: all 0.2s;
+                        color: #64748b;
+                    " onmouseover="this.style.background='rgba(0,0,0,0.12)'" onmouseout="this.style.background='rgba(0,0,0,0.06)'">✕</button>
+                </div>
+            </div>
+            <!-- Body -->
+            <div style="padding: 20px 28px 28px; overflow-y: auto; max-height: calc(85vh - 100px); display: flex; flex-direction: column; gap: 16px;">
+                
+                <!-- Abdul Rehan -->
+                <div style="
+                    display: flex; align-items: center; gap: 20px;
+                    padding: 22px;
+                    background: rgba(255,255,255,0.4);
+                    backdrop-filter: blur(12px);
+                    border: 1px solid rgba(255,255,255,0.5);
+                    border-radius: 16px;
+                    transition: all 0.3s;
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <!-- Avatar/Icon -->
+                    <div style="
+                        min-width: 60px; text-align: center;
+                        background: rgba(22, 163, 74, 0.1);
+                        border: 1px solid rgba(22, 163, 74, 0.3);
+                        border-radius: 50%; width: 60px; height: 60px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 1.8rem;
+                    ">
+                        👤
+                    </div>
+                    <!-- Details -->
+                    <div style="flex: 1;">
+                        <div style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 2px;">Abdul Rehan</div>
+                        <div style="font-size: 0.85rem; color: #16a34a; font-weight: 600; margin-bottom: 8px;">Creator & Lead Developer</div>
+                        <p style="font-size: 0.9rem; color: #475569; line-height: 1.5; margin: 0 0 12px 0;">
+                            Abdul Rehan is the mind behind this project — responsible for the core concept, architecture, and overall development. His vision and commitment shaped everything you see here.
+                        </p>
+                        <div style="display: flex; gap: 12px; align-items: center; font-size: 0.85rem;">
+                            <a href="https://github.com/iamrehhh" target="_blank" style="color: #0f172a; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 4px hover:underline;">
+                                🔗 GitHub
+                            </a>
+                            <span style="color: #cbd5e1;">·</span>
+                            <a href="mailto:abdulrehanoffical@gmail.com" style="color: #64748b; text-decoration: none;">Email - abdulrehanoffical@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sarbojit Mondal -->
+                <div style="
+                    display: flex; align-items: center; gap: 20px;
+                    padding: 22px;
+                    background: rgba(255,255,255,0.3);
+                    backdrop-filter: blur(12px);
+                    border: 1px solid rgba(255,255,255,0.4);
+                    border-radius: 16px;
+                    transition: all 0.3s;
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <!-- Avatar/Icon -->
+                    <div style="
+                        min-width: 60px; text-align: center;
+                        background: rgba(99, 102, 241, 0.1);
+                        border: 1px solid rgba(99, 102, 241, 0.3);
+                        border-radius: 50%; width: 60px; height: 60px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 1.8rem;
+                    ">
+                        👤
+                    </div>
+                    <!-- Details -->
+                    <div style="flex: 1;">
+                        <div style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 2px;">Sarbojit Mondal</div>
+                        <div style="font-size: 0.85rem; color: #6366f1; font-weight: 600; margin-bottom: 8px;">Part-Time Contributor</div>
+                        <p style="font-size: 0.9rem; color: #475569; line-height: 1.5; margin: 0 0 12px 0;">
+                            Sarbojit Mondal contributed his time and expertise to help improve and refine the project. His support and input played a meaningful role in making this project better.
+                        </p>
+                        <div style="display: flex; gap: 12px; align-items: center; font-size: 0.85rem;">
+                            <a href="https://github.com/frontenders98" target="_blank" style="color: #0f172a; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 4px hover:underline;">
+                                🔗 GitHub
+                            </a>
+                            <span style="color: #cbd5e1;">·</span>
+                            <a href="mailto:willdexter98@gmail.com" style="color: #64748b; text-decoration: none;">Email - willdexter98@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    `;
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+
+    document.body.appendChild(modal);
+};
+
 // === GP2 QUESTION PAPER MODAL TOGGLE ===
 window.toggleQPPdf = function (pdfUrl) {
     let modal = document.getElementById('qp-pdf-modal');
