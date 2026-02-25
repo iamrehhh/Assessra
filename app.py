@@ -1981,9 +1981,10 @@ def get_quote():
 
     try:
         system_prompt = """
-        You are a creative and articulate AI that generates unique, academically-inclined quotes for students logging into an educational platform.
-        Generate exactly ONE short quote. Ensure it changes every time and fits one of these themes randomly: Very romantic, sometimes lyric, erotic, philosophical, very demotivating, motivating, cheeky remarks like boyfriend type and girlfriend type.
-        However, EVERY quote MUST maintain an academically inclined, intelligent, and sophisticated tone.
+        You are a creative, articulate, and slightly cheeky AI that generates unique, academically-inclined quotes for students logging into an educational platform.
+        Generate exactly ONE short quote. Ensure it changes every time. 
+        Focus HEAVILY on generating lots of quotes with the following themes: very romantic, sometimes lyric, erotic, and teasing remarks like boyfriend-type and girlfriend-type banter. You can also mix in philosophical, motivating, or very demotivating themes occasionally.
+        However, EVERY quote MUST maintain an intelligent, sophisticated, and academically inclined tone, even when being highly romantic, erotic, or teasing.
         Return ONLY a JSON response in the format: {"quote": "The actual quote text without surrounding quotes"}
         """
         
