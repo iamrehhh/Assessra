@@ -997,7 +997,7 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
             <div id="split-container" style="flex-grow: 1; display: flex; overflow: hidden; background: #f5f5f5;">
                 <!-- Left: PDF Viewer (60%) -->
                 <div id="pdf-panel" style="flex: 6; height: 100%; position: relative;">
-                    <iframe src="${data.pdf}#toolbar=0&navpanes=0&scrollbar=1&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
+                    <iframe src="${data.insert ? data.insert : data.pdf}#toolbar=0&navpanes=0&scrollbar=1&view=FitH" width="100%" height="100%" style="border:none;"></iframe>
                 </div>
                 
                 <!-- Draggable Divider -->
