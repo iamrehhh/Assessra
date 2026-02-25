@@ -918,7 +918,7 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
     } catch (e) { console.error("Error loading paper data:", e); }
 
     // Generate questions HTML
-    let isGP2 = pid.startsWith('gp_') && pid.includes('_2');
+    let isGP2 = pid.startsWith('gp_') && (pid.endsWith('_21') || pid.endsWith('_22') || pid.endsWith('_23'));
     let qHtml = `<div style="position: relative;">
         <h2 style="margin-bottom:20px; color:var(--lime-dark); border-bottom:2px solid #eee; padding-bottom:10px; padding-right: 40px;">${data.title}</h2>
         ${isGP2 && data.pdf ? `<button onclick="toggleQPPdf('${data.pdf}')" style="position: absolute; top: -5px; right: 0; background: none; border: none; cursor: pointer; padding: 5px; color: var(--lime-dark);" title="View Question Paper">
@@ -953,6 +953,7 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
             <div id="wc_${pid}_${q.n}" class="word-count">0 words</div>
             <button class="submit-btn ${done ? 'completed' : ''}" onclick="submitAnswer('${pid}', '${q.n}')">${done ? '✓ Re-Evaluate' : 'Submit for Strict Marking'}</button>
             <div style="text-align: center; margin-top: 6px; font-size: 0.85rem; color: #888;">${(() => {
+                if (isGP2) return '∞ Unlimited submissions for General Paper 2';
                 const now = new Date();
                 const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
                 let maxAttempts = 12;
@@ -1168,8 +1169,9 @@ async function submitAnswer(pid, qn) {
         }
     }
     const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
+    const isGP2 = pid.startsWith('gp_') && (pid.endsWith('_21') || pid.endsWith('_22') || pid.endsWith('_23'));
 
-    if (dailyCount >= maxAttempts) {
+    if (!isGP2 && dailyCount >= maxAttempts) {
         showToast('⚠️ You\'ve reached your daily limit of ' + maxAttempts + ' question submissions. Come back tomorrow!', 'warning');
         return;
     }
@@ -1228,7 +1230,9 @@ async function submitAnswer(pid, qn) {
         const json = await res.json();
 
         // Increment daily submission counter AFTER successful response
-        localStorage.setItem(limitKey, String(dailyCount + 1));
+        if (!isGP2) {
+            localStorage.setItem(limitKey, String(dailyCount + 1));
+        }
 
         // SAVE TO CLOUD AND WAIT
         await window.CloudManager.saveAttempt(getUser(), pid, qn, {
@@ -1258,9 +1262,11 @@ async function submitAnswer(pid, qn) {
 
         // Update Daily Limit Text
         const limitDisplay = el.parentElement.querySelector('div[style*="text-align: center"]');
-        if (limitDisplay) {
+        if (limitDisplay && !isGP2) {
             const newLeft = Math.max(0, maxAttempts - (dailyCount + 1));
             limitDisplay.innerText = newLeft > 0 ? `📊 ${newLeft}/${maxAttempts} submissions remaining today` : `⚠️ Daily limit reached (${maxAttempts}/${maxAttempts})`;
+        } else if (limitDisplay && isGP2) {
+            limitDisplay.innerText = '∞ Unlimited submissions for General Paper 2';
         }
 
         // Construct Feedback HTML
