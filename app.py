@@ -1392,9 +1392,21 @@ def mark():
         """
         word_guide = "Subject to 100-200 word feedback limit"
     elif is_general_paper_2:
-        rubric = f"""
-        All rules and structures apply per the Universal Marking System Prompt provided above. Max Marks for this specific question submission: {marks}
-        """
+        if marks <= 4:
+            rubric = f"""
+            SHORT ANSWER / VOCABULARY RUBRIC ({marks} MARKS):
+            CRITICAL: This is a General Paper 2 Comprehension question, NOT a math calculation.
+            - Provide marks strictly for content that matches the Marking Scheme and context of the passage.
+            - If it asks for the meaning of a word, it MUST be defined in the context of the passage, not just a generic dictionary definition.
+            - Award 1 mark per valid point made, up to the maximum {marks} marks.
+            - If the student's answer captures the core meaning accurately in their own words, award the mark.
+            - DO NOT penalize for lack of complex examples in 1-2 mark questions.
+            """
+        else:
+            rubric = f"""
+            LONG ANSWER RUBRIC ({marks} MARKS):
+            All rules and structures apply per the Universal Marking System Prompt provided above. Max Marks for this specific question submission: {marks}
+            """
         word_guide = "According to question constraints"
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER (non-business)
@@ -1629,63 +1641,73 @@ You MUST structure your GENERATED essay exactly as follows:
 Use precise terminology (e.g., "allocative efficiency", "PED").
 Use causal connectives ("therefore", "consequently").
 CRITICAL: DO NOT copy these instructions into the output. You must strictly output ONLY the newly generated essay text answering the specific question above.>"""
+    elif is_general_paper_1:
+         model_answer_instruction = f"""<GENERATE A MODEL ANSWER USING THESE COMMANDS:
+General Paper 8021 Model Answer Specifications:
+
+*** ABSOLUTE WORD COUNT REQUIREMENT ***
+The model answer MUST be EXACTLY between 600 and 700 words. This is a NON-NEGOTIABLE hard limit.
+- MINIMUM: 600 words. Anything below 600 words is UNACCEPTABLE and a FAILURE.
+- MAXIMUM: 700 words. Anything above 700 words is UNACCEPTABLE and a FAILURE.
+- You MUST mentally count your words as you write. Before finalising, verify the total word count falls within 600-700.
+- If you are under 600 words, you MUST expand your arguments with more depth, examples, and analysis until you reach at least 600.
+- If you are over 700 words, you MUST trim unnecessary elaboration until you are at or below 700.
+
+- MANDATORY Structure and Paragraph Constraints (to ensure length and depth):
+  * Introduction: Minimum 5 detailed sentences (define key terms, establish your thesis, signal argument direction).
+  * Body Paragraphs 1 to 4: EACH MUST be highly verbose and elaborative. Minimum 8 to 10 long, highly detailed sentences per paragraph. You MUST include at least TWO specific, deeply analyzed examples per paragraph. Do not be concise; elaborate deeply on every point.
+  * Conclusion: Minimum 5 sentences summarizing the nuanced judgement.
+- Word Count Target: Ensure you write abundantly to hit the 600-700 word mark by fulfilling the heavy sentence constraints above.
+  TOTAL TARGET: ~640 words minimum to score well.
+
+- Must demonstrate: Sophisticated question interpretation, deeply expanded analytical thinking, evaluative thinking, extremely specific credible examples. DO NOT be concise.
+- Argument Balance: You MUST provide a balanced, two-sided evaluation. Develop counter-arguments seriously and in-depth. Do not provide a one-sided list. Your conclusion MUST reflect a nuanced, weighed judgement rather than just a reinforcement of an opening thesis.
+- Writing Style (CRITICAL): The tone must NOT sound like an AI. It must sound like a high-level high school student. The language should be human-like and not overly complex or artificially sophisticated. It is perfectly fine to use standard connectors like 'Furthermore' or 'In conclusion' when needed, but keep the overall style accessible and authentic. Use varied sentence lengths, descriptive imagery, natural transitions, and personal/observational anecdotes where appropriate. Mimic the cadence of a thoughtful student who connects abstract ideas to tangible, lived experiences.
+Here is a direct example of the exact writing style and tone you MUST emulate:
+"After a 5 minute scooty ride, I finally arrive at the gate of Lee's club. Taking off the helmet I see my friends already in that circular formation around the indoor badminton court, cheering vociferously for Satyaki in a match against Sobuj. Looks like there's a tournament going on. And I am late.\\n\\n
+I walk inside the indoor court. It is a hall tall enough to fit a two story house, with a floor large enough to hide 12 large trucks. Yet, as the matches heat up, the hall almost narrows down to the one little badminton court, which becomes the centre of everyone's attention. There are half a dozen chairs lined up beside the court, premium tickets for only the most punctual. Up above the strong fluorescent lights, we can see the tin roof, surprisingly durable and water-proof even during the stormiest nights- providing us, on many occasions, a safe haven against the bad monsoon weather.\\n\\n
+Far away on the other corner lay a TT table, its deteriorating conditions almost giving it a pitiable appearance- with its own set of empty chairs that begged for attention. For now though they were occupied by few of the disinterested chatterers, who just came to the club to socialise and relax. I decided to step out to get a breath of fresh air- the place, though special in many ways, always gave us a mildly stifling feeling accentuated by the daunting echoes of loud cheering from the circle at the court.\\n\\n
+Across the sliding metal gate was the place where we parked our cycles and our bags full of accessories and outer jackets- some simple wrist watches while some fitbits, some cheap bicycles while some with gears fitted on them. It was almost as if this pristine and protected hub of the batch of 2025-26 boys required you to strip off all your status symbols before stepping in- with only your popularity and your sporting abilities defining your quality of time here.\\n\\n
+This place was protected and private, away from the snooping eyes of our parents and teachers, our very 'den'- or the 'hub of indiscipline', as our school authorities would say. Numerous 'festivals' have been held here by our gang, on dates that mean nothing on a normal calendar, just occasions when school and academic lives grow tiring and we all decide a evening's worth of break. Cold-drinks and fast-food flood into the club, funded by the rich boys and fetched by younger boys eager for an excuse to ride their unlicensed scooties. Musically gifted boys haul in their guitars and amplifiers and play rock music while the hall transforms into a nightclub, with torches flickered in perfect sync with the beats to emulate disco lights.\\n\\n
+Yes, it is this place that I love the most. This is the place that never fails to intoxicate me with a potent solution of liberty and power- a sense of collective invinciblity that will be a part of our teenage memories, a page with a turned corner that we will all revisit from time to time."
+- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.
+- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.
+- CRITICAL REQUIREMENT (MARKING SCHEME ADHERENCE): You MUST construct your entire argument using EXACTLY the points, evidence, and perspectives listed in the Marking Scheme provided above. DO NOT invent random generic arguments. If the question refers to specific texts (e.g., Essay Paper 12), you MUST analyze those exact texts as specified in the marking scheme. Do not wander off-topic.
+- Ensure the answer would score Level 5 (25-30 marks) across all AOs.
+
+*** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"""
+    elif is_general_paper_2:
+        model_answer_instruction = f"""<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.
+The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').
+It MUST follow standard A-Level Essay structure with proper paragraph breaks for longer answers.
+
+CRITICAL REQUIREMENT (VOCABULARY QUESTIONS): If the question asks for the "exact meaning" of words as used in the material (e.g., "perspective (line 20)"):
+1. The answer must draw EXCLUSIVELY on the provided case study context and marking scheme.
+2. The definition must reflect how the word was used in that specific sentence, not its generic dictionary definition.
+3. Be concise and precise.
+
+CRITICAL: The model answer must read exactly like a perfect student essay or response. DO NOT mention the student.>"""
+    elif marks <= 4:
+        # CALCULATION / SHORT ANSWER FALLBACK (non-business, non-gp2)
+        model_answer_instruction = f"""<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:
+1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').
+2. STATE FORMULA: Write the standard formula clearly.
+3. SUBSTITUTE: Show the formula with the extracted numbers inserted.
+4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.
+5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).
+DO NOT SKIP STEPS. PRECISION IS MANDATORY.>"""
     else:
-        # FALLBACK FOR OTHER PAPERS
-        model_answer_instruction = (
-            f"<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:\n"
-            f"1. EXTRACT DATA: List every relevant number from the case study (e.g., 'Revenue = $500,000').\n"
-            f"2. STATE FORMULA: Write the standard formula clearly.\n"
-            f"3. SUBSTITUTE: Show the formula with the extracted numbers inserted.\n"
-            f"4. CALCULATE: Show the step-by-step arithmetic. DOUBLE CHECK YOUR MATH.\n"
-            f"5. FINAL ANSWER: State the final result with correct units (e.g., %, $, ratios).\n"
-            f"DO NOT SKIP STEPS. PRECISION IS MANDATORY.>\n"
-        ) if marks <= 4 else (
-            f"<GENERATE A MODEL ANSWER USING THESE COMMANDS:\n"
-            f"General Paper 8021 Model Answer Specifications:\n"
-            f"\n"
-            f"*** ABSOLUTE WORD COUNT REQUIREMENT ***\n"
-            f"The model answer MUST be EXACTLY between 600 and 700 words. This is a NON-NEGOTIABLE hard limit.\n"
-            f"- MINIMUM: 600 words. Anything below 600 words is UNACCEPTABLE and a FAILURE.\n"
-            f"- MAXIMUM: 700 words. Anything above 700 words is UNACCEPTABLE and a FAILURE.\n"
-            f"- You MUST mentally count your words as you write. Before finalising, verify the total word count falls within 600-700.\n"
-            f"- If you are under 600 words, you MUST expand your arguments with more depth, examples, and analysis until you reach at least 600.\n"
-            f"- If you are over 700 words, you MUST trim unnecessary elaboration until you are at or below 700.\n"
-            f"\n"
-            f"- MANDATORY Structure and Paragraph Constraints (to ensure length and depth):\n"
-            f"  * Introduction: Minimum 5 detailed sentences (define key terms, establish your thesis, signal argument direction).\n"
-            f"  * Body Paragraphs 1 to 4: EACH MUST be highly verbose and elaborative. Minimum 8 to 10 long, highly detailed sentences per paragraph. You MUST include at least TWO specific, deeply analyzed examples per paragraph. Do not be concise; elaborate deeply on every point.\n"
-            f"  * Conclusion: Minimum 5 sentences summarizing the nuanced judgement.\n"
-            f"- Word Count Target: Ensure you write abundantly to hit the 600-700 word mark by fulfilling the heavy sentence constraints above.\n"
-            f"  TOTAL TARGET: ~640 words minimum to score well.\n"
-            f"\n"
-            f"- Must demonstrate: Sophisticated question interpretation, deeply expanded analytical thinking, evaluative thinking, extremely specific credible examples. DO NOT be concise.\n"
-            f"- Argument Balance: You MUST provide a balanced, two-sided evaluation. Develop counter-arguments seriously and in-depth. Do not provide a one-sided list. Your conclusion MUST reflect a nuanced, weighed judgement rather than just a reinforcement of an opening thesis.\n"
-            f"- Writing Style (CRITICAL): The tone must NOT sound like an AI. It must sound like a high-level high school student. The language should be human-like and not overly complex or artificially sophisticated. It is perfectly fine to use standard connectors like 'Furthermore' or 'In conclusion' when needed, but keep the overall style accessible and authentic. Use varied sentence lengths, descriptive imagery, natural transitions, and personal/observational anecdotes where appropriate. Mimic the cadence of a thoughtful student who connects abstract ideas to tangible, lived experiences.\n"
-            f"Here is a direct example of the exact writing style and tone you MUST emulate:\n"
-            f"\"After a 5 minute scooty ride, I finally arrive at the gate of Lee's club. Taking off the helmet I see my friends already in that circular formation around the indoor badminton court, cheering vociferously for Satyaki in a match against Sobuj. Looks like there's a tournament going on. And I am late.\\n\\n"
-            f"I walk inside the indoor court. It is a hall tall enough to fit a two story house, with a floor large enough to hide 12 large trucks. Yet, as the matches heat up, the hall almost narrows down to the one little badminton court, which becomes the centre of everyone's attention. There are half a dozen chairs lined up beside the court, premium tickets for only the most punctual. Up above the strong fluorescent lights, we can see the tin roof, surprisingly durable and water-proof even during the stormiest nights- providing us, on many occasions, a safe haven against the bad monsoon weather.\\n\\n"
-            f"Far away on the other corner lay a TT table, its deteriorating conditions almost giving it a pitiable appearance- with its own set of empty chairs that begged for attention. For now though they were occupied by few of the disinterested chatterers, who just came to the club to socialise and relax. I decided to step out to get a breath of fresh air- the place, though special in many ways, always gave us a mildly stifling feeling accentuated by the daunting echoes of loud cheering from the circle at the court.\\n\\n"
-            f"Across the sliding metal gate was the place where we parked our cycles and our bags full of accessories and outer jackets- some simple wrist watches while some fitbits, some cheap bicycles while some with gears fitted on them. It was almost as if this pristine and protected hub of the batch of 2025-26 boys required you to strip off all your status symbols before stepping in- with only your popularity and your sporting abilities defining your quality of time here.\\n\\n"
-            f"This place was protected and private, away from the snooping eyes of our parents and teachers, our very 'den'- or the 'hub of indiscipline', as our school authorities would say. Numerous 'festivals' have been held here by our gang, on dates that mean nothing on a normal calendar, just occasions when school and academic lives grow tiring and we all decide a evening's worth of break. Cold-drinks and fast-food flood into the club, funded by the rich boys and fetched by younger boys eager for an excuse to ride their unlicensed scooties. Musically gifted boys haul in their guitars and amplifiers and play rock music while the hall transforms into a nightclub, with torches flickered in perfect sync with the beats to emulate disco lights.\\n\\n"
-            f"Yes, it is this place that I love the most. This is the place that never fails to intoxicate me with a potent solution of liberty and power- a sense of collective invinciblity that will be a part of our teenage memories, a page with a turned corner that we will all revisit from time to time.\"\n"
-            f"- Follow the 'Discuss', 'Evaluate', or 'Country-Specific' template as appropriate.\n"
-            f"- Write in PLAIN TEXT only. No markdown, bold, bullets, or special characters.\n"
-            f"- CRITICAL REQUIREMENT (MARKING SCHEME ADHERENCE): You MUST construct your entire argument using EXACTLY the points, evidence, and perspectives listed in the Marking Scheme provided above. DO NOT invent random generic arguments. If the question refers to specific texts (e.g., Essay Paper 12), you MUST analyze those exact texts as specified in the marking scheme. Do not wander off-topic.\n"
-            f"- Ensure the answer would score Level 5 (25-30 marks) across all AOs.\n"
-            f"\n"
-            f"*** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"
-        ) if is_general_paper_2 else (
-            f"<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.\\n"
-            f"The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').\\n"
-            f"It MUST follow standard A-Level Essay structure with proper paragraph breaks.\\n"
-            f"IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.\\n"
-            f"Your essay should naturally embed:\\n"
-            f"- Precise definition of terms.\\n"
-            f"- Specific facts/figures applied from the case.\\n"
-            f"- Developed chains of argument (Point -> Evidence -> Explanation + Connectors).\\n"
-            f"- A balanced conclusion with short/long term view.\\n"
-            f"CRITICAL: The model answer must read exactly like a perfect student essay. DO NOT mention the student.> "
-        )
+        # Default Fallback
+        model_answer_instruction = f"""<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.
+The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').
+It MUST follow standard A-Level Essay structure with proper paragraph breaks.
+IMPORTANT: If the question involves data, calculate ratios/figures IN THE BACKGROUND first.
+Your essay should naturally embed:
+- Precise definition of terms.
+- Specific facts/figures applied from the case.
+- Developed chains of argument (Point -> Evidence -> Explanation + Connectors).
+- A balanced conclusion with short/long term view.
+CRITICAL: The model answer must read exactly like a perfect student essay. DO NOT mention the student.>"""
 
     # 4. DETERMINE FEEDBACK STRUCTURE
     if custom_feedback_structure:
