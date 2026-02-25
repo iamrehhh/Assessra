@@ -437,7 +437,8 @@ const ALLOWED_USERS = {
     "Angira.Barman": "Angira",
     "Mod.Discord": "Mod",
     "IGCSE.Mod": "IGCSE",
-    "Ahana.Bera": "Ahana"
+    "Ahana.Bera": "Ahana",
+    "Arkojyoti.Chatterjee": "Arko"
 };
 
 function getUser() { return localStorage.getItem('user'); }
@@ -2452,7 +2453,7 @@ function openExamTimeline() {
 // ==========================================
 // ABOUT SECTION MODAL
 // ==========================================
-window.openAboutModal = function() {
+window.openAboutModal = function () {
     // Remove existing modal if any
     const existing = document.getElementById('about-section-modal');
     if (existing) existing.remove();
