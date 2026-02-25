@@ -1107,33 +1107,6 @@ Object.assign(paperData, {
             { n: '2(i)', m: 2, l: '', t: "In your opinion, explain the benefit to people of experiencing extreme challenges. Do not repeat material from Section B.", i: [] }
         ]
     },
-    // --- COMPREHENSION PAPER 22 (Feb/March '24) ---
-    'gp_2024_fm_22': {
-        title: "Comprehension Paper 22 (Feb/March '24)",
-        pdf: "papers/8021_m24_qp_22.pdf",
-        ms: "papers/8021_m24_ms_22.pdf",
-        insert: "papers/8021_m24_in_22.pdf",
-        questions: [
-            { n: '1(a)', m: 10, l: '', t: "Considering the advantages and one disadvantage, explain why Francesca is most likely to choose the zoo trip. Do not refer to the other celebration ideas. Answer in continuous prose.", i: [] },
-            { n: '1(b)(i)', m: 4, l: '', t: "Explain two reasons why Antony and Maria might like the luxury hotel weekend. Do not refer to the other celebration ideas.", i: [] },
-            { n: '1(b)(ii)', m: 4, l: '', t: "Explain two reasons why Antony and Maria might not like the surprise party. Do not refer to the other celebration ideas.", i: [] },
-            { n: '1(c)', m: 1, l: '', t: "State the one piece of the Additional Information provided which is the least relevant when Francesca is deciding which celebration to organise.", i: [] },
-            { n: '1(d)(i)', m: 2, l: '', t: "Using only evidence from Katarina\'s email: justify James\'s claim that Katarina likes to tell other people what to do", i: [] },
-            { n: '1(d)(ii)', m: 2, l: '', t: "Using only evidence from Katarina\'s email: justify James\'s claim that Katarina is not telling the truth when saying she cannot contribute financially", i: [] },
-            { n: '1(d)(iii)', m: 2, l: '', t: "Using only evidence from Katarina\'s email: justify James\'s claim that Katarina will not help with the organisation.", i: [] },
-            { n: '2(a)', m: 2, l: '', t: "Identify how American prisons have been portrayed in some films and on TV.", i: [] },
-            { n: '2(b)', m: 1, l: '', t: "Identify Brian Roettinger\'s goal in running art classes for prisoners in California.", i: [] },
-            { n: '2(c)(i)', m: 1, l: '', t: "Using only lines 1 to 18 of the material, identify the exact word which means the following: to redefine", i: [] },
-            { n: '2(c)(ii)', m: 1, l: '', t: "Using only lines 1 to 18 of the material, identify the exact word which means the following: partnership", i: [] },
-            { n: '2(c)(iii)', m: 1, l: '', t: "Using only lines 1 to 18 of the material, identify the exact word which means the following: reflective self-awareness.", i: [] },
-            { n: '2(d)', m: 5, l: '', t: "Explain why Willo Perron believes \'in the transformative power of art and the redemptive potential of self-expression\' for prisoners (lines 25 to 31). Answer using your own words as far as possible.", i: [] },
-            { n: '2(e)', m: 5, l: '', t: "According to Perron, explain how the duo\'s proposed arts programme demonstrates their views relating to prison reform (lines 32 to 44). Answer in about 50 words.", i: [] },
-            { n: '2(f)', m: 3, l: '', t: "According to Annie Buckley, identify the \'overwhelmingly positive\' features of the guest artist programme for prisoners (lines 45 to 55). Answer in about 30 words.", i: [] },
-            { n: '2(g)', m: 2, l: '', t: "Suggest why Buckley might find the example of the prisoner\'s daughter \'powerful\'.", i: [] },
-            { n: '2(h)', m: 2, l: '', t: "Explain why the organisers of the arts programme do not ask prisoners \'why they\'re there or what they\'ve done\' (lines 59 to 64). Answer in about 20 words.", i: [] },
-            { n: '2(i)', m: 2, l: '', t: "In your opinion, explain why art therapy for prisoners might not be successful.", i: [] }
-        ]
-    },
     // --- COMPREHENSION PAPER 21 (Oct/Nov '24) ---
     'gp_2024_on_21': {
         title: "Comprehension Paper 21 (Oct/Nov '24)",
@@ -1227,8 +1200,164 @@ Object.assign(paperData, {
             { n: '2(h)', m: 2, l: '', t: "Explain the possible link between watching flickering flames and dramatic scene-cuts in movies.", i: [] },
             { n: '2(i)', m: 3, l: '', t: "In your opinion, suggest one example of a negative effect of watching television. Justify your choice. Do not repeat material from Section B.", i: [] }
         ]
-    }
+    },
 
+    // --- COMPREHENSION PAPER 21 (OCT/NOV '25) ---
+    'gp_2025_on_21': {
+        title: "Comprehension Paper 21 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_21.pdf",
+        ms: "papers/8021_w25_ms_21.pdf",
+        insert: "papers/8021_w25_in_21.pdf",
+        questions: [
+            { n: '1(a)', m: 2, l: '', t: 'With reference to the Background and the Additional Information only, identify two pieces of evidence showing that Ereeka might not have the necessary experience to organise a \'memorable\' press launch.', i: [] },
+            { n: '1(b)', m: 1, l: '', t: 'Identify the disadvantage with The Beeches.', i: [] },
+            { n: '1(c)', m: 1, l: '', t: 'Identify the likely date for the press launch.', i: [] },
+            { n: '1(d)', m: 3, l: '', t: 'Explain why Ereeka will have to ask Caradoc Schmidt for an increased budget for the press launch.', i: [] },
+            { n: '1(e)', m: 8, l: '', t: 'Apart from the cost, explain the disadvantages of The Tuila Hotel and Conference Centre as a venue for the press launch. Answer in continuous prose.', i: [] },
+            { n: '1(f)', m: 3, l: '', t: 'Explain why working with Orlando Teeme has been a particularly stressful time for Klaus, the Director of Manufacturing.', i: [] },
+            { n: '1(g)', m: 1, l: '', t: 'With reference to the Additional Information, identify the reason why Caradoc Schmidt might soon regret linking his company\'s reputation with that of Orlando Teeme.', i: [] },
+            { n: '1(h)', m: 4, l: '', t: 'In your opinion, explain why, as Schmidt + Daughters Tableware has its own design team, Caradoc Schmidt asked Orlando Teeme to design a product range for them.', i: [] },
+            { n: '1(i)', m: 2, l: '', t: 'In your opinion, suggest why celebrities feel the need to be chauffeured in limousines.', i: [] },
+            { n: '2(a)', m: 1, l: '', t: 'Identify when lulia Bochis started to become interested in illustrations, specifically.', i: [] },
+            { n: '2(b)(i)', m: 1, l: '', t: 'Using your own words as far as possible, explain the meaning of the following five phrases as used in the material: \'something changed in me\' (lines 9-10)', i: [] },
+            { n: '2(b)(ii)', m: 1, l: '', t: 'Using your own words as far as possible, explain the meaning of the following five phrases as used in the material: \'felt a strong desire to travel\' (line 10)', i: [] },
+            { n: '2(b)(iii)', m: 1, l: '', t: 'Using your own words as far as possible, explain the meaning of the following five phrases as used in the material: \'obstacles that got in the way\' (line 12)', i: [] },
+            { n: '2(b)(iv)', m: 1, l: '', t: 'Using your own words as far as possible, explain the meaning of the following five phrases as used in the material: \'after much deliberation\' (line 12)', i: [] },
+            { n: '2(b)(v)', m: 1, l: '', t: 'Using your own words as far as possible, explain the meaning of the following five phrases as used in the material: \'there wasn\'t a better moment than "now"\' (lines 12-13).', i: [] },
+            { n: '2(c)(i)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: life-changing (lines 9-18)', i: [] },
+            { n: '2(c)(ii)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: imagination (lines 20-25)', i: [] },
+            { n: '2(c)(iii)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: affect emotionally (lines 20-25)', i: [] },
+            { n: '2(c)(iv)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: remedy (lines 29-34)', i: [] },
+            { n: '2(c)(v)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: encouraging (lines 44-56).', i: [] },
+            { n: '2(d)(i)', m: 1, l: '', t: 'Regarding lulia\'s site: describe what makes her feel humble', i: [] },
+            { n: '2(d)(ii)', m: 1, l: '', t: 'Regarding lulia\'s site: identify the comparison she makes to describe her site.', i: [] },
+            { n: '2(e)', m: 2, l: '', t: 'According to lulia, identify one advantage and one disadvantage of an easily accessible virtual world.', i: [] },
+            { n: '2(f)', m: 5, l: '', t: 'Explain the structure of lulia\'s book (lines 44-52). Answer in about 50 words using continuous prose.', i: [] },
+            { n: '2(g)(i)', m: 1, l: '', t: 'State the exact meaning of the following five words as they are used in the material: thought-provoking (line 7)', i: [] },
+            { n: '2(g)(ii)', m: 1, l: '', t: 'State the exact meaning of the following five words as they are used in the material: perspective (line 20)', i: [] },
+            { n: '2(g)(iii)', m: 1, l: '', t: 'State the exact meaning of the following five words as they are used in the material: resilient (line 26)', i: [] },
+            { n: '2(g)(iv)', m: 1, l: '', t: 'State the exact meaning of the following five words as they are used in the material: solace (line 31)', i: [] },
+            { n: '2(g)(v)', m: 1, l: '', t: 'State the exact meaning of the following five words as they are used in the material: superficial (line 35).', i: [] }
+        ]
+    },
+    // --- COMPREHENSION PAPER 22 (OCT/NOV '25) ---
+    'gp_2025_on_22': {
+        title: "Comprehension Paper 22 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_22.pdf",
+        ms: "papers/8021_w25_ms_22.pdf",
+        insert: "papers/8021_w25_in_22.pdf",
+        questions: [
+            { n: '1(a)', m: 2, l: '', t: 'Explain how Sarantown University would be more likely to recover the building costs if they were to choose Sarantown Select\'s proposal.', i: [] },
+            { n: '1(b)(i)', m: 1, l: '', t: 'With reference to the Additional Information only: state the one piece of information which suggests that Georg Walters\' claim to offer \'fully costed construction plans\' might be untrue.', i: [] },
+            { n: '1(b)(ii)', m: 2, l: '', t: 'With reference to the Additional Information only: state two pieces of information which suggest that tourists may not wish to stay in the new building.', i: [] },
+            { n: '1(c)', m: 10, l: '', t: 'Apart from financial reasons, explain why Bilal Mendes-Smith is more likely to choose Sarantown Select to design the new student accommodation block. Do not refer to Barton Build. Answer in continuous prose.', i: [] },
+            { n: '1(d)', m: 8, l: '', t: 'Apart from any financial considerations, explain four reasons which suggest that Georg Walters has not read the contract brief properly. Do not refer to Sarantown Select.', i: [] },
+            { n: '1(e)', m: 2, l: '', t: 'Explain how Bilal Mendes-Smith could have made the contract brief more specific.', i: [] },
+            { n: '2(a)', m: 3, l: '', t: 'Identify three different informal language features in lines 1-3.', i: [] },
+            { n: '2(b)', m: 3, l: '', t: 'Identify three reasons why an individual might consider quiet quitting (lines 9-16). Answer in about 30 words using continuous prose.', i: [] },
+            { n: '2(c)', m: 4, l: '', t: 'Identify four of the ways in which the working from home (WFH) phenomenon has changed people\'s attitudes to work and leisure time.', i: [] },
+            { n: '2(d)(i)', m: 1, l: '', t: 'Using your own words as far as possible, state the meaning of the following five phrases, as they are used in the material: most of us are eager to please (line 31)', i: [] },
+            { n: '2(d)(ii)', m: 1, l: '', t: 'Using your own words as far as possible, state the meaning of the following five phrases, as they are used in the material: even more so if we like our boss (line 32)', i: [] },
+            { n: '2(d)(iii)', m: 1, l: '', t: 'Using your own words as far as possible, state the meaning of the following five phrases, as they are used in the material: those who choose not to join in may be criticised (line 33)', i: [] },
+            { n: '2(d)(iv)', m: 1, l: '', t: 'Using your own words as far as possible, state the meaning of the following five phrases, as they are used in the material: existing issues are never addressed (line 40)', i: [] },
+            { n: '2(d)(v)', m: 1, l: '', t: 'Using your own words as far as possible, state the meaning of the following five phrases, as they are used in the material: further burdens your colleagues (lines 41-42).', i: [] },
+            { n: '2(e)(i)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: withdrawing (from) (lines 1-13)', i: [] },
+            { n: '2(e)(ii)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: sidelined (lines 30-43)', i: [] },
+            { n: '2(e)(iii)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: (to) stop working (lines 39-57)', i: [] },
+            { n: '2(e)(iv)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: mutinous (lines 50-60)', i: [] },
+            { n: '2(e)(v)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: harmful (lines 50-60)', i: [] },
+            { n: '2(e)(vi)', m: 1, l: '', t: 'Identify the exact word or phrase in the material which means the following: (to) work beyond expectations (lines 61-71).', i: [] },
+            { n: '2(f)', m: 2, l: '', t: 'In your opinion, suggest one example of a reward an employee might be able to negotiate with their supervisor. Justify your response.', i: [] },
+            { n: '2(g)', m: 2, l: '', t: 'In your opinion, explain what is meant by the following quotation: \'You can\'t change someone who doesn\'t see an issue in their actions\' (Unknown). Do not repeat any material from Section B.', i: [] }
+        ]
+    },
+    // --- COMPREHENSION PAPER 23 (OCT/NOV '25) ---
+    'gp_2025_on_23': {
+        title: "Comprehension Paper 23 (Oct/Nov '25)",
+        pdf: "papers/8021_w25_qp_23.pdf",
+        ms: "papers/8021_w25_ms_23.pdf",
+        insert: "papers/8021_w25_in_23.pdf",
+        questions: [
+            { n: '1(a)', m: 2, l: '', t: 'According to the Background, identify the two main reasons for the increase in the volume of traffic.', i: [] },
+            { n: '1(b)(i)', m: 2, l: '', t: 'With reference to Option A: explain the problem for the taxi drivers. Do not refer to Option B.', i: [] },
+            { n: '1(b)(ii)', m: 2, l: '', t: 'With reference to Option A: explain the advantages for the tourists. Do not refer to Option B.', i: [] },
+            { n: '1(c)', m: 10, l: '', t: 'Explain the advantages and one disadvantage for students if Option B were chosen. Do not refer to Option A. Answer in continuous prose.', i: [] },
+            { n: '1(d)', m: 2, l: '', t: 'Explain why Option B may create a problem for the residents of Battax.', i: [] },
+            { n: '1(e)', m: 2, l: '', t: 'Explain why the engineering department\'s accreditation application may not be successful.', i: [] },
+            { n: '1(f)', m: 3, l: '', t: 'Identify three reasons why the student questionnaire feedback may not provide accurate data.', i: [] },
+            { n: '1(g)', m: 2, l: '', t: 'In your opinion, explain one way a busy town could reduce the amount of traffic. Do not repeat any material from Section A.', i: [] },
+            { n: '2(a)(i)', m: 1, l: '', t: 'Identify the exact word in the material which means the following: shared (lines 3-7)', i: [] },
+            { n: '2(a)(ii)', m: 1, l: '', t: 'Identify the exact word in the material which means the following: acknowledged (lines 9-14)', i: [] },
+            { n: '2(a)(iii)', m: 1, l: '', t: 'Identify the exact word in the material which means the following: (to) control (lines 15-20).', i: [] },
+            { n: '2(b)', m: 1, l: '', t: 'Identify one of the benefits for the volunteers who ate a large breakfast.', i: [] },
+            { n: '2(c)', m: 1, l: '', t: 'According to Brady Holmer, state one of the problems caused by missing breakfast.', i: [] },
+            { n: '2(d)', m: 5, l: '', t: 'Explain why going for a walk \'might be good advice\' (lines 26-29). Answer using your own words as far as possible.', i: [] },
+            { n: '2(e)(i)', m: 1, l: '', t: 'Explain the benefit for a person who achieved seven to eight hours of sleep.', i: [] },
+            { n: '2(e)(ii)', m: 3, l: '', t: 'Identify the three disadvantages for people who lacked sleep (lines 38-41). Answer in about 30 words using continuous prose.', i: [] },
+            { n: '2(e)(iii)', m: 3, l: '', t: 'According to Steve Magness, identify three different ways we can improve the way we sleep.', i: [] },
+            { n: '2(f)', m: 2, l: '', t: 'Explain why Brady Holmer says, \'The five servings recommendation is sound advice, but also somewhat arbitrary\' (lines 50-53). Answer in about 20 words using continuous prose.', i: [] },
+            { n: '2(g)', m: 2, l: '', t: 'Identify the two different reasons why \'the recommendation to drink two litres of water a day is not based on hard science\' (lines 58-64). Answer in about 20 words using continuous prose.', i: [] },
+            { n: '2(h)(i)', m: 1, l: '', t: 'State the exact meaning of the following four phrases as they are used in the material: (to) sift fact from fiction (lines 1-2)', i: [] },
+            { n: '2(h)(ii)', m: 1, l: '', t: 'State the exact meaning of the following four phrases as they are used in the material: (the) bottom line (line 21)', i: [] },
+            { n: '2(h)(iii)', m: 1, l: '', t: 'State the exact meaning of the following four phrases as they are used in the material: stepping up the pace (line 29)', i: [] },
+            { n: '2(h)(iv)', m: 1, l: '', t: 'State the exact meaning of the following four phrases as they are used in the material: cognitive decline (line 54).', i: [] }
+        ]
+    },
+    // --- COMPREHENSION PAPER 22 (FEB/MARCH '25) ---
+    'gp_2025_fm_22': {
+        title: "Comprehension Paper 22 (Feb/March '25)",
+        pdf: "papers/8021_m25_qp_22.pdf",
+        ms: "papers/8021_m25_ms_22.pdf",
+        insert: "papers/8021_m25_in_22.pdf",
+        questions: [
+            { n: '1(a)', m: 10, l: '', t: 'Considering the advantages, explain why the commemorative statue is more likely to be chosen. Do not refer to the new road bridge. Answer in continuous prose.', i: [] },
+            { n: '1(b)', m: 6, l: '', t: 'Explain three disadvantages of choosing the new road bridge. Do not refer to the commemorative statue.', i: [] },
+            { n: '1(c)(i)', m: 1, l: '', t: 'With reference to the Additional Information only, state the one piece of information which is the least relevant when deciding which proposal to choose.', i: [] },
+            { n: '1(c)(ii)', m: 1, l: '', t: 'With reference to the Additional Information only, state the one piece of information which suggests that Justina\'s claim that \'decision-makers in Mosman have done absolutely nothing to help us here\' is untrue.', i: [] },
+            { n: '1(d)(i)', m: 2, l: '', t: 'With reference to the television interview extracts only, explain why Justina has a vested interest in favouring the new road bridge.', i: [] },
+            { n: '1(d)(ii)', m: 1, l: '', t: 'With reference to the television interview extracts only, identify the comment by Bernardo which supports Justina\'s claim that her \'region is too often neglected\'.', i: [] },
+            { n: '1(e)', m: 4, l: '', t: 'In your opinion, explain two possible problems with the format of the proposed referendum, as outlined in the Background.', i: [] },
+            { n: '2(a)(i)', m: 2, l: '', t: 'Identify two of the main aims of Operation Mincemeat during the Second World War, as stated in lines 1-6.', i: [] },
+            { n: '2(a)(ii)', m: 2, l: '', t: 'Identify two reasons given for the success of the deception (lines 9-13). Answer in about 20 words using continuous prose.', i: [] },
+            { n: '2(b)', m: 3, l: '', t: 'Suggest what each of the three pieces of \'wallet litter\' was intended to show about \'Major Martin\' (lines 19-25). Answer in about 30 words using continuous prose.', i: [] },
+            { n: '2(c)', m: 4, l: '', t: 'Explain why Macintyre uses the term \'hidden hero\' in connection with the people who devised the plan (lines 26-29). Answer using your own words as far as possible.', i: [] },
+            { n: '2(d)', m: 2, l: '', t: 'Explain the importance of creativity in Operation Mincemeat (lines 30-35). Answer in about 40 words using continuous prose.', i: [] },
+            { n: '2(e)', m: 2, l: '', t: 'Identify the two ways in which the theatre company updated the story for modern audiences (lines 43-48). Answer in about 20 words using continuous prose.', i: [] },
+            { n: '2(f)(i)', m: 2, l: '', t: 'Explain how creating Martin could be seen as \'morally doubtful\' (lines 49-51). Answer using your own words as far as possible.', i: [] },
+            { n: '2(f)(ii)', m: 2, l: '', t: 'Explain how Michelle Ashford justifies \'the less ethical aspects of the story\' (lines 56-59). Answer using your own words as far as possible.', i: [] },
+            { n: '2(g)', m: 3, l: '', t: 'Explain the present-day justifications offered for having used the dead man in Operation Mincemeat.', i: [] },
+            { n: '2(h)(i)', m: 1, l: '', t: 'Referring to lines 14-25 only, identify the exact word or phrase in the material which means: impeded', i: [] },
+            { n: '2(h)(ii)', m: 1, l: '', t: 'Referring to lines 14-25 only, identify the exact word or phrase in the material which means: wily', i: [] },
+            { n: '2(h)(iii)', m: 1, l: '', t: 'Referring to lines 14-25 only, identify the exact word or phrase in the material which means: appropriate for.', i: [] }
+        ]
+    },
+    // --- COMPREHENSION PAPER 22 (FEB/MARCH '24) ---
+    'gp_2024_fm_22': {
+        title: "Comprehension Paper 22 (Feb/March '24)",
+        pdf: "papers/8021_m24_qp_22.pdf",
+        ms: "papers/8021_m24_ms_22.pdf",
+        insert: "papers/8021_m24_in_22.pdf",
+        questions: [
+            { n: '1(a)', m: 10, l: '', t: 'Considering the advantages and one disadvantage, explain why Francesca is most likely to choose the zoo trip. Do not refer to the other celebration ideas. Answer in continuous prose.', i: [] },
+            { n: '1(b)(i)', m: 4, l: '', t: 'Explain two reasons why Antony and Maria might like the luxury hotel weekend. Do not refer to the other celebration ideas.', i: [] },
+            { n: '1(b)(ii)', m: 4, l: '', t: 'Explain two reasons why Antony and Maria might not like the surprise party. Do not refer to the other celebration ideas.', i: [] },
+            { n: '1(c)', m: 1, l: '', t: 'State the one piece of the Additional Information provided which is the least relevant when Francesca is deciding which celebration to organise.', i: [] },
+            { n: '1(d)(i)', m: 2, l: '', t: 'Using only evidence from Katarina\'s email: justify James\'s claim that Katarina likes to tell other people what to do', i: [] },
+            { n: '1(d)(ii)', m: 2, l: '', t: 'Using only evidence from Katarina\'s email: justify James\'s claim that Katarina is not telling the truth when saying she cannot contribute financially', i: [] },
+            { n: '1(d)(iii)', m: 2, l: '', t: 'Using only evidence from Katarina\'s email: justify James\'s claim that Katarina will not help with the organisation.', i: [] },
+            { n: '2(a)', m: 2, l: '', t: 'Identify how American prisons have been portrayed in some films and on TV.', i: [] },
+            { n: '2(b)', m: 1, l: '', t: 'Identify Brian Roettinger\'s goal in running art classes for prisoners in California.', i: [] },
+            { n: '2(c)(i)', m: 1, l: '', t: 'Using only lines 1 to 18 of the material, identify the exact word which means the following: to redefine', i: [] },
+            { n: '2(c)(ii)', m: 1, l: '', t: 'Using only lines 1 to 18 of the material, identify the exact word which means the following: partnership', i: [] },
+            { n: '2(c)(iii)', m: 1, l: '', t: 'Using only lines 1 to 18 of the material, identify the exact word which means the following: reflective self-awareness.', i: [] },
+            { n: '2(d)', m: 5, l: '', t: 'Explain why Willo Perron believes \'in the transformative power of art and the redemptive potential of self-expression\' for prisoners (lines 25 to 31). Answer using your own words as far as possible.', i: [] },
+            { n: '2(e)', m: 5, l: '', t: 'According to Perron, explain how the duo\'s proposed arts programme demonstrates their views relating to prison reform (lines 32 to 44). Answer in about 50 words.', i: [] },
+            { n: '2(f)', m: 3, l: '', t: 'According to Annie Buckley, identify the \'overwhelmingly positive\' features of the guest artist programme for prisoners (lines 45 to 55). Answer in about 30 words.', i: [] },
+            { n: '2(g)', m: 2, l: '', t: 'Suggest why Buckley might find the example of the prisoner\'s daughter \'powerful\'.', i: [] },
+            { n: '2(h)', m: 2, l: '', t: 'Explain why the organisers of the arts programme do not ask prisoners \'why they\'re there or what they\'ve done\' (lines 59 to 64). Answer in about 20 words.', i: [] },
+            { n: '2(i)', m: 2, l: '', t: 'In your opinion, explain why art therapy for prisoners might not be successful.', i: [] }
+        ]
+    },
 });
 
 // === 2. THE VISUAL CARDS ===
@@ -1285,6 +1414,34 @@ const gpCardsP1 = `
         </div>
     </div>
 
+
+    <!-- 2025 PAPERS -->
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('gp_2025_on_21')">
+            <span class="paper-tag">8021/21</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">29 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_22')">
+            <span class="paper-tag">8021/22</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">22 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_23')">
+            <span class="paper-tag">8021/23</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">23 Questions</p>
+        </div>
+    </div>
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('gp_2025_fm_22')">
+            <span class="paper-tag">8021/22</span>
+            <h3>Feb/March '25</h3>
+            <p style="color:#888; margin-top:5px;">19 Questions</p>
+        </div>
+    </div>
     <!-- 2024 PAPERS -->
     <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
     <div class="papers-grid">
@@ -1340,6 +1497,34 @@ const gpCardsP2 = `
         <p style="color:#666;">Paper 2: Comprehension (50 Marks)</p>
     </div>
 
+
+    <!-- 2025 PAPERS -->
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Oct / Nov Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('gp_2025_on_21')">
+            <span class="paper-tag">8021/21</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">29 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_22')">
+            <span class="paper-tag">8021/22</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">22 Questions</p>
+        </div>
+        <div class="paper-card" onclick="openPaper('gp_2025_on_23')">
+            <span class="paper-tag">8021/23</span>
+            <h3>Oct/Nov '25</h3>
+            <p style="color:#888; margin-top:5px;">23 Questions</p>
+        </div>
+    </div>
+    <div class="series-header"><div class="year-big">2025</div><div class="series-name">Feb / March Series</div></div>
+    <div class="papers-grid">
+        <div class="paper-card" onclick="openPaper('gp_2025_fm_22')">
+            <span class="paper-tag">8021/22</span>
+            <h3>Feb/March '25</h3>
+            <p style="color:#888; margin-top:5px;">19 Questions</p>
+        </div>
+    </div>
     <!-- 2024 PAPERS -->
     <div class="series-header"><div class="year-big">2024</div><div class="series-name">Oct / Nov Series</div></div>
     <div class="papers-grid">
