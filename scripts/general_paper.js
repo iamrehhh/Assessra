@@ -1021,7 +1021,7 @@ Object.assign(paperData, {
     'gp_2024_mj_21': {
         title: "Comprehension Paper 21 (May/June '24)",
         pdf: "papers/8021_s24_qp_21.pdf",
-        ms: "papers/8021_s24_ms_21.pdf",
+        ms: "papers/8021_s24_ms_11.pdf",
         insert: "papers/8021_s24_in_21.pdf",
         questions: [
             { n: '1(a)(i)', m: 2, l: '', t: "Identify two pieces of evidence which show that Mungo uses a controlling style of leadership: with reference to only the Background", i: [] },
@@ -1053,7 +1053,7 @@ Object.assign(paperData, {
     'gp_2024_mj_22': {
         title: "Comprehension Paper 22 (May/June '24)",
         pdf: "papers/8021_s24_qp_22.pdf",
-        ms: "papers/8021_s24_ms_22.pdf",
+        ms: "papers/8021_s24_ms_12.pdf",
         insert: "papers/8021_s24_in_22.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: "With reference to the Additional Information, explain why Olivia \'refused emphatically\' to put herself forward for election, despite Mr Beppe\'s pleas.", i: [] },
@@ -1081,7 +1081,7 @@ Object.assign(paperData, {
     'gp_2024_mj_23': {
         title: "Comprehension Paper 23 (May/June '24)",
         pdf: "papers/8021_s24_qp_23.pdf",
-        ms: "papers/8021_s24_ms_23.pdf",
+        ms: "papers/8021_s24_ms_13.pdf",
         insert: "papers/8021_s24_in_23.pdf",
         questions: [
             { n: '1(a)', m: 1, l: '', t: "With reference to the Background, identify the Royberts\' two aims for their much-needed family break.", i: [] },
@@ -1111,7 +1111,7 @@ Object.assign(paperData, {
     'gp_2024_on_21': {
         title: "Comprehension Paper 21 (Oct/Nov '24)",
         pdf: "papers/8021_w24_qp_21.pdf",
-        ms: "papers/8021_w24_ms_21.pdf",
+        ms: "papers/8021_w24_ms_11.pdf",
         insert: "papers/8021_w24_in_21.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: "With reference to the Additional Information, explain why Mrs Mattieu\'s statement about the sales figures in the Background is inaccurate.", i: [] },
@@ -1145,7 +1145,7 @@ Object.assign(paperData, {
     'gp_2024_on_22': {
         title: "Comprehension Paper 22 (Oct/Nov '24)",
         pdf: "papers/8021_w24_qp_22.pdf",
-        ms: "papers/8021_w24_ms_22.pdf",
+        ms: "papers/8021_w24_ms_12.pdf",
         insert: "papers/8021_w24_in_22.pdf",
         questions: [
             { n: '1(a)', m: 10, l: '', t: "Considering only the advantages, explain why the free distribution of the newspaper to all households might be successful. Do not refer to Strategy 1. Answer in continuous prose.", i: [] },
@@ -1172,7 +1172,7 @@ Object.assign(paperData, {
     'gp_2024_on_23': {
         title: "Comprehension Paper 23 (Oct/Nov '24)",
         pdf: "papers/8021_w24_qp_23.pdf",
-        ms: "papers/8021_w24_ms_23.pdf",
+        ms: "papers/8021_w24_ms_13.pdf",
         insert: "papers/8021_w24_in_23.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: "Explain the one reason why a wedding reception at The Beauville Hotel could be difficult for Jasmine, Carla\'s sister.", i: [] },
@@ -1206,7 +1206,7 @@ Object.assign(paperData, {
     'gp_2025_on_21': {
         title: "Comprehension Paper 21 (Oct/Nov '25)",
         pdf: "papers/8021_w25_qp_21.pdf",
-        ms: "papers/8021_w25_ms_21.pdf",
+        ms: "papers/8021_w25_ms_11.pdf",
         insert: "papers/8021_w25_in_21.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: 'With reference to the Background and the Additional Information only, identify two pieces of evidence showing that Ereeka might not have the necessary experience to organise a \'memorable\' press launch.', i: [] },
@@ -1244,7 +1244,7 @@ Object.assign(paperData, {
     'gp_2025_on_22': {
         title: "Comprehension Paper 22 (Oct/Nov '25)",
         pdf: "papers/8021_w25_qp_22.pdf",
-        ms: "papers/8021_w25_ms_22.pdf",
+        ms: "papers/8021_w25_ms_12.pdf",
         insert: "papers/8021_w25_in_22.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: 'Explain how Sarantown University would be more likely to recover the building costs if they were to choose Sarantown Select\'s proposal.', i: [] },
@@ -1275,7 +1275,7 @@ Object.assign(paperData, {
     'gp_2025_on_23': {
         title: "Comprehension Paper 23 (Oct/Nov '25)",
         pdf: "papers/8021_w25_qp_23.pdf",
-        ms: "papers/8021_w25_ms_23.pdf",
+        ms: "papers/8021_w25_ms_13.pdf",
         insert: "papers/8021_w25_in_23.pdf",
         questions: [
             { n: '1(a)', m: 2, l: '', t: 'According to the Background, identify the two main reasons for the increase in the volume of traffic.', i: [] },
@@ -1307,7 +1307,7 @@ Object.assign(paperData, {
     'gp_2025_fm_22': {
         title: "Comprehension Paper 22 (Feb/March '25)",
         pdf: "papers/8021_m25_qp_22.pdf",
-        ms: "papers/8021_m25_ms_22.pdf",
+        ms: "papers/8021_m25_ms_12.pdf",
         insert: "papers/8021_m25_in_22.pdf",
         questions: [
             { n: '1(a)', m: 10, l: '', t: 'Considering the advantages, explain why the commemorative statue is more likely to be chosen. Do not refer to the new road bridge. Answer in continuous prose.', i: [] },
@@ -1335,7 +1335,7 @@ Object.assign(paperData, {
     'gp_2024_fm_22': {
         title: "Comprehension Paper 22 (Feb/March '24)",
         pdf: "papers/8021_m24_qp_22.pdf",
-        ms: "papers/8021_m24_ms_22.pdf",
+        ms: "papers/8021_m24_ms_12.pdf",
         insert: "papers/8021_m24_in_22.pdf",
         questions: [
             { n: '1(a)', m: 10, l: '', t: 'Considering the advantages and one disadvantage, explain why Francesca is most likely to choose the zoo trip. Do not refer to the other celebration ideas. Answer in continuous prose.', i: [] },

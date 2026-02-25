@@ -1209,6 +1209,8 @@ async function submitAnswer(pid, qn) {
             body: JSON.stringify({
                 question: qData.t,
                 pdf_path: paperData[pid].pdf,
+                ms_path: paperData[pid].ms || '',
+                insert_path: paperData[pid].insert || '',
                 case_study: `Refer to extracted text from ${paperData[pid].title}.`,
                 answer: ans,
                 marks: qData.m,

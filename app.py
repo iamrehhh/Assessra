@@ -306,6 +306,8 @@ def mark():
     # Logic.js sends "Refer to attached PDF..." string usually.
     # We will look for a new field 'pdf_path' to be explicit.
     pdf_path = data.get('pdf_path', '')
+    ms_path_override = data.get('ms_path', '')
+    insert_path_override = data.get('insert_path', '')
     case_study_text = ""
     
     if pdf_path and os.path.exists(pdf_path):
@@ -374,9 +376,21 @@ def mark():
         elif "_qp_" in filename:
             ms_filename = filename.replace("_qp_", "_ms_")
             in_filename = filename.replace("_qp_", "_in_")
+            # SPECIAL CASE: GP2 marking schemes use Paper 1 numbering
+            # e.g. 8021_s24_qp_21.pdf → 8021_s24_ms_11.pdf (NOT ms_21)
+            if "8021" in filename and "_qp_2" in filename:
+                ms_filename = ms_filename.replace("_ms_2", "_ms_1")
+                print(f"📋 GP2 MS path correction: {ms_filename}")
         
+        # Use frontend-provided override paths if available
         insert_text = ""
-        if in_filename:
+        if insert_path_override and os.path.exists(insert_path_override):
+            print(f"✅ FOUND Insert (override): {insert_path_override}")
+            try:
+                insert_text = extract_text_from_pdf(insert_path_override)
+            except Exception as e:
+                print(f"❌ Failed to extract Insert (override): {e}")
+        elif in_filename:
             in_path = os.path.join(base_dir, in_filename)
             if os.path.exists(in_path):
                 print(f"✅ FOUND Insert: {in_path}")
@@ -385,16 +399,26 @@ def mark():
                 except Exception as e:
                     print(f"❌ Failed to extract Insert: {e}")
                     
-        if ms_filename:
-            ms_path = os.path.join(base_dir, ms_filename)
-            if os.path.exists(ms_path):
-                print(f"✅ FOUND Marking Scheme: {ms_path}")
-                try:
-                    marking_scheme_text = extract_text_from_pdf(ms_path)
-                    if insert_text:
-                        marking_scheme_text += "\n\n[INSERT / PASSAGE TEXT]\n" + insert_text
-                except Exception as e:
-                    print(f"❌ Failed to extract Marking Scheme: {e}")
+        # Use frontend-provided MS path if available, else use derived path
+        resolved_ms_path = None
+        if ms_path_override and os.path.exists(ms_path_override):
+            resolved_ms_path = ms_path_override
+            print(f"✅ FOUND Marking Scheme (override): {resolved_ms_path}")
+        elif ms_filename:
+            derived_ms_path = os.path.join(base_dir, ms_filename)
+            if os.path.exists(derived_ms_path):
+                resolved_ms_path = derived_ms_path
+                print(f"✅ FOUND Marking Scheme: {resolved_ms_path}")
+            else:
+                print(f"❌ Marking Scheme NOT FOUND at: {derived_ms_path}")
+
+        if resolved_ms_path:
+            try:
+                marking_scheme_text = extract_text_from_pdf(resolved_ms_path)
+                if insert_text:
+                    marking_scheme_text += "\n\n[INSERT / PASSAGE TEXT]\n" + insert_text
+            except Exception as e:
+                print(f"❌ Failed to extract Marking Scheme: {e}")
 
     # 1. DETERMINE SYSTEM PROMPT
     if custom_system_prompt:
@@ -550,9 +574,20 @@ def mark():
               "examiner_justification": "Concise 2-3 sentence technical justification based on the applicable rubric and standard Cambridge annotations."
             }}
 
-        CRITICAL INSTRUCTION: Analyze the student answer based heavily on the marking scheme and insert provided below. Use those as reference data.
+        CRITICAL INSTRUCTION — MANDATORY MARKING SCHEME REFERENCE:
+        For EVERY question you mark, you MUST follow this exact process:
+        1. LOCATE the specific question number (e.g., 1(a), 2(b)(i), 2(h)(iii)) in the MARKING SCHEME text provided below.
+        2. READ the EXACT expected answer points, accepted synonyms, and mark allocation listed for that question in the marking scheme.
+        3. COMPARE the student's answer ONLY against those specific points from the marking scheme.
+        4. For point-based questions (1-6 marks): Award marks ONLY for points that match or closely paraphrase the marking scheme answers. Do NOT invent your own criteria.
+        5. For vocabulary/word-meaning questions (1 mark): ONLY accept the exact word, phrase, or synonym explicitly listed in the marking scheme. If the student gives a different word not in the marking scheme, award 0.
+        6. For "identify" questions: The answer MUST match the specific evidence/point listed in the marking scheme.
+        7. For levels-based questions (8-10 marks): Use the marking scheme's indicative content to evaluate quality and completeness of arguments.
+        8. In your feedback, EXPLICITLY STATE what the marking scheme expected vs. what the student wrote.
+        
+        If no marking scheme is provided below, use your best Cambridge examiner judgement, but flag this in your justification.
 
-        {'[MARKING SCHEME AND INSERT REFERENCE DATA]' if marking_scheme_text else ''}
+        {'[MARKING SCHEME AND INSERT REFERENCE DATA]' if marking_scheme_text else '[WARNING: No marking scheme was found for this paper. Marking based on general Cambridge principles only.]'}
         {marking_scheme_text if marking_scheme_text else ''}
         """
     else:
@@ -1036,10 +1071,22 @@ def mark():
             rubric = f"""
             SHORT ANSWER / VOCABULARY RUBRIC ({marks} MARKS):
             CRITICAL: This is a General Paper 2 Comprehension question, NOT a math calculation.
-            - Provide marks strictly for content that matches the Marking Scheme and context of the passage.
-            - If it asks for the meaning of a word, it MUST be defined in the context of the passage, not just a generic dictionary definition.
+            
+            MANDATORY MARKING SCHEME PROCESS:
+            1. FIND this exact question number in the Marking Scheme provided in the system prompt.
+            2. READ the accepted answer(s) listed for this question.
+            3. COMPARE the student's answer DIRECTLY against those accepted answers.
+            4. Award marks ONLY for content that matches or closely paraphrases the Marking Scheme answers.
+            
+            SPECIFIC RULES BY QUESTION TYPE:
+            - "Identify the exact word/phrase" questions: ONLY accept the specific word(s) listed in the marking scheme. No synonyms, no alternatives.
+            - "State the exact meaning" questions: Accept ONLY the definition or synonym listed in the marking scheme for that specific word in context.
+            - "Identify" / "State" questions: The answer must match the specific point from the marking scheme.
+            - "Explain" questions: Award 1 mark for the point identified + 1 mark for development/explanation, as per marking scheme structure.
+            - "Using your own words" questions: The student must paraphrase, not copy from the text. But the meaning must still match the marking scheme answer.
+            
             - Award 1 mark per valid point made, up to the maximum {marks} marks.
-            - If the student's answer captures the core meaning accurately in their own words, award the mark.
+            - DO NOT award marks for points not supported by the marking scheme.
             - DO NOT penalize for lack of complex examples in 1-2 mark questions.
             """
         else:
@@ -1317,9 +1364,24 @@ Yes, it is this place that I love the most. This is the place that never fails t
 
 *** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"""
     elif is_general_paper_2:
-        model_answer_instruction = f"""<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.
+        if marks <= 3:
+            model_answer_instruction = f"""<Write the perfect model answer for this {marks}-mark question.
+CRITICAL REQUIREMENT: The model answer MUST be derived DIRECTLY from the marking scheme provided above.
+1. Find the specific question number in the marking scheme text.
+2. Copy the accepted answer points exactly as listed in the marking scheme.
+3. For vocabulary questions (1 mark): State ONLY the exact word/synonym from the marking scheme.
+4. For "identify" questions: State ONLY the specific point from the marking scheme.
+5. For 2-3 mark questions: List each marking scheme point clearly.
+6. Do NOT fabricate or supplement with information not in the marking scheme.
+7. Keep it concise — just the answer the student needs to write to get full marks.
+
+CRITICAL: The model answer must read exactly like a perfect student response. DO NOT mention the student.>"""
+        else:
+            model_answer_instruction = f"""<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.
 The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').
 It MUST follow standard A-Level Essay structure with proper paragraph breaks for longer answers.
+
+CRITICAL REQUIREMENT (MARKING SCHEME ADHERENCE): You MUST construct your answer using the points and content listed in the Marking Scheme provided above for this specific question number. Do not invent arguments not supported by the marking scheme.
 
 CRITICAL REQUIREMENT (VOCABULARY QUESTIONS): If the question asks for the "exact meaning" of words as used in the material (e.g., "perspective (line 20)"):
 1. The answer must draw EXCLUSIVELY on the provided case study context and marking scheme.
