@@ -1338,14 +1338,15 @@ async function submitAnswer(pid, qn) {
 // === 4. HELPER FUNCTIONS ===
 
 function updateWordCount(el, limitStr) {
-    if (!limitStr) return;
     const count = el.value.trim().split(/\s+/).filter(w => w.length > 0).length;
     const wcId = el.id.replace('ans_', 'wc_');
     const wcEl = document.getElementById(wcId);
     if (wcEl) {
-        wcEl.innerText = `${count} words (${limitStr})`;
-        wcEl.classList.toggle('bad', count < parseInt(limitStr.split('-')[0]));
-        wcEl.classList.toggle('good', count >= parseInt(limitStr.split('-')[0]));
+        wcEl.innerText = limitStr ? `${count} words (${limitStr})` : `${count} words`;
+        if (limitStr) {
+            wcEl.classList.toggle('bad', count < parseInt(limitStr.split('-')[0]));
+            wcEl.classList.toggle('good', count >= parseInt(limitStr.split('-')[0]));
+        }
     }
 }
 
