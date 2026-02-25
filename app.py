@@ -1361,31 +1361,31 @@ Yes, it is this place that I love the most. This is the place that never fails t
 
 *** FINAL REMINDER: YOUR MODEL ANSWER MUST BE 600-700 WORDS. NOT 400. NOT 500. NOT 800. EXACTLY 600-700. COUNT YOUR WORDS. ***>"""
     elif is_general_paper_2:
+        ms_ref = f"\n\nMARKING SCHEME ANSWER FOR REFERENCE:\n{marking_scheme_answer}" if marking_scheme_answer else ""
         if marks <= 3:
             model_answer_instruction = f"""<Write the perfect model answer for this {marks}-mark question.
-CRITICAL REQUIREMENT: The model answer MUST be derived DIRECTLY from the marking scheme provided above.
-1. Find the specific question number in the marking scheme text.
-2. Copy the accepted answer points exactly as listed in the marking scheme.
-3. For vocabulary questions (1 mark): State ONLY the exact word/synonym from the marking scheme.
-4. For "identify" questions: State ONLY the specific point from the marking scheme.
-5. For 2-3 mark questions: List each marking scheme point clearly.
-6. Do NOT fabricate or supplement with information not in the marking scheme.
-7. Keep it concise — just the answer the student needs to write to get full marks.
+Take reference from the marking scheme below to understand the EXPECTED POINTS, then write a clean, well-worded answer that a top student would write.
+{ms_ref}
 
-CRITICAL: The model answer must read exactly like a perfect student response. DO NOT mention the student.>"""
+GUIDELINES:
+- For vocabulary / "exact meaning" questions (1 mark): Provide the best synonym or definition that fits the context of the passage. Use the marking scheme's accepted words as your guide.
+- For "identify the exact word/phrase" questions (1 mark): State the precise word/phrase from the passage as listed in the marking scheme.
+- For "identify" / "state" / "explain" questions (2-3 marks): Write a concise, clear answer covering all the required points from the marking scheme, but word it naturally as a student would.
+- Keep the answer concise and direct — just what's needed for full marks.
+- The model answer must read like a perfect student response. DO NOT mention "the marking scheme" or "the student".>"""
         else:
-            model_answer_instruction = f"""<Write a perfect A* model answer ({word_guide}) that would score FULL MARKS.
-The answer MUST be a standalone continuous prose candidate response. DO NOT use bullet points, headings, bold text, or explicit Assessment Objective labels (like 'AO1' or 'Definition:').
-It MUST follow standard A-Level Essay structure with proper paragraph breaks for longer answers.
+            model_answer_instruction = f"""<Write a perfect A* model answer that would score FULL MARKS on this {marks}-mark question.
+Take reference from the marking scheme below to understand the KEY POINTS and EXPECTED CONTENT, then use your creativity to craft a polished, well-structured response.
+{ms_ref}
 
-CRITICAL REQUIREMENT (MARKING SCHEME ADHERENCE): You MUST construct your answer using the points and content listed in the Marking Scheme provided above for this specific question number. Do not invent arguments not supported by the marking scheme.
-
-CRITICAL REQUIREMENT (VOCABULARY QUESTIONS): If the question asks for the "exact meaning" of words as used in the material (e.g., "perspective (line 20)"):
-1. The answer must draw EXCLUSIVELY on the provided case study context and marking scheme.
-2. The definition must reflect how the word was used in that specific sentence, not its generic dictionary definition.
-3. Be concise and precise.
-
-CRITICAL: The model answer must read exactly like a perfect student essay or response. DO NOT mention the student.>"""
+GUIDELINES:
+- Cover ALL the key points from the marking scheme, but express them in your own fluent, natural prose.
+- For continuous prose questions: Write in proper paragraphs with smooth transitions. DO NOT use bullet points, headings, or labels.
+- For opinion questions: Build well-reasoned arguments that align with the spirit of the marking scheme while demonstrating genuine analytical thinking.
+- For "explain" questions: Develop each point with a clear point → evidence → explanation chain.
+- The answer should demonstrate what an excellent student response looks like — articulate, well-structured, and comprehensive.
+- DO NOT just list marking scheme points. Weave them into a natural, flowing response.
+- The model answer must read like a perfect student essay/response. DO NOT mention "the marking scheme" or "the student".>"""
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER FALLBACK (non-business, non-gp2)
         model_answer_instruction = f"""<For calculation questions: YOU MUST FOLLOW THIS EXACT FORMAT:
