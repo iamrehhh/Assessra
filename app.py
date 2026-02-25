@@ -1068,33 +1068,14 @@ def mark():
         """
         word_guide = "Subject to 100-200 word feedback limit"
     elif is_general_paper_2:
-        if marks <= 4:
-            rubric = f"""
-            SHORT ANSWER / VOCABULARY RUBRIC ({marks} MARKS):
-            CRITICAL: This is a General Paper 2 Comprehension question, NOT a math calculation.
-            
-            MANDATORY MARKING SCHEME PROCESS:
-            1. FIND this exact question number in the Marking Scheme provided in the system prompt.
-            2. READ the accepted answer(s) listed for this question.
-            3. COMPARE the student's answer DIRECTLY against those accepted answers.
-            4. Award marks ONLY for content that matches or closely paraphrases the Marking Scheme answers.
-            
-            SPECIFIC RULES BY QUESTION TYPE:
-            - "Identify the exact word/phrase" questions: ONLY accept the specific word(s) listed in the marking scheme. No synonyms, no alternatives.
-            - "State the exact meaning" questions: Accept ONLY the definition or synonym listed in the marking scheme for that specific word in context.
-            - "Identify" / "State" questions: The answer must match the specific point from the marking scheme.
-            - "Explain" questions: Award 1 mark for the point identified + 1 mark for development/explanation, as per marking scheme structure.
-            - "Using your own words" questions: The student must paraphrase, not copy from the text. But the meaning must still match the marking scheme answer.
-            
-            - Award 1 mark per valid point made, up to the maximum {marks} marks.
-            - DO NOT award marks for points not supported by the marking scheme.
-            - DO NOT penalize for lack of complex examples in 1-2 mark questions.
-            """
-        else:
-            rubric = f"""
-            LONG ANSWER RUBRIC ({marks} MARKS):
-            All rules and structures apply per the Universal Marking System Prompt provided above. Max Marks for this specific question submission: {marks}
-            """
+        rubric = f"""
+        GENERAL PAPER 2 — MARKING INSTRUCTION ({marks} MARKS):
+        Do NOT use any external rubric. Mark this question ONLY by comparing the student's answer against:
+        1. The MARKING SCHEME (provided in the system prompt above) — find question {question_number} in the Paper 2 section.
+        2. The QUESTION PAPER question text.
+        3. The INSERT / PASSAGE text.
+        Award marks strictly according to the accepted answers listed in the marking scheme for this specific question. Maximum marks: {marks}.
+        """
         word_guide = "According to question constraints"
     elif marks <= 4:
         # CALCULATION / SHORT ANSWER (non-business)
