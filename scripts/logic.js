@@ -1209,6 +1209,8 @@ async function submitAnswer(pid, qn) {
             body: JSON.stringify({
                 question: qData.t,
                 question_number: qData.n,
+                marking_scheme_answer: qData.a || '',
+                username: getUser() || '',
                 pdf_path: paperData[pid].pdf,
                 ms_path: paperData[pid].ms || '',
                 insert_path: paperData[pid].insert || '',

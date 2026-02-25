@@ -303,6 +303,10 @@ def mark():
     marks = int(data.get('marks', 12))
     question_text = data.get('question', '')
     question_number = data.get('question_number', '')
+    marking_scheme_answer = data.get('marking_scheme_answer', '')
+    username = data.get('username', 'Student')
+    # Extract first name from username (format: First.Last)
+    student_name = username.split('.')[0] if username else 'Student'
     # 'case_study' might now be a path if provided by frontend, or text. 
     # Logic.js sends "Refer to attached PDF..." string usually.
     # We will look for a new field 'pdf_path' to be explicit.
@@ -575,16 +579,26 @@ def mark():
               "examiner_justification": "Concise 2-3 sentence technical justification based on the applicable rubric and standard Cambridge annotations."
             }}
 
-        CRITICAL INSTRUCTION — MANDATORY MARKING SCHEME REFERENCE:
-        For EVERY question you mark, you MUST follow this exact process:
-        1. LOCATE the specific question number (e.g., 1(a), 2(b)(i), 2(h)(iii)) in the MARKING SCHEME text provided below.
-        2. READ the EXACT expected answer points, accepted synonyms, and mark allocation listed for that question in the marking scheme.
-        3. COMPARE the student's answer ONLY against those specific points from the marking scheme.
-        4. For point-based questions (1-6 marks): Award marks ONLY for points that match or closely paraphrase the marking scheme answers. Do NOT invent your own criteria.
-        5. For vocabulary/word-meaning questions (1 mark): ONLY accept the exact word, phrase, or synonym explicitly listed in the marking scheme. If the student gives a different word not in the marking scheme, award 0.
-        6. For "identify" questions: The answer MUST match the specific evidence/point listed in the marking scheme.
-        7. For levels-based questions (8-10 marks): Use the marking scheme's indicative content to evaluate quality and completeness of arguments.
-        8. In your feedback, EXPLICITLY STATE what the marking scheme expected vs. what the student wrote.
+        CRITICAL INSTRUCTION — MARKING APPROACH:
+        You are marking a PAPER 2 (Comprehension) question. Your marking MUST be based on:
+        1. The MARKING SCHEME provided below — this is your primary reference.
+        2. The INSERT / PASSAGE text — the source material students are working from.
+        3. The QUESTION PAPER question text.
+        
+        FLEXIBLE MARKING PRINCIPLE:
+        - The student's answer does NOT need to match the marking scheme word-for-word.
+        - If the student has worded their answer differently, written it in a different format, or used different phrasing, it can STILL earn marks as long as the ESSENCE and KEY POINTS align with the marking scheme.
+        - Use your creative and subjective ability to understand each response. Assess whether the student has captured the core meaning, even if expressed differently.
+        - For "own words" questions, actively reward effective paraphrasing that demonstrates genuine comprehension.
+        - For "identify exact word" questions, only the specific word(s) from the text are acceptable.
+        - For opinion questions, accept any well-reasoned point that aligns with the spirit of the marking scheme or is otherwise valid.
+        
+        PERSONALIZED FEEDBACK:
+        - Address the student by their first name: "{student_name}".
+        - Reference specific parts of THEIR answer in your feedback.
+        - Explain clearly what they got right (strengths) and what went wrong (weaknesses).
+        - For weaknesses, explain HOW they can fix it and what the marking scheme expected.
+        - Be encouraging but honest. Make the feedback feel like a real teacher talking to the student.
         
         If no marking scheme is provided below, use your best Cambridge examiner judgement, but flag this in your justification.
 
@@ -1070,11 +1084,12 @@ def mark():
     elif is_general_paper_2:
         rubric = f"""
         GENERAL PAPER 2 — MARKING INSTRUCTION ({marks} MARKS):
-        Do NOT use any external rubric. Mark this question ONLY by comparing the student's answer against:
-        1. The MARKING SCHEME (provided in the system prompt above) — find question {question_number} in the Paper 2 section.
-        2. The QUESTION PAPER question text.
-        3. The INSERT / PASSAGE text.
-        Award marks strictly according to the accepted answers listed in the marking scheme for this specific question. Maximum marks: {marks}.
+        Mark this question by comparing the student's answer against the MARKING SCHEME ANSWER provided below.
+        The student's answer does NOT need to be worded identically — award marks if the ESSENCE matches.
+        Use your creative and subjective judgement to assess whether the student has captured the key points.
+        Maximum marks: {marks}.
+        
+        {'MARKING SCHEME ANSWER FOR Q' + question_number + ':\n' + marking_scheme_answer if marking_scheme_answer else 'Use the marking scheme PDF data provided in the system prompt to find question ' + question_number + ' in the Paper 2 section.'}
         """
         word_guide = "According to question constraints"
     elif marks <= 4:
@@ -1461,8 +1476,25 @@ CRITICAL: The model answer must read exactly like a perfect student essay. DO NO
     """
     elif is_general_paper_2:
         feedback_structure = f"""
-    You must output your final grading using the structure defined in STEP 7 — GRADE SUMMARY of the System Prompt.
-    Make sure to put THIS summary into the 'detailed_critique' string of the JSON output, and put exactly what the student should write to get full marks according to PART 5 - MODEL ANSWER CONSTRUCTION PROTOCOL in the 'model_answer' string of the JSON output.
+    Structure for 'detailed_critique' field — PERSONALIZED FEEDBACK:
+    1. Final Score: [X]/{marks}
+    2. Personalized Examiner Feedback for {student_name}:
+       
+       **Strengths** (What {student_name} did well):
+       - Reference the specific parts of {student_name}'s answer that earned marks.
+       - Quote or paraphrase what they wrote and explain WHY it matched the marking scheme.
+       - Be specific: "Your point about X effectively captured the marking scheme's requirement for Y."
+       
+       **Areas to Improve** (Where {student_name} lost marks):
+       - Identify exactly where {student_name}'s answer fell short.
+       - Quote the weak part and explain what the marking scheme expected instead.
+       - Be constructive: "{student_name}, your answer mentioned X, but the marking scheme required Y because..."
+       
+       **How to Fix It**:
+       - Give {student_name} a specific tip on how to improve for this type of question.
+       - Provide a brief example of what a stronger answer would look like.
+    
+    TONE: Speak directly to {student_name} as a supportive but rigorous teacher. Be encouraging about strengths, honest about weaknesses, and practical about improvements.
     """
     elif is_business_p3 or is_business_p4:
         # PRAISE-POLISH-PONDER FEEDBACK STRUCTURE FOR BUSINESS PAPERS
