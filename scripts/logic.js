@@ -730,7 +730,10 @@ let paperTimerActive = false;
 let paperTimerPaused = false;
 
 function getTimerMinutes(pid) {
-    if (pid.startsWith('gp_')) return 75;            // General Paper: 1h 15m
+    if (pid.startsWith('gp_')) {
+        if (pid.includes('_2')) return 105; // General Paper 2: 1h 45m
+        return 75;                          // General Paper 1: 1h 15m
+    }
     if (pid.startsWith('econ_')) {
         if (pid.includes('_4')) return 120;           // Economics P4: 2h 00m
         return 0; // Economics P3 MCQ uses its own timer
@@ -914,7 +917,18 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
     } catch (e) { console.error("Error loading paper data:", e); }
 
     // Generate questions HTML
-    let qHtml = `<h2 style="margin-bottom:20px; color:var(--lime-dark); border-bottom:2px solid #eee; padding-bottom:10px;">${data.title}</h2>`;
+    let isGP2 = pid.startsWith('gp_') && pid.includes('_2');
+    let qHtml = `<div style="position: relative;">
+        <h2 style="margin-bottom:20px; color:var(--lime-dark); border-bottom:2px solid #eee; padding-bottom:10px; padding-right: 40px;">${data.title}</h2>
+        ${isGP2 && data.pdf ? `<button onclick="toggleQPPdf('${data.pdf}')" style="position: absolute; top: -5px; right: 0; background: none; border: none; cursor: pointer; padding: 5px; color: var(--lime-dark);" title="View Question Paper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <circle cx="10" cy="13" r="2"></circle>
+                <line x1="11.41" y1="14.41" x2="14" y2="17"></line>
+            </svg>
+        </button>` : ''}
+    </div>`;
     data.questions.forEach(q => {
         const att = attempts[q.n] || {};
         const done = att.score !== undefined;
@@ -1014,7 +1028,7 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
                 </div>
                 
                 <!-- Right: Questions Panel (40%) -->
-                <div id="questions-panel" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box;" id="questions-container">
+                <div id="questions-panel" class="questions-container" style="flex: 4; height: 100%; overflow-y: auto; padding: 30px; background: white; box-sizing: border-box; position: relative;">
                     ${qHtml}
                     <div style="height: 100px;"></div>
                 </div>
@@ -2435,3 +2449,83 @@ function openExamTimeline() {
     document.body.appendChild(modal);
 }
 
+// === GP2 QUESTION PAPER MODAL TOGGLE ===
+window.toggleQPPdf = function (pdfUrl) {
+    let modal = document.getElementById('qp-pdf-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'qp-pdf-modal';
+        modal.style.position = 'fixed';
+        modal.style.right = '40px';
+        modal.style.bottom = '40px';
+        modal.style.width = '45vw';
+        modal.style.height = '80vh';
+        modal.style.minWidth = '400px';
+        modal.style.backgroundColor = 'white';
+        modal.style.boxShadow = '0 10px 40px rgba(0,0,0,0.3)';
+        modal.style.borderRadius = '12px';
+        modal.style.zIndex = '100000';
+        modal.style.display = 'flex';
+        modal.style.flexDirection = 'column';
+        modal.style.overflow = 'hidden';
+        modal.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        modal.style.transform = 'translateY(120%) scale(0.9)';
+        modal.style.opacity = '0';
+
+        const header = document.createElement('div');
+        header.style.background = 'var(--lime-dark, #2e593a)';
+        header.style.color = 'white';
+        header.style.padding = '12px 20px';
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+
+        const title = document.createElement('span');
+        title.innerText = 'Question Paper';
+        title.style.fontWeight = '600';
+        title.style.fontFamily = "'Inter', sans-serif";
+        title.style.fontSize = '1.1rem';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '✖';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.color = 'white';
+        closeBtn.style.fontSize = '1.2rem';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.padding = '0';
+        closeBtn.onclick = () => {
+            modal.style.transform = 'translateY(120%) scale(0.9)';
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+        };
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
+
+        const iframe = document.createElement('iframe');
+        iframe.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH';
+        iframe.style.width = '100%';
+        iframe.style.flexGrow = '1';
+        iframe.style.border = 'none';
+
+        modal.appendChild(header);
+        modal.appendChild(iframe);
+        document.body.appendChild(modal);
+
+        // Force reflow
+        modal.offsetHeight;
+    }
+
+    if (modal.style.display === 'none' || modal.style.opacity === '0') {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.transform = 'translateY(0) scale(1)';
+            modal.style.opacity = '1';
+        }, 10);
+    } else {
+        modal.style.transform = 'translateY(120%) scale(0.9)';
+        modal.style.opacity = '0';
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+};
