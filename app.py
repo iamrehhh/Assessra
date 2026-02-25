@@ -1,6 +1,8 @@
 import os
 import json
 import logging
+import time
+import datetime
 from typing import Dict, Any
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -2055,21 +2057,32 @@ def swot_analysis():
 # ---------------------------------------------------------
 # AI QUOTE ENDPOINT
 # ---------------------------------------------------------
+daily_quote_cache: Dict[str, Any] = {
+    "date": None,
+    "quote_data": None
+}
+
 @app.route('/quote', methods=['GET'])
 def get_quote():
+    global daily_quote_cache
+
     if not OPENAI_API_KEY:
         return jsonify({"quote": "Education is the most powerful weapon which you can use to change the world."})
+
+    today_str = datetime.date.today().isoformat()
+    if daily_quote_cache["date"] == today_str and daily_quote_cache["quote_data"]:
+        return jsonify(daily_quote_cache["quote_data"])
 
     try:
         system_prompt = """
         You are a creative, articulate, and slightly cheeky AI that generates unique, academically-inclined quotes for students logging into an educational platform.
         Generate exactly ONE short quote. Ensure it changes every time. 
-        Focus HEAVILY on generating lots of quotes with the following themes: very romantic, sometimes lyric, erotic, and teasing remarks like boyfriend-type and girlfriend-type banter. You can also mix in philosophical, motivating, or very demotivating themes occasionally.
-        However, EVERY quote MUST maintain an intelligent, sophisticated, and academically inclined tone, even when being highly romantic, erotic, or teasing.
+        Focus HEAVILY on generating quotes matching one of the following themes: Romantic, Erotic, Motivating, Demotivating, Philosophical, Cheeky, Humorous, Touching, and Badass.
+        However, EVERY quote MUST maintain an intelligent, sophisticated, and academically inclined tone.
         Return ONLY a JSON response in the format: {"quote": "The actual quote text without surrounding quotes"}
         """
         
-        user_prompt = "Generate a fresh, unique quote according to the instructions."
+        user_prompt = f"Generate a fresh, unique quote according to the instructions. Today's date seed is {today_str} to ensure uniqueness."
 
         client = OpenAI(api_key=OPENAI_API_KEY)
         response = client.chat.completions.create(
@@ -2082,10 +2095,18 @@ def get_quote():
             response_format={"type": "json_object"}
         )
         content = response.choices[0].message.content
-        return jsonify(json.loads(content))
+        quote_data = json.loads(content)
+        
+        # Cache the quote for today
+        daily_quote_cache["date"] = today_str
+        daily_quote_cache["quote_data"] = quote_data
+
+        return jsonify(quote_data)
     except Exception as e:
         logger.error(f"Quote Generation Error: {str(e)}")
-        return jsonify({"quote": "Education is the most powerful weapon which you can use to change the world."}), 500
+        # Fallback quote if generation fails
+        fallback_data = {"quote": "Education is the most powerful weapon which you can use to change the world."}
+        return jsonify(fallback_data), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
