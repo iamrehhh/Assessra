@@ -955,9 +955,15 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
             <div style="text-align: center; margin-top: 6px; font-size: 0.85rem; color: #888;">${(() => {
                 const now = new Date();
                 const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-                const used = parseInt(localStorage.getItem('submissions_daily_' + today) || '0', 10);
                 let maxAttempts = 12;
-                if (u === 'Biswajit.Saha' && today === '2026-02-25') maxAttempts = 15;
+                if (u === 'Biswajit.Saha' && today === '2026-02-25') {
+                    maxAttempts = 15;
+                    if (!localStorage.getItem('b_reset_15')) {
+                        localStorage.setItem('submissions_daily_' + today, '0');
+                        localStorage.setItem('b_reset_15', 'true');
+                    }
+                }
+                const used = parseInt(localStorage.getItem('submissions_daily_' + today) || '0', 10);
                 const left = Math.max(0, maxAttempts - used);
                 return left > 0 ? '📊 ' + left + '/' + maxAttempts + ' submissions remaining today' : '⚠️ Daily limit reached (' + maxAttempts + '/' + maxAttempts + ')';
             })()}</div>
@@ -1152,13 +1158,16 @@ async function submitAnswer(pid, qn) {
         String(now.getDate()).padStart(2, '0');
 
     const limitKey = 'submissions_daily_' + today;
-    const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
-
     const u = getUser();
     let maxAttempts = 12;
     if (u === 'Biswajit.Saha' && today === '2026-02-25') {
         maxAttempts = 15;
+        if (!localStorage.getItem('b_reset_15')) {
+            localStorage.setItem(limitKey, '0');
+            localStorage.setItem('b_reset_15', 'true');
+        }
     }
+    const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
 
     if (dailyCount >= maxAttempts) {
         showToast('⚠️ You\'ve reached your daily limit of ' + maxAttempts + ' question submissions. Come back tomorrow!', 'warning');
