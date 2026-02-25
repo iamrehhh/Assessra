@@ -205,7 +205,7 @@ def generate_with_gemini(api_key, system_instruction, user_prompt):
             
     return None, 500
 
-def generate_with_gpt(system_instruction, user_prompt):
+def generate_with_gpt(system_instruction, user_prompt, temperature=1.0):
     """
     Helper function to call OpenAI GPT-4o-mini with retry logic, timeout, and JSON mode.
     """
@@ -224,7 +224,7 @@ def generate_with_gpt(system_instruction, user_prompt):
                     {"role": "system", "content": system_instruction},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=1.0,
+                temperature=temperature,
                 max_tokens=16384,
                 response_format={"type": "json_object"}
             )
@@ -1082,14 +1082,17 @@ def mark():
         """
         word_guide = "Subject to 100-200 word feedback limit"
     elif is_general_paper_2:
+        ms_text = 'MARKING SCHEME ANSWER FOR Q' + question_number + ':\n' + marking_scheme_answer if marking_scheme_answer else 'Use the marking scheme PDF data provided in the system prompt to find question ' + question_number + ' in the Paper 2 section.'
         rubric = f"""
-        GENERAL PAPER 2 — MARKING INSTRUCTION ({marks} MARKS):
-        Mark this question by comparing the student's answer against the MARKING SCHEME ANSWER provided below.
-        The student's answer does NOT need to be worded identically — award marks if the ESSENCE matches.
-        Use your creative and subjective judgement to assess whether the student has captured the key points.
+        GENERAL PAPER 2 — STRICT MARKING INSTRUCTION ({marks} MARKS):
+        Mark this question by strictly comparing the student's answer against the MARKING SCHEME ANSWER provided below.
+        The student's answer does NOT need to be worded identically — award marks if the ESSENCE of the point matches.
+        HOWEVER, DO NOT award marks for creative or subjective points that are NOT present in the marking scheme. You must NOT hallucinate acceptable answers.
+        If a point from the scheme is missing, DO NOT award the mark for that point.
+        Ensure the final mark strictly adds up and does not exceed the maximum possible marks.
         Maximum marks: {marks}.
         
-        {'MARKING SCHEME ANSWER FOR Q' + question_number + ':\n' + marking_scheme_answer if marking_scheme_answer else 'Use the marking scheme PDF data provided in the system prompt to find question ' + question_number + ' in the Paper 2 section.'}
+        {ms_text}
         """
         word_guide = "According to question constraints"
     elif marks <= 4:
@@ -1603,7 +1606,7 @@ CRITICAL: The model answer must read exactly like a perfect student essay. DO NO
     
     # Use GPT-4o Mini for all marking
     logger.info(f"📝 Processing with GPT-4o Mini... (Prompt length: {len(user_prompt)})")
-    text = generate_with_gpt(system_prompt, user_prompt)
+    text = generate_with_gpt(system_prompt, user_prompt, temperature=0.2)
     
     if text:
         cleaned_text = text.replace('```json', '').replace('```', '').strip()
