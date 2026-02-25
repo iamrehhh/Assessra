@@ -1569,8 +1569,8 @@ async function initHome() {
     if (!u) return;
 
     const name = u.split('.')[0] || 'Student';
-    // Random Quote
-    const quotes = [
+    // Random Quote (fallback)
+    const fallbackQuotes = [
         "Success is not final, failure is not fatal: it is the courage to continue that counts.",
         "The only way to do great work is to love what you do.",
         "Believe you can and you're halfway there.",
@@ -1578,7 +1578,22 @@ async function initHome() {
         "Difficult roads often lead to beautiful destinations.",
         "Don't watch the clock; do what it does. Keep going."
     ];
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    let quote = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
+
+    try {
+        // Fetch dynamic quote from backend
+        // We do this concurrently while other things load to avoid blocking the UI too much,
+        // but since we render the UI afterwards, we await it here.
+        const res = await fetch('/quote');
+        if (res.ok) {
+            const data = await res.json();
+            if (data.quote) {
+                quote = data.quote;
+            }
+        }
+    } catch (e) {
+        console.warn("Failed to fetch dynamic quote", e);
+    }
 
     // Insert into DOM
     const view = document.getElementById('view-home');

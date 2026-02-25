@@ -1971,6 +1971,41 @@ def swot_analysis():
         logger.error(f"SWOT Analysis Error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+# ---------------------------------------------------------
+# AI QUOTE ENDPOINT
+# ---------------------------------------------------------
+@app.route('/quote', methods=['GET'])
+def get_quote():
+    if not OPENAI_API_KEY:
+        return jsonify({"quote": "Education is the most powerful weapon which you can use to change the world."})
+
+    try:
+        system_prompt = """
+        You are a creative and articulate AI that generates unique, academically-inclined quotes for students logging into an educational platform.
+        Generate exactly ONE short quote. Ensure it changes every time and fits one of these themes randomly: Very romantic, sometimes lyric, erotic, philosophical, very demotivating, motivating, cheeky remarks like boyfriend type and girlfriend type.
+        However, EVERY quote MUST maintain an academically inclined, intelligent, and sophisticated tone.
+        Return ONLY a JSON response in the format: {"quote": "The actual quote text without surrounding quotes"}
+        """
+        
+        user_prompt = "Generate a fresh, unique quote according to the instructions."
+
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=1.0,
+            response_format={"type": "json_object"}
+        )
+        content = response.choices[0].message.content
+        return jsonify(json.loads(content))
+    except Exception as e:
+        logger.error(f"Quote Generation Error: {str(e)}")
+        return jsonify({"quote": "Education is the most powerful weapon which you can use to change the world."}), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
