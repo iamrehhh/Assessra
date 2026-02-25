@@ -1208,6 +1208,7 @@ async function submitAnswer(pid, qn) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 question: qData.t,
+                question_number: qData.n,
                 pdf_path: paperData[pid].pdf,
                 ms_path: paperData[pid].ms || '',
                 insert_path: paperData[pid].insert || '',

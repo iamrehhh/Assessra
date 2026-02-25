@@ -302,6 +302,7 @@ def mark():
     data = request.json
     marks = int(data.get('marks', 12))
     question_text = data.get('question', '')
+    question_number = data.get('question_number', '')
     # 'case_study' might now be a path if provided by frontend, or text. 
     # Logic.js sends "Refer to attached PDF..." string usually.
     # We will look for a new field 'pdf_path' to be explicit.
@@ -1554,8 +1555,10 @@ CRITICAL: The model answer must read exactly like a perfect student essay. DO NO
     CASE STUDY CONTEXT:
     {case_study_text}
 
+    QUESTION NUMBER: {question_number}
     QUESTION:
     {question_text}
+    {'IMPORTANT: This is a PAPER 2 (Comprehension) question. The marking scheme contains answers for BOTH Paper 1 (Essay) and Paper 2 (Comprehension). You MUST look up question ' + question_number + ' in the PAPER 2 section of the marking scheme, NOT the Paper 1 section.' if is_general_paper_2 and question_number else ''}
 
     STUDENT ANSWER:
     {student_answer}
