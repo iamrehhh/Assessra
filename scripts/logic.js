@@ -956,8 +956,10 @@ async function openPaper(pid, preservedScrollTop = 0, addHistory = true) {
                 const now = new Date();
                 const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
                 const used = parseInt(localStorage.getItem('submissions_daily_' + today) || '0', 10);
-                const left = Math.max(0, 12 - used);
-                return left > 0 ? '📊 ' + left + '/12 submissions remaining today' : '⚠️ Daily limit reached (12/12)';
+                let maxAttempts = 12;
+                if (u === 'Biswajit.Saha' && today === '2026-02-25') maxAttempts = 15;
+                const left = Math.max(0, maxAttempts - used);
+                return left > 0 ? '📊 ' + left + '/' + maxAttempts + ' submissions remaining today' : '⚠️ Daily limit reached (' + maxAttempts + '/' + maxAttempts + ')';
             })()}</div>
             ${done ? `<div class="feedback-box"><h3>Score: ${att.score}/${q.m}</h3>${aoHtml}<div class="feedback-content" style="background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ffeeba;"><strong>Detailed Critique:</strong><br>${att.feedback || att.weaknesses || "No feedback available."}</div><div class="model-ans-box"><strong>Model Answer:</strong><br>${(att.modelAnswer || 'Model answer not generated.').replace(/\n/g, '<br>')}</div></div>` : ''}
         </div>`;
@@ -1152,8 +1154,14 @@ async function submitAnswer(pid, qn) {
     const limitKey = 'submissions_daily_' + today;
     const dailyCount = parseInt(localStorage.getItem(limitKey) || '0', 10);
 
-    if (dailyCount >= 12) {
-        showToast('⚠️ You\'ve reached your daily limit of 12 question submissions. Come back tomorrow!', 'warning');
+    const u = getUser();
+    let maxAttempts = 12;
+    if (u === 'Biswajit.Saha' && today === '2026-02-25') {
+        maxAttempts = 15;
+    }
+
+    if (dailyCount >= maxAttempts) {
+        showToast('⚠️ You\'ve reached your daily limit of ' + maxAttempts + ' question submissions. Come back tomorrow!', 'warning');
         return;
     }
     // -----------------------------------
@@ -1242,8 +1250,8 @@ async function submitAnswer(pid, qn) {
         // Update Daily Limit Text
         const limitDisplay = el.parentElement.querySelector('div[style*="text-align: center"]');
         if (limitDisplay) {
-            const newLeft = Math.max(0, 12 - (dailyCount + 1));
-            limitDisplay.innerText = newLeft > 0 ? `📊 ${newLeft}/12 submissions remaining today` : '⚠️ Daily limit reached (12/12)';
+            const newLeft = Math.max(0, maxAttempts - (dailyCount + 1));
+            limitDisplay.innerText = newLeft > 0 ? `📊 ${newLeft}/${maxAttempts} submissions remaining today` : `⚠️ Daily limit reached (${maxAttempts}/${maxAttempts})`;
         }
 
         // Construct Feedback HTML
