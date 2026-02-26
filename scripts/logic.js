@@ -2735,14 +2735,8 @@ window.openReportModal = function () {
     const overlay = document.getElementById('report-modal-overlay');
     const modal = document.getElementById('report-modal');
     if (overlay && modal) {
-        overlay.classList.remove('hidden');
-        modal.classList.remove('hidden');
-
-        // Slight delay for transition to kick in
-        setTimeout(() => {
-            overlay.classList.remove('opacity-0');
-            modal.classList.remove('opacity-0');
-        }, 10);
+        overlay.classList.add('active');
+        modal.classList.add('active');
 
         document.getElementById('report-type').value = 'Bug';
         document.getElementById('report-desc').value = '';
@@ -2753,13 +2747,8 @@ window.closeReportModal = function () {
     const overlay = document.getElementById('report-modal-overlay');
     const modal = document.getElementById('report-modal');
     if (overlay && modal) {
-        overlay.classList.add('opacity-0');
-        modal.classList.add('opacity-0');
-
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-            modal.classList.add('hidden');
-        }, 300); // match duration
+        overlay.classList.remove('active');
+        modal.classList.remove('active');
     }
 };
 
