@@ -78,6 +78,78 @@ window.adminLogout = () => {
     window.location.href = 'index.html';
 };
 
+// === REPORT ERROR MANAGEMENT ===
+window.loadErrorReports = async function () {
+    const tbody = document.getElementById('reports-table-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">Loading reports...</td></tr>';
+
+    try {
+        const response = await fetch('/get_error_reports');
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+            const reports = data.reports || [];
+            if (reports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #888;">No error reports found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            reports.forEach(report => {
+                const date = new Date(report.timestamp).toLocaleString();
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding:15px; font-size: 0.9rem;">${date}</td>
+                    <td style="padding:15px; font-weight: 500;">${report.user}</td>
+                    <td style="padding:15px;"><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 0.85rem;">${report.issue_type}</span></td>
+                    <td style="padding:15px; font-size: 0.95rem; line-height: 1.4;">${report.description}</td>
+                    <td style="padding:15px; font-size: 0.85rem; color: #666;">${report.context}</td>
+                    <td style="padding:15px; text-align:center;">
+                        <button class="btn-danger" onclick="deleteErrorReport('${report.id}')" title="Mark as Resolved & Delete">
+                            <i class="fas fa-check"></i> Resolve
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px; color: red;">Failed to load reports: ${data.message}</td></tr>`;
+        }
+    } catch (error) {
+        console.error("Error fetching reports:", error);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px; color: red;">Network error. Could not fetch reports.</td></tr>';
+    }
+};
+
+window.deleteErrorReport = async function (reportId) {
+    if (!confirm("Are you sure you want to mark this report as resolved? It will be permanently deleted.")) return;
+
+    try {
+        const response = await fetch('/delete_error_report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ report_id: reportId })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+            if (window.showToast) window.showToast("Report resolved and deleted.");
+            else alert("Report resolved and deleted.");
+            loadErrorReports(); // Refresh the list
+        } else {
+            if (window.showToast) window.showToast("Failed to delete report: " + data.message);
+            else alert("Failed to delete report: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error deleting report:", error);
+        if (window.showToast) window.showToast("Network error. Could not delete report.");
+        else alert("Network error. Could not delete report.");
+    }
+};
+
 // === 4. CONTENT MANAGEMENT ===
 window.savePaperMeta = async () => {
     const pid = document.getElementById('p-id').value.trim();
@@ -271,12 +343,13 @@ window.switchView = (viewId, navEl) => {
         navEl.classList.add('active');
     }
 
-    const titles = { 'dashboard': 'Dashboard', 'content': 'Content Library', 'users': 'User Management', 'settings': 'Settings' };
+    const titles = { 'dashboard': 'Dashboard', 'content': 'Content Library', 'users': 'User Management', 'reports': 'Error Reports', 'settings': 'Settings' };
     document.getElementById('page-title').innerText = titles[viewId] || 'Admin';
 
     if (viewId === 'dashboard') loadDashboardStats();
     if (viewId === 'users') loadUsers();
     if (viewId === 'content') loadContentManager();
+    if (viewId === 'reports') loadErrorReports();
 };
 
 async function loadDashboardStats() {

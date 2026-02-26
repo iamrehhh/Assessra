@@ -72,6 +72,7 @@ VOCAB_SETS_DB_PATH = 'backend/vocab_sets'
 IDIOMS_SETS_DB_PATH = 'backend/idioms_sets'
 SENTENCES_DB_PATH = 'backend/sentences'
 NOTES_DB_PATH = 'backend/notes'
+ERROR_REPORTS_DB_PATH = 'backend/error_reports'
 
 def load_db_from_firebase(path) -> Dict[str, Any]:
     try:
@@ -2108,7 +2109,104 @@ def get_quote():
         fallback_data = {"quote": "Education is the most powerful weapon which you can use to change the world."}
         return jsonify(fallback_data), 500
 
+# ==========================================
+# ERROR REPORTS REPORTING ENDPOINTS
+# ==========================================
+
+@app.route('/report_error', methods=['POST'])
+def report_error():
+    """
+    Endpoint for users to report errors or bugs from the frontend UI.
+    Requires JSON payload: { issue_type, description, user, context }
+    """
+    try:
+        data = request.json
+        issue_type = data.get('issue_type', 'General Bug')
+        description = data.get('description', '')
+        user = data.get('user', 'Anonymous')
+        context = data.get('context', 'Unknown')
+        
+        if not description:
+            return jsonify({"status": "error", "message": "Description is required"}), 400
+            
+        timestamp = datetime.datetime.utcnow().isoformat() + 'Z'
+        
+        report_data = {
+            "issue_type": issue_type,
+            "description": description,
+            "user": user,
+            "context": context,
+            "timestamp": timestamp,
+            "status": "open"
+        }
+        
+        ref = db.reference(ERROR_REPORTS_DB_PATH)
+        # Using push() creates a unique key for each report
+        new_report_ref = ref.push(report_data)
+        
+        logger.info(f"New error report filed by {user}: {issue_type}")
+        return jsonify({"status": "success", "message": "Report submitted successfully", "id": new_report_ref.key}), 201
+        
+    except Exception as e:
+        logger.error(f"Failed to submit error report: {str(e)}")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
+
+@app.route('/get_error_reports', methods=['GET'])
+def get_error_reports():
+    """
+    Endpoint for admins to retrieve all error reports.
+    """
+    try:
+        ref = db.reference(ERROR_REPORTS_DB_PATH)
+        data = ref.get()
+        
+        # Format the data into a list for easier frontend consumption
+        reports = []
+        if data and isinstance(data, dict):
+            for report_id, report_details in data.items():
+                # Add the firebase key into the object so the frontend knows what to delete
+                report = report_details.copy()
+                report['id'] = report_id
+                reports.append(report)
+                
+        # Sort so newest is first based on timestamp
+        reports.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+                
+        return jsonify({"status": "success", "reports": reports}), 200
+        
+    except Exception as e:
+        logger.error(f"Failed to fetch error reports: {str(e)}")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
+
+@app.route('/delete_error_report', methods=['POST'])
+def delete_error_report():
+    """
+    Endpoint for admins to delete/resolve an error report.
+    Requires JSON payload: { report_id }
+    """
+    try:
+        data = request.json
+        report_id = data.get('report_id')
+        
+        if not report_id:
+            return jsonify({"status": "error", "message": "Report ID is required"}), 400
+            
+        ref = db.reference(f"{ERROR_REPORTS_DB_PATH}/{report_id}")
+        
+        # Check if it exists before deleting
+        if ref.get() is None:
+             return jsonify({"status": "error", "message": "Report not found"}), 404
+             
+        ref.delete()
+        
+        logger.info(f"Resolved/Deleted error report: {report_id}")
+        return jsonify({"status": "success", "message": "Report deleted successfully"}), 200
+        
+    except Exception as e:
+        logger.error(f"Failed to delete error report: {str(e)}")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5005))
     app.run(host='0.0.0.0', port=port, debug=True)
 

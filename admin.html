@@ -272,6 +272,11 @@
             </div>
         </div>
         <div class="nav-item">
+            <div class="nav-link" onclick="switchView('reports', this)">
+                <i class="fas fa-bug"></i> Error Reports
+            </div>
+        </div>
+        <div class="nav-item">
             <div class="nav-link" onclick="switchView('settings', this)">
                 <i class="fas fa-cog"></i> Settings
             </div>
@@ -442,6 +447,34 @@
                     </thead>
                     <tbody id="users-table-body">
                         <!-- Loaded via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIEW: ERROR REPORTS -->
+        <div id="view-reports" class="view-section">
+            <div class="glass-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 class="section-title" style="margin-top:0;">🐛 Error Reports</h2>
+                    <button class="btn-primary" onclick="loadErrorReports()"><i class="fas fa-sync-alt"></i>
+                        Refresh</button>
+                </div>
+                <table class="admin-table" style="width:100%; border-collapse:collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="border-bottom:2px solid #eee; text-align: left;">
+                            <th style="padding:15px;">Date</th>
+                            <th style="padding:15px;">User</th>
+                            <th style="padding:15px;">Type</th>
+                            <th style="padding:15px; width: 40%;">Description</th>
+                            <th style="padding:15px;">Context</th>
+                            <th style="padding:15px; text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-table-body">
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding: 20px;">Loading reports...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

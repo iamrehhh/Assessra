@@ -2198,6 +2198,34 @@ textarea.expanded {
     text-align: center;
 }
 
+/* FAB REPORT */
+.fab-report {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.85));
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--lime-primary, #4ade80);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: var(--lime-dark, #166534);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.fab-report:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 8px 25px rgba(74, 222, 128, 0.4);
+    background: white;
+}
+
 /* LOADING STATE */
 .liquid-loader {
     width: 60px;

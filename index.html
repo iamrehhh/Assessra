@@ -2696,6 +2696,37 @@
 
         </div>
     </div>
+    <!-- Report Error Modal & FAB -->
+    <button class="fab-report" onclick="openReportModal()" title="Report an Issue">
+        <i class="fas fa-bug">🐛</i>
+    </button>
+
+    <div id="report-modal-overlay" class="liquid-overlay" onclick="closeReportModal()"></div>
+    <div id="report-modal" class="liquid-modal" style="max-width: 500px;">
+        <div class="liquid-header">
+            <h2 style="margin:0; text-align:center; font-family:'Playfair Display', serif;">Report an Issue</h2>
+            <button class="close-btn" onclick="closeReportModal()" style="position:absolute; right:20px; top:20px; background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
+        </div>
+        <div class="liquid-content">
+            <p style="text-align:center; color:#666; margin-bottom: 20px;">Found a bug or have a suggestion? Let us know!</p>
+            <form id="report-form" onsubmit="submitErrorReport(event)">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Issue Type</label>
+                    <select id="report-type" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:inherit;">
+                        <option value="Bug">Technical Bug</option>
+                        <option value="Content Error">Content Error (e.g. wrong answer)</option>
+                        <option value="Feature Request">Feature Request</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Description</label>
+                    <textarea id="report-desc" required rows="4" placeholder="Please provide details..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <button type="submit" id="report-submit-btn" style="width:100%; background:var(--primary, #2ed573); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:1rem;">Submit Report</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Scorecard Panel -->
     <div id="scorecard-overlay" class="side-menu-overlay" onclick="toggleScorecardPanel()"></div>
