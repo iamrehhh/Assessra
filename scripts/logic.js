@@ -2731,39 +2731,51 @@ window.toggleQPPdf = function (pdfUrl) {
 // REPORT ERROR SYSTEM
 // ==========================================
 
-window.openReportModal = function() {
+window.openReportModal = function () {
     const overlay = document.getElementById('report-modal-overlay');
     const modal = document.getElementById('report-modal');
     if (overlay && modal) {
-        overlay.classList.add('active');
-        modal.classList.add('active');
+        overlay.classList.remove('hidden');
+        modal.classList.remove('hidden');
+
+        // Slight delay for transition to kick in
+        setTimeout(() => {
+            overlay.classList.remove('opacity-0');
+            modal.classList.remove('opacity-0');
+        }, 10);
+
         document.getElementById('report-type').value = 'Bug';
         document.getElementById('report-desc').value = '';
     }
 };
 
-window.closeReportModal = function() {
+window.closeReportModal = function () {
     const overlay = document.getElementById('report-modal-overlay');
     const modal = document.getElementById('report-modal');
     if (overlay && modal) {
-        overlay.classList.remove('active');
-        modal.classList.remove('active');
+        overlay.classList.add('opacity-0');
+        modal.classList.add('opacity-0');
+
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            modal.classList.add('hidden');
+        }, 300); // match duration
     }
 };
 
-window.submitErrorReport = async function(e) {
+window.submitErrorReport = async function (e) {
     if (e) e.preventDefault();
-    
+
     const type = document.getElementById('report-type').value;
     const desc = document.getElementById('report-desc').value;
     const btn = document.getElementById('report-submit-btn');
-    
+
     if (!desc.trim()) {
-        if(window.showToast) window.showToast("Please provide a description");
+        if (window.showToast) window.showToast("Please provide a description");
         else alert("Please provide a description");
         return;
     }
-    
+
     // Determine context based on visible view
     let currentContext = "Unknown";
     document.querySelectorAll('.view-section').forEach(view => {
@@ -2771,44 +2783,44 @@ window.submitErrorReport = async function(e) {
             currentContext = view.id;
         }
     });
-    
+
     // If in workspace, add paper ID
     if (currentContext === 'view-workspace' && window.currentPaperId) {
         currentContext += ` (${window.currentPaperId})`;
     }
-    
+
     const originalText = btn.innerText;
     btn.innerText = "Submitting...";
     btn.disabled = true;
-    
+
     const payload = {
         issue_type: type,
         description: desc,
         user: window.getUser ? window.getUser() : 'Anonymous',
         context: currentContext
     };
-    
+
     try {
         const response = await fetch('/report_error', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok && data.status === 'success') {
             closeReportModal();
-            if(window.showToast) window.showToast("Report submitted successfully. Thank you!");
+            if (window.showToast) window.showToast("Report submitted successfully. Thank you!");
             else alert("Report submitted successfully. Thank you!");
         } else {
             console.error("Report submission failed:", data);
-            if(window.showToast) window.showToast("Failed to submit report. Error: " + (data.message || "Unknown error"));
+            if (window.showToast) window.showToast("Failed to submit report. Error: " + (data.message || "Unknown error"));
             else alert("Failed to submit report. Please try again.");
         }
     } catch (error) {
         console.error("Error submitting report:", error);
-        if(window.showToast) window.showToast("Network error. Please try again later.");
+        if (window.showToast) window.showToast("Network error. Please try again later.");
         else alert("Network error. Please try again later.");
     } finally {
         btn.innerText = originalText;

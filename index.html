@@ -2701,30 +2701,59 @@
         <i class="fas fa-bug">🐛</i>
     </button>
 
-    <div id="report-modal-overlay" class="liquid-overlay" onclick="closeReportModal()"></div>
-    <div id="report-modal" class="liquid-modal" style="max-width: 500px;">
-        <div class="liquid-header">
-            <h2 style="margin:0; text-align:center; font-family:'Playfair Display', serif;">Report an Issue</h2>
-            <button class="close-btn" onclick="closeReportModal()" style="position:absolute; right:20px; top:20px; background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
-        </div>
-        <div class="liquid-content">
-            <p style="text-align:center; color:#666; margin-bottom: 20px;">Found a bug or have a suggestion? Let us know!</p>
-            <form id="report-form" onsubmit="submitErrorReport(event)">
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Issue Type</label>
-                    <select id="report-type" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:inherit;">
-                        <option value="Bug">Technical Bug</option>
-                        <option value="Content Error">Content Error (e.g. wrong answer)</option>
-                        <option value="Feature Request">Feature Request</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">Description</label>
-                    <textarea id="report-desc" required rows="4" placeholder="Please provide details..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <button type="submit" id="report-submit-btn" style="width:100%; background:var(--primary, #2ed573); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:1rem;">Submit Report</button>
-            </form>
+    <div id="report-modal-overlay"
+        class="liquid-overlay fixed top-0 left-0 w-full h-full bg-slate-900/40 backdrop-blur-md z-[2000] hidden opacity-0 transition-opacity duration-300"
+        onclick="closeReportModal()"></div>
+    <div id="report-modal"
+        class="liquid-modal hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[500px] z-[2001] opacity-0 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
+        <div
+            style="background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.85)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6); overflow: hidden;">
+
+            <div style="padding: 32px 32px 24px; border-bottom: 1px solid rgba(0,0,0,0.04); position: relative;">
+                <h2
+                    style="margin:0; text-align:center; font-family:'Playfair Display', serif; font-size: 1.8rem; color: #0f172a;">
+                    Report an Issue</h2>
+                <button class="close-btn" onclick="closeReportModal()"
+                    style="position:absolute; right:24px; top:24px; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; color: #64748b; border:none; font-size:1.2rem; cursor:pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"
+                    onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f172a'"
+                    onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b'">✕</button>
+            </div>
+
+            <div style="padding: 24px 32px 32px;">
+                <p style="text-align:center; color:#475569; font-size: 0.95rem; margin-bottom: 24px; font-weight: 500;">
+                    Found a bug or have a suggestion? Let us know!</p>
+
+                <form id="report-form" onsubmit="submitErrorReport(event)">
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label
+                            style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #1e293b;">Issue
+                            Type</label>
+                        <select id="report-type" required
+                            style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid #e2e8f0; background: rgba(255,255,255,0.8); font-family:inherit; font-size: 0.95rem; color: #0f172a; transition: border-color 0.2s; outline: none;"
+                            onfocus="this.style.borderColor='#4ade80'" onblur="this.style.borderColor='#e2e8f0'">
+                            <option value="Bug">Technical Bug</option>
+                            <option value="Content Error">Content Error (e.g. wrong answer)</option>
+                            <option value="Feature Request">Feature Request</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 28px;">
+                        <label
+                            style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #1e293b;">Description</label>
+                        <textarea id="report-desc" required rows="4" placeholder="Please provide details..."
+                            style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid #e2e8f0; background: rgba(255,255,255,0.8); font-family:inherit; font-size: 0.95rem; color: #0f172a; resize:vertical; transition: border-color 0.2s; outline: none;"
+                            onfocus="this.style.borderColor='#4ade80'"
+                            onblur="this.style.borderColor='#e2e8f0'"></textarea>
+                    </div>
+
+                    <button type="submit" id="report-submit-btn"
+                        style="width:100%; background: linear-gradient(135deg, #2ed573, #22c55e); color:white; border:none; padding:14px; border-radius:12px; font-weight: 600; font-size: 1.05rem; cursor:pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);"
+                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(34, 197, 94, 0.3)'"
+                        onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.2)'">Submit
+                        Report</button>
+                </form>
+            </div>
         </div>
     </div>
 
