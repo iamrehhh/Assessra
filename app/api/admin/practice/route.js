@@ -40,14 +40,14 @@ export async function GET() {
         const mappedLogs = (practiceScores || []).map(score => ({
             id: score.id,
             user_email: score.username,
-            user_name: score.userName,
+            user_name: score.username || '',
             subject: score.subject,
             level: 'A Level', // Default fallback
-            topic: score.paper_type || 'Mixed AI Practice',
+            topic: score.paper_title || 'Mixed AI Practice',
             question_type: score.paper_id.includes('mcq') ? 'multiple_choice' : 'structured',
             score: score.score,
-            marks: score.maxMarks,
-            created_at: score.submitted_at || score.submittedAt
+            marks: score.max_marks,
+            created_at: score.submitted_at
         }));
 
         return NextResponse.json({ practiceScores: mappedLogs });

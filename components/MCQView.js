@@ -37,6 +37,7 @@ export default function MCQView({ paperId, paperData, onBack }) {
     const [loadingAttempt, setLoadingAttempt] = useState(true);
     const timerRef = useRef(null);
 
+    // Fetch existing attempt
     useEffect(() => {
         if (sessionStatus !== 'authenticated' || !session?.user?.email) {
             setLoadingAttempt(false);
@@ -50,24 +51,39 @@ export default function MCQView({ paperId, paperData, onBack }) {
                     setSubmitted(true);
                     setScore(data.score);
                     setTimeLeft(0);
-                    clearInterval(timerRef.current);
                 }
             })
             .catch(err => console.error('Failed to load MCQ attempt:', err))
             .finally(() => setLoadingAttempt(false));
     }, [paperId, sessionStatus]);
 
-    // AI Explanations removed.
+    // Timer — only starts AFTER loading is complete and not already submitted
+    // Using a separate effect with loadingAttempt as dependency prevents the race condition
     useEffect(() => {
-        if (loadingAttempt || submitted) { clearInterval(timerRef.current); return; }
+        // Do not start timer until loading is done
+        if (loadingAttempt) return;
+        // Do not start if already submitted
+        if (submitted) {
+            clearInterval(timerRef.current);
+            return;
+        }
+
+        // Clear any existing timer before starting a fresh one
+        clearInterval(timerRef.current);
+
         timerRef.current = setInterval(() => {
             setTimeLeft(prev => {
-                if (prev <= 1) { clearInterval(timerRef.current); handleSubmit(true); return 0; }
+                if (prev <= 1) {
+                    clearInterval(timerRef.current);
+                    handleSubmit(true);
+                    return 0;
+                }
                 return prev - 1;
             });
         }, 1000);
+
         return () => clearInterval(timerRef.current);
-    }, [submitted, loadingAttempt]);
+    }, [submitted, loadingAttempt]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (loadingAttempt) return (
         <div className="flex items-center justify-center h-screen flex-col gap-4 text-text-muted">
@@ -155,7 +171,6 @@ export default function MCQView({ paperId, paperData, onBack }) {
     const items = paper.questions || ansList.map((_, idx) => ({ n: idx + 1, t: null }));
     const totalQ = items.length;
     const attemptedCount = Object.keys(answers).length;
-    const wrongCount = ansList.filter((ans, i) => answers[i] && answers[i] !== ans).length;
 
     return (
         <div className="flex flex-col h-screen bg-bg-base text-text-main font-display overflow-hidden fixed inset-0 z-[9999]">
@@ -230,7 +245,6 @@ export default function MCQView({ paperId, paperData, onBack }) {
                             const correctAns = ansList[i];
                             const userAns = answers[i];
                             const isCorrect = correctAns ? userAns === correctAns : false;
-                            const isWrong = submitted && correctAns && userAns && !isCorrect;
                             const isMarked = !submitted && markedForReview[i];
 
                             return (
@@ -277,7 +291,7 @@ export default function MCQView({ paperId, paperData, onBack }) {
                                                 let cls = 'bg-black/5 dark:bg-white/5 border-border-main text-text-muted hover:border-primary/50 hover:bg-black/10';
                                                 if (!submitted && userAns === letter) cls = 'bg-primary border-primary text-white';
                                                 if (submitted && correctAns && letter === correctAns) cls = 'bg-green-500 border-green-500 text-white';
-                                                if (submitted && correctAns && userAns === letter && !isCorrect && letter !== correctAns) cls = 'bg-red-500 border-red-500 text-white';
+                                                if (submitted && correctAns && userAns === letter && userAns !== correctAns && letter !== correctAns) cls = 'bg-red-500 border-red-500 text-white';
                                                 if (submitted && !correctAns && userAns === letter) cls = 'bg-primary/50 border-primary/50 text-white';
                                                 return (
                                                     <button key={letter} onClick={() => handleAnswer(i, letter)}

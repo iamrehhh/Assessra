@@ -161,9 +161,11 @@ export default function VocabIdiomsView() {
     };
 
     const finishPracticeSet = () => {
-        // Save score globally if > 0
-        if (score + (isAnswered && selectedOption === currentSet[currentIndex].meaning ? 1 : 0) > 0) {
-            const finalScore = score + (isAnswered && selectedOption === currentSet[currentIndex].meaning ? 1 : 0);
+        // Derive score and mistakes from currentSet state to avoid stale closure values.
+        // By the time this runs, handleOptionClick has already stamped isCorrect on every item.
+        const finalScore = currentSet.filter(item => item.isCorrect === true).length;
+
+        if (finalScore > 0) {
             fetch('/api/scores/save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -178,21 +180,16 @@ export default function VocabIdiomsView() {
             }).catch(() => { });
         }
 
-        if (mistakes.length > 0 || (!isAnswered && !selectedOption)) {
-            // Handle case where last item was wrong directly
-            const allMistakes = [...mistakes];
-            if (selectedOption && selectedOption !== currentSet[currentIndex].meaning) {
-                if (!mistakes.includes(currentSet[currentIndex])) allMistakes.push(currentSet[currentIndex]);
-            }
+        // Build mistake list purely from state — no stale `mistakes` or `isAnswered` vars
+        const allMistakes = currentSet.filter(item => item.isCorrect === false);
 
-            if (allMistakes.length > 0) {
-                setMistakes(allMistakes);
-                setCurrentMistakeIndex(0);
-                setUserSentence('');
-                setEvaluationData(null);
-                setPracticeState('error-practice');
-                return;
-            }
+        if (allMistakes.length > 0) {
+            setMistakes(allMistakes);
+            setCurrentMistakeIndex(0);
+            setUserSentence('');
+            setEvaluationData(null);
+            setPracticeState('error-practice');
+            return;
         }
 
         setPracticeState('results');
