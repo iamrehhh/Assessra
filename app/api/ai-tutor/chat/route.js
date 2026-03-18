@@ -276,12 +276,30 @@ export async function POST(request) {
             });
             const embedding = embedRes.data[0].embedding;
 
-            const { data: chunks } = await supabase.rpc('match_tutor_reference', {
+            // Try match_tutor_reference first; fall back to match_document_chunks
+            // (covers deployments where only one RPC function exists)
+            let chunks = null;
+            const { data: tutorChunks, error: tutorErr } = await supabase.rpc('match_tutor_reference', {
                 query_embedding: embedding,
                 match_count: 5,
                 filter_subject: subject.toLowerCase(),
                 filter_level: level
             });
+
+            if (!tutorErr && tutorChunks) {
+                chunks = tutorChunks;
+            } else {
+                // Fallback to the shared document_chunks RPC used by other routes
+                const { data: docChunks } = await supabase.rpc('match_document_chunks', {
+                    query_embedding: embedding,
+                    match_threshold: 0.65,
+                    match_count: 5,
+                    filter_subject: subject.toLowerCase(),
+                    filter_level: level,
+                    filter_type: 'textbook'
+                });
+                chunks = docChunks;
+            }
 
             if (chunks && chunks.length > 0) {
                 ragContext = chunks.map(c => c.content).join('\n---\n');

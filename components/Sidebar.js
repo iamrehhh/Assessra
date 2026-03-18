@@ -1,7 +1,6 @@
 'use client';
 
 import { ADMIN_EMAILS } from '@/lib/admin';
-
 import { useState, useEffect } from 'react';
 
 export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsMobileOpen }) {
@@ -17,7 +16,6 @@ export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsM
                 if (!userEmail) return;
                 const scoresRes = await fetch(`/api/scores/user?username=${encodeURIComponent(userEmail)}`);
                 const scoresData = await scoresRes.json();
-
                 if (scoresData.attempts && scoresData.attempts.length > 0) {
                     setCompletedPapers(scoresData.attempts.length);
                 }
@@ -34,9 +32,8 @@ export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsM
         { id: 'practice', icon: 'auto_awesome', label: 'AI Practice' },
         { id: 'pastpapers', icon: 'auto_stories', label: 'Past Papers' },
         { id: 'vocab-idioms', icon: 'menu_book', label: 'Vocab & Idioms' },
-        { id: 'prepositions', icon: 'text_select_move_forward_word', label: 'Prepositions' },
-        { id: 'grammar-errors', icon: 'spellcheck', label: 'Grammar' },
         { id: 'tenses', icon: 'schedule', label: 'Tenses' },
+        { id: 'grammar-errors', icon: 'spellcheck', label: 'Grammar' },
         { id: 'leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
     ];
 
@@ -56,7 +53,8 @@ export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsM
 
             <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
                 {navItems.map(item => {
-                    const isActive = view === item.id;
+                    // old /prepositions bookmarks highlight under Tenses
+                    const isActive = view === item.id || (item.id === 'tenses' && view === 'prepositions');
                     return (
                         <button
                             key={item.id}
@@ -85,7 +83,6 @@ export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsM
                     </button>
                 )}
             </nav>
-
         </aside>
     );
 }

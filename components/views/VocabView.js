@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useConfirm } from '@/components/ConfirmContext';
 
 /* ── Question pool (copied from original vocab_quiz.js) ── */
 const vocabQuestionsBank = [
@@ -177,7 +178,6 @@ export default function VocabView() {
         saveProgress(next, score, answered);
     }
 
-    // --- Admin Feature: Reset Progress ---
     const handleResetAll = async () => {
         const isConfirmed = await confirmDialog('Reset Progress', 'Are you sure you want to reset all vocabulary progress? This action cannot be undone.');
         if (!isConfirmed) return;

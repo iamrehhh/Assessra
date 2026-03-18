@@ -5,26 +5,24 @@ import { useRouter } from 'next/navigation';
 
 // ── Timer durations (seconds) by subject + paper ────────────────
 const TIMER_DURATIONS = {
-    'economics_p3': 75 * 60,     // 1hr 15min
-    'economics_p4': 120 * 60,    // 2hr
-    'business_p3': 105 * 60,     // 1hr 45min
-    'business_p4': 75 * 60,      // 1hr 15min
-    'general_paper_p1': 75 * 60, // 1hr 15min
-    'general_paper_p2': 105 * 60 // 1hr 45min
+    'economics_p3': 75 * 60,
+    'economics_p4': 120 * 60,
+    'business_p3': 105 * 60,
+    'business_p4': 75 * 60,
+    'general_paper_p1': 75 * 60,
+    'general_paper_p2': 105 * 60
 };
 
 function getTimerDuration(paperId, meta) {
-    // Try to infer paper number from paperId (e.g. econ_2024_on_41 → paper 4)
     const idParts = (paperId || '').split('_');
-    const variant = idParts[idParts.length - 1]; // e.g. "41"
-    const paperNum = variant ? variant[0] : null; // e.g. "4"
-
+    const variant = idParts[idParts.length - 1];
+    const paperNum = variant ? variant[0] : null;
     const subject = meta?.subject || '';
     if (subject && paperNum) {
         const key = `${subject}_p${paperNum}`;
         if (TIMER_DURATIONS[key]) return TIMER_DURATIONS[key];
     }
-    return null; // no timer available
+    return null;
 }
 
 function formatTime(totalSeconds) {
@@ -40,29 +38,28 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
     const filename = decodeURIComponent(paperId);
     const exitHash = backHash || '#pastpapers';
 
-    // UI state
     const [pdfUrl, setPdfUrl] = useState('');
     const [loading, setLoading] = useState(true);
     const [showInsert, setShowInsert] = useState(false);
     const [insertFilename, setInsertFilename] = useState(null);
 
-    // Answer blocks state
     const [blocks, setBlocks] = useState([
         { id: Date.now().toString(), label: 'Q1', questionText: '', marks: 0, answer: '', status: 'idle', feedback: null, prefilled: false }
     ]);
 
-    // Meta state for evaluation
+    // Track whether blocks have been initialized from API/localStorage
+    // to avoid saving an empty default block over real saved progress
+    const [blocksInitialized, setBlocksInitialized] = useState(false);
+
     const [paperMeta, setPaperMeta] = useState(null);
 
-    // Timer state
-    const [timerDuration, setTimerDuration] = useState(null); // total seconds for this paper
-    const [timerSeconds, setTimerSeconds] = useState(0);       // remaining seconds
+    const [timerDuration, setTimerDuration] = useState(null);
+    const [timerSeconds, setTimerSeconds] = useState(0);
     const [timerRunning, setTimerRunning] = useState(false);
     const [timerVisible, setTimerVisible] = useState(false);
     const timerRef = useRef(null);
 
     useEffect(() => {
-        // Fetch metadata, exact URL, and pre-extracted questions
         const init = async () => {
             try {
                 const res = await fetch(`/api/past-papers/info?filename=${filename}`);
@@ -75,13 +72,30 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                     }
                     if (data.meta) {
                         setPaperMeta(data.meta);
-                        // Set timer duration based on meta
                         const dur = getTimerDuration(filename, data.meta);
                         if (dur) {
                             setTimerDuration(dur);
                             setTimerSeconds(dur);
                         }
                     }
+
+                    // Try to load from localStorage first
+                    const savedProgress = localStorage.getItem(`assessra_paper_blocks_${filename}`);
+                    if (savedProgress) {
+                        try {
+                            const parsedBlocks = JSON.parse(savedProgress);
+                            if (Array.isArray(parsedBlocks) && parsedBlocks.length > 0) {
+                                setBlocks(parsedBlocks);
+                                setBlocksInitialized(true);
+                                setLoading(false);
+                                return;
+                            }
+                        } catch (err) {
+                            console.error('Failed to parse saved progress', err);
+                        }
+                    }
+
+                    // No saved progress — use API questions if available
                     if (data.questions && data.questions.length > 0) {
                         const newBlocks = data.questions.map((q, idx) => ({
                             id: Date.now().toString() + idx,
@@ -93,56 +107,29 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                             feedback: null,
                             prefilled: true
                         }));
-
-                        // Check if we have saved progress in localStorage
-                        const savedProgress = localStorage.getItem(`assessra_paper_blocks_${filename}`);
-                        if (savedProgress) {
-                            try {
-                                const parsedBlocks = JSON.parse(savedProgress);
-                                if (Array.isArray(parsedBlocks) && parsedBlocks.length > 0) {
-                                    setBlocks(parsedBlocks);
-                                } else {
-                                    setBlocks(newBlocks);
-                                }
-                            } catch (err) {
-                                console.error('Failed to parse saved progress', err);
-                                setBlocks(newBlocks);
-                            }
-                        } else {
-                            setBlocks(newBlocks);
-                        }
-                    } else {
-                        // If no predefined questions but we have saved progress for an empty start
-                        const savedProgress = localStorage.getItem(`assessra_paper_blocks_${filename}`);
-                        if (savedProgress) {
-                            try {
-                                const parsedBlocks = JSON.parse(savedProgress);
-                                if (Array.isArray(parsedBlocks) && parsedBlocks.length > 0) {
-                                    setBlocks(parsedBlocks);
-                                }
-                            } catch (err) {
-                                console.error('Failed to parse saved progress', err);
-                            }
-                        }
+                        setBlocks(newBlocks);
                     }
-                } else {
-                    console.error('Failed to get paper info:', data.error);
+                    // If no questions from API either, the default single empty block remains
                 }
             } catch (e) {
                 console.error('Error fetching paper info:', e);
             }
 
+            setBlocksInitialized(true);
             setLoading(false);
         };
         init();
     }, [filename]);
 
-    // Auto-save blocks to localStorage whenever they change
+    // Auto-save blocks to localStorage — but only after full initialization
+    // to prevent overwriting real progress with the default empty block
     useEffect(() => {
-        if (!loading && blocks.length > 0) {
+        if (!blocksInitialized || loading) return;
+        // Only save if we have meaningful content (at least one block with a label)
+        if (blocks.length > 0) {
             localStorage.setItem(`assessra_paper_blocks_${filename}`, JSON.stringify(blocks));
         }
-    }, [blocks, filename, loading]);
+    }, [blocks, filename, blocksInitialized, loading]);
 
     // Timer tick effect
     useEffect(() => {
@@ -192,12 +179,10 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
         updateBlock(id, 'status', 'evaluating');
 
         try {
-            // Use local static meta if available
             const subject = paperMeta?.subject || 'unknown';
             const level = paperMeta?.level || 'alevel';
             const year = paperMeta?.year || '2025';
 
-            // Call the evaluation endpoint (which handles RAG for the markscheme)
             const res = await fetch('/api/ai/grade-past-paper', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -218,14 +203,12 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
             updateBlock(id, 'feedback', resultData);
             updateBlock(id, 'status', 'done');
 
-            // Parse score from string e.g. "3/4 Marks" or "3"
             let parsedScore = 0;
             if (resultData.score) {
                 const match = String(resultData.score).match(/(\d+)/);
                 if (match) parsedScore = parseInt(match[1]);
             }
 
-            // Silently save score to Supabase
             fetch('/api/scores/save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -245,10 +228,9 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
         }
     };
 
-    // Timer progress for visual indicator
     const timerProgress = timerDuration ? (timerSeconds / timerDuration) : 0;
-    const timerUrgent = timerDuration && timerSeconds < timerDuration * 0.1; // last 10%
-    const timerWarning = timerDuration && timerSeconds < timerDuration * 0.25; // last 25%
+    const timerUrgent = timerDuration && timerSeconds < timerDuration * 0.1;
+    const timerWarning = timerDuration && timerSeconds < timerDuration * 0.25;
 
     const isFullWidthMode = filename.includes('general_paper') || filename.startsWith('gp_');
 
@@ -262,13 +244,11 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
 
     return (
         <div className="flex h-screen bg-bg-base text-text-main font-display overflow-hidden">
-            {/* Split Container */}
             <div className="flex w-full h-full pb-0 pt-0">
 
                 {/* Left Panel: PDF Viewer */}
                 {!isFullWidthMode && (
                     <div className="w-1/2 h-full flex flex-col border-r border-border-main bg-bg-card dark:bg-[#1e1e1e]">
-                        {/* Header */}
                         <div className="h-14 bg-bg-base border-b border-border-main flex items-center justify-between px-4 shrink-0">
                             <button onClick={() => {
                                 window.location.hash = exitHash.replace('#', '');
@@ -294,10 +274,9 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     </button>
                                 </div>
                             )}
-                            <div className="w-16"></div> {/* Spacer to center toggle */}
+                            <div className="w-16"></div>
                         </div>
 
-                        {/* Iframe Viewer */}
                         <div className="flex-1 w-full bg-[#323639]">
                             <iframe
                                 src={(showInsert && insertFilename ? pdfUrl.replace(filename, insertFilename) : pdfUrl) + '#toolbar=0&navpanes=0&scrollbar=0'}
@@ -345,7 +324,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     timerWarning ? 'bg-amber-500/10 border-amber-500/20' :
                                         'bg-black/5 dark:bg-white/5 border-border-main'
                                 }`}>
-                                {/* Timer text */}
                                 <span className={`text-sm font-mono font-black tracking-wider ${timerSeconds === 0 ? 'text-red-400' :
                                     timerUrgent ? 'text-red-400' :
                                         timerWarning ? 'text-amber-400' :
@@ -354,7 +332,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     {formatTime(timerSeconds)}
                                 </span>
 
-                                {/* Play / Pause */}
                                 <button
                                     onClick={toggleTimer}
                                     disabled={timerSeconds === 0}
@@ -370,7 +347,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     </span>
                                 </button>
 
-                                {/* Reset */}
                                 <button
                                     onClick={resetTimer}
                                     className="w-7 h-7 flex items-center justify-center rounded-lg text-text-muted hover:text-text-main hover:bg-black/10 dark:bg-white/10 transition-all"
@@ -379,7 +355,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     <span className="material-symbols-outlined text-base">restart_alt</span>
                                 </button>
 
-                                {/* Close timer */}
                                 <button
                                     onClick={() => { setTimerVisible(false); setTimerRunning(false); clearInterval(timerRef.current); }}
                                     className="w-7 h-7 flex items-center justify-center rounded-lg text-text-muted hover:text-text-main hover:bg-black/10 dark:bg-white/10 transition-all"
@@ -392,11 +367,8 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                     </div>
 
                     <div className="p-6 md:p-8 space-y-8 pb-32">
-                        {/* Questions automatically load here */}
-
                         {blocks.map((block, index) => (
                             <div key={block.id} className="bg-bg-card dark:bg-[#18181b] rounded-3xl p-6 border border-border-main shadow-[var(--shadow-elevated)] dark:shadow-2xl space-y-6">
-                                {/* Top Row: Label, Marks, Close */}
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-xl font-black text-text-main w-24">
                                         {block.prefilled ? (
@@ -412,7 +384,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                         )}
                                     </h3>
 
-                                    {/* Center: Marks Pill */}
                                     <div className="flex items-center justify-center bg-primary rounded-full px-4 py-1 flex-1 max-w-fit mx-auto shadow-[0_0_15px_rgba(34,197,94,0.15)]">
                                         {block.prefilled ? (
                                             <span className="text-xs font-bold text-background-dark px-1">{block.marks}</span>
@@ -428,7 +399,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                         <span className="text-xs font-bold text-background-dark pr-1">Marks</span>
                                     </div>
 
-                                    {/* Right: Close */}
                                     <div className="w-24 flex justify-end">
                                         {!block.prefilled && blocks.length > 1 && (
                                             <button onClick={() => removeBlock(block.id)} className="text-text-muted hover:text-text-main transition-colors">
@@ -438,7 +408,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     </div>
                                 </div>
 
-                                {/* Question Text Box */}
                                 <div className={`border rounded-xl p-4 min-h-[60px] ${block.prefilled ? 'border-border-main bg-black/[0.02] dark:bg-white/[0.02]' : 'border-border-main dark:border-white/80'}`}>
                                     {block.prefilled ? (
                                         <p className="text-text-main font-bold leading-relaxed text-sm">
@@ -455,7 +424,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                     )}
                                 </div>
 
-                                {/* Answer Box (Green Outline) */}
                                 <div className="border border-primary rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-all relative">
                                     <textarea
                                         value={block.answer}
@@ -465,13 +433,11 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                                         className="w-full bg-transparent px-5 py-4 pb-8 text-text-main placeholder-slate-500/80 focus:outline-none resize-y min-h-[200px]"
                                         disabled={block.status === 'evaluating' || block.status === 'done'}
                                     />
-                                    {/* Word Count Indicator */}
                                     <div className="absolute bottom-2 right-4 text-xs font-bold text-text-muted/60 bg-bg-card/80 px-2 py-0.5 rounded backdrop-blur-sm pointer-events-none">
                                         {block.answer.trim().split(/\s+/).filter(w => w.length > 0).length} words
                                     </div>
                                 </div>
 
-                                {/* Action Buttons */}
                                 <div className="flex gap-3">
                                     {block.status !== 'done' && (
                                         <button
@@ -521,7 +487,6 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
     );
 }
 
-// ── AI Feedback Modal ──────────────────────────────────────────
 function FeedbackModal() {
     const [block, setBlock] = useState(null);
 
@@ -539,7 +504,6 @@ function FeedbackModal() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
             <div className="bg-bg-card dark:bg-[#1e293b] w-full max-w-2xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-border-main animate-slide-up">
 
-                {/* Modal Header */}
                 <div className="px-6 py-4 border-b border-border-main flex items-center justify-between shrink-0 bg-black/5 dark:bg-white/5">
                     <div>
                         <h2 className="text-xl font-black text-text-main">{block.label} Feedback</h2>
@@ -554,9 +518,7 @@ function FeedbackModal() {
                     </button>
                 </div>
 
-                {/* Modal Body */}
                 <div className="p-6 overflow-y-auto space-y-6">
-                    {/* Mark Breakdown */}
                     <div>
                         <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-2">
                             <span className="material-symbols-outlined text-base">fact_check</span> Requirements Met
@@ -566,7 +528,6 @@ function FeedbackModal() {
                         </div>
                     </div>
 
-                    {/* Examiner Feedback */}
                     <div>
                         <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-2">
                             <span className="material-symbols-outlined text-base">campaign</span> Examiner Feedback
@@ -576,7 +537,6 @@ function FeedbackModal() {
                         </div>
                     </div>
 
-                    {/* Model Answer */}
                     <div>
                         <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-2">
                             <span className="material-symbols-outlined text-base">workspace_premium</span> Model Answer

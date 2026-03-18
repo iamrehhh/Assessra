@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import Sidebar from './Sidebar';
 import TopHeader from './TopHeader';
@@ -18,59 +18,95 @@ import AdminView from './views/AdminView';
 import PracticeView from './views/PracticeView';
 import PastPapersView from './views/PastPapersView';
 import VocabIdiomsView from './views/VocabIdiomsView';
-import PrepositionsView from './views/PrepositionsView';
 import GrammarErrorView from './views/GrammarErrorView';
 import TensesView from './views/TensesView';
 import ReportErrorModal from './ReportErrorModal';
 
 const VALID_VIEWS = ['home', 'ai-tutor', 'practice', 'pastpapers', 'scorecard', 'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms', 'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'];
+// 'prepositions' kept in VALID_VIEWS so old bookmarks don't 404 — it redirects to 'tenses' in renderContent
 
-function parseHash() {
+// Parse the current URL into { view, params }
+// Supports path-based (/leaderboard) AND legacy hash-based (#leaderboard)
+function parsePath() {
     if (typeof window === 'undefined') return { view: 'home', params: [] };
-    const raw = window.location.hash.replace('#', '');
-    if (!raw) return { view: 'home', params: [] };
-    const parts = raw.split('/');
-    const baseView = parts[0];
-    if (!VALID_VIEWS.includes(baseView)) return { view: 'home', params: [] };
-    return { view: baseView, params: parts.slice(1) };
-}
 
-function getInitialView() {
-    return parseHash().view;
+    // Path-based (new) e.g. /pastpapers/alevel/economics
+    const pathname = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+    if (pathname) {
+        const parts = pathname.split('/');
+        const baseView = parts[0];
+        if (VALID_VIEWS.includes(baseView)) {
+            return { view: baseView, params: parts.slice(1) };
+        }
+    }
+
+    // Hash-based fallback (legacy) e.g. #pastpapers/alevel/economics
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+        const parts = hash.split('/');
+        const baseView = parts[0];
+        if (VALID_VIEWS.includes(baseView)) {
+            return { view: baseView, params: parts.slice(1) };
+        }
+    }
+
+    return { view: 'home', params: [] };
 }
 
 export default function Dashboard() {
     const { data: session } = useSession();
-    const [view, setViewState] = useState(getInitialView);
-    const [hashParams, setHashParams] = useState(() => parseHash().params);
+    const [view, setViewState] = useState(() => parsePath().view);
+    const [urlParams, setUrlParams] = useState(() => parsePath().params);
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [userProfile, setUserProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const profileIntervalRef = useRef(null);
 
-    // Wrap setView to also update the URL hash
+    // Navigate — writes a clean path URL so refresh lands on the right view
     const setView = useCallback((newView) => {
         const parts = newView.split('/');
         const baseView = parts[0];
         const params = parts.slice(1);
         setViewState(baseView);
-        setHashParams(params);
-        window.location.hash = newView === 'home' ? '' : newView;
+        setUrlParams(params);
+        const path = (!baseView || baseView === 'home') ? '/' : '/' + newView;
+        window.history.pushState(null, '', path);
     }, []);
 
-    // Listen for browser back/forward navigation
+    // Browser back / forward
     useEffect(() => {
-        const onHashChange = () => {
-            const { view: v, params: p } = parseHash();
+        const onPopState = () => {
+            const { view: v, params: p } = parsePath();
             setViewState(v);
-            setHashParams(p);
+            setUrlParams(p);
         };
-        window.addEventListener('hashchange', onHashChange);
-        return () => window.removeEventListener('hashchange', onHashChange);
+        window.addEventListener('popstate', onPopState);
+        return () => window.removeEventListener('popstate', onPopState);
     }, []);
 
-    // Fetch user profile on mount
+    // On first load, silently migrate any legacy hash URL to a path URL
     useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+            const parts = hash.split('/');
+            const baseView = parts[0];
+            if (VALID_VIEWS.includes(baseView)) {
+                const path = baseView === 'home' ? '/' : '/' + hash;
+                window.history.replaceState(null, '', path);
+                setViewState(baseView);
+                setUrlParams(parts.slice(1));
+            }
+        }
+    }, []);
+
+    // Fetch user profile with stable interval (no stacking)
+    useEffect(() => {
+        if (!session?.user) {
+            setIsLoading(false);
+            return;
+        }
+
         const fetchProfile = async () => {
             try {
                 const res = await fetch('/api/user');
@@ -79,21 +115,22 @@ export default function Dashboard() {
                     setUserProfile(data.user);
                 }
             } catch (err) {
-                console.error("Failed to load user profile:", err);
+                console.error('Failed to load user profile:', err);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        if (session?.user) {
-            fetchProfile();
-            const interval = setInterval(() => {
-                fetchProfile();
-            }, 60000);
-            return () => clearInterval(interval);
-        } else {
-            setIsLoading(false);
-        }
+        fetchProfile();
+        if (profileIntervalRef.current) clearInterval(profileIntervalRef.current);
+        profileIntervalRef.current = setInterval(fetchProfile, 60000);
+
+        return () => {
+            if (profileIntervalRef.current) {
+                clearInterval(profileIntervalRef.current);
+                profileIntervalRef.current = null;
+            }
+        };
     }, [session]);
 
     if (isLoading) {
@@ -111,17 +148,10 @@ export default function Dashboard() {
                     <div className="relative group">
                         <div className="absolute inset-0 bg-primary/20 blur-[40px] rounded-full animate-pulse" style={{ animationDuration: '2s' }} />
                         <div className="absolute -inset-4 border border-primary/20 rounded-[2.5rem] animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
-
-                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2rem] bg-white/60 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl flex items-center justify-center p-6 sm:p-7 transform transition-transform duration-500 hover:scale-105">
-                            <img
-                                src="/new-logo.png"
-                                alt="Assessra Logo"
-                                className="w-full h-full object-contain drop-shadow-xl animate-pulse"
-                                style={{ animationDuration: '1.5s' }}
-                            />
+                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2rem] bg-white/60 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl flex items-center justify-center p-6 sm:p-7">
+                            <img src="/new-logo.png" alt="Assessra Logo" className="w-full h-full object-contain drop-shadow-xl animate-pulse" style={{ animationDuration: '1.5s' }} />
                         </div>
                     </div>
-
                     <div className="flex flex-col items-center gap-4">
                         <p className="text-xs sm:text-sm font-black text-text-main tracking-[0.2em] uppercase opacity-90 animate-pulse" style={{ animationDuration: '1.5s' }}>
                             Loading Profile
@@ -140,17 +170,13 @@ export default function Dashboard() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column', textAlign: 'center' }}>
                 <h2 style={{ color: '#ef4444', marginBottom: '10px' }}>Failed to load profile</h2>
                 <p style={{ color: '#666', marginBottom: '20px' }}>There was an error communicating with the server.</p>
-                <button
-                    onClick={() => window.location.reload()}
-                    style={{ padding: '10px 20px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-                >
+                <button onClick={() => window.location.reload()} style={{ padding: '10px 20px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
                     Retry
                 </button>
             </div>
         );
     }
 
-    // Block access if not onboarded
     if (!userProfile.isOnboarded) {
         return <OnboardingView
             userEmail={session?.user?.email}
@@ -174,9 +200,9 @@ export default function Dashboard() {
                 return <PracticeView />;
             case 'pastpapers':
                 return <PastPapersView
-                    initialLevel={hashParams[0] || null}
-                    initialSubject={hashParams[1] || null}
-                    initialScorecard={hashParams[2] === 'scorecard'}
+                    initialLevel={urlParams[0] || null}
+                    initialSubject={urlParams[1] || null}
+                    initialScorecard={urlParams[2] === 'scorecard'}
                     setView={setView}
                 />;
             case 'scorecard':
@@ -185,12 +211,11 @@ export default function Dashboard() {
                 return <VocabView />;
             case 'vocab-idioms':
                 return <VocabIdiomsView />;
-            case 'prepositions':
-                return <PrepositionsView />;
-            case 'grammar-errors':
-                return <GrammarErrorView />;
+            case 'prepositions': // legacy redirect
             case 'tenses':
                 return <TensesView />;
+            case 'grammar-errors':
+                return <GrammarErrorView />;
             case 'tips':
                 return <TipsView />;
             case 'profile':
@@ -212,8 +237,6 @@ export default function Dashboard() {
                 <div className={`flex-1 ${view === 'ai-tutor' ? 'p-0 pb-0' : 'p-4 md:p-8 space-y-8 pb-10'}`}>
                     {renderContent()}
                 </div>
-
-                {/* Footer */}
                 {view !== 'ai-tutor' && (
                     <footer className="w-full py-6 mt-auto border-t border-border-main flex flex-col items-center justify-center shrink-0">
                         <p className="text-xs text-text-muted font-medium flex items-center gap-2">
