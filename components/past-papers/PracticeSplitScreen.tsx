@@ -128,8 +128,23 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
         // Only save if we have meaningful content (at least one block with a label)
         if (blocks.length > 0) {
             localStorage.setItem(`assessra_paper_blocks_${filename}`, JSON.stringify(blocks));
+            
+            // Save for the Resume widget
+            const subjectStr = paperMeta?.subject || 'Paper';
+            const levelStr = paperMeta?.level || '';
+            const yearStr = paperMeta?.year || '';
+            let title = `${subjectStr.charAt(0).toUpperCase() + subjectStr.slice(1)} ${levelStr.toUpperCase()} Practice`;
+            if (yearStr) title += ` ${yearStr}`;
+            
+            localStorage.setItem('assessra_recent_activity', JSON.stringify({
+                type: 'pastpaper',
+                url: `/past-papers/practice/${filename}`,
+                title: title,
+                subject: subjectStr,
+                updatedAt: Date.now()
+            }));
         }
-    }, [blocks, filename, blocksInitialized, loading]);
+    }, [blocks, filename, blocksInitialized, loading, paperMeta]);
 
     // Timer tick effect
     useEffect(() => {

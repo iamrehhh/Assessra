@@ -3,9 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import ScorecardView from './ScorecardView';
 
-export default function PastPapersView({ initialLevel, initialSubject, initialScorecard, setView }) {
+export default function PastPapersView({ initialLevel, initialSubject, setView }) {
     const router = useRouter();
     const { data: session } = useSession();
     const [loading, setLoading] = useState(true);
@@ -17,7 +16,6 @@ export default function PastPapersView({ initialLevel, initialSubject, initialSc
     const [selectedLevel, setSelectedLevel] = useState(initialLevel || null);
     const [selectedSubject, setSelectedSubject] = useState(initialSubject || null);
     const [selectedPaperTab, setSelectedPaperTab] = useState(null);
-    const [showScorecard, setShowScorecard] = useState(initialScorecard || false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,8 +52,7 @@ export default function PastPapersView({ initialLevel, initialSubject, initialSc
     useEffect(() => {
         setSelectedLevel(initialLevel || null);
         setSelectedSubject(initialSubject || null);
-        setShowScorecard(initialScorecard || false);
-    }, [initialLevel, initialSubject, initialScorecard]);
+    }, [initialLevel, initialSubject]);
 
     // Helper to navigate and update URL hash
     const navigate = (level?: string | null, subject?: string | null, extra?: string | null) => {
@@ -257,13 +254,6 @@ export default function PastPapersView({ initialLevel, initialSubject, initialSc
                     </h2>
                     <p className="text-text-muted mt-2">Select a paper to start practicing in the split-screen view.</p>
                 </div>
-                <button
-                    onClick={() => navigate(selectedLevel, selectedSubject, 'scorecard')}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold bg-primary text-background-dark hover:bg-white hover:-translate-y-0.5 shadow-lg shadow-primary/10 transition-all"
-                >
-                    <span className="material-symbols-outlined text-lg">bar_chart</span>
-                    My Scorecard
-                </button>
             </div>
 
             {papers.length === 0 ? (
@@ -365,21 +355,6 @@ export default function PastPapersView({ initialLevel, initialSubject, initialSc
                 </>
             )}
 
-            {/* In-built Scorecard Modal Wrapper */}
-            {showScorecard && (
-                <div className="fixed inset-0 z-[9999] bg-bg-base overflow-y-auto p-6 lg:p-12 animate-fade-in">
-                    <div className="max-w-4xl mx-auto bg-[#1e1e1e] rounded-3xl p-8 border border-border-main shadow-2xl relative">
-                        <button
-                            onClick={() => navigate(selectedLevel, selectedSubject)}
-                            className="absolute top-6 right-6 flex items-center gap-2 text-text-muted hover:text-text-main transition-colors text-sm font-bold bg-black/5 dark:bg-white/5 w-fit px-4 py-2 rounded-xl"
-                        >
-                            <span className="material-symbols-outlined text-sm">close</span>
-                            Close
-                        </button>
-                        <ScorecardView filterSubject={selectedSubject === 'general_paper' ? 'general' : selectedSubject} />
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

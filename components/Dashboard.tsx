@@ -10,7 +10,6 @@ import HomeView from './views/HomeView';
 import LeaderboardView from './views/LeaderboardView';
 import FormulaeView from './views/FormulaeView';
 import DefinitionsView from './views/DefinitionsView';
-import ScorecardView from './views/ScorecardView';
 import TipsView from './views/TipsView';
 import VocabView from './views/VocabView';
 import OnboardingView from './views/OnboardingView';
@@ -23,7 +22,7 @@ import GrammarErrorView from './views/GrammarErrorView';
 import TensesView from './views/TensesView';
 import ReportErrorModal from './ReportErrorModal';
 
-const VALID_VIEWS = ['home', 'pastpapers', 'scorecard', 'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms', 'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'];
+const VALID_VIEWS = ['home', 'pastpapers', 'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms', 'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'];
 // 'prepositions' kept in VALID_VIEWS so old bookmarks don't 404 — it redirects to 'tenses' in renderContent
 
 // Parse the current URL into { view, params }
@@ -201,11 +200,8 @@ export default function Dashboard() {
                 return <PastPapersView
                     initialLevel={urlParams[0] || null}
                     initialSubject={urlParams[1] || null}
-                    initialScorecard={urlParams[2] === 'scorecard'}
                     setView={setView}
                 />;
-            case 'scorecard':
-                return <ScorecardView filterSubject={null} />;
             case 'vocab':
                 return <VocabView />;
             case 'vocab-idioms':
