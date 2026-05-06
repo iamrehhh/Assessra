@@ -1,0 +1,452 @@
+app/[view]/[...params]/page.tsx(20,31): error TS2345: Argument of type 'ParamValue' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+app/[view]/page.tsx(21,31): error TS2345: Argument of type 'ParamValue' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+app/api/active-users/route.ts(31,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/active-users/route.ts(45,57): error TS2339: Property 'nickname' does not exist on type '{ name?: string; email?: string; image?: string; }'.
+app/api/admin/active-users/route.ts(9,44): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/notification/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/practice/route.ts(12,44): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/scores/route.ts(12,44): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/users/edit/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/users/message/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/users/reset-password/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/admin/users/route.ts(12,44): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/ai-tutor/flashcard/route.ts(30,62): error TS2769: No overload matches this call.
+  Overload 3 of 3, '(body: ChatCompletionCreateParamsBase, options?: RequestOptions<unknown>): APIPromise<ChatCompletion | Stream<ChatCompletionChunk>>', gave the following error.
+    Type '{ role: string; content: string; }' is not assignable to type 'ChatCompletionMessageParam'.
+      Property 'name' is missing in type '{ role: string; content: string; }' but required in type 'ChatCompletionFunctionMessageParam'.
+  Overload 3 of 3, '(body: ChatCompletionCreateParamsBase, options?: RequestOptions<unknown>): APIPromise<ChatCompletion | Stream<ChatCompletionChunk>>', gave the following error.
+    Type '{ role: string; content: string; }' is not assignable to type 'ChatCompletionMessageParam'.
+      Property 'name' is missing in type '{ role: string; content: string; }' but required in type 'ChatCompletionFunctionMessageParam'.
+app/api/ai-tutor/upload/route.ts(22,54): error TS2339: Property 'default' does not exist on type 'typeof import("/Users/abdulrehan/Documents/Assessra/node_modules/pdf-parse/dist/pdf-parse/esm/index")'.
+app/api/ai/grade-past-paper/route.ts(2,10): error TS2459: Module '"@/lib/rag"' declares 'generateEmbeddingsBatch' locally, but it is not exported.
+app/api/auth/[...nextauth]/route.ts(77,26): error TS2345: Argument of type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to parameter of type 'AuthOptions'.
+  The types of 'session.strategy' are incompatible between these types.
+    Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/evaluate-answer/route.ts(34,13): error TS2322: Type '{ context: string; found: boolean; count: number; }' is not assignable to type 'string'.
+app/api/generate-question/route.ts(30,13): error TS2322: Type '{ context: string; found: boolean; count: number; }' is not assignable to type 'string'.
+app/api/leaderboard/route.ts(42,13): error TS2698: Spread types may only be created from object types.
+app/api/leaderboard/route.ts(43,36): error TS2339: Property 'subjects' does not exist on type 'unknown'.
+app/api/leaderboard/route.ts(44,27): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+app/api/leaderboard/route.ts(44,56): error TS2339: Property 'totalScore' does not exist on type 'unknown'.
+app/api/leaderboard/route.ts(44,71): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+app/api/mark/route.ts(204,13): error TS2322: Type '{ context: string; found: boolean; count: number; }' is not assignable to type 'string'.
+app/api/mark/route.ts(206,13): error TS2322: Type '{ context: string; found: boolean; count: number; }' is not assignable to type 'string'.
+app/api/mcq-attempts/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/mcq-attempts/route.ts(40,13): error TS2322: Type '{ score: any; max_marks: any; percentage: any; submitted_at: any; }[]' is not assignable to type '{ score: any; max_marks: any; percentage: any; submitted_at: any; user_answers: any; }[]'.
+  Property 'user_answers' is missing in type '{ score: any; max_marks: any; percentage: any; submitted_at: any; }' but required in type '{ score: any; max_marks: any; percentage: any; submitted_at: any; user_answers: any; }'.
+app/api/mcq-attempts/route.ts(69,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/mcq-feedback/route.ts(88,29): error TS2740: Type 'CanvasRenderingContext2D' is missing the following properties from type 'CanvasRenderingContext2D': isPointInStroke, createConicGradient, filter, imageSmoothingQuality, and 10 more.
+app/api/mcq-feedback/route.ts(111,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/mcq-feedback/route.ts(150,17): error TS2322: Type '{ context: string; found: boolean; count: number; }' is not assignable to type 'string'.
+app/api/past-papers/info/route.ts(42,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+app/api/practice-log/route.ts(11,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/quote/route.ts(63,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/reports/route.ts(120,21): error TS2339: Property 'status' does not exist on type '{}'.
+app/api/reports/route.ts(130,21): error TS2339: Property 'messages' does not exist on type '{}'.
+app/api/reports/route.ts(134,25): error TS2339: Property 'admin_reply' does not exist on type '{}'.
+app/api/scores/save/route.ts(10,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/scores/save/route.ts(36,24): error TS2339: Property 'user_answers' does not exist on type '{ username: string; paper_id: any; paper_title: any; subject: any; question_number: any; score: number; max_marks: number; percentage: number; }'.
+app/api/scores/save/route.ts(44,31): error TS2339: Property 'user_answers' does not exist on type '{ username: string; paper_id: any; paper_title: any; subject: any; question_number: any; score: number; max_marks: number; percentage: number; }'.
+app/api/user/clear-message/route.ts(8,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/user/route.ts(19,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/user/route.ts(71,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/user/route.ts(80,53): error TS2339: Property 'nickname' does not exist on type '{ updated_at: string; }'.
+app/api/user/route.ts(81,50): error TS2339: Property 'level' does not exist on type '{ updated_at: string; }'.
+app/api/user/route.ts(82,50): error TS2339: Property 'image' does not exist on type '{ updated_at: string; }'.
+app/api/user/route.ts(83,56): error TS2339: Property 'is_onboarded' does not exist on type '{ updated_at: string; }'.
+app/api/user/saved-practices/route.ts(8,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/user/saved-practices/route.ts(31,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/api/user/saved-practices/route.ts(69,48): error TS2345: Argument of type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to parameter of type 'GetServerSessionParams<GetServerSessionOptions>'.
+  Type '[{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }]' is not assignable to type '[GetServerSessionOptions]'.
+    Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'GetServerSessionOptions'.
+      Type '{ providers: (OAuthConfig<GoogleProfile> | CredentialsConfig<{ email: { label: string; type: string; }; password: { label: string; type: string; }; }>)[]; session: { ...; }; callbacks: { ...; }; pages: { ...; }; secret: string; }' is not assignable to type 'Partial<Omit<AuthOptions, "callbacks">>'.
+        The types of 'session.strategy' are incompatible between these types.
+          Type 'string' is not assignable to type 'SessionStrategy'.
+app/layout.tsx(2,8): error TS2882: Cannot find module or type declarations for side-effect import of './globals.css'.
+app/past-papers/practice/[paperId]/page.tsx(37,40): error TS2345: Argument of type 'ParamValue' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+components/admin/PaperUpload.tsx(193,21): error TS2322: Type '{ borderColor?: string; background: string; border: string; borderRadius: string; padding: string; textAlign: string; cursor: string; transition: string; marginBottom: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(234,29): error TS2322: Type '{ width: string; padding: string; borderRadius: string; border: string; fontSize: string; outline: string; color: string; background: string; cursor: string; boxSizing: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'boxSizing' are incompatible.
+    Type 'string' is not assignable to type 'BoxSizing'.
+components/admin/PaperUpload.tsx(246,29): error TS2322: Type '{ width: string; padding: string; borderRadius: string; border: string; fontSize: string; outline: string; color: string; background: string; cursor: string; boxSizing: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'boxSizing' are incompatible.
+    Type 'string' is not assignable to type 'BoxSizing'.
+components/admin/PaperUpload.tsx(259,29): error TS2322: Type '{ width: string; padding: string; borderRadius: string; border: string; fontSize: string; outline: string; transition: string; color: string; background: string; boxSizing: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'boxSizing' are incompatible.
+    Type 'string' is not assignable to type 'BoxSizing'.
+components/admin/PaperUpload.tsx(270,29): error TS2322: Type '{ width: string; padding: string; borderRadius: string; border: string; fontSize: string; outline: string; color: string; background: string; cursor: string; boxSizing: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'boxSizing' are incompatible.
+    Type 'string' is not assignable to type 'BoxSizing'.
+components/admin/PaperUpload.tsx(316,50): error TS2339: Property 'status' does not exist on type 'unknown'.
+components/admin/PaperUpload.tsx(316,90): error TS2339: Property 'status' does not exist on type 'unknown'.
+components/admin/PaperUpload.tsx(320,42): error TS2339: Property 'status' does not exist on type 'unknown'.
+components/admin/PaperUpload.tsx(321,48): error TS2339: Property 'status' does not exist on type 'unknown'.
+components/admin/PaperUpload.tsx(324,43): error TS2339: Property 'message' does not exist on type 'unknown'.
+components/admin/PaperUpload.tsx(339,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/admin/PaperUpload.tsx(342,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(343,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(344,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(345,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(346,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(347,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/admin/PaperUpload.tsx(348,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/AITutorChat.tsx(16,32): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/AITutorChat.tsx(17,28): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/AITutorChat.tsx(603,117): error TS2554: Expected 2 arguments, but got 0.
+components/AITutorChat.tsx(621,49): error TS2322: Type '(e: any, overrideInput: any) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+components/Dashboard.tsx(209,25): error TS2741: Property 'filterSubject' is missing in type '{}' but required in type '{ filterSubject: any; }'.
+components/ReportErrorModal.tsx(223,20): error TS2339: Property '__reportHasUnread' does not exist on type 'Window & typeof globalThis'.
+components/views/AdminView.tsx(321,9): error TS2698: Spread types may only be created from object types.
+components/views/AdminView.tsx(322,32): error TS2339: Property 'subjects' does not exist on type 'unknown'.
+components/views/AdminView.tsx(323,23): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+components/views/AdminView.tsx(323,52): error TS2339: Property 'totalScore' does not exist on type 'unknown'.
+components/views/AdminView.tsx(323,67): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+components/views/AdminView.tsx(358,9): error TS2698: Spread types may only be created from object types.
+components/views/AdminView.tsx(359,32): error TS2339: Property 'subjects' does not exist on type 'unknown'.
+components/views/AdminView.tsx(360,23): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+components/views/AdminView.tsx(360,52): error TS2339: Property 'totalScore' does not exist on type 'unknown'.
+components/views/AdminView.tsx(360,67): error TS2339: Property 'totalMax' does not exist on type 'unknown'.
+components/views/AdminView.tsx(361,17): error TS2339: Property 'logs' does not exist on type 'unknown'.
+components/views/AdminView.tsx(361,37): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/views/AdminView.tsx(361,62): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/views/AdminView.tsx(411,18): error TS2322: Type '{ display: string; alignItems: string; gap: string; marginBottom: string; flexWrap: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'flexWrap' are incompatible.
+    Type 'string' is not assignable to type 'FlexWrap'.
+components/views/AdminView.tsx(417,18): error TS2322: Type '{ display: string; gap: string; marginBottom: string; flexWrap: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'flexWrap' are incompatible.
+    Type 'string' is not assignable to type 'FlexWrap'.
+components/views/AdminView.tsx(565,22): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(572,26): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(578,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(581,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(582,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(583,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(584,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(585,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(586,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(587,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(666,26): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(672,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(675,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(676,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(677,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(678,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(679,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(680,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(681,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(746,26): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(752,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(755,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(756,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(757,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(758,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(759,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(821,26): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(827,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(830,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(831,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(832,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(860,74): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/views/AdminView.tsx(860,87): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+components/views/AdminView.tsx(928,34): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(934,40): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(937,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(938,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(939,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(940,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(941,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(942,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(943,49): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1009,26): error TS2322: Type '{ textAlign: string; padding: string; color: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1020,32): error TS2322: Type '{ width: string; borderCollapse: string; borderSpacing: string; background: string; borderRadius: string; overflow: string; boxShadow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(1023,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1024,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1025,41): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1050,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1060,36): error TS2322: Type '{ borderRadius: number; boxShadow: "none"; width: string; borderCollapse: string; borderSpacing: string; background: string; overflow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(1063,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1064,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1065,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1066,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1067,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1118,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1250,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1260,36): error TS2322: Type '{ borderRadius: number; boxShadow: "none"; width: string; borderCollapse: string; borderSpacing: string; background: string; overflow: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'borderCollapse' are incompatible.
+    Type 'string' is not assignable to type 'BorderCollapse'.
+components/views/AdminView.tsx(1263,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1264,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1265,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1266,45): error TS2322: Type '{ padding: string; textAlign: string; fontSize: string; fontWeight: number; color: string; textTransform: string; letterSpacing: string; borderBottom: string; background: string; }' is not assignable to type 'CSSProperties'.
+  Types of property 'textAlign' are incompatible.
+    Type 'string' is not assignable to type 'TextAlign'.
+components/views/AdminView.tsx(1304,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1340,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1380,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/AdminView.tsx(1419,22): error TS2322: Type '{ position: string; top: number; left: number; width: string; height: string; background: string; backdropFilter: string; display: string; alignItems: string; justifyContent: string; zIndex: number; }' is not assignable to type 'CSSProperties'.
+  Types of property 'position' are incompatible.
+    Type 'string' is not assignable to type 'Position'.
+components/views/PapersView.tsx(58,40): error TS2339: Property 'year' does not exist on type 'unknown'.
+components/views/PapersView.tsx(58,54): error TS2339: Property 'series' does not exist on type 'unknown'.
+components/views/PapersView.tsx(60,62): error TS2339: Property 'year' does not exist on type 'unknown'.
+components/views/PapersView.tsx(61,65): error TS2339: Property 'series' does not exist on type 'unknown'.
+components/views/PapersView.tsx(64,36): error TS2339: Property 'papers' does not exist on type 'unknown'.
+components/views/PracticeView.tsx(442,90): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+components/views/ProfileView.tsx(128,49): error TS2322: Type 'number' is not assignable to type 'string'.
+components/views/ProfileView.tsx(129,48): error TS2322: Type 'number' is not assignable to type 'string'.
+components/views/ScorecardView.tsx(114,40): error TS2339: Property 'maxMarks' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(114,74): error TS2339: Property 'score' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(114,89): error TS2339: Property 'maxMarks' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(120,88): error TS2339: Property 'score' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(120,103): error TS2339: Property 'maxMarks' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(120,129): error TS2339: Property 'attempts' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(120,154): error TS2339: Property 'attempts' does not exist on type 'unknown'.
+components/views/ScorecardView.tsx(133,35): error TS2339: Property 'map' does not exist on type 'unknown'.
+components/views/TensesView.tsx(292,136): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+components/views/TensesView.tsx(296,137): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+lib/llm.ts(75,35): error TS2339: Property 'text' does not exist on type 'ContentBlock'.
+  Property 'text' does not exist on type 'ThinkingBlock'.
+lib/pdfUtils.ts(41,61): error TS2339: Property 'str' does not exist on type 'TextItem | TextMarkedContent'.
+  Property 'str' does not exist on type 'TextMarkedContent'.

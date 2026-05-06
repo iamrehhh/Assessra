@@ -1,0 +1,23 @@
+// Allowed users — this will be replaced by real auth (NextAuth) in Phase 3
+export const ALLOWED_USERS: Record<string, string> = {
+    "Jesan.Equebal": "virgin",
+    "Newton.Mondal": "anime",
+    "Sarwar.Alam": "suspension",
+    "Aadrita.Mukhopadhyay": "ipmat",
+    "Shinjan.Garain": "Shinjan",
+    "Debraj.Mondal": "Debraj",
+    "Abdul.Subhan": "biology",
+    "Biswajit.Saha": "general",
+    "Surjayu.Sanyal": "rizz",
+    "Shreyas.Bhattacharya": "A....",
+    "Ayush.Paul": "ayush",
+    "Abdul.Rehan": "jipmat",
+    "Shefa.Hassan": "maths",
+    "Swapneel.Tiwari": "2026",
+    "Satyaki.Das": "Satyaki",
+    "Guest.User": "Guest",
+    "Angira.Barman": "Angira",
+    "Mod.Discord": "Mod",
+    "IGCSE.Mod": "IGCSE",
+    "Ahana.Bera": "Ahana",
+};
