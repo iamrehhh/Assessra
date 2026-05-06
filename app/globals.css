@@ -297,7 +297,9 @@
 
 * {
     box-sizing: border-box;
-    /* Smooth scrolling behavior */
+}
+
+html {
     scroll-behavior: smooth;
 }
 
@@ -353,7 +355,7 @@ h2 {
     border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.03);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: white;
 }
 
@@ -370,7 +372,7 @@ h2 {
     border-radius: 8px;
     font-weight: 500;
     letter-spacing: -0.01em;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-btn:hover {

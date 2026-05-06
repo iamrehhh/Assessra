@@ -91,7 +91,7 @@ export default function TopHeader({ setView, userProfile, setIsMobileOpen }) {
     };
 
     return (
-        <header className="h-20 border-b border-border-main flex items-center justify-between px-8 sticky top-0 bg-bg-base/80 backdrop-blur-md z-40 shrink-0 transition-colors duration-300">
+        <header className="h-20 border-b border-border-main flex items-center justify-between px-8 sticky top-0 bg-bg-base/80 backdrop-blur-md transform-gpu z-40 shrink-0">
             <div className="flex items-center gap-4">
                 <button onClick={() => setIsMobileOpen(true)} className="lg:hidden text-text-muted hover:text-text-main transition-colors">
                     <span className="material-symbols-outlined text-2xl">menu</span>

@@ -135,31 +135,23 @@ export default function Dashboard() {
 
     if (isLoading) {
         return (
-            <div className="fixed inset-0 bg-bg-base flex flex-col items-center justify-center z-50 overflow-hidden">
+            <div className="fixed inset-0 bg-bg-base z-50">
                 <style dangerouslySetInnerHTML={{
                     __html: `
-                    @keyframes fastShimmer {
-                        0% { transform: translateX(-150%); }
-                        100% { transform: translateX(150%); }
+                    @keyframes indeterminate {
+                        0% { left: -35%; right: 100%; }
+                        60% { left: 100%; right: -90%; }
+                        100% { left: 100%; right: -90%; }
+                    }
+                    @keyframes indeterminate-short {
+                        0% { left: -200%; right: 100%; }
+                        60% { left: 107%; right: -8%; }
+                        100% { left: 107%; right: -8%; }
                     }
                 `}} />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--primary-rgb),0.05)_0%,transparent_100%)] pointer-events-none" />
-                <div className="flex flex-col items-center gap-8 animate-[fade-in_0.2s_ease-out] z-10 -mt-10">
-                    <div className="relative group">
-                        <div className="absolute inset-0 bg-primary/20 blur-[40px] rounded-full animate-pulse" style={{ animationDuration: '2s' }} />
-                        <div className="absolute -inset-4 border border-primary/20 rounded-[2.5rem] animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2rem] bg-white/60 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl flex items-center justify-center p-6 sm:p-7">
-                            <img src="/new-logo.png" alt="Assessra Logo" className="w-full h-full object-contain drop-shadow-xl animate-pulse" style={{ animationDuration: '1.5s' }} />
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center gap-4">
-                        <p className="text-xs sm:text-sm font-black text-text-main tracking-[0.2em] uppercase opacity-90 animate-pulse" style={{ animationDuration: '1.5s' }}>
-                            Loading Profile
-                        </p>
-                        <div className="w-48 sm:w-56 h-1.5 rounded-full bg-black/5 dark:bg-white/5 overflow-hidden relative isolate">
-                            <div className="absolute top-0 bottom-0 w-2/3 rounded-full bg-gradient-to-r from-transparent via-primary to-transparent" style={{ animation: 'fastShimmer 1.2s infinite ease-in-out' }} />
-                        </div>
-                    </div>
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-primary/10 overflow-hidden">
+                    <div className="absolute top-0 bottom-0 bg-primary shadow-[0_0_10px_var(--primary)] animate-[indeterminate_2.1s_cubic-bezier(0.65,0.815,0.735,0.395)_infinite]" />
+                    <div className="absolute top-0 bottom-0 bg-primary shadow-[0_0_10px_var(--primary)] animate-[indeterminate-short_2.1s_cubic-bezier(0.165,0.84,0.44,1)_infinite_1.15s]" />
                 </div>
             </div>
         );
@@ -223,7 +215,7 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="flex h-screen overflow-hidden bg-bg-base text-text-main font-display transition-colors duration-300">
+        <div className="flex h-screen overflow-hidden bg-bg-base text-text-main font-display">
             <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
             <main className="flex-1 flex flex-col w-full h-full overflow-y-auto">
                 <TopHeader setView={setView} userProfile={userProfile} setIsMobileOpen={setIsMobileOpen} />
