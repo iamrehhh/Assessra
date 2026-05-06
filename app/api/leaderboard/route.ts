@@ -1,6 +1,5 @@
-
 // GET /api/leaderboard
-// Returns top 20 users ranked by total score
+// Returns top 20 users ranked by total score for IGCSE and A Level respectively
 
 import supabase from '@/lib/supabase';
 
@@ -16,7 +15,7 @@ export async function GET() {
             return Response.json({ error: 'Failed to fetch leaderboard.' }, { status: 500 });
         }
 
-        // Aggregate per user in JS (replaces MongoDB aggregation pipeline)
+        // Aggregate per user in JS
         const userMap: Record<string, any> = {};
         for (const s of (scores || [])) {
             if (!userMap[s.username]) {
@@ -45,11 +44,7 @@ export async function GET() {
             percentage: u.totalMax > 0 ? Math.round((u.totalScore / u.totalMax) * 100) : 0,
         }));
 
-        // Sort by totalScore descending, take top 20
-        leaderboard.sort((a, b) => b.totalScore - a.totalScore);
-        leaderboard = leaderboard.slice(0, 20);
-
-        // Enrich with user profile data (nickname, image, level)
+        // Enrich with user profile data (nickname, image, level) for all aggregated users
         const emails = leaderboard.map(u => u._id);
         if (emails.length > 0) {
             const { data: users } = await supabase
@@ -57,7 +52,7 @@ export async function GET() {
                 .select('email, nickname, image, level')
                 .in('email', emails);
 
-            const userLookup = {};
+            const userLookup: Record<string, any> = {};
             for (const u of (users || [])) {
                 userLookup[u.email] = u;
             }
@@ -72,7 +67,23 @@ export async function GET() {
             }
         }
 
-        return Response.json({ leaderboard });
+        // Split into IGCSE and A Level
+        let igcse = leaderboard.filter(u => u.level === 'IGCSE');
+        let alevel = leaderboard.filter(u => u.level === 'A Level' || u.level === 'AS Level');
+
+        // Sort by totalScore descending, take top 20
+        igcse.sort((a, b) => b.totalScore - a.totalScore);
+        igcse = igcse.slice(0, 20);
+
+        alevel.sort((a, b) => b.totalScore - a.totalScore);
+        alevel = alevel.slice(0, 20);
+
+        return Response.json({ 
+            igcse, 
+            alevel,
+            // Keep original single leaderboard for backward compatibility while UI updates, if needed
+            leaderboard: [...igcse, ...alevel].sort((a, b) => b.totalScore - a.totalScore).slice(0, 20)
+        });
     } catch (err) {
         console.error('Leaderboard error:', err);
         return Response.json({ error: 'Failed to fetch leaderboard.' }, { status: 500 });

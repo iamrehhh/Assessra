@@ -44,3 +44,4 @@ export default function PastPaperPracticePage() {
 
     return <PracticeSplitScreen paperId={params.paperId as string} backHash={backHash} />;
 }
+

@@ -62,6 +62,18 @@ export default function MCQView({ paperId, paperData, onBack }) {
     useEffect(() => {
         // Do not start timer until loading is done
         if (loadingAttempt) return;
+        
+        try {
+            const subjectStr = paper?.subject || 'Economics MCQ';
+            const title = paper?.title || `Economics P3 — ${paperId}`;
+            localStorage.setItem('assessra_recent_activity', JSON.stringify({
+                type: 'mcq',
+                url: `/past-papers/practice/${paperId}`,
+                title: title,
+                subject: subjectStr,
+                updatedAt: Date.now()
+            }));
+        } catch {}
         // Do not start if already submitted
         if (submitted) {
             clearInterval(timerRef.current);

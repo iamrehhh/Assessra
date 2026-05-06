@@ -3,6 +3,7 @@
 // Direct OpenAI GPT-4o-mini marking — mirrors the logic from the original app.py
 
 import { callLLM } from '@/lib/llm';
+import { BUSINESS_P3_RUBRIC } from './businessP3Rubric';
 
 
 function getSubject(pdf, paperTitle) {
@@ -77,29 +78,7 @@ function buildRubric(pdf, marks) {
     const isGeneralPaper = pdf && pdf.includes('8021');
 
     if (isBusinessP3) {
-        if (marks <= 4) return `CALCULATION RUBRIC (${marks} MARKS):
-- Full marks (${marks}/${marks}): Correct final answer with or without working. Accept reasonable rounding.
-- Partial (1 mark): Correct formula stated but arithmetic wrong, OR correct method with computational error.
-- 0 marks: Wrong formula AND wrong answer.
-Apply positive marking only.`;
-
-        if (marks === 8) return `ANALYSIS RUBRIC (8 MARKS) — AO1(2) + AO2(2) + AO3(4):
-AO1 – KNOWLEDGE (2): 1 mark per relevant business term identified and explained accurately.
-AO2 – APPLICATION (2): 1 mark per point specifically applied to the business context using case information.
-AO3 – ANALYSIS (4):
-  Level 2 (3-4 marks): Developed analysis with multiple logical links, identifies connections and consequences.
-  Level 1 (1-2 marks): Simple cause-effect links, minimal development.
-Use best-fit. Award whole marks only.`;
-
-        if (marks === 12) return `EVALUATION RUBRIC (12 MARKS) — AO1(2) + AO2(2) + AO3(2) + AO4(6):
-AO1 – KNOWLEDGE (2): 2=developed and accurate; 1=partially explained.
-AO2 – APPLICATION (2): 2=specific case references; 1=superficial.
-AO3 – ANALYSIS (2): 2=developed with consequences; 1=basic connections.
-AO4 – EVALUATION (6):
-  Level 3 (5-6): Balanced, justified, contextualised judgement.
-  Level 2 (3-4): Judgement present, some balance.
-  Level 1 (1-2): Judgement weak, poor justification.
-Award whole marks only.`;
+        return BUSINESS_P3_RUBRIC;
     }
 
     if (isBusinessP4) return `STRATEGY RUBRIC (20 MARKS) — AO1(3) + AO2(2) + AO3(8) + AO4(7):

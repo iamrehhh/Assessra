@@ -20,14 +20,14 @@
 }
 
 :root {
-    --background-base: #f5f0e8;
-    --card-base: #fffdf8;
-    --text-base: #1a1a2e;
-    --text-muted: #6b7280;
-    --border-base: rgba(120, 90, 50, 0.08);
-    --shadow-card: 0 1px 3px rgba(100, 80, 40, 0.04), 0 4px 12px rgba(100, 80, 40, 0.03);
-    --shadow-elevated: 0 4px 24px rgba(100, 80, 40, 0.06), 0 1px 2px rgba(100, 80, 40, 0.04);
-    --sidebar-bg: linear-gradient(180deg, #fffdf8 0%, #f7f2ea 100%);
+    --background-base: #F7F4ED;
+    --card-base: #FFFFFF;
+    --text-base: #2C2621;
+    --text-muted: #857A70;
+    --border-base: rgba(90, 75, 60, 0.08);
+    --shadow-card: 0 1px 3px rgba(60, 50, 40, 0.03), 0 4px 12px rgba(60, 50, 40, 0.02);
+    --shadow-elevated: 0 8px 30px rgba(60, 50, 40, 0.05), 0 1px 3px rgba(60, 50, 40, 0.02);
+    --sidebar-bg: #F7F4ED;
 }
 
 .dark {
@@ -43,10 +43,10 @@
 
 @layer utilities {
     .glass {
-        background: rgba(255, 253, 248, 0.88);
+        background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(120, 90, 50, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.6);
         box-shadow: var(--shadow-card);
     }
 
@@ -280,14 +280,14 @@
 /* === VISUAL POLISH: PREMIUM THEME === */
 
 :root {
-    --lime-primary: #16A34A;
-    --lime-dark: #14532D;
-    --lime-light: #f0fdf4;
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.5);
-    --text-dark: #0f172a;
+    --lime-primary: #2C5545;
+    --lime-dark: #1E3B30;
+    --lime-light: #EAF0EC;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --text-dark: #2C2621;
     /* Soft, diffused, colored shadow for depth */
-    --shadow: 0 10px 40px -10px rgba(22, 163, 74, 0.15), 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 10px 40px -10px rgba(44, 85, 69, 0.15), 0 4px 10px -2px rgba(60, 50, 40, 0.04);
     --danger: #dc2626;
     --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -310,8 +310,8 @@ body {
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    /* Warm beige mesh gradient */
-    background: radial-gradient(circle at 10% 20%, #f7f2ea 0%, #faf6ef 90%);
+    /* Clean, premium off-white background */
+    background: var(--background-base);
     background-attachment: fixed;
     color: var(--text-dark);
     min-height: 100vh;
@@ -551,8 +551,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Soft warm beige background */
-    background: radial-gradient(120% 100% at 50% 0%, #ffffff 0%, #f5f0e8 100%);
+    /* Clean soft slate background */
+    background: var(--background-base);
     z-index: 1000;
 }
 
