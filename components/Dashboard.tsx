@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import Sidebar from './Sidebar';
 import TopHeader from './TopHeader';
@@ -53,6 +53,32 @@ function parsePath() {
     return { view: 'home', params: [] };
 }
 
+// Deterministic widths for skeleton items
+const SKELETON_NAV_WIDTHS = [67, 74, 81, 60, 88, 72];
+
+// Content skeleton shown inside the persistent shell while profile loads
+function ContentSkeleton() {
+    return (
+        <div className="flex-1 p-4 md:p-8 space-y-6">
+            <div className="space-y-3">
+                <div className="h-8 w-64 rounded-lg skeleton-pulse" />
+                <div className="h-4 w-48 rounded-md skeleton-pulse" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[0, 1, 2].map((i) => (
+                    <div key={i} className="h-32 rounded-2xl skeleton-pulse" />
+                ))}
+            </div>
+            <div className="space-y-3 mt-4">
+                <div className="h-6 w-40 rounded-md skeleton-pulse" />
+                {[0, 1, 2, 3].map((i) => (
+                    <div key={i} className="h-14 rounded-xl skeleton-pulse" />
+                ))}
+            </div>
+        </div>
+    );
+}
+
 export default function Dashboard() {
     const { data: session } = useSession();
     const [view, setViewState] = useState<string>(() => parsePath().view);
@@ -63,6 +89,10 @@ export default function Dashboard() {
     const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
     const profileIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Track view changes for transition animation
+    const [viewKey, setViewKey] = useState(0);
+    const prevViewRef = useRef(view);
+
     // Navigate — writes a clean path URL so refresh lands on the right view
     const setView = useCallback((newView: string) => {
         const parts = newView.split('/');
@@ -70,6 +100,7 @@ export default function Dashboard() {
         const params = parts.slice(1);
         setViewState(baseView);
         setUrlParams(params);
+        setViewKey(k => k + 1);
         const path = (!baseView || baseView === 'home') ? '/' : '/' + newView;
         window.history.pushState(null, '', path);
     }, []);
@@ -80,6 +111,7 @@ export default function Dashboard() {
             const { view: v, params: p } = parsePath();
             setViewState(v);
             setUrlParams(p);
+            setViewKey(k => k + 1);
         };
         window.addEventListener('popstate', onPopState);
         return () => window.removeEventListener('popstate', onPopState);
@@ -133,31 +165,16 @@ export default function Dashboard() {
         };
     }, [session]);
 
-    if (isLoading) {
-        return (
-            <div className="fixed inset-0 bg-bg-base z-50">
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                    @keyframes indeterminate {
-                        0% { left: -35%; right: 100%; }
-                        60% { left: 100%; right: -90%; }
-                        100% { left: 100%; right: -90%; }
-                    }
-                    @keyframes indeterminate-short {
-                        0% { left: -200%; right: 100%; }
-                        60% { left: 107%; right: -8%; }
-                        100% { left: 107%; right: -8%; }
-                    }
-                `}} />
-                <div className="absolute top-0 left-0 right-0 h-[3px] bg-primary/10 overflow-hidden">
-                    <div className="absolute top-0 bottom-0 bg-primary shadow-[0_0_10px_var(--primary)] animate-[indeterminate_2.1s_cubic-bezier(0.65,0.815,0.735,0.395)_infinite]" />
-                    <div className="absolute top-0 bottom-0 bg-primary shadow-[0_0_10px_var(--primary)] animate-[indeterminate-short_2.1s_cubic-bezier(0.165,0.84,0.44,1)_infinite_1.15s]" />
-                </div>
-            </div>
-        );
+    // If not onboarded, show onboarding
+    if (!isLoading && userProfile && !userProfile.isOnboarded) {
+        return <OnboardingView
+            userEmail={session?.user?.email}
+            onComplete={(updatedProfile) => setUserProfile(updatedProfile)}
+        />;
     }
 
-    if (!userProfile) {
+    // Error state: profile fetch failed
+    if (!isLoading && !userProfile) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column', textAlign: 'center' }}>
                 <h2 style={{ color: '#ef4444', marginBottom: '10px' }}>Failed to load profile</h2>
@@ -167,13 +184,6 @@ export default function Dashboard() {
                 </button>
             </div>
         );
-    }
-
-    if (!userProfile.isOnboarded) {
-        return <OnboardingView
-            userEmail={session?.user?.email}
-            onComplete={(updatedProfile) => setUserProfile(updatedProfile)}
-        />;
     }
 
     const renderContent = () => {
@@ -214,15 +224,57 @@ export default function Dashboard() {
         }
     };
 
+    // Persistent shell: sidebar + header always render, only content area changes.
+    // During profile loading, show skeleton content inside the shell.
     return (
         <div className="flex h-screen overflow-hidden bg-bg-base text-text-main font-display">
-            <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
+            {/* Sidebar: show skeleton version while loading, real version when ready */}
+            {isLoading ? (
+                <aside className="hidden lg:flex w-64 border-r border-border-main flex-col shrink-0" style={{ background: 'var(--sidebar-bg, var(--bg-base))' }}>
+                    <div className="p-6 flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl skeleton-pulse" />
+                        <div className="h-5 w-24 rounded-md skeleton-pulse" />
+                    </div>
+                    <nav className="flex-1 px-4 space-y-2 mt-4">
+                        {SKELETON_NAV_WIDTHS.map((w, i) => (
+                            <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div className="w-6 h-6 rounded skeleton-pulse" />
+                                <div className="h-4 rounded-md skeleton-pulse" style={{ width: `${w}%` }} />
+                            </div>
+                        ))}
+                    </nav>
+                </aside>
+            ) : (
+                <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
+            )}
+
             <main className="flex-1 flex flex-col w-full h-full overflow-y-auto">
-                <TopHeader setView={setView} userProfile={userProfile} setIsMobileOpen={setIsMobileOpen} />
-                <div className="flex-1 p-4 md:p-8 space-y-8 pb-10">
-                    {renderContent()}
-                </div>
-                {
+                {/* Header: show skeleton version while loading, real version when ready */}
+                {isLoading ? (
+                    <header className="h-20 border-b border-border-main flex items-center justify-between px-8 shrink-0">
+                        <div className="flex items-center gap-4">
+                            <div className="h-10 w-96 rounded-xl skeleton-pulse hidden md:block" />
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="w-8 h-8 rounded-full skeleton-pulse" />
+                            <div className="w-8 h-8 rounded-full skeleton-pulse" />
+                            <div className="w-10 h-10 rounded-full skeleton-pulse" />
+                        </div>
+                    </header>
+                ) : (
+                    <TopHeader setView={setView} userProfile={userProfile} setIsMobileOpen={setIsMobileOpen} />
+                )}
+
+                {/* Content: skeleton during load, animated view transitions after */}
+                {isLoading ? (
+                    <ContentSkeleton />
+                ) : (
+                    <div key={viewKey} className="flex-1 p-4 md:p-8 space-y-8 pb-10 view-transition-in">
+                        {renderContent()}
+                    </div>
+                )}
+
+                {!isLoading && (
                     <footer className="w-full py-6 mt-auto border-t border-border-main flex flex-col items-center justify-center shrink-0">
                         <p className="text-xs text-text-muted font-medium flex items-center gap-2">
                             © {new Date().getFullYear()} Abdul Rehan <span className="text-text-muted/50">|</span>
@@ -230,9 +282,9 @@ export default function Dashboard() {
                             <a href="https://github.com/iamrehhh/Assessra-v2" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
                         </p>
                     </footer>
-                }
+                )}
             </main>
-            <ReportErrorModal currentView={view} />
+            {!isLoading && <ReportErrorModal currentView={view} />}
         </div>
     );
 }

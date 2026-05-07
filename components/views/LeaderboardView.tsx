@@ -41,7 +41,35 @@ export default function LeaderboardView() {
             .catch(() => { setError('Failed to load leaderboard.'); setLoading(false); });
     }, [currentUser]);
 
-    if (loading) return <div style={{ textAlign: 'center', padding: '60px', color: '#aaa' }}>⏳ Loading leaderboard...</div>;
+    if (loading) {
+        return (
+            <div className="space-y-10 animate-fade-in max-w-5xl mx-auto pb-12">
+                <div className="text-center space-y-4">
+                    <div className="h-12 w-64 rounded-xl skeleton-pulse mx-auto" />
+                    <div className="h-6 w-96 rounded-lg skeleton-pulse mx-auto" />
+                </div>
+                <div className="flex justify-center gap-4 mb-8">
+                    <div className="h-12 w-32 rounded-full skeleton-pulse" />
+                    <div className="h-12 w-32 rounded-full skeleton-pulse" />
+                </div>
+                <div className="glass rounded-3xl overflow-hidden border border-border-main">
+                    <div className="h-12 bg-black/5 dark:bg-white/5 border-b border-border-main skeleton-pulse" />
+                    <div className="divide-y divide-border-main">
+                        {[0, 1, 2, 3, 4].map(i => (
+                            <div key={i} className="p-6 flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-full skeleton-pulse" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 w-40 rounded skeleton-pulse" />
+                                    <div className="h-3 w-20 rounded skeleton-pulse" />
+                                </div>
+                                <div className="w-20 h-6 rounded skeleton-pulse" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
     if (error) return <div style={{ textAlign: 'center', padding: '60px', color: '#ef4444' }}>{error}</div>;
 
     const board = data ? data[activeTab] : [];

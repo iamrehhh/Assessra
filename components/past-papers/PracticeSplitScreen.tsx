@@ -33,10 +33,10 @@ function formatTime(totalSeconds) {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-export default function PracticeSplitScreen({ paperId, backHash }) {
+export default function PracticeSplitScreen({ paperId, backPath }) {
     const router = useRouter();
     const filename = decodeURIComponent(paperId);
-    const exitHash = backHash || '#pastpapers';
+    const exitPath = backPath || '/pastpapers';
 
     const [pdfUrl, setPdfUrl] = useState('');
     const [loading, setLoading] = useState(true);
@@ -251,8 +251,18 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-bg-base text-text-main">
-                <div className="w-8 h-8 border-4 border-border-main border-t-primary rounded-full animate-spin"></div>
+            <div className="flex h-screen bg-bg-base overflow-hidden">
+                <div className="w-1/2 h-full border-r border-border-main flex flex-col">
+                    <div className="h-14 border-b border-border-main skeleton-pulse" />
+                    <div className="flex-1 bg-black/5 dark:bg-white/5 skeleton-pulse" />
+                </div>
+                <div className="w-1/2 h-full flex flex-col">
+                    <div className="h-14 border-b border-border-main skeleton-pulse" />
+                    <div className="p-8 space-y-8">
+                        <div className="h-64 rounded-3xl skeleton-pulse" />
+                        <div className="h-64 rounded-3xl skeleton-pulse" />
+                    </div>
+                </div>
             </div>
         );
     }
@@ -266,8 +276,7 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                     <div className="w-1/2 h-full flex flex-col border-r border-border-main bg-bg-card dark:bg-[#1e1e1e]">
                         <div className="h-14 bg-bg-base border-b border-border-main flex items-center justify-between px-4 shrink-0">
                             <button onClick={() => {
-                                window.location.hash = exitHash.replace('#', '');
-                                router.push('/');
+                                router.push(exitPath);
                             }} className="flex items-center gap-2 text-text-muted hover:text-text-main transition-colors text-sm font-bold">
                                 <span className="material-symbols-outlined text-base">arrow_back</span>
                                 Back to Papers
@@ -308,8 +317,7 @@ export default function PracticeSplitScreen({ paperId, backHash }) {
                         <div className="flex items-center gap-4">
                             {isFullWidthMode && (
                                 <button onClick={() => {
-                                    window.location.hash = exitHash.replace('#', '');
-                                    router.push('/');
+                                    router.push(exitPath);
                                 }} className="flex items-center gap-1 text-text-muted hover:text-text-main transition-colors text-sm font-bold border-r border-border-main pr-4">
                                     <span className="material-symbols-outlined text-base">arrow_back</span>
                                     Back to Papers

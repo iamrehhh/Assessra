@@ -15,35 +15,24 @@ export default function TopHeader({ setView, userProfile, setIsMobileOpen }) {
 
     // Check for unread report replies periodically
     useEffect(() => {
-        const checkReportReplies = async () => {
+        if (!session) return;
+
+        const fetchData = async () => {
             try {
-                const res = await fetch('/api/reports?mine=true');
-                if (res.ok) {
-                    const data = await res.json();
+                const [reportRes, notifyRes] = await Promise.all([
+                    fetch('/api/reports?mine=true'),
+                    fetch('/api/notification')
+                ]);
+
+                if (reportRes.ok) {
+                    const data = await reportRes.json();
                     const seen = JSON.parse(localStorage.getItem('assessra_seen_replies') || '[]');
                     const hasNew = (data.reports || []).some(r => r.admin_reply && !seen.includes(r.id));
                     setHasUnreadReport(hasNew);
                 }
-            } catch { /* silent */ }
-        };
-        checkReportReplies();
-        const interval = setInterval(checkReportReplies, 60000);
-        return () => clearInterval(interval);
-    }, [session]);
 
-    // Listen for report modal close to clear unread state
-    useEffect(() => {
-        const handleReportRead = () => setHasUnreadReport(false);
-        window.addEventListener('report-replies-read', handleReportRead);
-        return () => window.removeEventListener('report-replies-read', handleReportRead);
-    }, []);
-
-    useEffect(() => {
-        const fetchNotification = async () => {
-            try {
-                const res = await fetch('/api/notification');
-                if (res.ok) {
-                    const data = await res.json();
+                if (notifyRes.ok) {
+                    const data = await notifyRes.json();
                     setNotification(data);
                     const seenMsg = localStorage.getItem('assessra_seen_notification');
                     setHasUnread(
@@ -51,11 +40,22 @@ export default function TopHeader({ setView, userProfile, setIsMobileOpen }) {
                         !!userProfile?.admin_message
                     );
                 }
-            } catch (err) { console.error('Notification error', err); }
+            } catch (err) {
+                console.error('Header fetch error:', err);
+            }
         };
 
-        fetchNotification();
+        fetchData();
+        const interval = setInterval(fetchData, 60000);
+        return () => clearInterval(interval);
     }, [session, userProfile?.admin_message]);
+
+    // Listen for report modal close to clear unread state
+    useEffect(() => {
+        const handleReportRead = () => setHasUnreadReport(false);
+        window.addEventListener('report-replies-read', handleReportRead);
+        return () => window.removeEventListener('report-replies-read', handleReportRead);
+    }, []);
 
     const handleOpenPanel = () => {
         setShowPanel(!showPanel);

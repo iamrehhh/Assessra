@@ -24,18 +24,27 @@ export default function HomeView({ setView, setSelectedSubject }) {
     const firstName = user.split(' ')[0] || 'Student';
 
     useEffect(() => {
-        const fetchDashboardData = async () => {
+        if (!session?.user?.email) return;
+
+        const userEmail = session.user.email;
+
+        const fetchData = async () => {
             try {
-                const userEmail = session?.user?.email;
-                if (!userEmail) return;
+                // Fetch in parallel
+                const [scoresRes, lbRes, quoteRes] = await Promise.all([
+                    fetch(`/api/scores/user?username=${encodeURIComponent(userEmail)}`),
+                    fetch('/api/leaderboard'),
+                    fetch('/api/quote')
+                ]);
 
-                // Fetch user scores
-                const scoresRes = await fetch(`/api/scores/user?username=${encodeURIComponent(userEmail)}`);
-                const scoresData = await scoresRes.json();
+                // Parse in parallel
+                const [scoresData, lbData, quoteData] = await Promise.all([
+                    scoresRes.json(),
+                    lbRes.json(),
+                    quoteRes.ok ? quoteRes.json() : Promise.resolve({})
+                ]);
 
-                // Fetch leaderboard for rank
-                const lbRes = await fetch('/api/leaderboard');
-                const lbData = await lbRes.json();
+                if (quoteData.quote) setQuote(quoteData.quote);
 
                 let totalS = 0;
                 let todayS = 0;
@@ -45,54 +54,41 @@ export default function HomeView({ setView, setSelectedSubject }) {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                if (scoresData.attempts && scoresData.attempts.length > 0) {
-                    completed = scoresData.attempts.length;
-                    scoresData.attempts.forEach(s => {
-                        totalS += s.score;
-                        totalMax += s.maxMarks;
+                const allRecords = scoresData.attempts || scoresData.scores || [];
+                completed = allRecords.length;
 
-                        const attemptDate = new Date(s.submittedAt);
-                        attemptDate.setHours(0, 0, 0, 0);
-                        if (attemptDate.getTime() === today.getTime()) {
-                            todayS += s.score;
-                        }
-                    });
-                } else if (scoresData.scores && scoresData.scores.length > 0) {
-                    // Fallback in case of old API return format
-                    completed = scoresData.scores.length;
-                    scoresData.scores.forEach(s => {
-                        totalS += s.score;
-                        totalMax += s.maxMarks;
+                const scoresByDate = {};
+                
+                allRecords.forEach(s => {
+                    totalS += s.score;
+                    totalMax += s.maxMarks;
 
-                        const attemptDate = new Date(s.submittedAt || s.submitted_at);
-                        attemptDate.setHours(0, 0, 0, 0);
-                        if (attemptDate.getTime() === today.getTime()) {
-                            todayS += s.score;
-                        }
-                    });
-                }
+                    const attemptDate = new Date(s.submittedAt || s.submitted_at);
+                    const dateStr = attemptDate.toLocaleDateString();
+                    scoresByDate[dateStr] = (scoresByDate[dateStr] || 0) + s.score;
+
+                    attemptDate.setHours(0, 0, 0, 0);
+                    if (attemptDate.getTime() === today.getTime()) {
+                        todayS += s.score;
+                    }
+                });
 
                 const avg = totalMax > 0 ? Math.round((totalS / totalMax) * 100 * 10) / 10 : 0;
 
                 // Find rank in leaderboard
                 let currentRank = '-';
-                if (lbData.leaderboard && userEmail) {
+                if (lbData.leaderboard) {
                     const idx = lbData.leaderboard.findIndex(u => u.username === userEmail);
                     if (idx !== -1) currentRank = idx + 1;
                 }
 
                 // Calculate streak
                 let calculatedStreak = 0;
-                const allRecords = scoresData.attempts || scoresData.scores || [];
                 if (allRecords.length > 0) {
-                    const scoresByDate = {};
-                    allRecords.forEach(r => {
-                        const dateStr = new Date(r.submittedAt || r.submitted_at).toLocaleDateString();
-                        scoresByDate[dateStr] = (scoresByDate[dateStr] || 0) + r.score;
-                    });
                     let checkDate = new Date();
                     const todayStr = checkDate.toLocaleDateString();
                     if ((scoresByDate[todayStr] || 0) >= 50) calculatedStreak++;
+                    
                     checkDate.setDate(checkDate.getDate() - 1);
                     while (true) {
                         const prevStr = checkDate.toLocaleDateString();
@@ -118,22 +114,7 @@ export default function HomeView({ setView, setSelectedSubject }) {
             }
         };
 
-        const fetchQuote = async () => {
-            try {
-                const res = await fetch('/api/quote');
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.quote) setQuote(data.quote);
-                }
-            } catch (err) {
-                console.error('Failed to load quote:', err);
-            }
-        };
-
-        if (session?.user) {
-            fetchDashboardData();
-            fetchQuote();
-        }
+        fetchData();
     }, [session]);
 
     useEffect(() => {

@@ -1,39 +1,18 @@
 'use client';
 
 import { ADMIN_EMAILS } from '@/lib/admin';
-import { useState, useEffect } from 'react';
+
+const navItems = [
+    { id: 'home', icon: 'grid_view', label: 'Overview' },
+    { id: 'pastpapers', icon: 'auto_stories', label: 'Past Papers' },
+    { id: 'vocab-idioms', icon: 'menu_book', label: 'Vocab & Idioms' },
+    { id: 'tenses', icon: 'schedule', label: 'Tenses' },
+    { id: 'grammar-errors', icon: 'spellcheck', label: 'Grammar' },
+    { id: 'leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
+];
 
 export default function Sidebar({ view, setView, userEmail, isMobileOpen, setIsMobileOpen }) {
     const isAdmin = ADMIN_EMAILS.includes(userEmail);
-
-    const [completedPapers, setCompletedPapers] = useState(0);
-    const paperGoal = 10;
-    const goalPercent = Math.min(100, Math.round((completedPapers / paperGoal) * 100)) || 0;
-
-    useEffect(() => {
-        const fetchScores = async () => {
-            try {
-                if (!userEmail) return;
-                const scoresRes = await fetch(`/api/scores/user?username=${encodeURIComponent(userEmail)}`);
-                const scoresData = await scoresRes.json();
-                if (scoresData.attempts && scoresData.attempts.length > 0) {
-                    setCompletedPapers(scoresData.attempts.length);
-                }
-            } catch (err) {
-                console.error('Failed to fetch user scores for sidebar:', err);
-            }
-        };
-        fetchScores();
-    }, [userEmail]);
-
-    const navItems = [
-        { id: 'home', icon: 'grid_view', label: 'Overview' },
-        { id: 'pastpapers', icon: 'auto_stories', label: 'Past Papers' },
-        { id: 'vocab-idioms', icon: 'menu_book', label: 'Vocab & Idioms' },
-        { id: 'tenses', icon: 'schedule', label: 'Tenses' },
-        { id: 'grammar-errors', icon: 'spellcheck', label: 'Grammar' },
-        { id: 'leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
-    ];
 
     return (
         <aside className={`fixed inset-y-0 left-0 z-50 w-64 border-r border-border-main flex flex-col shrink-0 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{ background: 'var(--sidebar-bg)' }}>

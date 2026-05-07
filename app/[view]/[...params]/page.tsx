@@ -22,8 +22,24 @@ function SubViewContent() {
 
     if (status === 'loading') {
         return (
-            <div className="fixed inset-0 bg-bg-base flex items-center justify-center z-50">
-                <div className="w-8 h-8 border-4 border-border-main border-t-primary rounded-full animate-spin" />
+            <div className="flex h-screen overflow-hidden bg-bg-base text-text-main font-display">
+                <main className="flex-1 flex flex-col w-full h-full overflow-hidden">
+                    <header className="h-20 border-b border-border-main flex items-center justify-between px-8 shrink-0">
+                        <div className="h-10 w-96 rounded-xl skeleton-pulse hidden md:block" />
+                        <div className="flex items-center gap-4">
+                            <div className="w-8 h-8 rounded-full skeleton-pulse" />
+                            <div className="w-10 h-10 rounded-full skeleton-pulse" />
+                        </div>
+                    </header>
+                    <div className="flex-1 p-4 md:p-8 space-y-6">
+                        <div className="h-8 w-64 rounded-lg skeleton-pulse" />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="h-32 rounded-2xl skeleton-pulse" />
+                            <div className="h-32 rounded-2xl skeleton-pulse" />
+                            <div className="h-32 rounded-2xl skeleton-pulse" />
+                        </div>
+                    </div>
+                </main>
             </div>
         );
     }

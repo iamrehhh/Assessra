@@ -73,9 +73,15 @@ export default function PastPapersView({ initialLevel, initialSubject, setView }
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center h-[60vh] text-text-muted">
-                <div className="w-8 h-8 border-4 border-border-main border-t-primary rounded-full animate-spin mb-4" />
-                <p className="font-bold">Loading available past papers...</p>
+            <div className="space-y-10 animate-fade-in max-w-3xl mx-auto">
+                <div className="text-center space-y-4 mb-10">
+                    <div className="h-10 w-64 rounded-xl skeleton-pulse mx-auto" />
+                    <div className="h-4 w-96 rounded-lg skeleton-pulse mx-auto" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="h-64 rounded-3xl skeleton-pulse" />
+                    <div className="h-64 rounded-3xl skeleton-pulse" />
+                </div>
             </div>
         );
     }
@@ -230,7 +236,7 @@ export default function PastPapersView({ initialLevel, initialSubject, setView }
     const activeTab = (selectedPaperTab && sortedPaperNums.includes(selectedPaperTab)) ? selectedPaperTab : sortedPaperNums[0];
 
     const handlePaperClick = (filename) => {
-        router.push(`/past-papers/practice/${encodeURIComponent(filename)}`);
+        router.push(`/past-papers/practice/${encodeURIComponent(filename)}?level=${encodeURIComponent(selectedLevel)}&subject=${encodeURIComponent(selectedSubject)}`);
     };
 
     return (

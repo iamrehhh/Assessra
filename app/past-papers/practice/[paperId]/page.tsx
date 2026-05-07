@@ -2,7 +2,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { allMCQData } from '@/data/index';
 
 const PracticeSplitScreen = dynamic(
@@ -15,33 +16,66 @@ const MCQView = dynamic(
     { ssr: false }
 );
 
-// Infer the back URL from the paperId so we can return to the right subject
-function getBackHash(paperId: string) {
-    const decoded = decodeURIComponent(paperId);
-    // paperId format: "subject_season_year_variant"  e.g. "business_s24_qp_41"
-    // or "general_paper_s24_qp_11"
-    let subject = '';
-    if (decoded.startsWith('general_paper') || decoded.startsWith('gp_')) subject = 'general_paper';
-    else if (decoded.startsWith('economics')) subject = 'economics';
-    else if (decoded.startsWith('business')) subject = 'business';
+// Build the back path from query params or by inferring from the paperId.
+// Returns a path-based URL like "/pastpapers/alevel/economics".
+function getBackPath(paperId: string, searchParams: URLSearchParams) {
+    // Prefer explicit query params (passed by PastPapersView)
+    const level = searchParams.get('level');
+    const subject = searchParams.get('subject');
 
-    if (subject) return `#pastpapers/alevel/${subject}`;
-    return '#pastpapers';
+    if (level && subject) {
+        return `/pastpapers/${level}/${subject}`;
+    }
+
+    // Fallback: infer from the paperId string
+    const decoded = decodeURIComponent(paperId);
+    let inferredSubject = '';
+    let inferredLevel = 'alevel'; // default
+
+    if (decoded.startsWith('general_paper') || decoded.startsWith('gp_')) {
+        inferredSubject = 'general_paper';
+        inferredLevel = 'alevel';
+    } else if (decoded.startsWith('economics')) {
+        inferredSubject = 'economics';
+        inferredLevel = 'alevel';
+    } else if (decoded.startsWith('business')) {
+        inferredSubject = 'business';
+        inferredLevel = 'alevel';
+    }
+
+    if (inferredSubject) {
+        return `/pastpapers/${inferredLevel}/${inferredSubject}`;
+    }
+
+    // If we can't determine the subject at all, go to pastpapers root
+    return '/pastpapers';
 }
 
-export default function PastPaperPracticePage() {
+function PracticePage() {
     const params = useParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     if (!params.paperId) return null;
 
     const paperId = decodeURIComponent(params.paperId as string);
-    const backHash = getBackHash(params.paperId as string);
+    const backPath = getBackPath(params.paperId as string, searchParams);
 
     if (allMCQData[paperId]) {
-        return <MCQView paperId={paperId} paperData={allMCQData} onBack={() => router.push('/' + backHash)} />;
+        return <MCQView paperId={paperId} paperData={allMCQData} onBack={() => router.push(backPath)} />;
     }
 
-    return <PracticeSplitScreen paperId={params.paperId as string} backHash={backHash} />;
+    return <PracticeSplitScreen paperId={params.paperId as string} backPath={backPath} />;
 }
 
+export default function PastPaperPracticePage() {
+    return (
+        <Suspense fallback={
+            <div className="flex h-screen items-center justify-center bg-bg-base text-text-main">
+                <div className="w-8 h-8 border-4 border-border-main border-t-primary rounded-full animate-spin"></div>
+            </div>
+        }>
+            <PracticePage />
+        </Suspense>
+    );
+}

@@ -1,6 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -70,6 +68,25 @@
     .fill-1 {
         font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
+}
+
+/* ── Global Performance Optimizations ── */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Prevent layout shift from scrollbar appearing/disappearing */
+html, body {
+    overflow-x: hidden;
+}
+
+/* GPU-accelerate main scrollable area */
+main {
+    will-change: scroll-position;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* GLOBAL FONTS */
@@ -2193,11 +2210,29 @@ textarea.expanded {
 @keyframes fadeIn {
     from {
         opacity: 0;
+        transform: translateY(6px);
     }
 
     to {
         opacity: 1;
+        transform: translateY(0);
     }
+}
+
+/* Smooth view transition for content area switches */
+@keyframes viewSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.view-transition-in {
+    animation: viewSlideIn 0.2s ease-out both;
 }
 
 @keyframes slideUp {
@@ -3744,23 +3779,42 @@ textarea.expanded {
     }
 }
 
-/* ── Loading Screen Animations ── */
-@keyframes shimmer-slide {
+/* ── Skeleton Loading Animations ── */
+@keyframes skeleton-shimmer {
     0% {
-        transform: translateX(-100%);
+        background-position: -200% 0;
     }
-
     100% {
-        transform: translateX(400%);
+        background-position: 200% 0;
     }
 }
 
-.animate-shimmer {
-    animation: shimmer-slide 1.5s ease-in-out infinite;
+.skeleton-pulse {
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-base, rgba(0, 0, 0, 0.06)) 25%,
+        var(--skeleton-shine, rgba(0, 0, 0, 0.10)) 37%,
+        var(--skeleton-base, rgba(0, 0, 0, 0.06)) 63%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+    border-radius: inherit;
+}
+
+/* Dark mode skeleton */
+.dark .skeleton-pulse,
+[data-theme="dark"] .skeleton-pulse {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.06) 25%,
+        rgba(255, 255, 255, 0.12) 37%,
+        rgba(255, 255, 255, 0.06) 63%
+    );
+    background-size: 200% 100%;
 }
 
 .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.2s ease-out;
 }
 
 /* === AI FEEDBACK MARKDOWN STYLING === */
