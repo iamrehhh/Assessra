@@ -11,19 +11,15 @@ import LeaderboardView from './views/LeaderboardView';
 import FormulaeView from './views/FormulaeView';
 import DefinitionsView from './views/DefinitionsView';
 import TipsView from './views/TipsView';
-import VocabView from './views/VocabView';
 import OnboardingView from './views/OnboardingView';
 import ProfileView from './views/ProfileView';
 import AdminView from './views/AdminView';
 
 import PastPapersView from './views/PastPapersView';
 import VocabIdiomsView from './views/VocabIdiomsView';
-import GrammarErrorView from './views/GrammarErrorView';
-import TensesView from './views/TensesView';
 import ReportErrorModal from './ReportErrorModal';
 
-const VALID_VIEWS = ['home', 'pastpapers', 'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms', 'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'];
-// 'prepositions' kept in VALID_VIEWS so old bookmarks don't 404 — it redirects to 'tenses' in renderContent
+const VALID_VIEWS = ['home', 'pastpapers', 'leaderboard', 'formulae', 'definitions', 'vocab-idioms', 'tips', 'profile', 'admin'];
 
 // Parse the current URL into { view, params }
 // Supports path-based (/leaderboard) AND legacy hash-based (#leaderboard)
@@ -155,7 +151,7 @@ export default function Dashboard() {
 
         fetchProfile();
         if (profileIntervalRef.current) clearInterval(profileIntervalRef.current);
-        profileIntervalRef.current = setInterval(fetchProfile, 60000);
+        profileIntervalRef.current = setInterval(fetchProfile, 45000);
 
         return () => {
             if (profileIntervalRef.current) {
@@ -204,15 +200,10 @@ export default function Dashboard() {
                     initialSubject={urlParams[1] || null}
                     setView={setView}
                 />;
-            case 'vocab':
-                return <VocabView />;
+
             case 'vocab-idioms':
                 return <VocabIdiomsView />;
-            case 'prepositions': // legacy redirect
-            case 'tenses':
-                return <TensesView />;
-            case 'grammar-errors':
-                return <GrammarErrorView />;
+
             case 'tips':
                 return <TipsView />;
             case 'profile':
@@ -248,7 +239,7 @@ export default function Dashboard() {
                 <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
             )}
 
-            <main className="flex-1 flex flex-col w-full h-full overflow-y-auto">
+            <main className="flex-1 flex flex-col w-full h-full overflow-hidden">
                 {/* Header: show skeleton version while loading, real version when ready */}
                 {isLoading ? (
                     <header className="h-20 border-b border-border-main flex items-center justify-between px-8 shrink-0">
@@ -269,20 +260,12 @@ export default function Dashboard() {
                 {isLoading ? (
                     <ContentSkeleton />
                 ) : (
-                    <div key={viewKey} className="flex-1 p-4 md:p-8 space-y-8 pb-10 view-transition-in">
+                    <div key={viewKey} className="flex-1 p-4 md:p-8 space-y-8 pb-10 view-transition-in overflow-y-auto">
                         {renderContent()}
                     </div>
                 )}
 
-                {!isLoading && (
-                    <footer className="w-full py-6 mt-auto border-t border-border-main flex flex-col items-center justify-center shrink-0">
-                        <p className="text-xs text-text-muted font-medium flex items-center gap-2">
-                            © {new Date().getFullYear()} Abdul Rehan <span className="text-text-muted/50">|</span>
-                            <a href="mailto:abdulrehanoffical@gmail.com" className="hover:text-primary transition-colors">abdulrehanoffical@gmail.com</a> <span className="text-text-muted/50">|</span>
-                            <a href="https://github.com/iamrehhh/Assessra-v2" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
-                        </p>
-                    </footer>
-                )}
+
             </main>
             {!isLoading && <ReportErrorModal currentView={view} />}
         </div>

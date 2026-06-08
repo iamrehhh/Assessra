@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import LoginPage from '@/components/LoginPage';
+import LandingPage from '@/components/LandingPage';
 import Dashboard from '@/components/Dashboard';
 
 // Deterministic widths for skeleton nav items to avoid Math.random() hydration mismatches
@@ -67,7 +67,7 @@ export default function Home() {
   }
 
   if (!session) {
-    return <LoginPage />;
+    return <LandingPage />;
   }
 
   return <Dashboard />;

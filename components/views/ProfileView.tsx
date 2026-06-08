@@ -1,16 +1,21 @@
-
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function ProfileView({ userProfile, onProfileUpdate }: { userProfile: any, onProfileUpdate: (user: any) => void }) {
     const [nickname, setNickname] = useState(userProfile?.nickname || '');
-    const [level, setLevel] = useState(userProfile?.level || '');
+    const [level, setLevel] = useState(userProfile?.level || 'AS Level');
     const [imagePreview, setImagePreview] = useState<string | null>(userProfile?.image || null);
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        // Trigger entrance animation
+        setTimeout(() => setIsLoaded(true), 50);
+    }, []);
 
     // Get initials fallback
     const getInitials = (nameStr: string) => {
@@ -28,13 +33,13 @@ export default function ProfileView({ userProfile, onProfileUpdate }: { userProf
 
         // Basic validation
         if (!file.type.startsWith('image/')) {
-            setMessage({ type: 'error', text: 'Please upload an image file (JPEG, PNG)' });
+            setMessage({ type: 'error', text: 'Please upload an image file (JPEG, PNG, WEBP)' });
             return;
         }
 
         // 500kb limit for Base64 MongoDB storage
         if (file.size > 500 * 1024) {
-            setMessage({ type: 'error', text: 'Image must be less than 500KB' });
+            setMessage({ type: 'error', text: 'Image must be less than 500KB. Please compress it first.' });
             return;
         }
 
@@ -83,53 +88,46 @@ export default function ProfileView({ userProfile, onProfileUpdate }: { userProf
     };
 
     return (
-        <div style={{ maxWidth: 800, margin: '40px auto', padding: '0 20px' }}>
-            <h1 style={{ color: 'var(--lime-dark)', fontSize: '2.5rem', marginBottom: '10px', fontWeight: 800 }}>My Profile</h1>
-            <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '40px' }}>Manage your personal details and leaderboard appearance.</p>
+        <div className={`max-w-4xl mx-auto pt-4 pb-20 space-y-8 transition-all duration-700 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            
+            <div className="mb-10 text-center md:text-left">
+                <h2 className="text-4xl md:text-5xl font-black tracking-tight text-text-main mb-3 flex items-center justify-center md:justify-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
+                        <span className="material-symbols-outlined text-primary text-3xl">manage_accounts</span>
+                    </div>
+                    My Profile
+                </h2>
+                <p className="text-text-muted text-lg md:ml-[68px]">Manage your personal details, avatar, and leaderboard appearance.</p>
+            </div>
 
-            <div style={{ background: 'white', borderRadius: '20px', padding: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
+            <div className="bg-bg-card rounded-[2.5rem] p-8 md:p-12 border border-border-main shadow-sm relative overflow-hidden group">
+                
+                {/* Ambient background glow */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-primary/10 transition-colors duration-700 pointer-events-none"></div>
 
                 {/* Avatar Section */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
-                    <div
-                        onClick={handleImageClick}
-                        style={{
-                            width: '120px',
-                            height: '120px',
-                            borderRadius: '50%',
-                            background: imagePreview ? `url(${imagePreview}) center/cover no-repeat` : 'linear-gradient(135deg, var(--lime-primary), #16a34a)',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '3rem',
-                            fontWeight: 800,
-                            cursor: 'pointer',
-                            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            border: '4px solid white'
-                        }}
-                    >
-                        {!imagePreview && getInitials(nickname || userProfile?.name)}
-
-                        {/* Hover Overlay */}
-                        <div style={{
-                            position: 'absolute',
-                            top: 0, left: 0, right: 0, bottom: 0,
-                            background: 'rgba(0,0,0,0.5)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            opacity: 0,
-                            transition: 'opacity 0.2s',
-                            fontSize: '1rem',
-                            fontWeight: 600
-                        }}
-                            onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-                            onMouseOut={(e) => e.currentTarget.style.opacity = '0'}
+                <div className="flex flex-col items-center mb-12 relative z-10">
+                    <div className="relative group/avatar cursor-pointer" onClick={handleImageClick}>
+                        {/* Glowing ring behind avatar */}
+                        <div className="absolute -inset-2 bg-gradient-to-tr from-primary/40 to-primary/0 rounded-full blur-md opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div
+                            className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center text-4xl md:text-5xl font-black text-white overflow-hidden relative z-10 border-4 border-bg-card shadow-xl transition-transform duration-300 group-hover/avatar:scale-105 bg-black/5 dark:bg-white/5"
+                            style={{
+                                background: imagePreview ? `url(${imagePreview}) center/cover no-repeat` : undefined
+                            }}
                         >
-                            📷 Change
+                            {!imagePreview && (
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary to-emerald-600 flex items-center justify-center">
+                                    {getInitials(nickname || userProfile?.name)}
+                                </div>
+                            )}
+
+                            {/* Hover Overlay */}
+                            <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+                                <span className="material-symbols-outlined text-white text-3xl mb-1">photo_camera</span>
+                                <span className="text-white text-xs font-bold uppercase tracking-wider">Change</span>
+                            </div>
                         </div>
                     </div>
                     <input
@@ -137,96 +135,116 @@ export default function ProfileView({ userProfile, onProfileUpdate }: { userProf
                         ref={fileInputRef}
                         onChange={handleFileChange}
                         accept="image/jpeg, image/png, image/webp"
-                        style={{ display: 'none' }}
+                        className="hidden"
                     />
-                    <p style={{ color: '#888', fontSize: '0.9rem', marginTop: '15px' }}>Click avatar to upload image (Max 500KB)</p>
+                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mt-6 bg-black/5 dark:bg-white/5 px-4 py-1.5 rounded-full border border-border-main">
+                        Max Size: 500KB
+                    </p>
                 </div>
 
                 {message.text && (
-                    <div style={{
-                        padding: '12px',
-                        borderRadius: '8px',
-                        marginBottom: '20px',
-                        fontWeight: 600,
-                        background: message.type === 'success' ? '#f0fdf4' : '#fef2f2',
-                        color: message.type === 'success' ? '#16a34a' : '#ef4444',
-                        textAlign: 'center'
-                    }}>
+                    <div className={`p-4 rounded-2xl mb-8 font-bold text-sm flex items-center justify-center gap-2 relative z-10 animate-fade-in ${
+                        message.type === 'success' 
+                            ? 'bg-primary/10 text-primary border border-primary/20' 
+                            : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                    }`}>
+                        <span className="material-symbols-outlined text-xl">
+                            {message.type === 'success' ? 'check_circle' : 'error'}
+                        </span>
                         {message.text}
                     </div>
                 )}
 
                 {/* Form fields */}
-                <form onSubmit={handleSave}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px', marginBottom: '30px' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', color: '#444', fontWeight: 600 }}>Email Address</label>
+                <form onSubmit={handleSave} className="relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        {/* Email (Disabled) */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[16px]">mail</span>
+                                Email Address
+                            </label>
                             <input
                                 type="email"
                                 disabled
                                 value={userProfile?.email || ''}
-                                style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '2px solid #e5e7eb', background: '#f9fafb', color: '#888', fontSize: '1rem', boxSizing: 'border-box' }}
+                                className="w-full p-4 rounded-xl border border-border-main bg-black/5 dark:bg-white/5 text-text-muted font-medium cursor-not-allowed"
                             />
-                            <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '5px' }}>Email cannot be changed.</p>
+                            <p className="text-[10px] text-text-muted/60 font-bold uppercase tracking-wider flex items-center gap-1 mt-1">
+                                <span className="material-symbols-outlined text-[12px]">lock</span> Email cannot be changed
+                            </p>
                         </div>
 
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', color: '#444', fontWeight: 600 }}>Full Name</label>
+                        {/* Full Name (Disabled) */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[16px]">badge</span>
+                                Full Name
+                            </label>
                             <input
                                 type="text"
                                 disabled
                                 value={userProfile?.name || ''}
-                                style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '2px solid #e5e7eb', background: '#f9fafb', color: '#888', fontSize: '1rem', boxSizing: 'border-box' }}
+                                className="w-full p-4 rounded-xl border border-border-main bg-black/5 dark:bg-white/5 text-text-muted font-medium cursor-not-allowed"
                             />
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px', marginBottom: '40px' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', color: '#444', fontWeight: 600 }}>Leaderboard Nickname</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        {/* Nickname */}
+                        <div className="space-y-2 group/input">
+                            <label className="text-xs font-bold text-text-main group-focus-within/input:text-primary transition-colors uppercase tracking-widest flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[16px]">military_tech</span>
+                                Leaderboard Nickname
+                            </label>
                             <input
                                 type="text"
                                 value={nickname}
                                 onChange={(e) => setNickname(e.target.value)}
                                 maxLength={20}
-                                style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '2px solid #e5e7eb', fontSize: '1rem', color: '#111827', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                                onFocus={(e) => e.target.style.borderColor = 'var(--lime-primary)'}
-                                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                                placeholder="Enter a cool nickname"
+                                className="w-full p-4 rounded-xl border border-border-main bg-transparent text-text-main font-bold focus:outline-none focus:border-primary/50 focus:bg-primary/5 transition-all shadow-sm"
                             />
                         </div>
 
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', color: '#444', fontWeight: 600 }}>Appearing For</label>
-                            <select
-                                value={level}
-                                onChange={(e) => setLevel(e.target.value)}
-                                style={{ width: '100%', padding: '14px', borderRadius: '10px', border: '2px solid #e5e7eb', fontSize: '1rem', color: '#111827', boxSizing: 'border-box', cursor: 'pointer', backgroundColor: 'white' }}
-                            >
-                                <option value="IGCSE">IGCSE</option>
-                                <option value="AS Level">AS Level</option>
-                                <option value="A Level">A Level</option>
-                            </select>
+                        {/* Level */}
+                        <div className="space-y-2 group/input">
+                            <label className="text-xs font-bold text-text-main group-focus-within/input:text-primary transition-colors uppercase tracking-widest flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[16px]">school</span>
+                                Academic Level
+                            </label>
+                            <div className="relative">
+                                <select
+                                    value={level}
+                                    onChange={(e) => setLevel(e.target.value)}
+                                    className="w-full p-4 pr-12 rounded-xl border border-border-main bg-transparent text-text-main font-bold focus:outline-none focus:border-primary/50 focus:bg-primary/5 transition-all shadow-sm appearance-none cursor-pointer"
+                                >
+                                    <option value="IGCSE" className="bg-bg-card text-text-main">IGCSE</option>
+                                    <option value="AS Level" className="bg-bg-card text-text-main">AS Level</option>
+                                    <option value="A Level" className="bg-bg-card text-text-main">A Level</option>
+                                </select>
+                                <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
+                                    expand_more
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <div style={{ textAlign: 'right', borderTop: '1px solid #f3f4f6', paddingTop: '25px' }}>
+                    <div className="border-t border-border-main pt-8 flex justify-end">
                         <button
                             type="submit"
                             disabled={isSaving}
-                            style={{
-                                padding: '14px 40px',
-                                background: isSaving ? '#9ca3af' : 'var(--lime-primary)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '10px',
-                                fontSize: '1.1rem',
-                                fontWeight: 700,
-                                cursor: isSaving ? 'not-allowed' : 'pointer',
-                                boxShadow: isSaving ? 'none' : '0 4px 12px rgba(132,204,22,0.3)',
-                                transition: 'all 0.2s'
-                            }}
+                            className={`flex items-center gap-2 px-8 py-4 rounded-xl font-black uppercase tracking-wider text-sm transition-all duration-300 ${
+                                isSaving 
+                                    ? 'bg-black/10 dark:bg-white/10 text-text-muted cursor-not-allowed' 
+                                    : 'bg-primary text-background-dark hover:scale-105 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]'
+                            }`}
                         >
-                            {isSaving ? 'Saving...' : 'Save Changes'}
+                            {isSaving ? (
+                                <><div className="w-4 h-4 border-2 border-text-muted border-t-transparent rounded-full animate-spin" /> Saving Changes...</>
+                            ) : (
+                                <><span className="material-symbols-outlined text-lg">save</span> Save Profile</>
+                            )}
                         </button>
                     </div>
                 </form>

@@ -101,7 +101,7 @@ export default function DefinitionsView() {
                     ))
                 ) : (
                     <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#aaa' }}>
-                        No definitions found matching "{searchTerm}".
+                        No definitions found matching &quot;{searchTerm}&quot;.
                     </div>
                 )}
             </div>

@@ -305,7 +305,7 @@ export default function VocabIdiomsView() {
     // ─────────────────────────────────────────────────────────────────
     if (practiceState === 'idle') {
         return (
-            <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-10">
+            <div className="max-w-4xl mx-auto space-y-8 view-transition-in pb-10">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
                         <h1 className="text-3xl font-black text-text-main tracking-tight">Vocabulary & Idioms</h1>
@@ -314,7 +314,7 @@ export default function VocabIdiomsView() {
                 </div>
 
                 {viewingSet ? (
-                    <div className="space-y-6 animate-fade-in relative">
+                    <div className="space-y-6 view-transition-in relative">
                         <div className="flex items-center justify-between mb-8">
                             <button
                                 onClick={() => setViewingSet(null)}
@@ -336,7 +336,7 @@ export default function VocabIdiomsView() {
                             return (
                                 <div key={idx} className={`glass p-6 sm:p-8 rounded-[2rem] border-2 shadow-sm ${isCorrect ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}>
                                     <div className="flex justify-between items-start gap-4 mb-6">
-                                        <h3 className="text-2xl font-black text-text-main font-serif italic">"{term}"</h3>
+                                        <h3 className="text-2xl font-black text-text-main font-serif italic">&quot;{term}&quot;</h3>
                                         {item.isCorrect !== undefined && (
                                             <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shrink-0 ${isCorrect ? 'bg-green-500 shadow-sm shadow-green-500/30' : 'bg-red-500 shadow-sm shadow-red-500/30'}`}>
                                                 <span className="material-symbols-outlined text-sm">{isCorrect ? 'check' : 'close'}</span>
@@ -364,7 +364,7 @@ export default function VocabIdiomsView() {
                                                         <span className="material-symbols-outlined text-xs">format_quote</span>
                                                         Example
                                                     </span>
-                                                    <p className="text-text-main italic">"{item.aiData.example}"</p>
+                                                    <p className="text-text-main italic">&quot;{item.aiData.example}&quot;</p>
                                                 </div>
                                                 {item.aiData.synonyms && (
                                                     <div>
@@ -390,7 +390,7 @@ export default function VocabIdiomsView() {
                                                     <span className="material-symbols-outlined text-xs">edit_note</span>
                                                     Your Practice Sentence
                                                 </span>
-                                                <p className="text-text-main italic">"{item.userSentence}"</p>
+                                                <p className="text-text-main italic">&quot;{item.userSentence}&quot;</p>
 
                                                 {item.sentenceEvaluation && (
                                                     <div className={`mt-3 pt-3 border-t border-amber-500/20 flex items-start gap-2 ${item.sentenceEvaluation.correct ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -414,7 +414,7 @@ export default function VocabIdiomsView() {
                                 {savedSets.length === 0 ? (
                                     <div className="glass p-10 rounded-3xl border border-border-main text-center">
                                         <p className="text-text-muted font-medium">No saved sets yet.</p>
-                                        <p className="text-text-muted text-sm mt-1">Complete a practice session and click "Save Set" to see it here.</p>
+                                        <p className="text-text-muted text-sm mt-1">Complete a practice session and click &quot;Save Set&quot; to see it here.</p>
                                     </div>
                                 ) : (
                                     savedSets.map(set => (
@@ -456,7 +456,7 @@ export default function VocabIdiomsView() {
                                 <ul className="text-text-muted max-w-lg mx-auto mb-8 leading-relaxed list-disc text-left pl-10 space-y-2">
                                     <li>5 Multiple Choice Questions.</li>
                                     <li>AI generates examples and synonyms for every word.</li>
-                                    <li>If you make a mistake, you'll need to construct a sentence using the word to reinforce learning.</li>
+                                    <li>If you make a mistake, you&apos;ll need to construct a sentence using the word to reinforce learning.</li>
                                 </ul>
                                 <button
                                     onClick={startPractice}
@@ -482,9 +482,9 @@ export default function VocabIdiomsView() {
         const progressPercent = ((currentMistakeIndex) / mistakes.length) * 100;
 
         return (
-            <div className="max-w-3xl mx-auto animate-fade-in py-8 pt-2">
+            <div className="max-w-3xl mx-auto view-transition-in py-8 pt-2">
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-black text-text-main mb-2">Let's Fix Those Mistakes!</h2>
+                    <h2 className="text-3xl font-black text-text-main mb-2">Let&apos;s Fix Those Mistakes!</h2>
                     <p className="text-text-muted">Construct a sentence applying the correct meaning.</p>
                 </div>
 
@@ -500,7 +500,7 @@ export default function VocabIdiomsView() {
 
                 <div className="glass p-8 md:p-10 rounded-[2rem] border border-border-main shadow-lg">
                     <div className="mb-6 bg-amber-500/10 border border-amber-500/20 p-5 rounded-xl">
-                        <h3 className="text-2xl font-black text-text-main mb-2 font-serif italic text-amber-600 dark:text-amber-400">"{term}"</h3>
+                        <h3 className="text-2xl font-black text-text-main mb-2 font-serif italic text-amber-600 dark:text-amber-400">&quot;{term}&quot;</h3>
                         <p className="text-text-main font-medium">{currentMistake.meaning}</p>
                     </div>
 
@@ -528,7 +528,7 @@ export default function VocabIdiomsView() {
                                 )}
                             </button>
                         ) : (
-                            <div className={`p-6 sm:p-8 rounded-[2rem] border-2 shadow-sm animate-fade-in ${evaluationData.correct ? 'bg-green-500/5 border-green-500/30 shadow-green-500/5' : 'bg-red-500/5 border-red-500/30 shadow-red-500/5'} `}>
+                            <div className={`p-6 sm:p-8 rounded-[2rem] border-2 shadow-sm view-transition-in ${evaluationData.correct ? 'bg-green-500/5 border-green-500/30 shadow-green-500/5' : 'bg-red-500/5 border-red-500/30 shadow-red-500/5'} `}>
                                 <div className="flex items-center gap-3 mb-4">
                                     <span className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shrink-0 ${evaluationData.correct ? 'bg-green-500 shadow-md shadow-green-500/30' : 'bg-red-500 shadow-md shadow-red-500/30'}`}>
                                         <span className="material-symbols-outlined text-lg">
@@ -563,7 +563,7 @@ export default function VocabIdiomsView() {
         const finalScore = mistakes.length > 0 ? currentSet.length - mistakes.length : currentSet.length;
 
         return (
-            <div className="max-w-4xl mx-auto space-y-8 animate-fade-in text-center py-10">
+            <div className="max-w-4xl mx-auto space-y-8 view-transition-in text-center py-10">
                 <div className="text-7xl mb-6 animate-bounce">🎉</div>
                 <h2 className="text-4xl font-black text-text-main mb-2">Session Complete!</h2>
                 <div className="text-6xl font-black text-primary mb-6">{finalScore}/{currentSet.length}</div>
@@ -606,7 +606,7 @@ export default function VocabIdiomsView() {
     const progressPercent = ((currentIndex) / currentSet.length) * 100;
 
     return (
-        <div className="max-w-3xl mx-auto animate-fade-in py-8 pt-2">
+        <div className="max-w-3xl mx-auto view-transition-in py-8 pt-2">
 
             <div className="flex items-center justify-between mb-8">
                 <button
@@ -627,7 +627,7 @@ export default function VocabIdiomsView() {
 
             <div className="glass p-6 md:p-10 rounded-[2rem] border border-border-main shadow-lg relative overflow-hidden transition-all duration-300">
                 <h2 className="text-3xl md:text-5xl font-black text-text-main text-center mb-8 relative z-10 font-serif italic">
-                    "{term}"
+                    &quot;{term}&quot;
                 </h2>
 
                 <div className="space-y-3">
@@ -661,7 +661,7 @@ export default function VocabIdiomsView() {
                 </div>
 
                 {isAnswered && (
-                    <div className="mt-8 pt-8 border-t border-border-main animate-fade-in space-y-6">
+                    <div className="mt-8 pt-8 border-t border-border-main view-transition-in space-y-6">
                         {loadingAi ? (
                             <div className="bg-primary/5 p-6 rounded-2xl flex flex-col items-center justify-center gap-3">
                                 <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
@@ -675,7 +675,7 @@ export default function VocabIdiomsView() {
                                         Example
                                     </span>
                                     <p className="text-text-main text-lg italic bg-white/50 dark:bg-black/20 p-4 rounded-xl shadow-sm">
-                                        "{aiData.example}"
+                                        &quot;{aiData.example}&quot;
                                     </p>
                                 </div>
                                 {aiData.synonyms && (

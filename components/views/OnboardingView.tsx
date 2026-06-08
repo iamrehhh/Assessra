@@ -67,7 +67,7 @@ export default function OnboardingView({ onComplete, userEmail }) {
                 <div style={{ fontSize: '4rem', marginBottom: '20px' }}>👋</div>
                 <h1 style={{ color: 'var(--lime-dark)', fontSize: '2rem', marginBottom: '10px', fontWeight: 800 }}>Welcome to Assessra!</h1>
                 <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '30px', lineHeight: 1.5 }}>
-                    Let's get you set up. Please choose a nickname for the leaderboard and select what you are appearing for.
+                    Let&apos;s get you set up. Please choose a nickname for the leaderboard and select what you are appearing for.
                 </p>
 
                 {error && (

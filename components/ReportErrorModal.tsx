@@ -229,38 +229,38 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in" onClick={close}>
             <div
-                className="bg-[#0f172a] w-full max-w-lg max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-white/10"
+                className="glass bg-bg-card w-full max-w-lg max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-border-main"
                 style={{ animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between shrink-0 bg-white/[0.03]">
+                <div className="px-6 py-4 border-b border-border-main flex items-center justify-between shrink-0 bg-black/5 dark:bg-white/5">
                     <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-red-500/15 flex items-center justify-center border border-red-500/20">
                             <span className="material-symbols-outlined text-red-400 text-lg">bug_report</span>
                         </div>
-                        <h2 className="text-lg font-black text-slate-100">Report an Issue</h2>
+                        <h2 className="text-lg font-black text-text-main">Report an Issue</h2>
                     </div>
-                    <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
+                    <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-text-muted hover:text-text-main transition-colors">
                         <span className="material-symbols-outlined">close</span>
                     </button>
                 </div>
 
                 {/* Tab Switcher */}
-                <div className="px-6 pt-4 flex gap-1 bg-white/[0.02] shrink-0">
+                <div className="px-6 pt-4 flex gap-1 bg-black/5 dark:bg-white/5 shrink-0">
                     <button
                         onClick={() => setTab('new')}
-                        className={`px-4 py-2 rounded-t-xl text-xs font-bold transition-all ${tab === 'new' ? 'bg-white/10 text-white border-b-2 border-primary' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-4 py-2 rounded-t-xl text-xs font-bold transition-all ${tab === 'new' ? 'bg-black/10 dark:bg-white/10 text-text-main border-b-2 border-primary' : 'text-text-muted/70 hover:text-text-main'}`}
                     >
                         New Report
                     </button>
                     <button
                         onClick={() => { setTab('history'); fetchMyReports(); }}
-                        className={`px-4 py-2 rounded-t-xl text-xs font-bold transition-all flex items-center gap-1.5 ${tab === 'history' ? 'bg-white/10 text-white border-b-2 border-primary' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-4 py-2 rounded-t-xl text-xs font-bold transition-all flex items-center gap-1.5 ${tab === 'history' ? 'bg-black/10 dark:bg-white/10 text-text-main border-b-2 border-primary' : 'text-text-muted/70 hover:text-text-main'}`}
                     >
                         My Reports
                         {myReports.length > 0 && (
-                            <span className="bg-white/10 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{myReports.length}</span>
+                            <span className="bg-black/10 dark:bg-white/10 text-text-muted text-[10px] font-bold px-1.5 py-0.5 rounded-full">{myReports.length}</span>
                         )}
                         {hasUnreadReply && (
                             <span className="relative flex h-2.5 w-2.5 ml-1">
@@ -280,12 +280,12 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                 <div className="w-16 h-16 rounded-full bg-emerald-500/15 flex items-center justify-center border border-emerald-500/20">
                                     <span className="material-symbols-outlined text-emerald-400 text-3xl">check_circle</span>
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-100">Report Submitted!</h3>
-                                <p className="text-sm text-slate-400 max-w-xs">
+                                <h3 className="text-lg font-bold text-text-main">Report Submitted!</h3>
+                                <p className="text-sm text-text-muted max-w-xs">
                                     Thank you for helping us improve. We'll review your report and get back to you.
                                 </p>
                                 <div className="flex gap-3 pt-2">
-                                    <button onClick={() => setSubmitted(false)} className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-bold hover:bg-white/10 transition-all">
+                                    <button onClick={() => setSubmitted(false)} className="px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 border border-border-main text-text-main text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all">
                                         Submit Another
                                     </button>
                                     <button onClick={close} className="px-4 py-2 rounded-xl bg-primary/15 border border-primary/20 text-primary text-sm font-bold hover:bg-primary/25 transition-all">
@@ -298,15 +298,15 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                             <>
                                 {/* Category Select */}
                                 <div>
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Category</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2 block">Category</label>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                         {CATEGORIES.map(cat => (
                                             <button
                                                 key={cat.value}
                                                 onClick={() => setCategory(cat.value)}
                                                 className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all border ${category === cat.value
-                                                    ? 'bg-primary/15 border-primary/30 text-primary'
-                                                    : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                                                    ? 'bg-primary/15 border-primary/30 text-primary shadow-sm'
+                                                    : 'bg-black/5 dark:bg-white/5 border-border-main text-text-muted hover:border-black/20 dark:hover:border-white/20 hover:text-text-main'
                                                     }`}
                                             >
                                                 <span className="material-symbols-outlined text-sm">{cat.icon}</span>
@@ -318,42 +318,42 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
 
                                 {/* Page */}
                                 <div>
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Page / Section</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2 block">Page / Section</label>
                                     <input
                                         type="text"
                                         value={page}
                                         onChange={e => setPage(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary/40 transition-colors"
+                                        className="w-full bg-black/5 dark:bg-white/5 border border-border-main rounded-xl px-4 py-3 text-sm text-text-main placeholder-text-muted/50 focus:outline-none focus:border-primary/40 transition-colors"
                                         placeholder="e.g. Past Papers, Leaderboard"
                                     />
                                 </div>
 
                                 {/* Description */}
                                 <div>
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Description</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2 block">Description</label>
                                     <textarea
                                         value={description}
                                         onChange={e => setDescription(e.target.value)}
                                         rows={4}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary/40 transition-colors resize-y min-h-[100px]"
+                                        className="w-full bg-black/5 dark:bg-white/5 border border-border-main rounded-xl px-4 py-3 text-sm text-text-main placeholder-text-muted/50 focus:outline-none focus:border-primary/40 transition-colors resize-y min-h-[100px]"
                                         placeholder="Describe the issue in detail... What happened? What did you expect?"
                                     />
                                 </div>
 
                                 {/* Screenshot Upload */}
                                 <div>
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Screenshot (Optional)</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2 block">Screenshot (Optional)</label>
 
                                     {!screenshotPreview ? (
                                         <div
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="w-full bg-white/5 border border-white/10 border-dashed rounded-xl px-4 py-6 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white/10 transition-colors group"
+                                            className="w-full bg-black/5 dark:bg-white/5 border border-border-main border-dashed rounded-xl px-4 py-6 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 transition-colors group"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:text-primary transition-colors text-slate-400">
+                                            <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:text-primary transition-colors text-text-muted">
                                                 <span className="material-symbols-outlined">add_photo_alternate</span>
                                             </div>
-                                            <p className="text-sm font-medium text-slate-300">Click to upload screenshot</p>
-                                            <p className="text-xs text-slate-500">Max 5MB (PNG, JPG)</p>
+                                            <p className="text-sm font-medium text-text-main">Click to upload screenshot</p>
+                                            <p className="text-xs text-text-muted/70">Max 5MB (PNG, JPG)</p>
                                             <input
                                                 type="file"
                                                 ref={fileInputRef}
@@ -363,9 +363,9 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                             />
                                         </div>
                                     ) : (
-                                        <div className="relative rounded-xl border border-white/10 overflow-hidden bg-black/40 group">
+                                        <div className="relative rounded-xl border border-border-main overflow-hidden bg-black/5 dark:bg-white/5 group">
                                             <img src={screenshotPreview} alt="Screenshot preview" className="w-full max-h-48 object-contain" />
-                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-bg-card/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <button
                                                     onClick={clearScreenshot}
                                                     className="flex items-center gap-2 bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors backdrop-blur-sm"
@@ -383,8 +383,8 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                     onClick={handleSubmit}
                                     disabled={submitting || !description.trim()}
                                     className={`w-full flex items-center justify-center gap-2 py-3 mt-2 rounded-xl font-bold text-sm transition-all ${submitting || !description.trim()
-                                        ? 'bg-white/5 text-slate-500 cursor-not-allowed border border-white/5'
-                                        : 'bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/20'
+                                        ? 'bg-black/5 dark:bg-white/5 text-text-muted/50 cursor-not-allowed border border-border-main'
+                                        : 'bg-red-500 text-white hover:-translate-y-0.5 shadow-[0_8px_20px_rgba(239,68,68,0.3)] hover:shadow-[0_12px_25px_rgba(239,68,68,0.4)]'
                                         }`}
                                 >
                                     {submitting ? (
@@ -399,15 +399,15 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                         /* History Tab */
                         loadingHistory ? (
                             <div className="flex justify-center py-8">
-                                <div className="w-6 h-6 border-2 border-white/10 border-t-primary rounded-full animate-spin" />
+                                <div className="w-6 h-6 border-2 border-border-main border-t-primary rounded-full animate-spin" />
                             </div>
                         ) : myReports.length === 0 ? (
                             <div className="text-center py-8 space-y-3">
-                                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto">
-                                    <span className="material-symbols-outlined text-slate-500 text-2xl">inbox</span>
+                                <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mx-auto">
+                                    <span className="material-symbols-outlined text-text-muted/70 text-2xl">inbox</span>
                                 </div>
-                                <p className="text-sm text-slate-400 font-medium">No reports yet</p>
-                                <p className="text-xs text-slate-600">Submit a report and it will appear here</p>
+                                <p className="text-sm text-text-muted font-medium">No reports yet</p>
+                                <p className="text-xs text-text-muted/50">Submit a report and it will appear here</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -422,10 +422,10 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                     const isActive = activeReportId === report.id;
 
                                     return (
-                                        <div key={report.id} className={`bg-white/[0.03] border rounded-2xl overflow-hidden transition-all ${isNewReply ? 'border-red-500/40 shadow-[0_0_12px_rgba(239,68,68,0.15)]' : isActive ? 'border-primary/30' : 'border-white/5'}`}>
+                                        <div key={report.id} className={`bg-black/5 dark:bg-white/5 border rounded-2xl overflow-hidden transition-all ${isNewReply ? 'border-red-500/40 shadow-[0_0_12px_rgba(239,68,68,0.15)]' : isActive ? 'border-primary/30' : 'border-border-main'}`}>
                                             {/* Header row (clickable to expand) */}
                                             <div
-                                                className="p-4 cursor-pointer hover:bg-white/[0.02] flex items-center justify-between"
+                                                className="p-4 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-between"
                                                 onClick={() => toggleThread(report.id)}
                                             >
                                                 <div className="flex flex-col gap-2">
@@ -433,12 +433,12 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${st.bg} ${st.text} ${st.border}`}>
                                                             {st.label}
                                                         </span>
-                                                        <span className="text-[10px] text-slate-500 uppercase font-bold">{report.category?.replace('_', ' ')}</span>
+                                                        <span className="text-[10px] text-text-muted/70 uppercase font-bold">{report.category?.replace('_', ' ')}</span>
                                                         {report.screenshot_url && (
-                                                            <span className="material-symbols-outlined text-slate-500 text-xs" title="Has Screenshot">image</span>
+                                                            <span className="material-symbols-outlined text-text-muted/70 text-xs" title="Has Screenshot">image</span>
                                                         )}
                                                     </div>
-                                                    <p className="text-sm text-slate-200 font-medium truncate max-w-[280px]">
+                                                    <p className="text-sm text-text-main font-medium truncate max-w-[280px]">
                                                         {report.description}
                                                     </p>
                                                 </div>
@@ -448,7 +448,7 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                             NEW REPLY
                                                         </span>
                                                     )}
-                                                    <span className="material-symbols-outlined text-slate-500 transition-transform duration-300" style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0)' }}>
+                                                    <span className="material-symbols-outlined text-text-muted/70 transition-transform duration-300" style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0)' }}>
                                                         expand_more
                                                     </span>
                                                 </div>
@@ -456,13 +456,13 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
 
                                             {/* Expanded Thread */}
                                             {isActive && (
-                                                <div className="border-t border-white/5 bg-black/20 p-4">
+                                                <div className="border-t border-border-main bg-black/10 dark:bg-white/5 p-4">
                                                     {/* Screenshot if available */}
                                                     {report.screenshot_url && (
-                                                        <div className="mb-4 rounded-xl overflow-hidden border border-white/10 max-w-sm">
+                                                        <div className="mb-4 rounded-xl overflow-hidden border border-border-main max-w-sm">
                                                             <a href={report.screenshot_url} target="_blank" rel="noopener noreferrer" className="block relative group">
                                                                 <img src={report.screenshot_url} alt="Attached screenshot" className="w-full h-auto object-cover" />
-                                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                                <div className="absolute inset-0 bg-bg-card/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                                                     <span className="text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm flex items-center gap-1">
                                                                         <span className="material-symbols-outlined text-sm">open_in_new</span> Expand
                                                                     </span>
@@ -477,7 +477,7 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                             const isUser = msg.sender === 'user';
                                                             return (
                                                                 <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                                                                    <div className={`max-w-[85%] rounded-2xl p-3 ${isUser ? 'bg-white/10 text-slate-200 rounded-tr-sm' : 'bg-primary/20 border border-primary/20 text-emerald-50 rounded-tl-sm'}`}>
+                                                                    <div className={`max-w-[85%] rounded-2xl p-3 ${isUser ? 'bg-black/10 dark:bg-white/10 text-text-main rounded-tr-sm' : 'bg-primary/20 border border-primary/20 text-text-main rounded-tl-sm'}`}>
                                                                         {!isUser && (
                                                                             <p className="text-[10px] text-primary font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
                                                                                 <span className="material-symbols-outlined text-xs">support_agent</span>
@@ -485,7 +485,7 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                                             </p>
                                                                         )}
                                                                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                                                                        <div className={`text-[9px] mt-1.5 opacity-60 flex items-center gap-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
+                                                                        <div className={`text-[9px] mt-1.5 opacity-60 flex items-center gap-1 text-text-muted ${isUser ? 'justify-end' : 'justify-start'}`}>
                                                                             {msg.created_at && new Date(msg.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                                                                         </div>
                                                                     </div>
@@ -497,12 +497,12 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                     {/* Reply Input */}
                                                     {report.status !== 'resolved' && (
                                                         <div className="flex items-end gap-2 mt-2">
-                                                            <div className="flex-1 bg-white/5 border border-white/10 rounded-xl overflow-hidden focus-within:border-primary/40 focus-within:bg-white/10 transition-colors">
+                                                            <div className="flex-1 bg-black/5 dark:bg-white/5 border border-border-main rounded-xl overflow-hidden focus-within:border-primary/40 focus-within:bg-black/10 dark:focus-within:bg-white/10 transition-colors">
                                                                 <textarea
                                                                     value={replyText}
                                                                     onChange={e => setReplyText(e.target.value)}
                                                                     placeholder="Reply to admin..."
-                                                                    className="w-full bg-transparent p-3 text-sm text-slate-200 placeholder-slate-500 outline-none resize-none max-h-32 min-h-[44px]"
+                                                                    className="w-full bg-transparent p-3 text-sm text-text-main placeholder-text-muted/50 outline-none resize-none max-h-32 min-h-[44px]"
                                                                     rows={1}
                                                                     onKeyDown={(e) => {
                                                                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -515,7 +515,7 @@ export default function ReportErrorModal({ currentView }: { currentView: string 
                                                             <button
                                                                 onClick={() => handleSendReply(report.id)}
                                                                 disabled={!replyText.trim() || sendingReply}
-                                                                className={`p-3 rounded-xl flex items-center justify-center transition-colors shrink-0 ${!replyText.trim() || sendingReply ? 'bg-white/5 text-slate-500 cursor-not-allowed' : 'bg-primary/20 text-primary hover:bg-primary/30 border border-primary/20'}`}
+                                                                className={`p-3 rounded-xl flex items-center justify-center transition-colors shrink-0 ${!replyText.trim() || sendingReply ? 'bg-black/5 dark:bg-white/5 text-text-muted/50 cursor-not-allowed' : 'bg-primary/20 text-primary hover:bg-primary/30 border border-primary/20'}`}
                                                             >
                                                                 {sendingReply ? (
                                                                     <div className="w-5 h-5 border-2 border-primary/40 border-t-primary rounded-full animate-spin" />

@@ -4,13 +4,13 @@
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { Suspense } from 'react';
-import LoginPage from '@/components/LoginPage';
+import LandingPage from '@/components/LandingPage';
 import Dashboard from '@/components/Dashboard';
 
 const VALID_VIEWS = [
     'home', 'pastpapers', 'scorecard',
-    'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms',
-    'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'
+    'leaderboard', 'formulae', 'definitions', 'vocab-idioms',
+    'tips', 'profile', 'admin'
 ];
 
 function ViewContent() {
@@ -45,7 +45,7 @@ function ViewContent() {
         );
     }
 
-    if (!session) return <LoginPage />;
+    if (!session) return <LandingPage />;
 
     // Dashboard reads the path via window.location.pathname directly,
     // so no need to pass anything — just render it.

@@ -9,29 +9,23 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: "Assessra",
-  description: "AI-powered past paper platform for AS & A Level students",
+  title: "Assessra — AI-Powered Exam Preparation",
+  description: "Master your AS & A Level exams with AI-powered past paper practice, intelligent grading, and comprehensive study tools.",
+  keywords: "AS Level, A Level, past papers, exam preparation, AI grading, Cambridge",
 };
 
 export const maxDuration = 300;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Blocking script to prevent theme flash (FOUC). Reads from localStorage
-  // before React hydrates, so the correct class is applied before first paint.
-  const themeScript = `
-    (function() {
-      try {
-        var theme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.classList.add(theme);
-        document.documentElement.style.colorScheme = theme;
-      } catch(e) {}
-    })();
-  `;
+  // Minimal blocking script to prevent theme flash (FOUC)
+  const themeScript = `(function(){try{var t=localStorage.getItem('theme')||'dark';document.documentElement.classList.add(t);document.documentElement.style.colorScheme=t}catch(e){}})()`;
 
   return (
     <html lang="en" className={jakarta.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap"
           rel="stylesheet"

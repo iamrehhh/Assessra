@@ -9,8 +9,8 @@ import Dashboard from '@/components/Dashboard';
 
 const VALID_VIEWS = [
     'home', 'pastpapers', 'scorecard',
-    'leaderboard', 'formulae', 'definitions', 'vocab', 'vocab-idioms',
-    'prepositions', 'grammar-errors', 'tenses', 'tips', 'profile', 'admin'
+    'leaderboard', 'formulae', 'definitions', 'vocab-idioms',
+    'tips', 'profile', 'admin'
 ];
 
 function SubViewContent() {
