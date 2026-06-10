@@ -1,7 +1,7 @@
 // IGCSE History Rubric
 // This file will be updated with the marking scheme, feedback, and model answer rubric for IGCSE History.
 
-export const IGCSE_HISTORY_RUBRIC = \`
+export const IGCSE_HISTORY_RUBRIC = `
 CAMBRIDGE IGCSE HISTORY 0470 — PAPER 1 MARKING RUBRIC FOR AI
 OVERVIEW
 Paper structure: Each question has three parts — (a), (b), (c). Candidates answer 3 questions. Total: 60 marks.
@@ -277,4 +277,4 @@ Side A (agree): [summarise explanation(s)] — causal link present: yes/no — s
 Side B (disagree/other): [summarise explanation(s)] — causal link present: yes/no — specific evidence: [name it]
 Judgement: [quote or paraphrase] — reasoned: yes/no — references answer content: yes/no
 Why Level 5: Both sides explained with causal links, judgement directly answers the question and is supported by reasoning from the answer.
-\`;
+`;
