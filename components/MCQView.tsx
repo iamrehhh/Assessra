@@ -35,10 +35,28 @@ export default function MCQView({ paperId, paperData, onBack }) {
     const [score, setScore] = useState(null);
     const [timeLeft, setTimeLeft] = useState(75 * 60);
     const [loadingAttempt, setLoadingAttempt] = useState(true);
+    const [timerConfigLoaded, setTimerConfigLoaded] = useState(false);
     const timerRef = useRef(null);
 
-    // Fetch existing attempt
+    // Determine subject key
+    let subjectKey = 'economics-p3';
+    if (paperId.startsWith('bio_')) subjectKey = 'biology-p2';
+    else if (paperId.startsWith('phys_')) subjectKey = 'physics-p2';
+    else if (paperId.startsWith('econ_')) subjectKey = 'economics-p3';
+
+    // Fetch existing attempt and timer config
     useEffect(() => {
+        // Fetch timer config
+        fetch('/api/mcq-timers')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.timers && data.timers[subjectKey]) {
+                    setTimeLeft(data.timers[subjectKey] * 60);
+                }
+            })
+            .catch(err => console.error('Failed to load timer config:', err))
+            .finally(() => setTimerConfigLoaded(true));
+
         if (sessionStatus !== 'authenticated' || !session?.user?.email) {
             setLoadingAttempt(false);
             return;
@@ -55,13 +73,13 @@ export default function MCQView({ paperId, paperData, onBack }) {
             })
             .catch(err => console.error('Failed to load MCQ attempt:', err))
             .finally(() => setLoadingAttempt(false));
-    }, [paperId, sessionStatus]);
+    }, [paperId, sessionStatus, subjectKey]);
 
     // Timer — only starts AFTER loading is complete and not already submitted
     // Using a separate effect with loadingAttempt as dependency prevents the race condition
     useEffect(() => {
-        // Do not start timer until loading is done
-        if (loadingAttempt) return;
+        // Do not start timer until loading and config fetch is done
+        if (loadingAttempt || !timerConfigLoaded) return;
         
         try {
             const subjectStr = paper?.subject || 'Economics MCQ';
@@ -151,8 +169,8 @@ export default function MCQView({ paperId, paperData, onBack }) {
                 body: JSON.stringify({
                     username: session.user.email,
                     paperId,
-                    paperTitle: `Economics MCQ — ${paperId}`,
-                    subject: 'economics-p3',
+                    paperTitle: paper.title || `MCQ — ${paperId}`,
+                    subject: subjectKey,
                     questionNumber: 'all',
                     score: correct ?? 0,
                     maxMarks: Math.max(1, totalQ),

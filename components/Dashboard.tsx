@@ -3,21 +3,21 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import Sidebar from './Sidebar';
 import TopHeader from './TopHeader';
-import HomeView from './views/HomeView';
-
-import LeaderboardView from './views/LeaderboardView';
-import FormulaeView from './views/FormulaeView';
-import DefinitionsView from './views/DefinitionsView';
-import TipsView from './views/TipsView';
-import OnboardingView from './views/OnboardingView';
-import ProfileView from './views/ProfileView';
-import AdminView from './views/AdminView';
-
-import PastPapersView from './views/PastPapersView';
-import VocabIdiomsView from './views/VocabIdiomsView';
 import ReportErrorModal from './ReportErrorModal';
+
+const HomeView = dynamic(() => import('./views/HomeView'), { ssr: false });
+const LeaderboardView = dynamic(() => import('./views/LeaderboardView'), { ssr: false });
+const FormulaeView = dynamic(() => import('./views/FormulaeView'), { ssr: false });
+const DefinitionsView = dynamic(() => import('./views/DefinitionsView'), { ssr: false });
+const TipsView = dynamic(() => import('./views/TipsView'), { ssr: false });
+const OnboardingView = dynamic(() => import('./views/OnboardingView'), { ssr: false });
+const ProfileView = dynamic(() => import('./views/ProfileView'), { ssr: false });
+const AdminView = dynamic(() => import('./views/AdminView'), { ssr: false });
+const PastPapersView = dynamic(() => import('./views/PastPapersView'), { ssr: false });
+const VocabIdiomsView = dynamic(() => import('./views/VocabIdiomsView'), { ssr: false });
 
 const VALID_VIEWS = ['home', 'pastpapers', 'leaderboard', 'formulae', 'definitions', 'vocab-idioms', 'tips', 'profile', 'admin'];
 
@@ -75,10 +75,10 @@ function ContentSkeleton() {
     );
 }
 
-export default function Dashboard() {
+export default function Dashboard({ initialView, initialParams }: { initialView?: string, initialParams?: string[] }) {
     const { data: session } = useSession();
-    const [view, setViewState] = useState<string>(() => parsePath().view);
-    const [urlParams, setUrlParams] = useState<string[]>(() => parsePath().params);
+    const [view, setViewState] = useState<string>(() => initialView || parsePath().view);
+    const [urlParams, setUrlParams] = useState<string[]>(() => initialParams || parsePath().params);
     const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
     const [userProfile, setUserProfile] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -219,42 +219,12 @@ export default function Dashboard() {
     // During profile loading, show skeleton content inside the shell.
     return (
         <div className="flex h-screen overflow-hidden bg-bg-base text-text-main font-display">
-            {/* Sidebar: show skeleton version while loading, real version when ready */}
-            {isLoading ? (
-                <aside className="hidden lg:flex w-64 border-r border-border-main flex-col shrink-0" style={{ background: 'var(--sidebar-bg, var(--bg-base))' }}>
-                    <div className="p-6 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl skeleton-pulse" />
-                        <div className="h-5 w-24 rounded-md skeleton-pulse" />
-                    </div>
-                    <nav className="flex-1 px-4 space-y-2 mt-4">
-                        {SKELETON_NAV_WIDTHS.map((w, i) => (
-                            <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl">
-                                <div className="w-6 h-6 rounded skeleton-pulse" />
-                                <div className="h-4 rounded-md skeleton-pulse" style={{ width: `${w}%` }} />
-                            </div>
-                        ))}
-                    </nav>
-                </aside>
-            ) : (
-                <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
-            )}
+            {/* Sidebar: Renders immediately for instant feel */}
+            <Sidebar view={view} setView={setView} userEmail={session?.user?.email} isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
 
             <main className="flex-1 flex flex-col w-full h-full overflow-hidden">
-                {/* Header: show skeleton version while loading, real version when ready */}
-                {isLoading ? (
-                    <header className="h-20 border-b border-border-main flex items-center justify-between px-8 shrink-0">
-                        <div className="flex items-center gap-4">
-                            <div className="h-10 w-96 rounded-xl skeleton-pulse hidden md:block" />
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="w-8 h-8 rounded-full skeleton-pulse" />
-                            <div className="w-8 h-8 rounded-full skeleton-pulse" />
-                            <div className="w-10 h-10 rounded-full skeleton-pulse" />
-                        </div>
-                    </header>
-                ) : (
-                    <TopHeader setView={setView} userProfile={userProfile} setIsMobileOpen={setIsMobileOpen} />
-                )}
+                {/* Header: Renders immediately for instant feel */}
+                <TopHeader setView={setView} userProfile={userProfile} setIsMobileOpen={setIsMobileOpen} />
 
                 {/* Content: skeleton during load, animated view transitions after */}
                 {isLoading ? (

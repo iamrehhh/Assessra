@@ -20,7 +20,7 @@ const FEATURES = [
     {
         icon: 'auto_stories',
         title: 'Past Paper Practice',
-        description: 'Access a comprehensive library of Cambridge AS & A Level past papers with structured question blocks.',
+        description: 'Access a comprehensive library of Cambridge IGCSE, AS & A Level past papers with structured question blocks.',
         gradient: 'from-emerald-500/20 to-teal-500/20',
         iconColor: 'text-emerald-400',
     },
@@ -83,9 +83,12 @@ const STEPS = [
 ];
 
 const SUBJECTS = [
-    { name: 'Business', code: '9609', papers: 'Papers 3 & 4', color: 'from-emerald-600 to-green-500' },
-    { name: 'Economics', code: '9708', papers: 'Papers 3 & 4', color: 'from-blue-600 to-cyan-500' },
-    { name: 'General Paper', code: '8021', papers: 'Papers 1 & 2', color: 'from-purple-600 to-violet-500' },
+    { name: 'Business', code: '9609', papers: 'Papers 3 & 4', level: 'A Level', color: 'from-emerald-600 to-green-500' },
+    { name: 'Economics', code: '9708', papers: 'Papers 3 & 4', level: 'A Level', color: 'from-blue-600 to-cyan-500' },
+    { name: 'General Paper', code: '8021', papers: 'Papers 1 & 2', level: 'AS Level', color: 'from-purple-600 to-violet-500' },
+    { name: 'Biology', code: '0610', papers: 'Paper 2', level: 'IGCSE', color: 'from-teal-600 to-emerald-500' },
+    { name: 'Physics', code: '0625', papers: 'Paper 2', level: 'IGCSE', color: 'from-orange-600 to-amber-500' },
+    { name: 'History', code: '0470', papers: 'Papers 1 & 4', level: 'IGCSE', color: 'from-rose-600 to-red-500' },
 ];
 
 // ─── Animated Counter Hook ───
@@ -365,11 +368,11 @@ function LandingContent() {
 
                         <h1 className="landing-hero-title">
                             Master Your <br />
-                            <span className="landing-gradient-text">A Level Exams</span>
+                            <span className="landing-gradient-text">Cambridge Exams</span>
                         </h1>
 
                         <p className="landing-hero-subtitle">
-                            Practice with real Cambridge past papers, get instant AI grading with detailed feedback, 
+                            Practice with real IGCSE & A Level past papers, get instant AI grading with detailed feedback, 
                             and track your progress — all in one beautiful platform.
                         </p>
 
@@ -511,18 +514,21 @@ function LandingContent() {
                 <div className={`landing-section-inner ${subjectsReveal.visible ? 'landing-revealed' : ''}`}>
                     <div className="text-center mb-16">
                         <span className="landing-section-tag">Subjects</span>
-                        <h2 className="landing-section-title">Cambridge AS & A Level</h2>
+                        <h2 className="landing-section-title">Cambridge IGCSE & A Level</h2>
                         <p className="landing-section-subtitle">
                             Comprehensive past paper coverage for the subjects that matter most.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                         {SUBJECTS.map((subj, i) => (
                             <div key={subj.code} className="landing-subject-card" style={{ animationDelay: `${i * 0.1}s` }}>
                                 <div className={`landing-subject-gradient bg-gradient-to-br ${subj.color}`} />
                                 <div className="relative z-10">
-                                    <span className="text-xs text-white/40 font-mono font-bold">{subj.code}</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs text-white/40 font-mono font-bold">{subj.code}</span>
+                                        <span className="text-[10px] uppercase tracking-widest font-black text-white/60 bg-white/10 px-2 py-0.5 rounded-full border border-white/10">{subj.level}</span>
+                                    </div>
                                     <h3 className="text-2xl font-black text-white mt-1">{subj.name}</h3>
                                     <p className="text-white/50 text-sm mt-2">{subj.papers}</p>
                                     <div className="flex items-center gap-2 mt-4 text-emerald-400">
@@ -579,7 +585,7 @@ function LandingContent() {
                         <span className="text-sm font-bold text-white/40 uppercase tracking-wider italic">Assessra</span>
                     </div>
                     <p className="text-xs text-white/30 flex items-center gap-2 flex-wrap justify-center">
-                        © {new Date().getFullYear()} Abdul Rehan
+                        © 2025 Assessra
                         <span className="text-white/15">|</span>
                         <a href="mailto:abdulrehanoffical@gmail.com" className="hover:text-white/60 transition-colors">abdulrehanoffical@gmail.com</a>
                         <span className="text-white/15">|</span>

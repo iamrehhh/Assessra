@@ -208,7 +208,7 @@ export default function PracticeSplitScreen({ paperId, backPath }) {
     useEffect(() => {
         const init = async () => {
             try {
-                const res = await fetch(`/api/past-papers/info?filename=${filename}`);
+                const res = await fetch(`/api/past-papers/info?filename=${filename}`, { cache: 'no-store' });
                 const data = await res.json();
 
                 if (res.ok) {
@@ -228,10 +228,22 @@ export default function PracticeSplitScreen({ paperId, backPath }) {
                         try {
                             const parsedBlocks = JSON.parse(savedProgress);
                             if (Array.isArray(parsedBlocks) && parsedBlocks.length > 0) {
-                                setBlocks(parsedBlocks);
-                                setBlocksInitialized(true);
-                                setLoading(false);
-                                return;
+                                // If the API now has real questions but the saved blocks
+                                // were from before questions were extracted (i.e. none are prefilled
+                                // and none have real user answers), discard stale save.
+                                const hasApiQuestions = data.questions && data.questions.length > 0;
+                                const hasPrefilled = parsedBlocks.some(b => b.prefilled);
+                                const hasUserWork = parsedBlocks.some(b => b.answer && b.answer.trim().length > 0);
+                                
+                                if (hasApiQuestions && !hasPrefilled && !hasUserWork) {
+                                    // Stale save from before questions were extracted — discard it
+                                    localStorage.removeItem(`assessra_paper_blocks_${filename}`);
+                                } else {
+                                    setBlocks(parsedBlocks);
+                                    setBlocksInitialized(true);
+                                    setLoading(false);
+                                    return;
+                                }
                             }
                         } catch (err) { console.error('Failed to parse saved progress', err); }
                     }

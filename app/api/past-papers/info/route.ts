@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { allPaperData, allMCQData, allGeneralPaperData } from '@/data/index';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -35,9 +37,14 @@ export async function GET(request: Request) {
         // Our IDs look like: gp_2025_mj_12, econ_2024_w_42, etc.
         const idParts = paperId.split('_');
         let subject = 'unknown';
+        let level = 'alevel';
         if (paperId.startsWith('gp_')) subject = 'general_paper';
         else if (paperId.startsWith('bus_')) subject = 'business';
         else if (paperId.startsWith('econ_')) subject = 'economics';
+        else if (paperId.startsWith('history_')) {
+            subject = 'history';
+            level = 'igcse';
+        }
 
         let year = '2025';
         if (idParts.length >= 2 && !isNaN(Number(idParts[1]))) {
@@ -52,7 +59,7 @@ export async function GET(request: Request) {
             meta: {
                 title: paperData.title,
                 subject,
-                level: 'alevel',
+                level,
                 year
             }
         });

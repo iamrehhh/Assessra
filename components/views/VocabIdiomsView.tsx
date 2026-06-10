@@ -277,24 +277,26 @@ export default function VocabIdiomsView() {
     };
 
     const renderTabs = () => (
-        <div className="flex bg-black/5 dark:bg-white/5 p-1.5 rounded-2xl w-full max-w-lg mx-auto mb-8">
+        <div className="flex bg-black/5 dark:bg-white/5 p-1.5 rounded-2xl w-full max-w-lg mx-auto mb-10 border border-border-main/50 shadow-inner">
             <button
                 onClick={() => setActiveTab('vocab')}
-                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${activeTab === 'vocab' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
+                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${activeTab === 'vocab' ? 'bg-bg-card text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
             >
+                <span className="material-symbols-outlined text-[18px]">spellcheck</span>
                 Vocabulary
             </button>
             <button
                 onClick={() => setActiveTab('idioms')}
-                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${activeTab === 'idioms' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
+                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${activeTab === 'idioms' ? 'bg-bg-card text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
             >
+                <span className="material-symbols-outlined text-[18px]">forum</span>
                 Idioms
             </button>
             <button
                 onClick={() => setActiveTab('saved')}
-                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'saved' ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
+                className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${activeTab === 'saved' ? 'bg-bg-card text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]' : 'text-text-muted hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5'}`}
             >
-                <span className="material-symbols-outlined text-sm">bookmark</span>
+                <span className="material-symbols-outlined text-[18px]">bookmark</span>
                 Saved
             </button>
         </div>
@@ -306,25 +308,29 @@ export default function VocabIdiomsView() {
     if (practiceState === 'idle') {
         return (
             <div className="max-w-4xl mx-auto space-y-8 view-transition-in pb-10">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <h1 className="text-3xl font-black text-text-main tracking-tight">Vocabulary & Idioms</h1>
-                        <p className="text-text-muted mt-2">Master confusing words and expressions with AI context.</p>
+                <div className="text-center space-y-3 mb-10 pt-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 mb-2 shadow-[0_0_30px_rgba(34,197,94,0.15)]">
+                        <span className="material-symbols-outlined text-primary text-3xl">psychology</span>
                     </div>
+                    <h1 className="text-4xl md:text-5xl font-black text-text-main tracking-tight">Vocab & Idioms</h1>
+                    <p className="text-text-muted text-lg max-w-xl mx-auto">Master confusing words and expressions with interactive AI context.</p>
                 </div>
 
                 {viewingSet ? (
                     <div className="space-y-6 view-transition-in relative">
-                        <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center justify-between mb-8 bg-bg-card p-4 rounded-2xl border border-border-main shadow-sm">
                             <button
                                 onClick={() => setViewingSet(null)}
-                                className="flex items-center gap-2 text-text-muted hover:text-text-main transition-colors font-medium text-sm bg-black/5 dark:bg-white/5 px-4 py-2 rounded-xl"
+                                className="flex items-center gap-2 text-text-muted hover:text-text-main transition-colors font-bold text-sm bg-black/5 dark:bg-white/5 px-4 py-2 rounded-xl"
                             >
                                 <span className="material-symbols-outlined text-sm">arrow_back</span>
                                 Back to Saved Sets
                             </button>
-                            <div className="text-sm font-bold text-text-main tracking-widest uppercase">
-                                {viewingSet.score}/{viewingSet.max_marks} Score
+                            <div className="flex items-center gap-3">
+                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Score</span>
+                                <div className="bg-primary/10 text-primary font-black px-4 py-1.5 rounded-xl border border-primary/20">
+                                    {viewingSet.score}/{viewingSet.max_marks}
+                                </div>
                             </div>
                         </div>
 
@@ -358,7 +364,7 @@ export default function VocabIdiomsView() {
                                         )}
 
                                         {item.aiData && (
-                                            <div className="bg-black/5 dark:bg-white/5 rounded-xl p-5 space-y-4">
+                                            <div className="bg-black/5 dark:bg-white/5 rounded-xl p-5 space-y-4 border border-border-main/50">
                                                 <div>
                                                     <span className="text-xs font-bold text-text-muted uppercase tracking-widest mb-1 flex items-center gap-1">
                                                         <span className="material-symbols-outlined text-xs">format_quote</span>
@@ -386,7 +392,7 @@ export default function VocabIdiomsView() {
 
                                         {item.userSentence && (
                                             <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-5 space-y-3">
-                                                <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest block flex items-center gap-1">
+                                                <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest flex items-center gap-1 mb-2">
                                                     <span className="material-symbols-outlined text-xs">edit_note</span>
                                                     Your Practice Sentence
                                                 </span>
@@ -410,61 +416,89 @@ export default function VocabIdiomsView() {
                         {renderTabs()}
 
                         {activeTab === 'saved' ? (
-                            <div className="space-y-4">
+                            <div className="space-y-4 max-w-3xl mx-auto">
                                 {savedSets.length === 0 ? (
-                                    <div className="glass p-10 rounded-3xl border border-border-main text-center">
-                                        <p className="text-text-muted font-medium">No saved sets yet.</p>
-                                        <p className="text-text-muted text-sm mt-1">Complete a practice session and click &quot;Save Set&quot; to see it here.</p>
+                                    <div className="glass p-12 rounded-[2.5rem] border border-border-main text-center">
+                                        <div className="w-20 h-20 bg-black/5 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-border-main">
+                                            <span className="material-symbols-outlined text-4xl text-text-muted opacity-50">bookmark_border</span>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-text-main mb-2">No saved sets yet</h3>
+                                        <p className="text-text-muted text-sm max-w-sm mx-auto">Complete a practice session and click "Save Set" to build your personal vocabulary library.</p>
                                     </div>
                                 ) : (
                                     savedSets.map(set => (
-                                        <div key={set.id} className="glass p-6 rounded-2xl border border-border-main flex items-center justify-between">
-                                            <div>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-bold rounded-lg uppercase tracking-wider">{set.subject}</span>
-                                                    <span className="text-text-muted text-sm">{new Date(set.created_at).toLocaleDateString()}</span>
+                                        <div key={set.id} className="glass p-6 rounded-[2rem] border border-border-main hover:border-primary/40 transition-all duration-300 flex items-center justify-between group hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                                            <div className="flex-1 min-w-0 pr-4">
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <span className={`px-3 py-1 bg-black/5 dark:bg-white/5 border border-border-main text-text-main text-xs font-bold rounded-lg uppercase tracking-wider flex items-center gap-1.5`}>
+                                                        <span className="material-symbols-outlined text-[14px] text-primary">
+                                                            {set.subject === 'vocab' ? 'spellcheck' : 'forum'}
+                                                        </span>
+                                                        {set.subject}
+                                                    </span>
+                                                    <span className="text-text-muted text-xs font-bold tracking-widest uppercase">{new Date(set.created_at).toLocaleDateString()}</span>
                                                 </div>
-                                                <p className="font-bold text-text-main line-clamp-2 pr-4">
-                                                    {set.practice_data && set.practice_data.map ? set.practice_data.map(i => i.word || i.idiom).join(', ') : 'Practice Set'}
+                                                <p className="font-bold text-text-main line-clamp-1 group-hover:text-primary transition-colors text-lg">
+                                                    {set.practice_data && set.practice_data.map ? set.practice_data.map(i => i.word || i.idiom).join(' • ') : 'Practice Set'}
                                                 </p>
                                             </div>
-                                            <div className="text-right shrink-0">
-                                                <div className="text-xl font-black text-text-main">{set.score}/{set.max_marks}</div>
-                                                <div className="flex gap-2 items-center justify-end mt-2">
-                                                    <button
-                                                        onClick={() => setViewingSet(set)}
-                                                        className="px-4 py-1.5 bg-text-main text-bg-base text-xs font-bold rounded-lg hover:opacity-90 transition-opacity"
-                                                    >
-                                                        View
-                                                    </button>
+                                            <div className="flex items-center gap-6 shrink-0 border-l border-border-main pl-6">
+                                                <div className="text-center">
+                                                    <div className="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Score</div>
+                                                    <div className="text-2xl font-black text-text-main">{set.score}<span className="text-text-muted text-lg">/{set.max_marks}</span></div>
                                                 </div>
+                                                <button
+                                                    onClick={() => setViewingSet(set)}
+                                                    className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/5 border border-border-main flex items-center justify-center text-text-muted group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300"
+                                                >
+                                                    <span className="material-symbols-outlined">arrow_forward</span>
+                                                </button>
                                             </div>
                                         </div>
                                     ))
                                 )}
                             </div>
                         ) : (
-                            <div className="glass p-10 rounded-3xl border border-border-main text-center shadow-sm">
-                                <div className="w-20 h-20 bg-primary/10 text-primary mx-auto rounded-full flex items-center justify-center mb-6 ring-8 ring-primary/5">
-                                    <span className="material-symbols-outlined text-4xl">
-                                        {activeTab === 'vocab' ? 'spellcheck' : 'forum'}
-                                    </span>
+                            <div className="glass p-10 md:p-14 rounded-[3rem] border border-border-main text-center shadow-lg relative overflow-hidden group">
+                                {/* Decorative elements */}
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 transition-colors duration-700 group-hover:bg-primary/10"></div>
+                                <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -ml-32 -mb-32 transition-colors duration-700 group-hover:bg-blue-500/10"></div>
+                                
+                                <div className="relative z-10">
+                                    <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/5 text-primary mx-auto rounded-[2rem] flex items-center justify-center mb-8 border border-primary/20 shadow-[0_0_30px_rgba(34,197,94,0.15)] transform group-hover:scale-105 transition-transform duration-500">
+                                        <span className="material-symbols-outlined text-5xl">
+                                            {activeTab === 'vocab' ? 'spellcheck' : 'forum'}
+                                        </span>
+                                    </div>
+                                    <h2 className="text-3xl md:text-4xl font-black text-text-main mb-4 tracking-tight">
+                                        {activeTab === 'vocab' ? 'Vocabulary Practice' : 'Idioms Practice'}
+                                    </h2>
+                                    
+                                    <div className="max-w-lg mx-auto bg-black/5 dark:bg-white/5 rounded-2xl p-6 border border-border-main mb-10 text-left">
+                                        <ul className="text-text-muted space-y-4">
+                                            <li className="flex items-start gap-3">
+                                                <span className="material-symbols-outlined text-primary text-xl mt-0.5">quiz</span>
+                                                <span><strong className="text-text-main">5 curated questions</strong> to test your knowledge.</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <span className="material-symbols-outlined text-primary text-xl mt-0.5">auto_awesome</span>
+                                                <span><strong className="text-text-main">AI-generated context</strong> with synonyms and real-world examples.</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <span className="material-symbols-outlined text-primary text-xl mt-0.5">edit_note</span>
+                                                <span><strong className="text-text-main">Interactive learning:</strong> Construct sentences for any mistakes you make.</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <button
+                                        onClick={startPractice}
+                                        className="px-10 py-5 bg-primary text-white font-black rounded-2xl shadow-[0_10px_30px_rgba(34,197,94,0.3)] hover:shadow-[0_15px_40px_rgba(34,197,94,0.4)] hover:-translate-y-1.5 transition-all duration-300 flex items-center gap-3 mx-auto text-lg group/btn tracking-wide"
+                                    >
+                                        <span>Start Practice</span>
+                                        <span className="material-symbols-outlined text-xl group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                                    </button>
                                 </div>
-                                <h2 className="text-2xl font-bold text-text-main mb-3">
-                                    {activeTab === 'vocab' ? 'Vocabulary Practice' : 'Idioms Practice'}
-                                </h2>
-                                <ul className="text-text-muted max-w-lg mx-auto mb-8 leading-relaxed list-disc text-left pl-10 space-y-2">
-                                    <li>5 Multiple Choice Questions.</li>
-                                    <li>AI generates examples and synonyms for every word.</li>
-                                    <li>If you make a mistake, you&apos;ll need to construct a sentence using the word to reinforce learning.</li>
-                                </ul>
-                                <button
-                                    onClick={startPractice}
-                                    className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-[0_8px_20px_rgba(34,197,94,0.3)] hover:shadow-[0_12px_25px_rgba(34,197,94,0.4)] hover:-translate-y-1 transition-all flex items-center gap-2 mx-auto"
-                                >
-                                    <span>Start Practice</span>
-                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                                </button>
                             </div>
                         )}
                     </>

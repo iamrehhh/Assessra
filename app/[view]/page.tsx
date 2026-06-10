@@ -47,9 +47,9 @@ function ViewContent() {
 
     if (!session) return <LandingPage />;
 
-    // Dashboard reads the path via window.location.pathname directly,
-    // so no need to pass anything — just render it.
-    return <Dashboard />;
+    // Dashboard reads the path via props instead of window.location.pathname
+    // to support Next.js soft navigation properly.
+    return <Dashboard initialView={view} initialParams={[]} />;
 }
 
 export default function ViewPage() {

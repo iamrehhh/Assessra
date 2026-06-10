@@ -105,12 +105,15 @@ export default function PastPapersView({ initialLevel, initialSubject, setView }
         );
     }
 
-    // ── Step 1: Select Level ────────────────────────────────────────────────
-    if (!selectedLevel) {
-        const sortedLevels = [...data.levels].sort((a, b) => a === 'igcse' ? -1 : 1);
+    // ── Combined Level + Subject Selection (Toggles) ─────────────────────────
+    if (!selectedSubject) {
+        const levelConfig = {
+            igcse: { icon: 'school', emoji: '🏫', label: 'IGCSE', gradient: 'from-blue-500/20 to-cyan-500/10', border: 'border-blue-500/30', activeBg: 'bg-blue-500/10', activeText: 'text-blue-400', glow: 'shadow-[0_0_30px_rgba(59,130,246,0.15)]' },
+            alevel: { icon: 'history_edu', emoji: '🎓', label: 'A Level', gradient: 'from-purple-500/20 to-pink-500/10', border: 'border-purple-500/30', activeBg: 'bg-purple-500/10', activeText: 'text-purple-400', glow: 'shadow-[0_0_30px_rgba(168,85,247,0.15)]' }
+        };
 
         return (
-            <div className={`space-y-8 max-w-4xl mx-auto pt-4 transition-all duration-500 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`space-y-8 max-w-5xl mx-auto pt-4 transition-all duration-500 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="text-center space-y-3 mb-12">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 mb-4 shadow-[0_0_30px_rgba(34,197,94,0.15)]">
                         <span className="text-primary text-3xl">📚</span>
@@ -118,112 +121,91 @@ export default function PastPapersView({ initialLevel, initialSubject, setView }
                     <h2 className="text-4xl md:text-5xl font-black tracking-tight text-text-main">
                         Past Paper Practice
                     </h2>
-                    <p className="text-text-muted text-lg max-w-xl mx-auto">Select your education level to access a comprehensive library of past papers.</p>
+                    <p className="text-text-muted text-lg max-w-xl mx-auto">Select your level and subject to begin practising.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {['igcse', 'alevel'].map((cat, idx) => {
-                        const isAvailable = data.levels.includes(cat);
-                        const delay = isLoaded ? `delay-[${idx * 150}ms]` : '';
+                <div className="space-y-6">
+                    {['igcse', 'alevel'].map((level) => {
+                        const config = levelConfig[level];
+                        const isAvailable = data.levels.includes(level);
+                        const isOpen = selectedLevel === level;
+                        const subjects = data.subjectsByLevel[level] || [];
 
                         return (
-                            <button
-                                key={cat}
-                                onClick={() => isAvailable && navigate(cat)}
-                                disabled={!isAvailable}
-                                className={`relative group overflow-hidden rounded-[2.5rem] p-1 border flex-shrink-0 cursor-pointer transition-all duration-500 ${isAvailable ? 'border-border-main hover:border-primary/50 hover:shadow-[0_20px_60px_rgba(34,197,94,0.15)] hover:-translate-y-2' : 'border-border-main/50 opacity-60 cursor-not-allowed'} transform transition-all ${delay}`}
-                            >
-                                <div className="relative h-full bg-bg-card rounded-[2.3rem] flex flex-col items-center justify-center p-12 text-center border border-white/5 overflow-hidden">
-                                    
-                                    {isAvailable && (
-                                        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                                    )}
-
-                                    <div className={`w-24 h-24 rounded-full mx-auto mb-8 flex items-center justify-center transition-all duration-500 relative ${isAvailable ? 'bg-primary/10 text-primary group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)]' : 'bg-black/5 dark:bg-white/5 text-text-muted'}`}>
-                                        <span className="material-symbols-outlined text-5xl relative z-10">
-                                            {cat === 'igcse' ? 'school' : 'history_edu'}
-                                        </span>
-                                        {isAvailable && <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>}
+                            <div key={level} className={`rounded-[2rem] border transition-all duration-500 overflow-hidden ${isOpen ? `${config.border} ${config.glow}` : 'border-border-main hover:border-border-main/80'} ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}>
+                                {/* Toggle Header */}
+                                <button
+                                    onClick={() => {
+                                        if (!isAvailable) return;
+                                        setSelectedLevel(isOpen ? null : level);
+                                    }}
+                                    className={`w-full flex items-center justify-between px-8 py-6 group transition-all duration-300 ${isOpen ? `bg-gradient-to-r ${config.gradient}` : 'bg-bg-card hover:bg-black/5 dark:hover:bg-white/[0.02]'}`}
+                                >
+                                    <div className="flex items-center gap-5">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 border ${isOpen ? `${config.activeBg} ${config.border}` : 'bg-black/5 dark:bg-white/5 border-border-main'}`}>
+                                            <span className="text-2xl">{config.emoji}</span>
+                                        </div>
+                                        <div className="text-left">
+                                            <h3 className={`text-2xl font-black tracking-tight transition-colors ${isOpen ? config.activeText : 'text-text-main'}`}>{config.label}</h3>
+                                            <p className="text-text-muted text-sm font-medium mt-0.5">
+                                                {isAvailable ? `${subjects.length} subject${subjects.length !== 1 ? 's' : ''} available` : 'Coming Soon'}
+                                            </p>
+                                        </div>
                                     </div>
-                                    
-                                    <h3 className="text-3xl font-black text-text-main mb-3 drop-shadow-sm">{formatLabel(cat)}</h3>
-                                    
-                                    {isAvailable ? (
-                                        <p className="text-text-muted font-bold text-sm tracking-wide bg-black/5 dark:bg-white/5 px-4 py-1.5 rounded-full border border-border-main">
-                                            {data.subjectsByLevel[cat]?.length || 0} Subjects Available
-                                        </p>
-                                    ) : (
-                                        <span className="inline-block px-4 py-1.5 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold text-text-muted uppercase tracking-[0.2em]">Coming Soon</span>
-                                    )}
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-500 ${isOpen ? `${config.activeBg} ${config.border}` : 'bg-black/5 dark:bg-white/5 border-border-main'}`}>
+                                        <span className={`material-symbols-outlined transition-transform duration-500 ${isOpen ? 'rotate-180' : 'rotate-0'} ${isOpen ? config.activeText : 'text-text-muted'}`}>
+                                            expand_more
+                                        </span>
+                                    </div>
+                                </button>
+
+                                {/* Subjects Grid — Collapsible */}
+                                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                                    <div className="px-8 pb-8 pt-2">
+                                        {subjects.length === 0 ? (
+                                            <div className="text-center py-10 text-text-muted">
+                                                <span className="material-symbols-outlined text-4xl mb-3 opacity-30 block">folder_off</span>
+                                                <p className="font-bold">No subjects available yet.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                                                {subjects.map((subject, idx) => {
+                                                    const paperCount = data.documents.filter(d => d.subject === subject && d.level === level && d.type === 'paper').length;
+                                                    return (
+                                                        <button
+                                                            key={subject}
+                                                            onClick={() => {
+                                                                setSelectedLevel(level);
+                                                                navigate(level, subject);
+                                                            }}
+                                                            className="glass p-6 rounded-2xl border border-border-main hover:border-primary/40 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.12)] group relative overflow-hidden bg-bg-card"
+                                                            style={{ animationDelay: `${idx * 80}ms` }}
+                                                        >
+                                                            {/* Hover Glow */}
+                                                            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl -mr-8 -mt-8 group-hover:bg-primary/10 transition-colors duration-500"></div>
+                                                            
+                                                            <h4 className="text-lg font-black text-text-main mb-3 group-hover:text-primary transition-colors relative z-10">{formatLabel(subject)}</h4>
+                                                            
+                                                            <div className="flex justify-between items-end relative z-10">
+                                                                <div className="flex items-center gap-2 text-xs text-text-muted font-bold bg-black/5 dark:bg-white/5 px-2.5 py-1 rounded-lg border border-border-main">
+                                                                    <span className="material-symbols-outlined text-xs text-primary/70">description</span>
+                                                                    {paperCount} Papers
+                                                                </div>
+                                                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                                                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </button>
+                            </div>
                         );
                     })}
                 </div>
-            </div>
-        );
-    }
-
-    // ── Step 2: Select Subject ────────────────────────────────────────────────
-    if (!selectedSubject) {
-        const subjects = data.subjectsByLevel[selectedLevel] || [];
-
-        return (
-            <div className={`space-y-8 max-w-5xl mx-auto pt-4 transition-all duration-500 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                {/* Navigation Breadcrumb */}
-                <div className="flex items-center gap-3 text-text-muted font-bold text-xs mb-8 bg-bg-card border border-border-main w-fit rounded-full p-1.5 px-4 shadow-sm">
-                    <button onClick={() => navigate(null)} className="hover:text-primary flex items-center transition-colors uppercase tracking-wider">
-                        Levels
-                    </button>
-                    <span className="material-symbols-outlined text-[14px] opacity-50">chevron_right</span>
-                    <span className="text-text-main uppercase tracking-wider">{formatLabel(selectedLevel)}</span>
-                </div>
-
-                <div className="mb-12">
-                    <h2 className="text-4xl font-black tracking-tight text-text-main flex items-center gap-4">
-                        <span className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center text-3xl border border-primary/20 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
-                            {selectedLevel === 'igcse' ? '🏫' : '🎓'}
-                        </span>
-                        {formatLabel(selectedLevel)} Subjects
-                    </h2>
-                    <p className="text-text-muted mt-3 ml-[72px] text-lg">Choose a subject to explore its paper library.</p>
-                </div>
-
-                {subjects.length === 0 ? (
-                    <div className="text-center p-16 glass border border-border-main rounded-[2.5rem] text-text-muted">
-                        <span className="material-symbols-outlined text-6xl mb-6 opacity-30">folder_off</span>
-                        <h3 className="text-2xl font-black text-text-main mb-3">No subjects found</h3>
-                        <p className="text-lg">There are no uploaded papers for this level yet.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {subjects.map((subject, idx) => {
-                            const paperCount = data.documents.filter(d => d.subject === subject && d.level === selectedLevel && d.type === 'paper').length;
-                            return (
-                                <button
-                                    key={subject}
-                                    onClick={() => navigate(selectedLevel, subject)}
-                                    className="glass p-8 rounded-[2rem] border border-border-main hover:border-primary/40 text-left transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_15px_40px_rgba(0,0,0,0.15)] group relative overflow-hidden bg-bg-card"
-                                >
-                                    {/* Hover Glow */}
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors duration-500"></div>
-                                    
-                                    <h3 className="text-2xl font-black text-text-main mb-4 group-hover:text-primary transition-colors drop-shadow-sm relative z-10">{formatLabel(subject)}</h3>
-                                    
-                                    <div className="flex justify-between items-end relative z-10">
-                                        <div className="flex items-center gap-2 text-sm text-text-muted font-bold bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-lg border border-border-main">
-                                            <span className="material-symbols-outlined text-base text-primary/70">description</span>
-                                            {paperCount} Papers
-                                        </div>
-                                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                                            <span className="material-symbols-outlined">arrow_forward</span>
-                                        </div>
-                                    </div>
-                                </button>
-                            );
-                        })}
-                    </div>
-                )}
             </div>
         );
     }

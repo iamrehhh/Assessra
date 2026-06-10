@@ -263,16 +263,16 @@ export default function HomeView({ setView, setSelectedSubject }) {
                         </div>
 
                         {/* Total Expertise Widget */}
-                        <div className={`glass p-6 rounded-3xl flex items-center justify-between gap-5 border border-border-main relative overflow-hidden group hover:border-blue-500/30 transition-colors transform duration-700 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-blue-500/10 transition-colors"></div>
+                        <div className={`glass p-6 rounded-3xl flex items-center justify-between gap-5 border border-border-main relative overflow-hidden group hover:border-primary/30 transition-colors transform duration-700 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors"></div>
                             
                             <div className="flex items-center gap-5 relative z-10 w-full">
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/10 flex items-center justify-center border border-blue-500/20 shrink-0 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]">
-                                    <span className="material-symbols-outlined text-blue-500 text-3xl fill-1" style={{ fontVariationSettings: "'FILL' 1" }}>military_tech</span>
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 shrink-0 shadow-[inset_0_0_20px_rgba(34,197,94,0.1)]">
+                                    <span className="material-symbols-outlined text-primary text-3xl fill-1" style={{ fontVariationSettings: "'FILL' 1" }}>military_tech</span>
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-[10px] text-text-muted font-bold uppercase tracking-[0.15em] mb-1">Total Expertise</p>
-                                    <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-indigo-500 mb-1 leading-none">{stats.totalScore}</p>
+                                    <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-primary/80 to-primary mb-1 leading-none">{stats.totalScore}</p>
                                     <p className="text-[11px] font-bold text-text-muted">Mastery Points</p>
                                 </div>
                             </div>
@@ -412,22 +412,22 @@ function ResumeActivityCard({ activity }) {
     }
 
     return (
-        <a href={activity.url} className="relative group overflow-hidden rounded-[2.5rem] p-1 border border-border-main flex-shrink-0 cursor-pointer transition-all duration-500 hover:shadow-[0_10px_40px_rgb(0,0,0,0.2)] hover:border-blue-500/50 block bg-bg-card">
+        <a href={activity.url} className="relative group overflow-hidden rounded-[2.5rem] p-1 border border-border-main flex-shrink-0 cursor-pointer transition-all duration-500 hover:shadow-[0_10px_40px_rgba(16,185,129,0.2)] hover:border-emerald-500/50 block bg-bg-card">
             <div className="relative h-[280px] md:h-[340px] overflow-hidden rounded-[2.3rem] flex flex-col justify-between p-8 md:p-10 border border-white/5">
                 
                 {/* Dynamic Backgrounds */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a] z-0"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#064e3b] to-[#0f172a] z-0"></div>
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0"></div>
                 
                 {/* Glowing Orbs */}
-                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-500/20 blur-[80px] z-0 group-hover:bg-blue-400/30 transition-colors duration-700"></div>
-                <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/20 blur-[60px] z-0 group-hover:bg-indigo-400/30 transition-colors duration-700"></div>
+                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-500/20 blur-[80px] z-0 group-hover:bg-emerald-400/30 transition-colors duration-700"></div>
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-teal-500/20 blur-[60px] z-0 group-hover:bg-teal-400/30 transition-colors duration-700"></div>
 
                 {/* Top Row */}
                 <div className="flex justify-between items-start relative z-10">
                     <div className="backdrop-blur-xl bg-white/5 px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2.5 shadow-lg">
-                        <span className="material-symbols-outlined text-[16px] text-blue-400">play_circle</span>
-                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-blue-300">Resume Session</span>
+                        <span className="material-symbols-outlined text-[16px] text-emerald-400">play_circle</span>
+                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-emerald-300">Resume Session</span>
                     </div>
                     <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-500 shadow-xl">
                         <span className="material-symbols-outlined text-white text-xl">arrow_forward</span>
@@ -436,8 +436,8 @@ function ResumeActivityCard({ activity }) {
 
                 {/* Content */}
                 <div className="relative z-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div className="inline-block mb-3 px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-500/30 backdrop-blur-md">
-                        <p className="text-blue-300 text-[10px] font-black uppercase tracking-[0.2em]">{activity.type === 'pastpaper' ? 'Past Paper Practice' : 'Module Practice'}</p>
+                    <div className="inline-block mb-3 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 backdrop-blur-md">
+                        <p className="text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em]">{activity.type === 'pastpaper' ? 'Past Paper Practice' : 'Module Practice'}</p>
                     </div>
                     
                     <h3 className="text-3xl md:text-5xl font-black text-white leading-tight mb-3 drop-shadow-md">
@@ -456,8 +456,8 @@ function ResumeActivityCard({ activity }) {
                     </div>
 
                     <div className="mt-8 flex items-center gap-3">
-                        <div className="h-1 w-12 bg-blue-500 rounded-full group-hover:w-20 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
-                        <span className="text-xs font-bold uppercase tracking-widest text-blue-400 opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500 delay-100">Jump In</span>
+                        <div className="h-1 w-12 bg-emerald-500 rounded-full group-hover:w-20 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500 delay-100">Jump In</span>
                     </div>
                 </div>
             </div>

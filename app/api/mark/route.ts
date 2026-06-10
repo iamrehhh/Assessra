@@ -4,6 +4,7 @@
 
 import { callLLM } from '@/lib/llm';
 import { BUSINESS_P3_RUBRIC } from './businessP3Rubric';
+import { IGCSE_HISTORY_RUBRIC } from './igcseHistoryRubric';
 
 
 function getSubject(pdf, paperTitle) {
@@ -26,6 +27,7 @@ function buildSystemPrompt(pdf, marks) {
     const isBusinessP4 = pdf && pdf.includes('9609') && (pdf.includes('qp_4') || /[4][123]\.pdf/.test(pdf));
     const isEconomicsP4 = pdf && pdf.includes('9708') && pdf.includes('qp_4');
     const isGeneralPaper = pdf && pdf.includes('8021');
+    const isIgcseHistory = pdf && pdf.includes('0470');
 
     if (isBusinessP3 || isBusinessP4) {
         return `You are a Cambridge International A-Level Business (9609) Examiner. 
@@ -66,6 +68,10 @@ CRITICAL INSTRUCTION FOR NUANCED ARGUMENTS:
 3. DO NOT give away marks freely — the student must still demonstrate linguistic clarity and logical cohesion to score high bands.`;
     }
 
+    if (isIgcseHistory) {
+        return `You are a strict Cambridge IGCSE History examiner marking Paper 1 (0470). You follow Cambridge's Generic Marking Principles exactly: award marks positively only for correct relevant content, never deduct marks for errors or omissions, never award half marks, treat the mark scheme as indicative not exhaustive, and do not penalise spelling or grammar unless meaning is unclear. Use the full mark range within each level. The critical distinction: IDENTIFICATION = states a fact. EXPLANATION = shows causation with a causal link (because / this meant that / as a result / therefore). Do not award explanation marks for identification alone. For part (b) use Table A (4 levels, max 6 marks). For part (c) use Table B (5 levels, max 10 marks).`;
+    }
+
     return `You are a Cambridge International A-Level Examiner. Mark the following answer strictly according to Cambridge conventions.`;
 }
 
@@ -76,6 +82,7 @@ function buildRubric(pdf, marks) {
     const isBusinessP4 = pdf && pdf.includes('9609') && pdf.includes('qp_4');
     const isEconomicsP4 = pdf && pdf.includes('9708') && pdf.includes('qp_4');
     const isGeneralPaper = pdf && pdf.includes('8021');
+    const isIgcseHistory = pdf && pdf.includes('0470');
 
     if (isBusinessP3) {
         return BUSINESS_P3_RUBRIC;
@@ -114,6 +121,10 @@ Level 2 (7-12): Limited information; partial understanding; frequent errors.
 Level 1 (1-6): Very limited; weak argument; unclear.
 Each AO scored out of 10. Total = AO1+AO2+AO3 (max 30).`;
 
+    if (isIgcseHistory) {
+        return IGCSE_HISTORY_RUBRIC;
+    }
+
     if (marks <= 4) return `CALCULATION RUBRIC (${marks} MARKS): Full marks for correct answer. 1 mark for correct method with arithmetic error. 0 for wrong method and wrong answer.`;
 
     return `Mark strictly according to Cambridge conventions for ${marks} marks. Award whole marks only.`;
@@ -122,6 +133,8 @@ Each AO scored out of 10. Total = AO1+AO2+AO3 (max 30).`;
 // ─── Build model answer instruction ─────────────────────────────────────────
 
 function buildModelAnswerInstruction(pdf, marks) {
+    const noCommentary = `CRITICAL: The MODEL ANSWER must contain ONLY the perfect candidate response — exactly as a top-scoring student would write it in an exam. Do NOT include any commentary, annotations, explanations of why it scores well, meta-analysis, mark breakdowns, or examiner notes. Just the pure answer text.`;
+
     const isBusinessP3 = pdf && pdf.includes('9609') && pdf.includes('in_');
     const isBusinessP4 = pdf && pdf.includes('9609') && pdf.includes('qp_4');
 
@@ -132,30 +145,42 @@ function buildModelAnswerInstruction(pdf, marks) {
 3. SUBSTITUTE numbers into the formula
 4. CALCULATE step-by-step showing intermediate results
 5. STATE FINAL ANSWER with correct units (%, $, weeks, ratio, etc.)
-Plain text only. No bullet points in final answer.`;
+Plain text only. No bullet points in final answer.
+${noCommentary}`;
 
         if (marks === 8) return `Write an A* 8-mark analysis answer (PEEL structure, 150-225 words):
 - Point: State business concept/term
 - Evidence: Apply to this specific business context
 - Explain: Analyse the impact with a chain of reasoning
 - Link: Connect back to the question
-Two developed PEEL paragraphs. No bullet points.`;
+Two developed PEEL paragraphs. No bullet points.
+${noCommentary}`;
 
         return `Write an A* ${marks}-mark evaluative answer (250-350 words):
 Paragraph 1: Define key concept(s), apply to business context.
 Paragraph 2: Analyse first argument — cause, impact, consequence.
 Paragraph 3: Analyse counter-argument with case application.
 Paragraph 4: Evaluative conclusion with justified judgement contextualised to the business.
-No bullet points. Continuous prose.`;
+No bullet points. Continuous prose.
+${noCommentary}`;
     }
 
     if (isBusinessP4) return `Write an A* 20-mark strategy essay (EXACTLY 7 paragraphs, 400-600 words):
 Para 1 – Introduction: Define key concept(s), introduce business context.
 Para 2-5 – Body: Four distinct strategic factors, each with application + analysis + counter-point.
 Para 6 – Wider considerations: Conditions/context affecting outcome.
-Para 7 – Conclusion: Clear justified judgement. No bullet points.`;
+Para 7 – Conclusion: Clear justified judgement. No bullet points.
+${noCommentary}`;
 
-    return `Write a model answer targeting full marks for this ${marks}-mark question. Be concise but complete.`;
+    const isIgcseHistory = pdf && pdf.includes('0470');
+    if (isIgcseHistory) {
+        if (marks === 4) return `Mark this part (a) answer out of 4. Award 1 mark per distinct, correct, relevant point (max 4). Do not require explanation. Respond using these exact headers: WHAT YOU DID WELL, WHERE MARKS WERE LOST (or WHAT WAS MISSED OR WEAK), IMPROVEMENT TASK, and MARKS AWARDED: X (where X is the score). End with MODEL ANSWER: and provide a perfect candidate response. ${noCommentary}`;
+        if (marks === 6) return `Mark this part (b) answer using Cambridge Table A (max 6 marks). Respond using these exact headers: WHAT YOU DID WELL, WHERE MARKS WERE LOST, IMPROVEMENT TASK, and MARKS AWARDED: X (where X is the score, also state the LEVEL). End with MODEL ANSWER: and provide a perfect candidate response. ${noCommentary}`;
+        if (marks === 10) return `Mark this part (c) answer using Cambridge Table B (max 10 marks). Respond using these exact headers: WHAT YOU DID WELL, SIDE-BY-SIDE ANALYSIS, JUDGEMENT ANALYSIS, WHERE MARKS WERE LOST, IMPROVEMENT TASK, and MARKS AWARDED: X (where X is the score, also state the LEVEL). End with MODEL ANSWER: and provide a perfect candidate response. ${noCommentary}`;
+        if (marks === 20) return `Mark the following Cambridge IGCSE History Paper 1 answer (full 20 marks). Apply all three marking rubrics in sequence. For each part, output feedback using the headers: WHAT YOU DID WELL, WHERE MARKS WERE LOST, IMPROVEMENT TASK, and MARKS AWARDED: X. End with one overall comment, then MODEL ANSWER: and provide a perfect candidate response for all parts. ${noCommentary}`;
+    }
+
+    return `Write a model answer targeting full marks for this ${marks}-mark question. ${noCommentary}`;
 }
 
 // ─── Main POST handler ───────────────────────────────────────────────────────

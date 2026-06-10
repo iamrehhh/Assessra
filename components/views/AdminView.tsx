@@ -2,14 +2,18 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ADMIN_EMAILS } from '@/lib/admin';
+import { useToast } from '@/components/ToastContext';
+import { useConfirm } from '@/components/ConfirmContext';
 
 // Import sub-components
 import AdminUsersTab from '@/components/admin/AdminUsersTab';
 import AdminScoresTab from '@/components/admin/AdminScoresTab';
 import AdminActiveTab from '@/components/admin/AdminActiveTab';
 import AdminReportsTab from '@/components/admin/AdminReportsTab';
-import AdminBookClubTab from '@/components/admin/AdminBookClubTab';
+
 import AdminNotificationPanel from '@/components/admin/AdminNotificationPanel';
+import AdminTimersTab from '@/components/admin/AdminTimersTab';
+import SidePanel from '@/components/ui/SidePanel';
 
 const SkeletonLoader = () => (
     <div className="animate-pulse space-y-4 pt-4">
@@ -28,7 +32,7 @@ export default function AdminView() {
 
     const [activeUsersList, setActiveUsersList] = useState<any[]>([]);
     const [reports, setReports] = useState<any[]>([]);
-    const [bookCompletions, setBookCompletions] = useState<any[]>([]);
+
     
     // Loading States
     const [loading, setLoading] = useState(true);
@@ -57,24 +61,20 @@ export default function AdminView() {
     };
 
     // Modal State
-    const [modal, setModal] = useState({ open: false, type: 'alert', title: '', message: '', onConfirm: null as any });
     const [scoreModalOpen, setScoreModalOpen] = useState(false);
     const [selectedUserScores, setSelectedUserScores] = useState<any>(null);
     const [editUserModal, setEditUserModal] = useState({ open: false, userId: null as string | null, nickname: '' });
     const [messageUserModal, setMessageUserModal] = useState({ open: false, userId: null as string | null, name: '', message: '' });
     const [resetPasswordModal, setResetPasswordModal] = useState({ open: false, userId: null as string | null, email: '', password: '' });
 
+    const toast = useToast();
+    const showConfirm = useConfirm();
+
     const showAlert = useCallback((title: string, message: string) => {
-        setModal({ open: true, type: 'alert', title, message, onConfirm: null });
-    }, []);
-
-    const showConfirm = useCallback((title: string, message: string, onConfirm: any) => {
-        setModal({ open: true, type: 'confirm', title, message, onConfirm });
-    }, []);
-
-    const closeModal = useCallback(() => {
-        setModal(prev => ({ ...prev, open: false }));
-    }, []);
+        // Map common titles to toast types
+        const type = title.toLowerCase().includes('error') ? 'error' : 'success';
+        toast(message, type);
+    }, [toast]);
 
     const saveNotification = async () => {
         try {
@@ -128,15 +128,7 @@ export default function AdminView() {
         setLoading(false);
     }
 
-    async function fetchBookCompletions() {
-        setLoading(true);
-        try {
-            const res = await fetch('/api/admin/book-completions');
-            const data = await res.json();
-            setBookCompletions(data.completions || []);
-        } catch { setBookCompletions([]); }
-        setLoading(false);
-    }
+
 
     // Background poll for active users
     useEffect(() => {
@@ -158,7 +150,6 @@ export default function AdminView() {
         else if (tab === 'scores') { fetchScores(); }
         else if (tab === 'active') fetchActiveUsers();
         else if (tab === 'reports') fetchReports();
-        else if (tab === 'book') fetchBookCompletions();
         fetchNotification();
     }, [tab]);
 
@@ -243,57 +234,57 @@ export default function AdminView() {
     };
 
     const deleteReport = async (id: string) => {
-        showConfirm('Delete Report', 'Permanently delete this error report? This action cannot be undone.', async () => {
-            closeModal();
-            setDeletingReport(true);
-            try {
-                const res = await fetch(`/api/reports?id=${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    setReports(prev => prev.filter(r => r.id !== id));
-                    setSelectedReport(null);
-                    showAlert('Success', 'Report deleted successfully.');
-                } else {
-                    const d = await res.json();
-                    showAlert('Error', d.error || 'Failed to delete report.');
-                }
-            } catch { showAlert('Error', 'Network error.'); }
-            setDeletingReport(false);
-        });
+        const confirmed = await showConfirm('Delete Report', 'Permanently delete this error report? This action cannot be undone.');
+        if (!confirmed) return;
+        
+        setDeletingReport(true);
+        try {
+            const res = await fetch(`/api/reports?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setReports(prev => prev.filter(r => r.id !== id));
+                setSelectedReport(null);
+                showAlert('Success', 'Report deleted successfully.');
+            } else {
+                const d = await res.json();
+                showAlert('Error', d.error || 'Failed to delete report.');
+            }
+        } catch { showAlert('Error', 'Network error.'); }
+        setDeletingReport(false);
     };
 
     const deleteUser = async (id: string, email: string) => {
-        showConfirm('Delete User', `Permanently delete user "${email}" and all their scores?`, async () => {
-            closeModal();
-            setActionLoading(id);
-            try {
-                const res = await fetch(`/api/admin/users?id=${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    setUsers(prev => prev.filter(u => u.id !== id));
-                    setScores(prev => prev.filter(s => s.username !== email));
-                } else {
-                    const d = await res.json();
-                    showAlert('Error', d.error || 'Failed to delete user.');
-                }
-            } catch { showAlert('Error', 'Network error.'); }
-            setActionLoading(null);
-        });
+        const confirmed = await showConfirm('Delete User', `Permanently delete user "${email}" and all their scores?`);
+        if (!confirmed) return;
+
+        setActionLoading(id);
+        try {
+            const res = await fetch(`/api/admin/users?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setUsers(prev => prev.filter(u => u.id !== id));
+                setScores(prev => prev.filter(s => s.username !== email));
+            } else {
+                const d = await res.json();
+                showAlert('Error', d.error || 'Failed to delete user.');
+            }
+        } catch { showAlert('Error', 'Network error.'); }
+        setActionLoading(null);
     };
 
     const resetScores = async (email: string) => {
-        showConfirm('Reset Scores', `Reset ALL scores for "${email}"? This cannot be undone.`, async () => {
-            closeModal();
-            setActionLoading(email);
-            try {
-                const res = await fetch(`/api/admin/scores?username=${encodeURIComponent(email)}`, { method: 'DELETE' });
-                if (res.ok) {
-                    setScores(prev => prev.filter(s => s.username !== email));
-                } else {
-                    const d = await res.json();
-                    showAlert('Error', d.error || 'Failed to reset scores.');
-                }
-            } catch { showAlert('Error', 'Network error.'); }
-            setActionLoading(null);
-        });
+        const confirmed = await showConfirm('Reset Scores', `Reset ALL scores for "${email}"? This cannot be undone.`);
+        if (!confirmed) return;
+
+        setActionLoading(email);
+        try {
+            const res = await fetch(`/api/admin/scores?username=${encodeURIComponent(email)}`, { method: 'DELETE' });
+            if (res.ok) {
+                setScores(prev => prev.filter(s => s.username !== email));
+            } else {
+                const d = await res.json();
+                showAlert('Error', d.error || 'Failed to reset scores.');
+            }
+        } catch { showAlert('Error', 'Network error.'); }
+        setActionLoading(null);
     };
 
 
@@ -343,7 +334,8 @@ export default function AdminView() {
                     { id: 'scores', icon: '📊', label: 'Scores' },
                     { id: 'active', icon: '🟢', label: 'Active' },
                     { id: 'reports', icon: '🚨', label: 'Reports' },
-                    { id: 'book', icon: '📖', label: 'Book Club' },
+
+                    { id: 'timers', icon: '⏱️', label: 'Timers' },
                 ].map((t) => (
                     <button
                         key={t.id}
@@ -416,245 +408,242 @@ export default function AdminView() {
                             deletingReport={deletingReport}
                         />
                     )}
-                    {tab === 'book' && (
-                        <AdminBookClubTab bookCompletions={bookCompletions} searchTerm={searchTerm} />
+
+                    {tab === 'timers' && (
+                        <AdminTimersTab showAlert={showAlert} />
                     )}
                 </div>
             )}
 
             {/* Modal Components */}
             
-            {/* General Alert / Confirm Modal */}
-            {modal.open && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10">
-                        <div className="p-6">
-                            <h3 className="text-lg font-bold text-white mb-2">{modal.title}</h3>
-                            <p className="text-sm text-slate-300 mb-6">{modal.message}</p>
-                            <div className="flex justify-end gap-3">
-                                {modal.type === 'confirm' && (
-                                    <button onClick={closeModal} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
-                                        Cancel
-                                    </button>
-                                )}
-                                <button 
-                                    onClick={() => {
-                                        if (modal.type === 'confirm' && modal.onConfirm) modal.onConfirm();
-                                        else closeModal();
-                                    }} 
-                                    className={`px-5 py-2 rounded-xl text-sm font-bold text-white transition-transform hover:scale-[1.02] ${modal.type === 'confirm' ? 'bg-red-500 shadow-lg shadow-red-500/20' : 'bg-primary shadow-lg shadow-primary/20'}`}
-                                >
-                                    {modal.type === 'confirm' ? 'Confirm' : 'OK'}
-                                </button>
-                            </div>
+            {/* Score History Side Panel */}
+            <SidePanel 
+                isOpen={scoreModalOpen && !!selectedUserScores} 
+                onClose={() => setScoreModalOpen(false)}
+                title={
+                    <span className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+                            <span className="material-symbols-outlined text-xl">analytics</span>
                         </div>
+                        {selectedUserScores?.name || selectedUserScores?.email}&apos;s Logs
+                    </span>
+                }
+                subtitle={`Total Score: ${selectedUserScores?.totalScore} / ${selectedUserScores?.totalMax}`}
+                width="2xl"
+            >
+                {selectedUserScores && (
+                    <div className="space-y-4">
+                        {selectedUserScores.logs.length === 0 ? (
+                            <div className="p-12 glass rounded-[2rem] border border-border-main text-center flex flex-col items-center justify-center">
+                                <span className="material-symbols-outlined text-5xl text-text-muted opacity-30 mb-4">history</span>
+                                <p className="text-text-main font-bold">No detailed logs found.</p>
+                                <p className="text-sm text-text-muted mt-1">This user hasn&apos;t completed any practice sessions yet.</p>
+                            </div>
+                        ) : (
+                            <div className="grid gap-3">
+                                {selectedUserScores.logs.map((log: any, idx: number) => {
+                                    const percentage = log.maxMarks > 0 ? Math.round((log.score / log.maxMarks) * 100) : 0;
+                                    const isGood = percentage >= 70;
+                                    const isOk = percentage >= 40 && percentage < 70;
+                                    
+                                    return (
+                                        <div key={idx} className="glass p-5 rounded-2xl border border-border-main hover:border-primary/30 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-black bg-black/5 dark:bg-white/5 border border-border-main text-text-main uppercase tracking-widest flex items-center gap-1.5">
+                                                        <span className={`material-symbols-outlined text-[14px] ${log.subject === 'vocab' || log.subject === 'idioms' ? 'text-blue-500' : 'text-primary'}`}>
+                                                            {log.subject === 'vocab' ? 'spellcheck' : log.subject === 'idioms' ? 'forum' : 'library_books'}
+                                                        </span>
+                                                        {log.subject}
+                                                    </span>
+                                                    <span className="text-xs font-bold text-text-muted flex items-center gap-1">
+                                                        <span className="material-symbols-outlined text-[14px]">schedule</span>
+                                                        {log.submittedAt ? new Date(log.submittedAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Unknown Date'}
+                                                    </span>
+                                                </div>
+                                                <p className="font-bold text-text-main text-sm truncate group-hover:text-primary transition-colors">
+                                                    {log.paperTitle || log.paperId || log.paper_id || 'Practice Session'}
+                                                </p>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-6 sm:border-l border-border-main sm:pl-6">
+                                                {log.timeTaken && (
+                                                    <div className="text-center">
+                                                        <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-0.5">Time</div>
+                                                        <div className="text-sm font-bold text-text-main">{Math.round(log.timeTaken / 60)}m</div>
+                                                    </div>
+                                                )}
+                                                <div className="text-center min-w-[60px]">
+                                                    <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-0.5">Score</div>
+                                                    <div className="text-lg font-black flex items-baseline justify-center gap-1">
+                                                        <span className={isGood ? 'text-green-500' : isOk ? 'text-amber-500' : 'text-red-500'}>{log.score}</span>
+                                                        <span className="text-xs text-text-muted font-bold">/{log.maxMarks}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
-                </div>
-            )}
+                )}
+            </SidePanel>
 
-            {/* Score History Modal */}
-            {scoreModalOpen && selectedUserScores && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10 flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
+            {/* Report Side Panel */}
+            <SidePanel 
+                isOpen={!!selectedReport} 
+                onClose={() => setSelectedReport(null)}
+                title="Manage Report"
+                width="md"
+                footer={
+                    <>
+                        <button onClick={() => setSelectedReport(null)} className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
+                            Cancel
+                        </button>
+                        <button onClick={updateReport} disabled={savingReport} className="px-6 py-2.5 rounded-xl text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
+                            {savingReport ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    </>
+                }
+            >
+                {selectedReport && (
+                    <div className="space-y-6">
+                        <div className="bg-black/20 p-5 rounded-2xl border border-white/5">
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Issue Description</p>
+                            <p className="text-sm text-white leading-relaxed">{selectedReport.error_message || 'N/A'}</p>
+                        </div>
+
+                        {selectedReport.route && (
                             <div>
-                                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                    <span className="text-xl">📈</span> {selectedUserScores.name || selectedUserScores.email}&apos;s Logs
-                                </h3>
-                                <p className="text-xs text-slate-400 mt-1">Total Score: {selectedUserScores.totalScore} / {selectedUserScores.totalMax}</p>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">Route / Component</p>
+                                <p className="text-xs font-mono bg-black/40 text-blue-300 px-3 py-2 rounded-xl inline-block border border-blue-500/20">{selectedReport.route}</p>
                             </div>
-                            <button onClick={() => setScoreModalOpen(false)} className="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-0 overflow-y-auto flex-1">
-                            {selectedUserScores.logs.length === 0 ? (
-                                <div className="p-10 text-center text-slate-400">No detailed logs found.</div>
-                            ) : (
-                                <table className="w-full text-left text-sm text-slate-300">
-                                    <thead className="bg-black/40 text-slate-400 uppercase text-[10px] font-bold tracking-wider sticky top-0 backdrop-blur-md">
-                                        <tr>
-                                            <th className="p-4">Subject</th>
-                                            <th className="p-4">Score</th>
-                                            <th className="p-4">Time Taken</th>
-                                            <th className="p-4">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/5">
-                                        {selectedUserScores.logs.map((log: any, idx: number) => (
-                                            <tr key={idx} className="hover:bg-white/5 transition-colors">
-                                                <td className="p-4">
-                                                    <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-white/10 border border-white/10">{log.subject}</span>
-                                                    {log.paper_id && <div className="text-[10px] text-slate-500 mt-1.5">{log.paper_id}</div>}
-                                                </td>
-                                                <td className="p-4">
-                                                    <span className="font-bold text-white">{log.score}</span> / {log.maxMarks}
-                                                </td>
-                                                <td className="p-4">{log.timeTaken ? `${Math.round(log.timeTaken / 60)} min` : '—'}</td>
-                                                <td className="p-4 text-xs text-slate-400">{new Date(log.timestamp).toLocaleString()}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+                        )}
 
-            {/* Report Modal */}
-            {selectedReport && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
-                            <h3 className="text-lg font-bold text-white">Manage Report</h3>
-                            <button onClick={() => setSelectedReport(null)} className="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-5">
-                            <div className="bg-black/20 p-4 rounded-xl border border-white/5">
-                                <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Issue Description</p>
-                                <p className="text-sm text-white">{selectedReport.error_message || 'N/A'}</p>
-                            </div>
-
-                            {selectedReport.route && (
-                                <div>
-                                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Route / Component</p>
-                                    <p className="text-sm font-mono bg-black/40 text-blue-300 px-3 py-1.5 rounded-lg inline-block border border-blue-500/20">{selectedReport.route}</p>
-                                </div>
-                            )}
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-2">Update Status</label>
+                        <div className="space-y-5 pt-2">
+                            <div>
+                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-2">Update Status</label>
+                                <div className="relative">
                                     <select 
                                         value={reportStatus} 
                                         onChange={e => setReportStatus(e.target.value)}
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary transition-colors appearance-none"
+                                        className="w-full bg-black/40 border-2 border-white/10 rounded-xl px-4 py-3.5 text-sm font-medium text-white focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
                                     >
                                         <option value="open">🔴 Open</option>
                                         <option value="in_progress">🟡 In Progress</option>
                                         <option value="resolved">🟢 Resolved</option>
                                     </select>
-                                </div>
-                                <div>
-                                    <label className="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-2">Message User</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="Optional reply..." 
-                                        value={reportReply} 
-                                        onChange={e => setReportReply(e.target.value)}
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary transition-colors"
-                                    />
+                                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xl">expand_more</span>
                                 </div>
                             </div>
-                        </div>
-                        <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end gap-3">
-                            <button onClick={() => setSelectedReport(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={updateReport} disabled={savingReport} className="px-6 py-2 rounded-xl text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
-                                {savingReport ? 'Saving...' : 'Save Changes'}
-                            </button>
+                            <div>
+                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-2">Message User</label>
+                                <textarea 
+                                    placeholder="Add an optional reply to the user..." 
+                                    value={reportReply} 
+                                    onChange={e => setReportReply(e.target.value)}
+                                    rows={3}
+                                    className="w-full bg-black/40 border-2 border-white/10 rounded-xl px-4 py-3.5 text-sm font-medium text-white focus:outline-none focus:border-primary transition-colors resize-none placeholder-slate-500"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </SidePanel>
 
-            {/* Edit User Modal */}
-            {editUserModal.open && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
-                            <h3 className="text-lg font-bold text-white">Edit Nickname</h3>
-                            <button onClick={() => setEditUserModal({ open: false, userId: null, nickname: '' })} className="text-slate-400 hover:text-white transition-colors">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-6">
-                            <input 
-                                type="text" 
-                                placeholder="Enter nickname" 
-                                value={editUserModal.nickname} 
-                                onChange={e => setEditUserModal(prev => ({ ...prev, nickname: e.target.value }))}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors"
-                            />
-                        </div>
-                        <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end gap-3">
-                            <button onClick={() => setEditUserModal({ open: false, userId: null, nickname: '' })} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={handleEditUser} disabled={savingReport} className="px-6 py-2 rounded-xl text-sm font-bold bg-amber-500 text-white shadow-lg shadow-amber-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
-                                {savingReport ? 'Saving...' : 'Save Nickname'}
-                            </button>
-                        </div>
-                    </div>
+            {/* Edit User Side Panel */}
+            <SidePanel 
+                isOpen={editUserModal.open} 
+                onClose={() => setEditUserModal({ open: false, userId: null, nickname: '' })}
+                title="Edit Nickname"
+                width="md"
+                footer={
+                    <>
+                        <button onClick={() => setEditUserModal({ open: false, userId: null, nickname: '' })} className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
+                            Cancel
+                        </button>
+                        <button onClick={handleEditUser} disabled={savingReport} className="px-6 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white shadow-lg shadow-amber-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
+                            {savingReport ? 'Saving...' : 'Save Nickname'}
+                        </button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">User Nickname</label>
+                    <input 
+                        type="text" 
+                        placeholder="Enter nickname" 
+                        value={editUserModal.nickname} 
+                        onChange={e => setEditUserModal(prev => ({ ...prev, nickname: e.target.value }))}
+                        className="w-full bg-black/40 border-2 border-white/10 rounded-xl px-4 py-3.5 text-sm font-medium text-white focus:outline-none focus:border-amber-500 transition-colors placeholder-slate-500"
+                    />
                 </div>
-            )}
+            </SidePanel>
 
-            {/* Message User Modal */}
-            {messageUserModal.open && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
-                            <h3 className="text-lg font-bold text-white">Message {messageUserModal.name}</h3>
-                            <button onClick={() => setMessageUserModal({ open: false, userId: null, name: '', message: '' })} className="text-slate-400 hover:text-white transition-colors">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-6">
-                            <textarea 
-                                placeholder="Type your message here..." 
-                                value={messageUserModal.message} 
-                                onChange={e => setMessageUserModal(prev => ({ ...prev, message: e.target.value }))}
-                                rows={4}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors resize-none"
-                            ></textarea>
-                        </div>
-                        <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end gap-3">
-                            <button onClick={() => setMessageUserModal({ open: false, userId: null, name: '', message: '' })} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={handleMessageUser} disabled={savingReport} className="px-6 py-2 rounded-xl text-sm font-bold bg-purple-500 text-white shadow-lg shadow-purple-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
-                                {savingReport ? 'Sending...' : 'Send Message'}
-                            </button>
-                        </div>
-                    </div>
+            {/* Message User Side Panel */}
+            <SidePanel 
+                isOpen={messageUserModal.open} 
+                onClose={() => setMessageUserModal({ open: false, userId: null, name: '', message: '' })}
+                title={`Message ${messageUserModal.name}`}
+                width="md"
+                footer={
+                    <>
+                        <button onClick={() => setMessageUserModal({ open: false, userId: null, name: '', message: '' })} className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
+                            Cancel
+                        </button>
+                        <button onClick={handleMessageUser} disabled={savingReport} className="px-6 py-2.5 rounded-xl text-sm font-bold bg-purple-500 text-white shadow-lg shadow-purple-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
+                            {savingReport ? 'Sending...' : 'Send Message'}
+                        </button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">Custom Message</label>
+                    <textarea 
+                        placeholder="Type your message here..." 
+                        value={messageUserModal.message} 
+                        onChange={e => setMessageUserModal(prev => ({ ...prev, message: e.target.value }))}
+                        rows={6}
+                        className="w-full bg-black/40 border-2 border-white/10 rounded-xl px-4 py-3.5 text-sm font-medium text-white focus:outline-none focus:border-purple-500 transition-colors resize-none placeholder-slate-500"
+                    ></textarea>
                 </div>
-            )}
+            </SidePanel>
 
-            {/* Reset Password Modal */}
-            {resetPasswordModal.open && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center animate-fade-in p-4">
-                    <div className="bg-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden view-transition-in border border-white/10">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
-                            <h3 className="text-lg font-bold text-white">Reset Password</h3>
-                            <button onClick={() => setResetPasswordModal({ open: false, userId: null, email: '', password: '' })} className="text-slate-400 hover:text-white transition-colors">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-6">
-                            <p className="text-sm text-slate-400 mb-4">Resetting password for: <strong className="text-white">{resetPasswordModal.email}</strong></p>
-                            <input 
-                                type="password" 
-                                placeholder="Enter new password" 
-                                value={resetPasswordModal.password} 
-                                onChange={e => setResetPasswordModal(prev => ({ ...prev, password: e.target.value }))}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500 transition-colors"
-                            />
-                        </div>
-                        <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end gap-3">
-                            <button onClick={() => setResetPasswordModal({ open: false, userId: null, email: '', password: '' })} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={handleResetPassword} disabled={savingReport || !resetPasswordModal.password} className="px-6 py-2 rounded-xl text-sm font-bold bg-red-500 text-white shadow-lg shadow-red-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
-                                {savingReport ? 'Resetting...' : 'Confirm Reset'}
-                            </button>
-                        </div>
+            {/* Reset Password Side Panel */}
+            <SidePanel 
+                isOpen={resetPasswordModal.open} 
+                onClose={() => setResetPasswordModal({ open: false, userId: null, email: '', password: '' })}
+                title="Reset Password"
+                width="md"
+                footer={
+                    <>
+                        <button onClick={() => setResetPasswordModal({ open: false, userId: null, email: '', password: '' })} className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/10 transition-colors">
+                            Cancel
+                        </button>
+                        <button onClick={handleResetPassword} disabled={savingReport || !resetPasswordModal.password} className="px-6 py-2.5 rounded-xl text-sm font-bold bg-red-500 text-white shadow-lg shadow-red-500/20 hover:scale-[1.02] transition-transform disabled:opacity-50">
+                            {savingReport ? 'Resetting...' : 'Confirm Reset'}
+                        </button>
+                    </>
+                }
+            >
+                <div className="space-y-6">
+                    <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/20">
+                        <p className="text-sm text-red-200">Resetting password for:<br/><strong className="text-red-100 mt-1 block break-all">{resetPasswordModal.email}</strong></p>
+                    </div>
+                    <div>
+                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-2">New Password</label>
+                        <input 
+                            type="password" 
+                            placeholder="Enter new password" 
+                            value={resetPasswordModal.password} 
+                            onChange={e => setResetPasswordModal(prev => ({ ...prev, password: e.target.value }))}
+                            className="w-full bg-black/40 border-2 border-white/10 rounded-xl px-4 py-3.5 text-sm font-medium text-white focus:outline-none focus:border-red-500 transition-colors placeholder-slate-500"
+                        />
                     </div>
                 </div>
-            )}
+            </SidePanel>
         </div>
     );
 }

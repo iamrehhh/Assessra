@@ -45,8 +45,9 @@ function SubViewContent() {
     }
 
     if (!session) return <LoginPage />;
+    const urlParams = (params?.params as string[]) || [];
 
-    return <Dashboard />;
+    return <Dashboard initialView={view} initialParams={urlParams} />;
 }
 
 export default function SubViewPage() {

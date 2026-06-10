@@ -14,6 +14,8 @@ const subjectMeta = {
     'economics-p4': { emoji: '📈', title: 'Economics: Paper 4', subtitle: 'Data Response & Essays', code: '9708/4', type: 'essay' },
     'general-p1': { emoji: '🌍', title: 'General Paper 1', subtitle: 'Essay Questions', code: '8021/1', type: 'gp' },
     'general-p2': { emoji: '🌍', title: 'General Paper 2', subtitle: 'Data Response', code: '8021/2', type: 'essay' },
+    'biology-p2': { emoji: '🔬', title: 'Biology: Paper 2', subtitle: 'Multiple Choice (Extended)', code: '0610/2', type: 'mcq' },
+    'physics-p2': { emoji: '⚛️', title: 'Physics: Paper 2', subtitle: 'Multiple Choice (Extended)', code: '0625/2', type: 'mcq' },
 };
 
 export default function PapersView({ subject, paper }: { subject: string, paper: string }) {

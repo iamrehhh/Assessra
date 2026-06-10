@@ -4,17 +4,23 @@ import { businessP4Data, businessP4Papers } from './papers/businessP4';
 import { economicsP4Data, economicsP4Papers } from './papers/economicsP4';
 import { economicsP3Data, economicsP3Papers } from './papers/economicsP3';
 import { generalPaperData, generalPapers } from './papers/generalPaper';
+import { igcseBiologyP2Data, igcseBiologyP2Papers } from './papers/igcseBiologyP2';
+import { igcsePhysicsP2Data, igcsePhysicsP2Papers } from './papers/igcsePhysicsP2';
+import { igcseHistoryData, igcseHistoryPapers } from './papers/igcseHistory';
 
 // Combined lookup map: paperID → paper data (questions + pdf)
 export const allPaperData = {
     ...businessP3Data,
     ...businessP4Data,
     ...economicsP4Data,
+    ...igcseHistoryData,
 };
 
 // MCQ data (answer keys only, no questions array)
 export const allMCQData = {
     ...economicsP3Data,
+    ...igcseBiologyP2Data,
+    ...igcsePhysicsP2Data,
 };
 
 // General Paper data (essay questions)
@@ -30,4 +36,7 @@ export const paperListings = {
     'economics-p3': economicsP3Papers,
     'general-p1': generalPapers,
     'general-p2': [],
+    'biology-p2': igcseBiologyP2Papers,
+    'physics-p2': igcsePhysicsP2Papers,
+    'history-p4': igcseHistoryPapers,
 };

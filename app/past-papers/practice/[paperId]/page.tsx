@@ -41,6 +41,12 @@ function getBackPath(paperId: string, searchParams: URLSearchParams) {
     } else if (decoded.startsWith('business')) {
         inferredSubject = 'business';
         inferredLevel = 'alevel';
+    } else if (decoded.startsWith('phys_')) {
+        inferredSubject = 'physics';
+        inferredLevel = 'igcse';
+    } else if (decoded.startsWith('bio_')) {
+        inferredSubject = 'biology';
+        inferredLevel = 'igcse';
     }
 
     if (inferredSubject) {

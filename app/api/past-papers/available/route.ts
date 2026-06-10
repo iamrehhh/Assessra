@@ -44,12 +44,17 @@ export async function GET() {
         processListings(paperListings['economics-p3'] || [], 'economics', 'alevel');
         processListings(paperListings['economics-p4'] || [], 'economics', 'alevel');
         processListings(paperListings['general-p1'] || [], 'general_paper', 'alevel');
+        
+        processListings(paperListings['biology-p2'] || [], 'biology', 'igcse');
+        processListings(paperListings['physics-p2'] || [], 'physics', 'igcse');
+        processListings(paperListings['history-p4'] || [], 'history', 'igcse');
 
         return NextResponse.json({
             success: true,
-            levels: ['alevel'], // Hardcoded to A Level for now
+            levels: ['alevel', 'igcse'],
             subjectsByLevel: {
-                'alevel': ['business', 'economics', 'general_paper']
+                'alevel': ['business', 'economics', 'general_paper'],
+                'igcse': ['biology', 'physics', 'history']
             },
             documents
         });
