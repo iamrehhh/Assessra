@@ -41,21 +41,25 @@ export default function HomeView({ setView, setSelectedSubject }) {
 
         const fetchData = async () => {
             try {
-                // Fetch in parallel
-                const [scoresRes, lbRes, quoteRes] = await Promise.all([
+                // Fetch core stats in parallel
+                const [scoresRes, lbRes] = await Promise.all([
                     fetch(`/api/scores/user?username=${encodeURIComponent(userEmail)}`),
-                    fetch('/api/leaderboard'),
-                    fetch('/api/quote')
+                    fetch('/api/leaderboard')
                 ]);
 
                 // Parse in parallel
-                const [scoresData, lbData, quoteData] = await Promise.all([
+                const [scoresData, lbData] = await Promise.all([
                     scoresRes.json(),
-                    lbRes.json(),
-                    quoteRes.ok ? quoteRes.json() : Promise.resolve({})
+                    lbRes.json()
                 ]);
 
-                if (quoteData.quote) setQuote(quoteData.quote);
+                // Fetch quote asynchronously so it doesn't block the dashboard loading
+                fetch('/api/quote')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.quote) setQuote(data.quote);
+                    })
+                    .catch(err => console.error('Quote fetch error:', err));
 
                 let totalS = 0;
                 let todayS = 0;
