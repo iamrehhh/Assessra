@@ -127,13 +127,18 @@ export default function HomeView({ setView, setSelectedSubject }) {
             } catch (err) {
                 console.error('Failed to load dashboard data:', err);
             } finally {
-                // Trigger entry animations after data loads
-                setTimeout(() => setIsLoaded(true), 100);
+                // Fetch complete
             }
         };
 
         fetchData();
     }, [session]);
+
+    // Trigger entry animations immediately, independent of slow data fetching
+    useEffect(() => {
+        const timer = setTimeout(() => setIsLoaded(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
 
 
     useEffect(() => {

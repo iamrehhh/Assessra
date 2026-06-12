@@ -1,0 +1,167 @@
+[
+  {
+    "name": "1.1. Absenteeism (%)",
+    "formula": "Absenteeism = (number of days absent / total workdays) x 100",
+    "meaning": ""
+  },
+  {
+    "name": "Accounting Rate of Return (ARR)",
+    "formula": "ARR = (average annual profit / average investment) x 100",
+    "meaning": ""
+  },
+  {
+    "name": "Acid Test Ratio",
+    "formula": "Acid Test Ratio = liquid assets / current liabilities",
+    "meaning": ""
+  },
+  {
+    "name": "Annual Depreciation",
+    "formula": "Annual Depreciation = (original cost - residual value) / useful",
+    "meaning": ""
+  },
+  {
+    "name": "Average Inventory",
+    "formula": "Average Inventory = (inventory start + inventory end) / 2",
+    "meaning": ""
+  },
+  {
+    "name": "Average Investment",
+    "formula": "Average Investment = (initial capital cost + residual capital",
+    "meaning": ""
+  },
+  {
+    "name": "Cost of Sales",
+    "formula": "Cost of Sales = (opening inventories + purchases) - closing",
+    "meaning": ""
+  },
+  {
+    "name": "Current Ratio",
+    "formula": "Current Ratio = current assets / current liabilities",
+    "meaning": ""
+  },
+  {
+    "name": "Dividend Cover Ratio (x)",
+    "formula": "Dividend Cover Ratio = profit for year / annual dividends",
+    "meaning": ""
+  },
+  {
+    "name": "Dividend per Share",
+    "formula": "Dividend Per Share = total annual dividends / total issued",
+    "meaning": ""
+  },
+  {
+    "name": "Dividend Yield Ratio (%)",
+    "formula": "Dividend Yield Ratio = (dividend per share / market share price)",
+    "meaning": ""
+  },
+  {
+    "name": "Earnings Per Share",
+    "formula": "(EPS) Earnings Per Share = profit for year / number of shares",
+    "meaning": ""
+  },
+  {
+    "name": "Free Float",
+    "formula": "Free Float = estimated next activity - duration - estimated this",
+    "meaning": ""
+  },
+  {
+    "name": "Gearing Ratio (%)",
+    "formula": "Gearing Ratio = (non current liabilities / capital employed) x 100Gross Profit",
+    "meaning": ""
+  },
+  {
+    "name": "Gearing Ratio = (non current liabilities / capital employed) x 100Gross Profit",
+    "formula": "Gross Profit = revenue - cost of sales",
+    "meaning": ""
+  },
+  {
+    "name": "Gross Profit Margin Ratio (%)",
+    "formula": "Gross Profit Margin Ratio = (gross profit / revenue) x 100",
+    "meaning": ""
+  },
+  {
+    "name": "Income Elasticity of Demand (YED)",
+    "formula": "Income Elasticity of Demand = percentage change in demand /",
+    "meaning": ""
+  },
+  {
+    "name": "Liquid Assets",
+    "formula": "Liquid Assets = current assets - inventories",
+    "meaning": ""
+  },
+  {
+    "name": "Market Share (%)",
+    "formula": "Market Share = (sales of business / total market sales) x 100",
+    "meaning": ""
+  },
+  {
+    "name": "Net Book Value",
+    "formula": "Net Book Value = original cost - accumulated depreciation",
+    "meaning": ""
+  },
+  {
+    "name": "Net Realisable Value",
+    "formula": "Net Realisable Value = existing inventory value - cost of selling",
+    "meaning": ""
+  },
+  {
+    "name": "Operating Profit Margin Ratio (%)",
+    "formula": "Operating Profit Margin Ratio = (operating profit / revenue) x",
+    "meaning": ""
+  },
+  {
+    "name": "Payback Period - Additional Months",
+    "formula": "Additional Months to Payback = (additional net cash flow",
+    "meaning": ""
+  },
+  {
+    "name": "Price/Earnings (P/E) Ratio",
+    "formula": "Price Earnings Ratio = market share price / earnings per share",
+    "meaning": ""
+  },
+  {
+    "name": "Price Elasticity of Demand (PED)",
+    "formula": "Price Elasticity of Demand = % change in quantity demanded /",
+    "meaning": ""
+  },
+  {
+    "name": "Promotional Elasticity of Demand (PED)",
+    "formula": "Promotional Elasticity of Demand = % change in demand for a",
+    "meaning": ""
+  },
+  {
+    "name": "Rate of Inventory Turnover",
+    "formula": "Rate of Inventory Turnover = cost of sales / average inventory",
+    "meaning": ""
+  },
+  {
+    "name": "Reserve",
+    "formula": "Reserve = Shareholders' equity - equity capital",
+    "meaning": ""
+  },
+  {
+    "name": "Return on Capital Employed Ratio (ROCE)",
+    "formula": "Return on Capital Employed Ratio (ROCE) = (operating profit /",
+    "meaning": ""
+  },
+  {
+    "name": "Total Float",
+    "formula": "Total Float = Latest Finishing time (LFT) - Duration - Earliest",
+    "meaning": ""
+  },
+  {
+    "name": "Total Revenue",
+    "formula": "Total Revenue = selling price x quantity sold",
+    "meaning": ""
+  },
+  {
+    "name": "Trade Payable Turnover (Days)",
+    "formula": "Trade Payable Turnover = (Trade payables / credit purchases) x",
+    "meaning": ""
+  },
+  {
+    "name": "Working Capital",
+    "formula": "Working Capital = Current assets - Current Liabilities.",
+    "meaning": ""
+  }
+]

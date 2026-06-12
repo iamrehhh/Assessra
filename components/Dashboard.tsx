@@ -18,8 +18,9 @@ const ProfileView = dynamic(() => import('./views/ProfileView'), { ssr: false })
 const AdminView = dynamic(() => import('./views/AdminView'), { ssr: false });
 const PastPapersView = dynamic(() => import('./views/PastPapersView'), { ssr: false });
 const VocabIdiomsView = dynamic(() => import('./views/VocabIdiomsView'), { ssr: false });
+const NotesView = dynamic(() => import('./views/NotesView'), { ssr: false });
 
-const VALID_VIEWS = ['home', 'pastpapers', 'leaderboard', 'formulae', 'definitions', 'vocab-idioms', 'tips', 'profile', 'admin'];
+const VALID_VIEWS = ['home', 'pastpapers', 'notes', 'leaderboard', 'formulae', 'definitions', 'vocab-idioms', 'tips', 'profile', 'admin'];
 
 // Parse the current URL into { view, params }
 // Supports path-based (/leaderboard) AND legacy hash-based (#leaderboard)
@@ -193,6 +194,8 @@ export default function Dashboard({ initialView, initialParams }: { initialView?
                 return <FormulaeView />;
             case 'definitions':
                 return <DefinitionsView />;
+            case 'notes':
+                return <NotesView />;
 
             case 'pastpapers':
                 return <PastPapersView

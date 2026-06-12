@@ -39,6 +39,17 @@
     --sidebar-bg: #0a0a0a;
 }
 
+@layer base {
+    button, 
+    [role="button"] {
+        cursor: pointer;
+    }
+    button:disabled, 
+    [role="button"]:disabled {
+        cursor: default;
+    }
+}
+
 @layer utilities {
     .glass {
         background: rgba(255, 255, 255, 0.75);

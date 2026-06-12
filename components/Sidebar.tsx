@@ -5,6 +5,7 @@ import { ADMIN_EMAILS } from '@/lib/admin';
 const navItems = [
     { id: 'home', icon: 'grid_view', label: 'Overview' },
     { id: 'pastpapers', icon: 'auto_stories', label: 'Past Papers' },
+    { id: 'notes', icon: 'sticky_note_2', label: 'Study Notes' },
     { id: 'vocab-idioms', icon: 'menu_book', label: 'Vocab & Idioms' },
     { id: 'leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
 ];

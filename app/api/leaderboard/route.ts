@@ -3,6 +3,8 @@
 
 import supabase from '@/lib/supabase';
 
+export const revalidate = 300; // Cache for 5 minutes
+
 export async function GET() {
     try {
         // Fetch all scores

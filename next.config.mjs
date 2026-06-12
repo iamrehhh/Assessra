@@ -18,6 +18,9 @@ const nextConfig = {
     }
     return config;
   },
+  turbopack: {
+    root: '/Users/abdulrehan/Documents/Assessra',
+  },
 };
 
 
