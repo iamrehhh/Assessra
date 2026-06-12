@@ -1,34 +1,30 @@
 [
   {
-    "section": "alphabetical order with your exact wordings preserved",
+    "section": "General Definitions",
     "definitions": [
       {
         "term": "Absenteeism",
-        "definition": "The rate of workforce absence as a"
+        "definition": "The rate of workforce absence as a proportion of the total number of employees."
       },
       {
         "term": "Accountability",
-        "definition": "The responsibility to account for, explain,"
+        "definition": "The responsibility to account for, explain, and disclose the results of one's work honestly."
       },
       {
         "term": "Accounting rate of return (ARR)",
-        "definition": "A measure of the annual"
+        "definition": "A measure of the annual profitability of an investment as a percentage of the average investment (average capital cost)."
       },
       {
         "term": "Acid test ratio",
-        "definition": "A ratio comparing liquid assets with current"
+        "definition": "A ratio comparing liquid assets with current liabilities."
       },
       {
         "term": "Added Value",
-        "definition": "The difference between the cost of"
+        "definition": "The difference between the cost of purchasing raw materials and the final price the finished goods are sold for."
       },
       {
         "term": "Ansoff matrix",
-        "definition": "A model illustrating the degree of risk in"
-      },
-      {
-        "term": "growth strategies",
-        "definition": "market penetration, market"
+        "definition": "A model illustrating the degree of risk in growth strategies: market penetration, market development, product development, and diversification."
       },
       {
         "term": "Asset",
@@ -40,63 +36,59 @@
       },
       {
         "term": "Benchmark performance indicators (BPI)",
-        "definition": "Key areas of"
+        "definition": "Key areas of business performance measured and compared with competitors."
       },
       {
         "term": "Benchmarking",
-        "definition": "Comparing a business's performance"
+        "definition": "Comparing a business's performance against the best companies in the same industry."
       },
       {
         "term": "Blue ocean strategy",
-        "definition": "Exploiting uncontested market space"
+        "definition": "Exploiting uncontested market space through product differentiation and low cost."
       },
       {
         "term": "BRICS",
-        "definition": "Acronym for five rapidly developing economies with"
-      },
-      {
-        "term": "significant market opportunities",
-        "definition": "Brazil, Russia, India,"
+        "definition": "Acronym for five rapidly developing economies with significant market opportunities: Brazil, Russia, India, China, and South Africa."
       },
       {
         "term": "Budget deficit",
-        "definition": "When government spending exceeds"
+        "definition": "When government spending exceeds revenue from taxation."
       },
       {
         "term": "Budget surplus",
-        "definition": "When taxation revenue exceeds"
+        "definition": "When taxation revenue exceeds government spending."
       },
       {
         "term": "Business cycle",
-        "definition": "Regular swings in output, measured by real"
+        "definition": "Regular swings in output, measured by real GDP, from boom conditions to recession."
       },
       {
         "term": "Business investment",
-        "definition": "Expenditure by businesses on capital"
+        "definition": "Expenditure by businesses on capital equipment, new technology, and research and development."
       },
       {
         "term": "Business process re-engineering",
-        "definition": "Rethinking and"
+        "definition": "Rethinking and redesigning business processes to achieve significant performance improvements."
       },
       {
         "term": "Capital employed",
-        "definition": "The total value of long-term finance"
+        "definition": "The total value of long-term finance invested in a business Non-current liabilities + Shareholders\u2019 equity Non-current liabilities+Shareholders\u2019 equity (or Total assets \u2212 Current liabilities Total assets\u2212Current liabilities)."
       },
       {
         "term": "Cell production",
-        "definition": "Flow production organized into self-"
+        "definition": "Flow production organized into self-contained groups responsible for completing a unit of work."
       },
       {
-        "term": "work.Centralisation",
-        "definition": "Concentrating important decision-making"
+        "term": "Centralisation",
+        "definition": "Concentrating important decision-making powers within the head office or organisational centre."
       },
       {
         "term": "Change management",
-        "definition": "Planning, implementing, controlling,"
+        "definition": "Planning, implementing, controlling, and reviewing the transition of an organisation from its current state to a new one."
       },
       {
         "term": "Collusion",
-        "definition": "businesses agree to work together and restrict"
+        "definition": "businesses agree to work together and restrict competition by fixing prices and sharing contracts between themselves."
       },
       {
         "term": "Common currency",
@@ -104,115 +96,115 @@
       },
       {
         "term": "Communication methods",
-        "definition": "The media used to communicate"
+        "definition": "The media used to communicate messages."
       },
       {
         "term": "Communication barriers",
-        "definition": "Reasons why communication"
+        "definition": "Reasons why communication fails."
       },
       {
         "term": "Compressed working hours",
-        "definition": "A full-time workweek"
+        "definition": "A full-time workweek completed in fewer days, such as four 10-hour workdays."
       },
       {
         "term": "Computer-aided design (CAD)",
-        "definition": "Using computer programs to"
+        "definition": "Using computer programs to create 2D or 3D graphical representations of physical objects."
       },
       {
         "term": "Computer-aided manufacturing (CAM)",
-        "definition": "Using computer"
+        "definition": "Using computer software to control machine tools and equipment in manufacturing."
       },
       {
         "term": "Continuity planning",
-        "definition": "Preparing resources to ensure the"
+        "definition": "Preparing resources to ensure the business can continue operations after a major crisis."
       },
       {
         "term": "Control",
-        "definition": "Measuring and supervising employee"
+        "definition": "Measuring and supervising employee performance."
       },
       {
         "term": "Contribution per unit",
-        "definition": "The selling price of a product minus"
+        "definition": "The selling price of a product minus its variable costs per unit ( Price \u2212 Variable Cost Price\u2212Variable Cost)."
       },
       {
         "term": "Corporate plan",
-        "definition": "A plan detailing a business's central"
+        "definition": "A plan detailing a business's central objectives and the strategies to achieve them."
       },
       {
         "term": "Corporate planning",
-        "definition": "The process used by companies to set"
+        "definition": "The process used by companies to set long-term plans to meet objectives such as growth and higher returns on capital."
       },
       {
         "term": "Corporate culture",
-        "definition": "The values, attitudes, and beliefs of an"
+        "definition": "The values, attitudes, and beliefs of an organisation\u2019s people that influence internal and external interactions."
       },
       {
         "term": "Core competence",
-        "definition": "An essential business capability that"
+        "definition": "An essential business capability that provides a competitive advantage."
       },
       {
         "term": "Core product",
-        "definition": "A product based on a business's core"
+        "definition": "A product based on a business's core competencies, not necessarily for the final consumer or end user."
       },
       {
         "term": "Cost of sales",
-        "definition": "The direct cost of the goods sold during a"
+        "definition": "The direct cost of the goods sold during a financial period."
       },
       {
         "term": "Credit purchases",
-        "definition": "The value of materials and supplies"
+        "definition": "The value of materials and supplies bought on credit (over one year)."
       },
       {
         "term": "Criterion rate",
-        "definition": "The minimum accounting rate of return that"
+        "definition": "The minimum accounting rate of return that a business would accept before approving an investment."
       },
       {
         "term": "Critical path analysis (CPA)",
-        "definition": "A planning technique that"
+        "definition": "A planning technique that identifies tasks, sequences them, and identifies the critical path."
       },
       {
         "term": "Critical path",
-        "definition": "The sequence of tasks that must be"
+        "definition": "The sequence of tasks that must be completed on time to ensure the entire project finishes by the agreed date."
       },
       {
         "term": "Current ratio",
-        "definition": "A ratio comparing current assets with current"
+        "definition": "A ratio comparing current assets with current liabilities."
       },
       {
         "term": "Cyclical fluctuations",
-        "definition": "Variations in sales over longer periods,"
+        "definition": "Variations in sales over longer periods, influenced by the business cycle."
       },
       {
         "term": "Cyclical unemployment",
-        "definition": "Unemployment caused by low"
+        "definition": "Unemployment caused by low demand during slow economic growth or a recession."
       },
       {
         "term": "Decentralisation",
-        "definition": "Distributing decision-making powers"
+        "definition": "Distributing decision-making powers down the hierarchy to empower subordinates or area/product managers."
       },
       {
         "term": "Decision tree",
-        "definition": "A diagram outlining decision options,"
+        "definition": "A diagram outlining decision options, outcomes, and potential economic returns."
       },
       {
         "term": "Deflation",
-        "definition": "A fall in the average price level of goods and"
+        "definition": "A fall in the average price level of goods and services."
       },
       {
         "term": "Delayering",
-        "definition": "Removing one or more levels of hierarchy from"
+        "definition": "Removing one or more levels of hierarchy from the organisational structure."
       },
       {
         "term": "Delegation",
-        "definition": "Passing authority down the organisational"
+        "definition": "Passing authority down the organisational hierarchy."
       },
       {
         "term": "Delphi method",
-        "definition": "A long-range qualitative forecasting"
+        "definition": "A long-range qualitative forecasting technique that gathers forecasts from a panel of experts."
       },
       {
         "term": "Demerger",
-        "definition": "Separating one business unit from another,"
+        "definition": "Separating one business unit from another, often reversing a prior merger."
       },
       {
         "term": "Demographic",
@@ -220,195 +212,199 @@
       },
       {
         "term": "Depreciation",
-        "definition": "The reduction in the estimated value of a"
+        "definition": "The reduction in the estimated value of a non-current asset over time."
       },
       {
         "term": "Discounted cash flow",
-        "definition": "The present-day value of a future"
+        "definition": "The present-day value of a future cash flow."
       },
       {
         "term": "Dismissal",
-        "definition": "Being fired from a job due to incompetence or a"
+        "definition": "Being fired from a job due to incompetence or a breach of discipline."
       },
       {
         "term": "Diversification",
-        "definition": "Selling different, unrelated goods or"
+        "definition": "Selling different, unrelated goods or services in new markets."
       },
       {
         "term": "Dividends",
-        "definition": "A portion of profits paid to shareholders as a"
+        "definition": "A portion of profits paid to shareholders as a return on investment."
       },
       {
         "term": "Dividend",
-        "definition": "The share of company profits paid to"
+        "definition": "The share of company profits paid to shareholders."
       },
       {
         "term": "Dividend yield ratio",
-        "definition": "A ratio measuring the annual return"
+        "definition": "A ratio measuring the annual return from dividends as a percentage of the current market share price."
       },
       {
         "term": "Dividend per share",
-        "definition": "The financial amount received in"
+        "definition": "The financial amount received in dividends on one share."
       },
       {
         "term": "Dividend cover ratio",
-        "definition": "A ratio measuring how many times"
+        "definition": "A ratio measuring how many times dividends could be paid from profit for the year."
       },
       {
         "term": "Divisional organisational structure",
-        "definition": "Organises business"
+        "definition": "Organises business activities around geographical areas or product groups."
       },
       {
         "term": "Dummy activities",
-        "definition": "Used in network diagrams to show"
+        "definition": "Used in network diagrams to show logical dependencies between tasks, without consuming time or resources."
       },
       {
         "term": "Earliest start time",
-        "definition": "The earliest time an activity can begin.Earnings per share: The amount of profit after tax and"
+        "definition": "The earliest time an activity can begin."
+      },
+      {
+        "term": "Earnings per share",
+        "definition": "The amount of profit after tax and interest earned per share."
       },
       {
         "term": "Economic growth",
-        "definition": "An increase in a country's productive"
+        "definition": "An increase in a country's productive potential, measured by an increase in its real GDP."
       },
       {
         "term": "Economic collaboration",
-        "definition": "Countries working together to"
+        "definition": "Countries working together to achieve common goals, such as promoting free international trade."
       },
       {
         "term": "Effective communication",
-        "definition": "The exchange of information"
+        "definition": "The exchange of information between people or groups, with feedback."
       },
       {
         "term": "Electronic communication",
-        "definition": "Sending messages using media"
+        "definition": "Sending messages using media such as computers, email, or video conferencing."
       },
       {
         "term": "Emotional intelligence (EI)",
-        "definition": "The ability to understand and"
+        "definition": "The ability to understand and manage one's own emotions and those of others to improve business performance."
       },
       {
         "term": "Emotional quotient (EQ)",
-        "definition": "The measurement of a person's"
+        "definition": "The measurement of a person's emotional intelligence as assessed through a standardized test."
       },
       {
         "term": "Enterprise resource planning (ERP)",
-        "definition": "Using a single"
+        "definition": "Using a single computer application to manage the purchase and use of resources to improve operational efficiency."
       },
       {
         "term": "Entrepreneurial culture",
-        "definition": "A culture encouraging risk-taking,"
+        "definition": "A culture encouraging risk-taking, innovation, and testing new ventures."
       },
       {
         "term": "Environmental audit",
-        "definition": "assesses the impact of the activities"
+        "definition": "assesses the impact of the activities and decisions of a business on the environment."
       },
       {
         "term": "Eurozone",
-        "definition": "European Union countries that use the euro as"
+        "definition": "European Union countries that use the euro as their currency."
       },
       {
         "term": "Exchange rate",
-        "definition": "The price of one currency in terms of"
+        "definition": "The price of one currency in terms of another."
       },
       {
         "term": "Exchange rate depreciation",
-        "definition": "A fall in a currency's external"
+        "definition": "A fall in a currency's external value compared to other currencies."
       },
       {
         "term": "Exchange rate appreciation",
-        "definition": "A rise in a currency's external"
+        "definition": "A rise in a currency's external value compared to other currencies."
       },
       {
         "term": "Expected value",
-        "definition": "The probable financial result of an"
+        "definition": "The probable financial result of an outcome, calculated by multiplying the probability of an event by its forecasted economic return."
       },
       {
         "term": "Expenses",
-        "definition": "Overhead costs in operating the business,"
+        "definition": "Overhead costs in operating the business, deducted from gross profit to calculate profit from operations."
       },
       {
         "term": "Exports",
-        "definition": "Goods and services sold to consumers and"
+        "definition": "Goods and services sold to consumers and businesses in other countries."
       },
       {
         "term": "External costs",
-        "definition": "The costs of an economic activity not paid"
+        "definition": "The costs of an economic activity not paid for by the producer or consumer, but by the rest of society."
       },
       {
         "term": "External economies of scale",
-        "definition": "Cost reductions per unit that"
+        "definition": "Cost reductions per unit that benefit a business as the industry grows in a region."
       },
       {
         "term": "External diseconomies of scale",
-        "definition": "Increases in unit costs"
+        "definition": "Increases in unit costs resulting from industry expansion, particularly in one region."
       },
       {
         "term": "Fiscal policy",
-        "definition": "Decisions about government expenditure, tax"
+        "definition": "Decisions about government expenditure, tax rates, and borrowing."
       },
       {
         "term": "Force-field analysis",
-        "definition": "Identifying and analysing positive"
+        "definition": "Identifying and analysing positive factors (driving forces) and negative factors (restraining forces) affecting a decision."
       },
       {
         "term": "Forecasted net cash flow",
-        "definition": "Forecast cash inflows minus"
+        "definition": "Forecast cash inflows minus forecast cash outflows."
       },
       {
         "term": "Formal communication channels",
-        "definition": "The official"
+        "definition": "The official communication networks and routes used within an organisation."
       },
       {
         "term": "Free international trade",
-        "definition": "trade with no restrictions or"
+        "definition": "trade with no restrictions or barriers that might prevent or limit trade between countries."
       },
       {
         "term": "Free-trade agreements",
-        "definition": "Agreements between countries or"
+        "definition": "Agreements between countries or trading blocs to reduce or eliminate trade barriers like tariffs and quotas."
       },
       {
         "term": "Frictional unemployment",
-        "definition": "Unemployment caused by"
+        "definition": "Unemployment caused by workers taking time to find new jobs after leaving or losing their previous jobs."
       },
       {
         "term": "Full-time employment contract",
-        "definition": "A contract for a complete"
+        "definition": "A contract for a complete working week."
       },
       {
         "term": "Functional structure",
-        "definition": "Departments are organised by"
+        "definition": "Departments are organised by specialist areas such as marketing, finance, human resources, or operations."
       },
       {
         "term": "Functional manager",
-        "definition": "A senior employee with authority over"
+        "definition": "A senior employee with authority over a complete organisational unit."
       },
       {
         "term": "Gearing ratio",
-        "definition": "A ratio that measures the proportion of"
+        "definition": "A ratio that measures the proportion of capital employed that is financed by long-term borrowing (non-current liabilities)."
       },
       {
         "term": "Gig economy",
-        "definition": "A labor market with temporary, flexible jobs,"
+        "definition": "A labor market with temporary, flexible jobs, where workers are often independent contractors or freelancers."
       },
       {
         "term": "Globalization",
-        "definition": "the increasing freedom of movement of"
+        "definition": "the increasing freedom of movement of goods, capital, and people around the world."
       },
       {
         "term": "Global localisation",
-        "definition": "Adjusting the marketing mix, including"
+        "definition": "Adjusting the marketing mix, including product differentiation, to suit local and regional tastes and cultures while maintaining local market differences."
       },
       {
         "term": "Goodwill",
-        "definition": "The value arising when a business is bought for"
+        "definition": "The value arising when a business is bought for more than the balance sheet value of its assets."
       },
       {
         "term": "Green consumerism",
-        "definition": "the trend for consumers to only buy"
+        "definition": "the trend for consumers to only buy products that are produced sustainably without environmental damage."
       },
       {
         "term": "Gross Domestic Product (GDP)",
-        "definition": "The total value of goods"
+        "definition": "The total value of goods and services produced in a country in one year."
       },
       {
         "term": "Gross profit",
@@ -416,351 +412,351 @@
       },
       {
         "term": "Gross profit margin ratio",
-        "definition": "A ratio comparing percentage"
+        "definition": "A ratio comparing percentage gross profit (before overhead expenses) with percentage revenue."
       },
       {
         "term": "Hard HRM",
-        "definition": "An approach to managing employees focused"
+        "definition": "An approach to managing employees focused on cutting costs."
       },
       {
         "term": "Hierarchical structure",
-        "definition": "A structure with multiple levels,"
+        "definition": "A structure with multiple levels, where all members except one are subordinate to someone else."
       },
       {
-        "term": "someone else.High-quality profit",
-        "definition": "Profits that can be repeated and"
+        "term": "High-quality profit",
+        "definition": "Profits that can be repeated and sustained."
       },
       {
         "term": "Horizontal communication",
-        "definition": "Communication between"
+        "definition": "Communication between people on the same level of hierarchy."
       },
       {
         "term": "Human resource management (HRM) strategy",
-        "definition": "A long-term"
+        "definition": "A long-term plan for managing an organisation's human resources."
       },
       {
         "term": "Hyperinflation",
-        "definition": "Extremely high and accelerating inflation,"
+        "definition": "Extremely high and accelerating inflation, eroding the value of the local currency."
       },
       {
         "term": "Imports",
-        "definition": "Goods and services purchased from other"
+        "definition": "Goods and services purchased from other countries."
       },
       {
         "term": "Income elasticity of demand",
-        "definition": "A measure of how demand"
+        "definition": "A measure of how demand for a product changes in response to changes in consumer incomes."
       },
       {
         "term": "Inferior good",
-        "definition": "A product whose demand increases when"
+        "definition": "A product whose demand increases when consumer incomes fall."
       },
       {
         "term": "Inflation",
-        "definition": "An increase in the average price level of goods"
+        "definition": "An increase in the average price level of goods and services, resulting in a fall in the value of money."
       },
       {
         "term": "Informal communication",
-        "definition": "Unofficial communication"
+        "definition": "Unofficial communication channels that exist between informal groups within an organisation."
       },
       {
         "term": "Informal leader",
-        "definition": "A person without formal authority but who"
+        "definition": "A person without formal authority but who has the respect of colleagues and some power over them."
       },
       {
         "term": "Information technology (IT)",
-        "definition": "the use of electronic"
+        "definition": "the use of electronic technology to gather, store, process and communicate information."
       },
       {
         "term": "Information overload",
-        "definition": "Receiving too much information,"
+        "definition": "Receiving too much information, making it difficult to identify and act upon important messages."
       },
       {
         "term": "Internal customers",
-        "definition": "People within the organisation relying"
+        "definition": "People within the organisation relying on the quality of others' work."
       },
       {
         "term": "Internal economies of scale",
-        "definition": "Cost reductions per unit of"
+        "definition": "Cost reductions per unit of production achieved as a business expands its operations."
       },
       {
         "term": "Internal diseconomies of scale",
-        "definition": "Increases in unit production"
+        "definition": "Increases in unit production costs that occur when a business grows too large."
       },
       {
         "term": "International marketing",
-        "definition": "Selling products in markets"
+        "definition": "Selling products in markets outside the original domestic market."
       },
       {
         "term": "Investment appraisal",
-        "definition": "Evaluating the profitability or"
+        "definition": "Evaluating the profitability or feasibility of an investment project."
       },
       {
         "term": "ISO 9000",
-        "definition": "An internationally recognised standard for quality"
+        "definition": "An internationally recognised standard for quality assurance methods meeting specific criteria."
       },
       {
         "term": "Job enrichment",
-        "definition": "aims to use the full capabilities of workers"
+        "definition": "aims to use the full capabilities of workers by giving them the opportunity to do more challenging and fulfilling work."
       },
       {
         "term": "Jury of experts",
-        "definition": "A forecasting method that relies on the"
+        "definition": "A forecasting method that relies on the expertise of specialists within a business to predict the future."
       },
       {
         "term": "Kaizen",
-        "definition": "A Japanese term meaning continuous"
+        "definition": "A Japanese term meaning continuous improvement."
       },
       {
         "term": "Labour productivity",
-        "definition": "Average output per employee over a"
+        "definition": "Average output per employee over a given time period."
       },
       {
         "term": "Latest finish time",
-        "definition": "The latest time an activity can finish"
+        "definition": "The latest time an activity can finish without delaying the project."
       },
       {
         "term": "Leadership",
-        "definition": "The art of motivating a group of people to"
+        "definition": "The art of motivating a group of people to achieve a common objective."
       },
       {
         "term": "Lean production",
-        "definition": "Producing goods and services with"
+        "definition": "Producing goods and services with minimal wasted resources while maintaining high quality."
       },
       {
         "term": "Level of hierarchy",
-        "definition": "A stage in the organisational structure"
+        "definition": "A stage in the organisational structure where all personnel share equal status and authority."
       },
       {
         "term": "Liability",
-        "definition": "A financial obligation that a business must pay in"
+        "definition": "A financial obligation that a business must pay in the future."
       },
       {
         "term": "Line managers",
-        "definition": "Managers with direct authority over people,"
+        "definition": "Managers with direct authority over people, decisions, and resources in the organisational hierarchy."
       },
       {
         "term": "Liquidity",
-        "definition": "The ability of a business to pay its short-term"
+        "definition": "The ability of a business to pay its short-term debts using its current/liquid assets without delay."
       },
       {
         "term": "Low-quality profit",
-        "definition": "One-off profits that are not easily"
+        "definition": "One-off profits that are not easily repeated or sustained."
       },
       {
         "term": "Macroeconomic objectives",
-        "definition": "The goals a government aims to"
+        "definition": "The goals a government aims to achieve for the whole economy."
       },
       {
         "term": "Management by objectives (MBO)",
-        "definition": "A system comparing"
+        "definition": "A system comparing actual performance and achievements against pre-set objectives for each department or employee."
       },
       {
         "term": "Market development",
-        "definition": "Selling existing products in new"
+        "definition": "Selling existing products in new markets."
       },
       {
         "term": "Market Orientation",
-        "definition": "An outward-looking approach that"
+        "definition": "An outward-looking approach that bases product design and marketing decisions on consumer demand and market research."
       },
       {
         "term": "Market penetration",
-        "definition": "Increasing market share in existing"
+        "definition": "Increasing market share in existing markets with existing products."
       },
       {
         "term": "Marketing plan",
-        "definition": "A detailed and researched report outlining"
+        "definition": "A detailed and researched report outlining marketing objectives and the strategy to achieve them."
       },
       {
         "term": "Matrix structure",
-        "definition": "An organisational structure that creates"
+        "definition": "An organisational structure that creates project teams cutting across traditional functional departments."
       },
       {
         "term": "Minimum wage",
-        "definition": "Employers are not allowed to pay less than"
+        "definition": "Employers are not allowed to pay less than the set minimum wage per hour (in some countries, it is a minimum payment per week or per month)."
       },
       {
         "term": "Monetary policy",
-        "definition": "Decisions about interest rates and the"
+        "definition": "Decisions about interest rates and the money supply in the economy."
       },
       {
         "term": "Monopoly",
-        "definition": "a market in which there is only one supplier"
+        "definition": "a market in which there is only one supplier with no close competitors."
       },
       {
         "term": "Nationalization",
-        "definition": "the transfer of privately owned businesses"
+        "definition": "the transfer of privately owned businesses to state (government) ownership and control."
       },
       {
         "term": "Net book value",
-        "definition": "The current statement of financial position"
+        "definition": "The current statement of financial position value of a non-current asset (original cost minus accumulated depreciation)."
       },
       {
         "term": "Net current assets",
-        "definition": "The capital required for day-to-day"
+        "definition": "The capital required for day-to-day activities, also called working capital (current assets minus current liabilities)."
       },
       {
         "term": "Net present value (NPV)",
-        "definition": "The current value of estimated"
+        "definition": "The current value of estimated cash flows resulting from an investment."
       },
       {
-        "term": "cash flows resulting from an investment.Net realisable value (NRV)",
-        "definition": "The amount for which inventory"
+        "term": "Net realisable value (NRV)",
+        "definition": "The amount for which inventory can be sold, minus the cost of selling it."
       },
       {
         "term": "Network diagram",
-        "definition": "A diagram used in CPA to show the"
+        "definition": "A diagram used in CPA to show the logical sequence and dependencies of activities."
       },
       {
         "term": "New product development (NPD)",
-        "definition": "The design, creation, and"
+        "definition": "The design, creation, and marketing of new goods and services."
       },
       {
         "term": "Offshoring",
-        "definition": "Relocating a business process from one country"
+        "definition": "Relocating a business process from one country to another."
       },
       {
         "term": "One-way communication",
-        "definition": "Messages sent in one direction,"
+        "definition": "Messages sent in one direction, from sender to receiver, with no feedback expected."
       },
       {
         "term": "Operating profit margin",
-        "definition": "A ratio comparing percentage"
+        "definition": "A ratio comparing percentage operating profit for the year with percentage revenue."
       },
       {
         "term": "Operational flexibility",
-        "definition": "The ability to adjust production"
+        "definition": "The ability to adjust production levels and product range based on changes in customer demand."
       },
       {
         "term": "Optimal location",
-        "definition": "A business location that offers the best"
+        "definition": "A business location that offers the best combination of quantitative and qualitative factors."
       },
       {
         "term": "Opportunity Cost",
-        "definition": "The next best alternative foregone when"
+        "definition": "The next best alternative foregone when making a choice."
       },
       {
         "term": "Pan-global marketing",
-        "definition": "Marketing a standardised product"
+        "definition": "Marketing a standardised product worldwide as if the entire world were a single market, using the same strategies everywhere."
       },
       {
         "term": "Part-time contract",
-        "definition": "A contract where workers are only"
+        "definition": "A contract where workers are only required to work a certain number of hours each week (less than full-time)."
       },
       {
         "term": "Payback period",
-        "definition": "The length of time it takes for net cash"
+        "definition": "The length of time it takes for net cash inflows to recover the original capital cost of the investment."
       },
       {
         "term": "PEST analysis",
-        "definition": "Strategic analysis of a firm\u2019s macro"
+        "definition": "Strategic analysis of a firm\u2019s macro environment, focusing on political, economic, social, and technological factors."
       },
       {
         "term": "Permanent employment contract",
-        "definition": "A contract where the"
+        "definition": "A contract where the worker is employed indefinitely unless dismissed, made redundant, or they decide to leave."
       },
       {
         "term": "Person culture",
-        "definition": "A culture giving individuals freedom to"
+        "definition": "A culture giving individuals freedom to express themselves and make their own decisions."
       },
       {
         "term": "Porter\u2019s five forces model",
-        "definition": "Technique for analysing"
+        "definition": "Technique for analysing competitive forces within an industry."
       },
       {
         "term": "Power culture",
-        "definition": "A culture concentrating power among a few"
+        "definition": "A culture concentrating power among a few individuals."
       },
       {
         "term": "Price elasticity of demand (PED)",
-        "definition": "A measure of how demand"
+        "definition": "A measure of how demand for a product changes in response to a change in its price."
       },
       {
         "term": "Privatization",
-        "definition": "the act of selling state-owned and controlled"
+        "definition": "the act of selling state-owned and controlled business organizations to investors in the private sector."
       },
       {
         "term": "Process innovation",
-        "definition": "Using new or significantly improved"
+        "definition": "Using new or significantly improved production or service delivery methods."
       },
       {
         "term": "Product development",
-        "definition": "Developing and selling new or"
+        "definition": "Developing and selling new or improved products in existing markets."
       },
       {
         "term": "Product Life Cycle Extended Strategies",
-        "definition": "Marketing methods"
+        "definition": "Marketing methods used to prolong the maturity stage of a product before it goes into terminal decline."
       },
       {
         "term": "Product Orientation",
-        "definition": "An inward-looking approach that"
+        "definition": "An inward-looking approach that focuses on making products first, then trying to sell them."
       },
       {
         "term": "Profit before tax",
-        "definition": "Profit from operations minus interest"
+        "definition": "Profit from operations minus interest costs."
       },
       {
         "term": "Profit for the year (profit after tax)",
-        "definition": "Profit before tax minus"
+        "definition": "Profit before tax minus corporation tax."
       },
       {
         "term": "Profit from operations",
-        "definition": "Gross profit minus overhead"
+        "definition": "Gross profit minus overhead expenses (operating profit)."
       },
       {
         "term": "Profitability",
-        "definition": "A measure of a business's ability to make a"
+        "definition": "A measure of a business's ability to make a profit from sales or capital investment."
       },
       {
         "term": "Project champion",
-        "definition": "An individual supporting a project,"
+        "definition": "An individual supporting a project, driving it forward by explaining its benefits, and assisting the team in implementing changes."
       },
       {
         "term": "Project groups",
-        "definition": "Teams formed within an organisation to"
+        "definition": "Teams formed within an organisation to solve problems requiring input from various specialists."
       },
       {
         "term": "Protectionism",
-        "definition": "the use of barriers to free trade to protect a"
+        "definition": "the use of barriers to free trade to protect a country's domestic industries."
       },
       {
         "term": "Qualitative factors",
-        "definition": "Non-measurable issues that managers"
+        "definition": "Non-measurable issues that managers consider, such as employee satisfaction or brand image."
       },
       {
         "term": "Qualitative sales forecasting",
-        "definition": "Sales predictions based on"
+        "definition": "Sales predictions based on expert judgment rather than numerical analysis."
       },
       {
         "term": "Quality assurance",
-        "definition": "Ensuring agreed quality standards are"
+        "definition": "Ensuring agreed quality standards are met at each production stage to satisfy customers."
       },
       {
         "term": "Quality control",
-        "definition": "Inspecting the product or a sample of"
+        "definition": "Inspecting the product or a sample of products to check for defects."
       },
       {
         "term": "Quality product",
-        "definition": "A good or service that meets customers'"
+        "definition": "A good or service that meets customers' expectations and fulfils its intended purpose."
       },
       {
         "term": "Quality standards",
-        "definition": "Minimum acceptable production or"
+        "definition": "Minimum acceptable production or service standards based on customer expectations."
       },
       {
         "term": "Quantitative factors",
-        "definition": "Measurable issues in financial or"
+        "definition": "Measurable issues in financial or numerical terms that managers consider in decision-making."
       },
       {
         "term": "Quota",
-        "definition": "a physical limit placed on the quantity of imports of"
+        "definition": "a physical limit placed on the quantity of imports of certain products."
       },
       {
         "term": "Random fluctuations",
-        "definition": "Unpredictable variations in sales due"
+        "definition": "Unpredictable variations in sales due to unexpected events, such as poor weather or a negative public image."
       },
       {
         "term": "Rate of inventory turnover",
-        "definition": "The number of times inventory"
+        "definition": "The number of times inventory is bought and sold within a year."
       },
       {
         "term": "Real GDP",
@@ -768,39 +764,39 @@
       },
       {
         "term": "Recession",
-        "definition": "A decline in real GDP over two or more"
+        "definition": "A decline in real GDP over two or more consecutive quarters (at least six months)."
       },
       {
         "term": "Red ocean strategy",
-        "definition": "Competing with rivals in existing"
+        "definition": "Competing with rivals in existing markets."
       },
       {
         "term": "Redundancy",
-        "definition": "When a job is no longer required by the"
+        "definition": "When a job is no longer required by the business, so the employee loses their post through no fault of their own."
       },
       {
-        "term": "of their own.Research and development (R&D)",
-        "definition": "Scientific research and"
+        "term": "Research and development (R&D)",
+        "definition": "Scientific research and technical development of new products and processes."
       },
       {
         "term": "Reserves",
-        "definition": "Accumulated retained profits and capital"
+        "definition": "Accumulated retained profits and capital reserves from the revaluation of non-current assets."
       },
       {
         "term": "Reshoring",
-        "definition": "Moving a previously offshored business"
+        "definition": "Moving a previously offshored business operation back to its original country."
       },
       {
         "term": "Return on capital employed (ROCE) ratio",
-        "definition": "A ratio comparing"
+        "definition": "A ratio comparing percentage operating profit (profit from operations) with the percentage capital employed in the business."
       },
       {
         "term": "Role culture",
-        "definition": "A culture where each staff member has a"
+        "definition": "A culture where each staff member has a clearly defined job title and role."
       },
       {
         "term": "Sales force composite",
-        "definition": "A forecasting method combining"
+        "definition": "A forecasting method combining individual sales predictions from all sales representatives in a business."
       },
       {
         "term": "Sales forecasting",
@@ -808,99 +804,99 @@
       },
       {
         "term": "Scale of operations",
-        "definition": "The maximum output achievable with"
+        "definition": "The maximum output achievable with the available resources."
       },
       {
         "term": "Scenario planning",
-        "definition": "Identifying potential future situations"
+        "definition": "Identifying potential future situations and preparing business responses."
       },
       {
         "term": "Seasonal fluctuations",
-        "definition": "Regular, repeated variations in sales"
+        "definition": "Regular, repeated variations in sales data within a 12-month period."
       },
       {
         "term": "Share capital",
-        "definition": "The total value of capital raised from"
+        "definition": "The total value of capital raised from shareholders through the issuance of shares."
       },
       {
         "term": "Share price",
-        "definition": "The quoted price of one share on the stock"
+        "definition": "The quoted price of one share on the stock exchange."
       },
       {
         "term": "Shareholders' equity",
-        "definition": "The total value of assets minus the"
+        "definition": "The total value of assets minus the total value of liabilities."
       },
       {
         "term": "Shift work",
-        "definition": "Work scheduled outside the traditional 9 a.m. to"
+        "definition": "Work scheduled outside the traditional 9 a.m. to 5 p.m., including evening, night, early morning, or rotating shifts."
       },
       {
         "term": "Social audit",
-        "definition": "a report on the impact a business has on"
+        "definition": "a report on the impact a business has on society."
       },
       {
         "term": "Social Enterprise",
-        "definition": "A business with mainly social objectives"
+        "definition": "A business with mainly social objectives that reinvests most of its profits back into the business or into the community rather than paying dividends to shareholders."
       },
       {
         "term": "Soft HRM",
-        "definition": "An approach to managing employees focused on"
+        "definition": "An approach to managing employees focused on their development, self-fulfillment, and motivation."
       },
       {
         "term": "Span of Control",
-        "definition": "The number of subordinates working"
+        "definition": "The number of subordinates working directly under a manager."
       },
       {
         "term": "Spoken communication",
-        "definition": "Sending messages verbally"
+        "definition": "Sending messages verbally between two or more people."
       },
       {
         "term": "Staff managers",
-        "definition": "Specialists who provide support,"
+        "definition": "Specialists who provide support, information, and assistance to senior line managers."
       },
       {
         "term": "Statement of financial position",
-        "definition": "A statement that records a"
+        "definition": "A statement that records a business's assets, liabilities, and shareholders' equity at a particular point in time."
       },
       {
         "term": "Statement of profit or loss",
-        "definition": "A statement that records"
+        "definition": "A statement that records revenue, costs, and profit (or loss) over a specific period."
       },
       {
         "term": "Straight-line depreciation",
-        "definition": "A fixed amount of depreciation"
+        "definition": "A fixed amount of depreciation subtracted from the asset's value each year."
       },
       {
         "term": "Strategic analysis",
-        "definition": "Researching the business environment"
+        "definition": "Researching the business environment and the business itself to identify future strategies."
       },
       {
         "term": "Strategic choice",
-        "definition": "The process of selecting a strategy from"
+        "definition": "The process of selecting a strategy from various alternatives and using techniques to assist decision-making."
       },
       {
         "term": "Strategic implementation",
-        "definition": "Planning, allocating, and"
+        "definition": "Planning, allocating, and controlling resources to support the chosen strategy."
       },
       {
         "term": "Strategic management",
-        "definition": "Analysis of the current business"
+        "definition": "Analysis of the current business situation, setting long-term objectives, deciding on business strategies to achieve them, and implementing these strategies."
       },
       {
         "term": "Structural unemployment",
-        "definition": "Unemployment caused by the"
+        "definition": "Unemployment caused by the decline of important industries, leading to job losses in specific sectors."
       },
       {
         "term": "Supply-side policies",
-        "definition": "Government measures to improve"
+        "definition": "Government measures to improve market and economic competitiveness."
       },
       {
         "term": "Sustainability",
-        "definition": "activities that meet the needs of the present"
+        "definition": "activities that meet the needs of the present without compromising the ability of future generations to meet their needs."
       },
       {
         "term": "SWOT analysis",
-        "definition": "Strategic analysis identifying internal"
+        "definition": "Strategic analysis identifying internal strengths and weaknesses, and external opportunities and threats influencing business success."
       },
       {
         "term": "Tariff",
@@ -908,39 +904,39 @@
       },
       {
         "term": "Task culture",
-        "definition": "A culture emphasizing cooperation and"
+        "definition": "A culture emphasizing cooperation and teamwork."
       },
       {
         "term": "Temporary contract",
-        "definition": "A contract offered for a fixed period,"
+        "definition": "A contract offered for a fixed period, such as six months, with no obligation for renewal."
       },
       {
         "term": "Test marketing",
-        "definition": "Launching a product on a small-scale"
+        "definition": "Launching a product on a small-scale market to test consumer reactions."
       },
       {
         "term": "Total Quality Management (TQM)",
-        "definition": "A quality approach"
+        "definition": "A quality approach involving all employees in continuous improvement."
       },
       {
         "term": "Total float",
-        "definition": "The amount of time an activity can be delayed"
+        "definition": "The amount of time an activity can be delayed without delaying the overall project."
       },
       {
         "term": "Trade barriers",
-        "definition": "Taxes (tariffs) or other restrictions on the"
+        "definition": "Taxes (tariffs) or other restrictions on the free international movement of goods and services."
       },
       {
         "term": "Trade payables turnover (days)",
-        "definition": "The average time (in days)"
+        "definition": "The average time (in days) to pay suppliers for credit purchases."
       },
       {
         "term": "Trade receivables turnover (days)",
-        "definition": "The average time (in"
+        "definition": "The average time (in days) to receive payment from customers who bought on credit."
       },
       {
         "term": "Transformational leadership",
-        "definition": "A leadership style where the"
+        "definition": "A leadership style where the leader works with teams to identify the need for change, create a vision, and implement change collaboratively."
       },
       {
         "term": "Trend",
@@ -948,1123 +944,55 @@
       },
       {
         "term": "Triple Bottom Line",
-        "definition": "The three performance targets for"
-      },
-      {
-        "term": "social enterprises",
-        "definition": "Economic (Profit), Social (People), and"
-      },
-      {
-        "term": "Environmental (Planet).Two-way communication",
-        "definition": "Communication involving"
-      },
-      {
-        "term": "Unemployment",
-        "definition": "When members of the working population"
-      },
-      {
-        "term": "Vertical communication",
-        "definition": "Communication between people"
-      },
-      {
-        "term": "Visual communication",
-        "definition": "Conveying information or ideas in"
-      },
-      {
-        "term": "Voluntary export limits",
-        "definition": "agreed limits to the quantity of"
-      },
-      {
-        "term": "Window dressing",
-        "definition": "Techniques used by companies to"
-      },
-      {
-        "term": "Workforce Planning",
-        "definition": "Forecasting the future number of staff"
-      },
-      {
-        "term": "Working Capital",
-        "definition": "Current assets minus current liabilities;"
-      },
-      {
-        "term": "Working population",
-        "definition": "Those of working age willing and able"
-      },
-      {
-        "term": "Written communication",
-        "definition": "Any type of message that uses"
-      },
-      {
-        "term": "Zero defects",
-        "definition": "A mindset focused on ensuring products"
-      },
-      {
-        "term": "Zero-hours contract",
-        "definition": "A contract with no guaranteed"
-      },
-      {
-        "term": "Privatization",
-        "definition": "the act of selling state-owned and controlled"
-      },
-      {
-        "term": "Nationalization",
-        "definition": "the transfer of privately owned businesses"
-      },
-      {
-        "term": "Minimum wage",
-        "definition": "Employers are not allowed to pay less than"
-      },
-      {
-        "term": "Monopoly",
-        "definition": "a market in which there is only one supplier"
-      },
-      {
-        "term": "Collusion",
-        "definition": "businesses agree to work together and restrict"
-      },
-      {
-        "term": "Social audit",
-        "definition": "a report on the impact a business has on"
-      },
-      {
-        "term": "Demographic",
-        "definition": "relating to the structure of the population."
-      },
-      {
-        "term": "Globalization",
-        "definition": "the increasing freedom of movement of"
-      },
-      {
-        "term": "Information technology (IT)",
-        "definition": "the use of electronic"
-      },
-      {
-        "term": "Job enrichment",
-        "definition": "aims to use the full capabilities of workers"
-      },
-      {
-        "term": "Protectionism",
-        "definition": "the use of barriers to free trade to protect a"
-      },
-      {
-        "term": "Tariff",
-        "definition": "a tax imposed on an imported product."
-      },
-      {
-        "term": "Quota",
-        "definition": "a physical limit placed on the quantity of imports of"
-      },
-      {
-        "term": "Voluntary export limits",
-        "definition": "agreed limits to the quantity of"
-      },
-      {
-        "term": "Free international trade",
-        "definition": "trade with no restrictions or"
-      },
-      {
-        "term": "Environmental audit",
-        "definition": "assesses the impact of the activities"
-      },
-      {
-        "term": "Sustainability",
-        "definition": "activities that meet the needs of the present"
-      },
-      {
-        "term": "Green consumerism",
-        "definition": "the trend for consumers to only buy"
-      }
-    ]
-  },
-  {
-    "section": "Activity",
-    "definitions": [
-      {
-        "term": "External costs",
-        "definition": "The costs of an economic activity not paid"
-      },
-      {
-        "term": "Macroeconomic objectives",
-        "definition": "The goals a government aims to"
-      },
-      {
-        "term": "Economic growth",
-        "definition": "An increase in a country's productive"
-      },
-      {
-        "term": "Gross Domestic Product (GDP)",
-        "definition": "The total value of goods"
-      },
-      {
-        "term": "Real GDP",
-        "definition": "GDP data adjusted for the effects of inflation."
-      },
-      {
-        "term": "Inflation",
-        "definition": "An increase in the average price level of goods"
-      },
-      {
-        "term": "Unemployment",
-        "definition": "When members of the working population"
-      },
-      {
-        "term": "Imports",
-        "definition": "Goods and services purchased from other"
-      },
-      {
-        "term": "Exports",
-        "definition": "Goods and services sold to consumers and"
-      },
-      {
-        "term": "Exchange rate",
-        "definition": "The price of one currency in terms of"
-      },
-      {
-        "term": "another.Recession",
-        "definition": "A decline in real GDP over two or more"
-      },
-      {
-        "term": "Business investment",
-        "definition": "Expenditure by businesses on capital"
-      },
-      {
-        "term": "Labour productivity",
-        "definition": "Average output per employee over a"
-      },
-      {
-        "term": "Business cycle",
-        "definition": "Regular swings in output, measured by real"
-      },
-      {
-        "term": "Deflation",
-        "definition": "A fall in the average price level of goods and"
-      },
-      {
-        "term": "Hyperinflation",
-        "definition": "Extremely high and accelerating inflation,"
-      },
-      {
-        "term": "Working population",
-        "definition": "Those of working age willing and able"
-      },
-      {
-        "term": "Cyclical unemployment",
-        "definition": "Unemployment caused by low"
-      },
-      {
-        "term": "Structural unemployment",
-        "definition": "Unemployment caused by the"
-      },
-      {
-        "term": "Frictional unemployment",
-        "definition": "Unemployment caused by"
-      },
-      {
-        "term": "Monetary policy",
-        "definition": "Decisions about interest rates and the"
-      },
-      {
-        "term": "Fiscal policy",
-        "definition": "Decisions about government expenditure, tax"
-      },
-      {
-        "term": "Budget deficit",
-        "definition": "When government spending exceeds"
-      },
-      {
-        "term": "Budget surplus",
-        "definition": "When taxation revenue exceeds"
-      },
-      {
-        "term": "Supply-side policies",
-        "definition": "Government measures to improve"
-      },
-      {
-        "term": "Exchange rate depreciation",
-        "definition": "A fall in a currency's external"
-      },
-      {
-        "term": "Exchange rate appreciation",
-        "definition": "A rise in a currency's external"
-      },
-      {
-        "term": "Common currency",
-        "definition": "A currency used by multiple countries."
-      },
-      {
-        "term": "Eurozone",
-        "definition": "European Union countries that use the euro as"
-      }
-    ]
-  },
-  {
-    "section": "2.3. Business Strategy",
-    "definitions": [
-      {
-        "term": "Strategic management",
-        "definition": "Analysis of the current business"
-      },
-      {
-        "term": "Strategic analysis",
-        "definition": "Researching the business environment"
-      },
-      {
-        "term": "Strategic choice",
-        "definition": "The process of selecting a strategy from"
-      },
-      {
-        "term": "Strategic implementation",
-        "definition": "Planning, allocating, and"
-      },
-      {
-        "term": "Blue ocean strategy",
-        "definition": "Exploiting uncontested market space"
-      },
-      {
-        "term": "Red ocean strategy",
-        "definition": "Competing with rivals in existing"
-      },
-      {
-        "term": "SWOT analysis",
-        "definition": "Strategic analysis identifying internal"
-      },
-      {
-        "term": "Scenario planning",
-        "definition": "Identifying potential future situations"
-      },
-      {
-        "term": "PEST analysis",
-        "definition": "Strategic analysis of a firm\u2019s macro"
-      },
-      {
-        "term": "Porter\u2019s five forces model",
-        "definition": "Technique for analysing"
-      },
-      {
-        "term": "Core competence",
-        "definition": "An essential business capability that"
-      },
-      {
-        "term": "Core product",
-        "definition": "A product based on a business's core"
-      },
-      {
-        "term": "Ansoff matrix",
-        "definition": "A model illustrating the degree of risk in"
-      },
-      {
-        "term": "growth strategies",
-        "definition": "market penetration, market"
-      },
-      {
-        "term": "Market penetration",
-        "definition": "Increasing market share in existing"
-      },
-      {
-        "term": "Product development",
-        "definition": "Developing and selling new or"
-      },
-      {
-        "term": "Market development",
-        "definition": "Selling existing products in new"
-      },
-      {
-        "term": "Diversification",
-        "definition": "Selling different, unrelated goods or"
-      },
-      {
-        "term": "Force-field analysis",
-        "definition": "Identifying and analysing positive"
-      },
-      {
-        "term": "Decision tree",
-        "definition": "A diagram outlining decision options,"
-      },
-      {
-        "term": "Expected value",
-        "definition": "The probable financial result of an"
-      }
-    ]
-  },
-  {
-    "section": "2.4. Corporate Planning and Implementation",
-    "definitions": [
-      {
-        "term": "Corporate plan",
-        "definition": "A plan detailing a business's central"
-      },
-      {
-        "term": "Corporate planning",
-        "definition": "The process used by companies to set"
-      },
-      {
-        "term": "higher returns on capital.Corporate culture",
-        "definition": "The values, attitudes, and beliefs of an"
-      },
-      {
-        "term": "Power culture",
-        "definition": "A culture concentrating power among a few"
-      },
-      {
-        "term": "Role culture",
-        "definition": "A culture where each staff member has a"
-      },
-      {
-        "term": "Task culture",
-        "definition": "A culture emphasizing cooperation and"
-      },
-      {
-        "term": "Person culture",
-        "definition": "A culture giving individuals freedom to"
-      },
-      {
-        "term": "Entrepreneurial culture",
-        "definition": "A culture encouraging risk-taking,"
-      },
-      {
-        "term": "Transformational leadership",
-        "definition": "A leadership style where the"
-      },
-      {
-        "term": "Change management",
-        "definition": "Planning, implementing, controlling,"
-      },
-      {
-        "term": "Business process re-engineering",
-        "definition": "Rethinking and"
-      },
-      {
-        "term": "Project champion",
-        "definition": "An individual supporting a project,"
-      },
-      {
-        "term": "Project groups",
-        "definition": "Teams formed within an organisation to"
-      },
-      {
-        "term": "Continuity planning",
-        "definition": "Preparing resources to ensure the"
-      }
-    ]
-  },
-  {
-    "section": "3.1. Organsational Structure",
-    "definitions": [
-      {
-        "term": "Functional structure",
-        "definition": "Departments are organised by"
-      },
-      {
-        "term": "Functional manager",
-        "definition": "A senior employee with authority over"
-      },
-      {
-        "term": "Hierarchical structure",
-        "definition": "A structure with multiple levels,"
-      },
-      {
-        "term": "Level of hierarchy",
-        "definition": "A stage in the organisational structure"
-      },
-      {
-        "term": "Span of control",
-        "definition": "The number of subordinates directly"
-      },
-      {
-        "term": "Divisional organisational structure",
-        "definition": "Organises business"
-      },
-      {
-        "term": "Delayering",
-        "definition": "Removing one or more levels of hierarchy from"
-      },
-      {
-        "term": "Matrix structure",
-        "definition": "An organisational structure that creates"
-      },
-      {
-        "term": "Delegation",
-        "definition": "Passing authority down the organisational"
-      },
-      {
-        "term": "Accountability",
-        "definition": "The responsibility to account for, explain,"
-      },
-      {
-        "term": "Control",
-        "definition": "Measuring and supervising employee"
-      },
-      {
-        "term": "Authority",
-        "definition": "The power to give orders and make decisions."
-      },
-      {
-        "term": "Centralisation",
-        "definition": "Concentrating important decision-making"
-      },
-      {
-        "term": "Decentralisation",
-        "definition": "Distributing decision-making powers"
-      },
-      {
-        "term": "Line managers",
-        "definition": "Managers with direct authority over people,"
-      },
-      {
-        "term": "Staff managers",
-        "definition": "Specialists who provide support,"
-      }
-    ]
-  },
-  {
-    "section": "3.2. Business Communication",
-    "definitions": [
-      {
-        "term": "Effective communication",
-        "definition": "The exchange of information"
-      },
-      {
-        "term": "Communication methods",
-        "definition": "The media used to communicate"
-      },
-      {
-        "term": "Visual communication",
-        "definition": "Conveying information or ideas in"
-      },
-      {
-        "term": "Written communication",
-        "definition": "Any type of message that uses"
-      },
-      {
-        "term": "Electronic communication",
-        "definition": "Sending messages using media"
-      },
-      {
-        "term": "Information overload",
-        "definition": "Receiving too much information,"
-      },
-      {
-        "term": "Spoken communication",
-        "definition": "Sending messages verbally"
-      },
-      {
-        "term": "Formal communication channels",
-        "definition": "The official"
-      },
-      {
-        "term": "One-way communication",
-        "definition": "Messages sent in one direction,"
+        "definition": "The three performance targets for social enterprises: Economic (Profit), Social (People), and Environmental (Planet)."
       },
       {
         "term": "Two-way communication",
-        "definition": "Communication involving"
+        "definition": "Communication involving message transmission that encourages response and feedback."
+      },
+      {
+        "term": "Unemployment",
+        "definition": "When members of the working population are willing and able to work but cannot find a job."
       },
       {
         "term": "Vertical communication",
-        "definition": "Communication between people"
+        "definition": "Communication between people at different levels in a hierarchy."
       },
       {
-        "term": "Horizontal communication",
-        "definition": "Communication between"
+        "term": "Visual communication",
+        "definition": "Conveying information or ideas in forms that can be seen."
       },
       {
-        "term": "Communication barriers",
-        "definition": "Reasons why communication"
-      },
-      {
-        "term": "fails.Informal communication",
-        "definition": "Unofficial communication"
-      }
-    ]
-  },
-  {
-    "section": "3.3. Leadership",
-    "definitions": [
-      {
-        "term": "Leadership",
-        "definition": "The art of motivating a group of people to"
-      },
-      {
-        "term": "Informal leader",
-        "definition": "A person without formal authority but who"
-      },
-      {
-        "term": "Emotional intelligence (EI)",
-        "definition": "The ability to understand and"
-      },
-      {
-        "term": "Emotional quotient (EQ)",
-        "definition": "The measurement of a person's"
-      }
-    ]
-  },
-  {
-    "section": "3.4. Human Resource Management Strategy",
-    "definitions": [
-      {
-        "term": "Human resource management (HRM) strategy",
-        "definition": "A long-term"
-      },
-      {
-        "term": "Hard HRM",
-        "definition": "An approach to managing employees focused"
-      },
-      {
-        "term": "Soft HRM",
-        "definition": "An approach to managing employees focused on"
-      },
-      {
-        "term": "Full-time employment contract",
-        "definition": "A contract for a complete"
-      },
-      {
-        "term": "Permanent employment contract",
-        "definition": "A contract where the"
-      },
-      {
-        "term": "Temporary contract",
-        "definition": "A contract offered for a fixed period,"
-      },
-      {
-        "term": "Part-time contract",
-        "definition": "A contract where workers are only"
-      },
-      {
-        "term": "Zero-hours contract",
-        "definition": "A contract with no guaranteed"
-      },
-      {
-        "term": "Gig economy",
-        "definition": "A labor market with temporary, flexible jobs,"
-      },
-      {
-        "term": "Compressed working hours",
-        "definition": "A full-time workweek"
-      },
-      {
-        "term": "Shift work",
-        "definition": "Work scheduled outside the traditional 9 a.m. to"
-      },
-      {
-        "term": "Absenteeism",
-        "definition": "The rate of workforce absence as a"
-      },
-      {
-        "term": "Management by objectives (MBO)",
-        "definition": "A system comparing"
-      }
-    ]
-  },
-  {
-    "section": "4.1. Market Analysis",
-    "definitions": [
-      {
-        "term": "Price elasticity of demand (PED)",
-        "definition": "A measure of how demand"
-      },
-      {
-        "term": "Income elasticity of demand",
-        "definition": "A measure of how demand"
-      },
-      {
-        "term": "Inferior good",
-        "definition": "A product whose demand increases when"
-      },
-      {
-        "term": "New product development (NPD)",
-        "definition": "The design, creation, and"
-      },
-      {
-        "term": "Research and development (R&D)",
-        "definition": "Scientific research and"
-      },
-      {
-        "term": "Test marketing",
-        "definition": "Launching a product on a small-scale"
-      },
-      {
-        "term": "Sales forecasting",
-        "definition": "Predicting future sales levels and trends."
-      },
-      {
-        "term": "Trend",
-        "definition": "The underlying movement in data over time."
-      },
-      {
-        "term": "Seasonal fluctuations",
-        "definition": "Regular, repeated variations in sales"
-      },
-      {
-        "term": "Cyclical fluctuations",
-        "definition": "Variations in sales over longer periods,"
-      },
-      {
-        "term": "Random fluctuations",
-        "definition": "Unpredictable variations in sales due"
-      },
-      {
-        "term": "Qualitative sales forecasting",
-        "definition": "Sales predictions based on"
-      },
-      {
-        "term": "Sales force composite",
-        "definition": "A forecasting method combining"
-      },
-      {
-        "term": "Delphi method",
-        "definition": "A long-range qualitative forecasting"
-      },
-      {
-        "term": "Jury of experts",
-        "definition": "A forecasting method that relies on the"
-      }
-    ]
-  },
-  {
-    "section": "4.2. Marketing Strategy",
-    "definitions": [
-      {
-        "term": "Marketing plan",
-        "definition": "A detailed and researched report outlining"
-      },
-      {
-        "term": "Economic collaboration",
-        "definition": "Countries working together to"
-      },
-      {
-        "term": "Free-trade agreements",
-        "definition": "Agreements between countries or"
-      },
-      {
-        "term": "tariffs and quotas.International marketing",
-        "definition": "Selling products in markets"
-      },
-      {
-        "term": "BRICS",
-        "definition": "Acronym for five rapidly developing economies with"
-      },
-      {
-        "term": "significant market opportunities",
-        "definition": "Brazil, Russia, India,"
-      },
-      {
-        "term": "Pan-global marketing",
-        "definition": "Marketing a standardised product"
-      },
-      {
-        "term": "Global localisation",
-        "definition": "Adjusting the marketing mix, including"
-      }
-    ]
-  },
-  {
-    "section": "5.1. Location and Scale",
-    "definitions": [
-      {
-        "term": "Optimal location",
-        "definition": "A business location that offers the best"
-      },
-      {
-        "term": "Quantitative factors",
-        "definition": "Measurable issues in financial or"
-      },
-      {
-        "term": "Qualitative factors",
-        "definition": "Non-measurable issues that managers"
-      },
-      {
-        "term": "Offshoring",
-        "definition": "Relocating a business process from one country"
-      },
-      {
-        "term": "Trade barriers",
-        "definition": "Taxes (tariffs) or other restrictions on the"
-      },
-      {
-        "term": "Reshoring",
-        "definition": "Moving a previously offshored business"
-      },
-      {
-        "term": "Scale of operations",
-        "definition": "The maximum output achievable with"
-      },
-      {
-        "term": "Internal economies of scale",
-        "definition": "Cost reductions per unit of"
-      },
-      {
-        "term": "Internal diseconomies of scale",
-        "definition": "Increases in unit production"
-      },
-      {
-        "term": "Demerger",
-        "definition": "Separating one business unit from another,"
-      },
-      {
-        "term": "External economies of scale",
-        "definition": "Cost reductions per unit that"
-      },
-      {
-        "term": "External diseconomies of scale",
-        "definition": "Increases in unit costs"
-      }
-    ]
-  },
-  {
-    "section": "5.2. Quality Management",
-    "definitions": [
-      {
-        "term": "Quality product",
-        "definition": "A good or service that meets customers'"
-      },
-      {
-        "term": "Quality standards",
-        "definition": "Minimum acceptable production or"
-      },
-      {
-        "term": "Quality control",
-        "definition": "Inspecting the product or a sample of"
-      },
-      {
-        "term": "Quality assurance",
-        "definition": "Ensuring agreed quality standards are"
-      },
-      {
-        "term": "ISO 9000",
-        "definition": "An internationally recognised standard for quality"
-      },
-      {
-        "term": "Total Quality Management (TQM)",
-        "definition": "A quality approach"
-      },
-      {
-        "term": "Internal customers",
-        "definition": "People within the organisation relying"
-      },
-      {
-        "term": "Zero defects",
-        "definition": "A mindset focused on ensuring products"
-      },
-      {
-        "term": "Benchmarking",
-        "definition": "Comparing a business's performance"
-      },
-      {
-        "term": "Benchmark performance indicators (BPI)",
-        "definition": "Key areas of"
-      }
-    ]
-  },
-  {
-    "section": "5.3. Operation Strategy",
-    "definitions": [
-      {
-        "term": "Lean production",
-        "definition": "Producing goods and services with"
-      },
-      {
-        "term": "Computer-aided design (CAD)",
-        "definition": "Using computer programs to"
-      },
-      {
-        "term": "Computer-aided manufacturing (CAM)",
-        "definition": "Using computer"
-      },
-      {
-        "term": "Operational flexibility",
-        "definition": "The ability to adjust production"
-      },
-      {
-        "term": "Process innovation",
-        "definition": "Using new or significantly improved"
-      },
-      {
-        "term": "Enterprise resource planning (ERP)",
-        "definition": "Using a single"
-      },
-      {
-        "term": "Kaizen",
-        "definition": "A Japanese term meaning continuous"
-      },
-      {
-        "term": "Cell production",
-        "definition": "Flow production organized into self-"
-      },
-      {
-        "term": "Critical path analysis (CPA)",
-        "definition": "A planning technique that"
-      },
-      {
-        "term": "Network diagram",
-        "definition": "A diagram used in CPA to show the"
-      },
-      {
-        "term": "Critical path",
-        "definition": "The sequence of tasks that must be"
-      },
-      {
-        "term": "Earliest start time",
-        "definition": "The earliest time an activity can begin."
-      },
-      {
-        "term": "Latest finish time",
-        "definition": "The latest time an activity can finish"
-      },
-      {
-        "term": "Total float",
-        "definition": "The amount of time an activity can be delayed"
-      },
-      {
-        "term": "without delaying the overall project.Free float",
-        "definition": "The amount of time an activity can be delayed"
-      },
-      {
-        "term": "Dummy activities",
-        "definition": "Used in network diagrams to show"
-      }
-    ]
-  },
-  {
-    "section": "6.1. Financial Statement",
-    "definitions": [
-      {
-        "term": "Statement of profit or loss",
-        "definition": "A statement that records"
-      },
-      {
-        "term": "Statement of financial position",
-        "definition": "A statement that records a"
-      },
-      {
-        "term": "Asset",
-        "definition": "An item of monetary value owned by a business."
-      },
-      {
-        "term": "Liability",
-        "definition": "A financial obligation that a business must pay in"
-      },
-      {
-        "term": "Gross profit",
-        "definition": "Revenue minus the cost of sales."
-      },
-      {
-        "term": "Cost of sales",
-        "definition": "The direct cost of the goods sold during a"
-      },
-      {
-        "term": "Profit from operations",
-        "definition": "Gross profit minus overhead"
-      },
-      {
-        "term": "Expenses",
-        "definition": "Overhead costs in operating the business,"
-      },
-      {
-        "term": "Profit before tax",
-        "definition": "Profit from operations minus interest"
-      },
-      {
-        "term": "Profit for the year (profit after tax)",
-        "definition": "Profit before tax minus"
-      },
-      {
-        "term": "Dividends",
-        "definition": "A portion of profits paid to shareholders as a"
-      },
-      {
-        "term": "Low-quality profit",
-        "definition": "One-off profits that are not easily"
-      },
-      {
-        "term": "High-quality profit",
-        "definition": "Profits that can be repeated and"
-      },
-      {
-        "term": "Shareholders' equity",
-        "definition": "The total value of assets minus the"
-      },
-      {
-        "term": "Share capital",
-        "definition": "The total value of capital raised from"
-      },
-      {
-        "term": "Goodwill",
-        "definition": "The value arising when a business is bought for"
+        "term": "Voluntary export limits",
+        "definition": "agreed limits to the quantity of certain goods sold by one country to another (possibly to discourage the setting of tariffs/quotas)."
       },
       {
         "term": "Window dressing",
-        "definition": "Techniques used by companies to"
+        "definition": "Techniques used by companies to manipulate financial statements to show more favorable results."
       },
       {
-        "term": "Net current assets",
-        "definition": "The capital required for day-to-day"
+        "term": "Workforce Planning",
+        "definition": "Forecasting the future number of staff and the skills required by a business to achieve its objectives."
       },
       {
-        "term": "Reserves",
-        "definition": "Accumulated retained profits and capital"
+        "term": "Working Capital",
+        "definition": "Current assets minus current liabilities; the lifeblood money used to pay for day-to-day operational expenses."
       },
       {
-        "term": "Net realisable value (NRV)",
-        "definition": "The amount for which inventory"
+        "term": "Working population",
+        "definition": "Those of working age willing and able to work."
       },
       {
-        "term": "Depreciation",
-        "definition": "The reduction in the estimated value of a"
+        "term": "Written communication",
+        "definition": "Any type of message that uses written words."
       },
       {
-        "term": "Net book value",
-        "definition": "The current statement of financial position"
+        "term": "Zero defects",
+        "definition": "A mindset focused on ensuring products consistently meet customer expectations."
       },
       {
-        "term": "Straight-line depreciation",
-        "definition": "A fixed amount of depreciation"
-      }
-    ]
-  },
-  {
-    "section": "6.2. Analysis of Published Accounts",
-    "definitions": [
-      {
-        "term": "Current ratio",
-        "definition": "A ratio comparing current assets with current"
-      },
-      {
-        "term": "Acid test ratio",
-        "definition": "A ratio comparing liquid assets with current"
-      },
-      {
-        "term": "Profitability",
-        "definition": "A measure of a business's ability to make a"
-      },
-      {
-        "term": "Gross profit margin ratio",
-        "definition": "A ratio comparing gross profit"
-      },
-      {
-        "term": "Operating profit margin",
-        "definition": "A ratio comparing operating profit"
-      },
-      {
-        "term": "Return on capital employed (ROCE) ratio",
-        "definition": "A ratio comparing"
-      },
-      {
-        "term": "Capital employed",
-        "definition": "The total value of long-term finance"
-      },
-      {
-        "term": "Rate of inventory turnover",
-        "definition": "The number of times inventory"
-      },
-      {
-        "term": "Trade receivables turnover (days)",
-        "definition": "The average time (in"
-      },
-      {
-        "term": "Trade payables turnover (days)",
-        "definition": "The average time (in days)"
-      },
-      {
-        "term": "Credit purchases",
-        "definition": "The value of materials and supplies"
-      },
-      {
-        "term": "Gearing ratio",
-        "definition": "A ratio that measures the proportion of"
-      },
-      {
-        "term": "Share price",
-        "definition": "The quoted price of one share on the stock"
-      },
-      {
-        "term": "Dividend",
-        "definition": "The share of company profits paid to"
-      },
-      {
-        "term": "Dividend yield ratio",
-        "definition": "A ratio measuring the annual return"
-      },
-      {
-        "term": "Dividend per share",
-        "definition": "The financial amount received in"
-      },
-      {
-        "term": "Dividend cover ratio",
-        "definition": "A ratio measuring how many times"
-      },
-      {
-        "term": "dividends could be paid from profit for the year.Price/earnings ratio",
-        "definition": "The number of years it would take, at"
-      },
-      {
-        "term": "Earnings per share",
-        "definition": "The amount of profit after tax and"
-      }
-    ]
-  },
-  {
-    "section": "6.3. Investment Appraisal",
-    "definitions": [
-      {
-        "term": "Investment Appraisal",
-        "definition": "Evaluating the profitability or"
-      },
-      {
-        "term": "Net present value (NPV)",
-        "definition": "The current value of estimated"
-      },
-      {
-        "term": "Forecasted net cash flow",
-        "definition": "Forecast cash inflows minus"
-      },
-      {
-        "term": "Payback period",
-        "definition": "The length of time it takes for net cash"
-      },
-      {
-        "term": "Accounting rate of return (ARR)",
-        "definition": "A measure of the annual"
-      },
-      {
-        "term": "Criterion rate",
-        "definition": "The minimum accounting rate of return that"
-      },
-      {
-        "term": "Discounted cash flow",
-        "definition": "The present-day value of a future"
-      }
-    ]
-  },
-  {
-    "section": "cash flow.",
-    "definitions": [
-      {
-        "term": "Investment appraisal",
-        "definition": "Evaluating the profitability or"
-      },
-      {
-        "term": "Net present value (NPV)",
-        "definition": "The current value of estimated"
-      },
-      {
-        "term": "Forecasted net cash flow",
-        "definition": "Forecast cash inflows minus"
-      },
-      {
-        "term": "Payback period",
-        "definition": "The length of time it takes for net cash"
-      },
-      {
-        "term": "Accounting rate of return (ARR)",
-        "definition": "A measure of the annual"
-      },
-      {
-        "term": "Criterion rate",
-        "definition": "The minimum accounting rate of return that"
-      },
-      {
-        "term": "Discounted cash flow",
-        "definition": "The present-day value of a future"
+        "term": "Zero-hours contract",
+        "definition": "A contract with no guaranteed minimum hours per week, requiring availability when called by the employer."
       }
     ]
   }

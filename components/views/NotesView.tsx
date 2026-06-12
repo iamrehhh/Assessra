@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
+
 
 export default function NotesView() {
     const [tree, setTree] = useState<Record<string, Record<string, string[]>> | null>(null);
     const [level, setLevel] = useState<string>('');
     const [subject, setSubject] = useState<string>('');
-    const [activeTab, setActiveTab] = useState<string>('theory'); // theory, definitions, formulae
+    const [activeTab, setActiveTab] = useState<string>('definitions'); // definitions, formulae
     
     const [content, setContent] = useState<any>(null);
     const [fileType, setFileType] = useState<string>('');
@@ -91,7 +91,7 @@ export default function NotesView() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-border-main pb-6">
                 <div>
                     <h2 className="text-3xl font-black text-text-main font-playfair tracking-tight mb-2">Study Notes</h2>
-                    <p className="text-text-muted text-sm">Comprehensive theory, definitions, and formulae.</p>
+                    <p className="text-text-muted text-sm">Comprehensive definitions and formulae.</p>
                 </div>
 
                 <div className="flex gap-3 w-full md:w-auto">
@@ -119,7 +119,7 @@ export default function NotesView() {
             </div>
 
             <div className="flex gap-2 bg-black/5 dark:bg-white/5 p-1.5 rounded-xl w-fit">
-                {['theory', 'definitions', 'formulae'].map((tab) => (
+                {['definitions', 'formulae'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -141,34 +141,12 @@ export default function NotesView() {
                     </div>
                 ) : (
                     <div className="animate-in fade-in duration-500 space-y-8">
-                        {activeTab === 'theory' && content && Array.isArray(content) && (
-                            <div className="space-y-4">
-                                {content.map((section: any, idx: number) => (
-                                    <details key={idx} className="glass rounded-2xl group border border-border-main overflow-hidden">
-                                        <summary className="font-playfair font-bold text-lg md:text-xl text-text-main p-6 cursor-pointer list-none flex justify-between items-center group-open:bg-black/5 dark:group-open:bg-white/5 transition-colors">
-                                            {section.title}
-                                            <span className="text-primary opacity-60 group-open:rotate-180 transition-transform duration-300">▼</span>
-                                        </summary>
-                                        <div className="p-6 pt-0 mt-4 prose prose-slate dark:prose-invert max-w-none prose-p:leading-relaxed">
-                                            <ReactMarkdown>{section.content}</ReactMarkdown>
-                                        </div>
-                                    </details>
-                                ))}
-                            </div>
-                        )}
-                        
-                        {/* Fallback for markdown theory that wasn't parsed into JSON */}
-                        {fileType === 'markdown' && content && activeTab === 'theory' && (
-                            <div className="prose prose-slate dark:prose-invert max-w-none glass p-8 rounded-3xl">
-                                <ReactMarkdown>{content}</ReactMarkdown>
-                            </div>
-                        )}
 
                         {fileType === 'json' && content && activeTab === 'definitions' && (
                             <div className="space-y-12">
                                 {(content.length > 0 && content[0].definitions ? content : [{ section: "General Definitions", definitions: content }]).map((group: any, groupIdx: number) => (
                                     <div key={groupIdx} className="space-y-6">
-                                        <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md py-4 border-b border-border-main">
+                                        <div className="py-4 border-b border-border-main">
                                             <h3 className="font-playfair text-2xl font-bold text-primary">{group.section}</h3>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
